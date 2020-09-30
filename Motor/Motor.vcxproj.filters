@@ -19,6 +19,15 @@
     <Filter Include="Sources\Modules\Game">
       <UniqueIdentifier>{83f46af7-e02f-40c0-9e56-41d76082527b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\imgui">
+      <UniqueIdentifier>{3bfcc9b7-f13c-437a-94fd-b93dea7351fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\sources">
+      <UniqueIdentifier>{3617d6a0-1e1d-40ba-872d-c2e300003b29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\gl3w">
+      <UniqueIdentifier>{9f7c83fa-2a9d-48ab-bd13-1591b376f0ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -66,6 +75,36 @@
     <ClInclude Include="Timer.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>Sources\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>Sources\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>Sources\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>Sources\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>Sources\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>Sources\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_opengl3.h">
+      <Filter>Sources\sources</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_sdl.h">
+      <Filter>Sources\sources</Filter>
+    </ClInclude>
+    <ClInclude Include="GL\gl3w.h">
+      <Filter>Sources\gl3w</Filter>
+    </ClInclude>
+    <ClInclude Include="GL\glcorearb.h">
+      <Filter>Sources\gl3w</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -110,5 +149,31 @@
     <ClCompile Include="ModuleSceneIntro.cpp">
       <Filter>Sources\Modules\Game</Filter>
     </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>Sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>Sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>Sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>Sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_opengl3.cpp">
+      <Filter>Sources\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_sdl.cpp">
+      <Filter>Sources\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GL\gl3w.c">
+      <Filter>Sources\gl3w</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="imgui.natvis">
+      <Filter>Sources\sources</Filter>
+    </Natvis>
   </ItemGroup>
 </Project>
