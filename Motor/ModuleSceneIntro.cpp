@@ -59,6 +59,19 @@ update_status ModuleSceneIntro::Update(float dt)
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
+
+	{
+		ImGui::Begin("Menu");
+
+		if(ImGui::Button("Quit")) 
+		{
+			return UPDATE_STOP;
+		}
+
+		ImGui::End(); 
+	}
+
+
 	// Rendering
 	ImGui::Render();
 	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
