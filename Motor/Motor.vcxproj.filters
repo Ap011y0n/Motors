@@ -105,6 +105,9 @@
     <ClInclude Include="GL\glcorearb.h">
       <Filter>Sources\gl3w</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleUI.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -169,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="GL\gl3w.c">
       <Filter>Sources\gl3w</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleUi.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

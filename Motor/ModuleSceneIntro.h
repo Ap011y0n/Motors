@@ -1,7 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-#include "imgui.h"
+
 
 class ModuleSceneIntro : public Module
 {
@@ -14,7 +14,5 @@ public:
 	bool CleanUp();
 
 public:
-	bool show_demo_window;
-	ImVec4 clear_color;
-	bool show_another_window;
+
 };
