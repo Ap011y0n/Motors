@@ -135,6 +135,9 @@ bool ModuleUI::Init()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+	show_window = false;
+	About = false;
+
 	show_demo_window = true;
 	show_another_window = true;
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -162,20 +165,66 @@ update_status ModuleUI::Update(float dt)
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
+	ImGui::BeginMainMenuBar(); //this creates the top bar
 
-
-	
-		ImGui::Begin("Menu");
-
+	if (ImGui::BeginMenu("File"))
+	{
 		if (ImGui::Button("Quit"))
 		{
 			return UPDATE_STOP;
 		}
+		ImGui::EndMenu();
+	}
 
-		ImGui::End();
-	
+	if (ImGui::BeginMenu("Help"))
+	{
+		if (ImGui::MenuItem("Gui demo"))
+			show_demo_window = false;
+
+		if (ImGui::MenuItem("Documentation"))
+			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors", NULL, NULL, SW_SHOWNORMAL);
+
+		if (ImGui::MenuItem("Download latest"))
+			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors/releases", NULL, NULL, SW_SHOWNORMAL);
+
+		if (ImGui::MenuItem("Report bug"))
+			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors/issues", NULL, NULL, SW_SHOWNORMAL);
+
+		if (ImGui::MenuItem("About")) {
+			show_window = true;
+			About = true;
+		}
+
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::BeginMenu("View"))
+	{
+		ImGui::EndMenu();
+	}
+
+	ImGui::EndMainMenuBar();
+
+	if (!show_demo_window)
+		ImGui::ShowDemoWindow(&show_demo_window);
+
+	if (About)
+		AboutMenu(show_window);
+
+
+
+
+	/*ImGui::Begin("Menu");
+
+	if (ImGui::Button("Quit"))
+	{
+		return UPDATE_STOP;
+	}
+	ImGui::End();*/
+
+
+
+
 
 	
 
@@ -200,5 +249,20 @@ update_status ModuleUI::Update(float dt)
 
 
 	return UPDATE_CONTINUE;
+}
+
+
+void ModuleUI::AboutMenu(bool show_window)
+{
+	if (show_window == true)
+	{
+		ImGui::Begin("About Nidhogg engine", &show_window);
+		ImGui::Text("This is a Text longer than 19 characters aaaaaaaaaaaaaaaaaaaaah");
+		ImGui::End();
+	}
+	else {
+		ImGui::End();
+	}
+
 }
 

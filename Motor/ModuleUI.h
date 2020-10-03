@@ -13,6 +13,7 @@ public:
 
 	update_status Update(float dt);
 	bool CleanUp();
+	void AboutMenu(bool window);
 
 public:
 	SDL_GLContext gl_context;
@@ -20,5 +21,7 @@ public:
 	bool show_demo_window;
 	ImVec4 clear_color;
 	bool show_another_window;
+	bool About;
+	bool show_window;
 
 };
