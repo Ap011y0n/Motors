@@ -158,9 +158,7 @@ update_status ModuleUI::Update(float dt)
 {
 
 
-	Plane p(0, 1, 0, 0);
-	p.axis = true;
-	p.Render();
+
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	ImGui_ImplOpenGL3_NewFrame();
