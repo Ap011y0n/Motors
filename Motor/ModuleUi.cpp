@@ -165,8 +165,6 @@ update_status ModuleUI::Update(float dt)
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
-
-	
 		ImGui::Begin("Menu");
 
 		if (ImGui::Button("Quit"))

@@ -3,8 +3,15 @@
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
 #include "ModuleWindow.h"
-           
+       
 
+#ifdef _DEBUG
+#pragma comment( lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib" )
+#else
+#pragma comment( lib, "MathGeoLib/libx86/Release/MathGeoLib.lib" )
+#endif
+
+#include "MathGeoLib/include/MathGeoLib.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -39,14 +46,9 @@ update_status ModuleSceneIntro::Update(float dt)
 {
 
 
-	Plane p(0, 1, 0, 0);
+	PrimPlane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();
-
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-
-
 
 	return UPDATE_CONTINUE;
 }
