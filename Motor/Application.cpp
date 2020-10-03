@@ -15,13 +15,13 @@ Application::Application()
 
 	// Main Modules
 	AddModule(window);
-	AddModule(UI);
 	AddModule(camera);
 	AddModule(input);
 	AddModule(audio);
 	
 	// Scenes
 	AddModule(scene_intro);
+	AddModule(UI);
 
 	// Renderer last!
 	AddModule(renderer3D);
