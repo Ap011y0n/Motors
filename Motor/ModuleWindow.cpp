@@ -103,3 +103,15 @@ void ModuleWindow::SetTitle(const char* title)
 {
 	SDL_SetWindowTitle(window, title);
 }
+void ModuleWindow::Fullscreen_UI(bool active) 
+{
+	if (active == true && i == 0)
+	{
+		i++;
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+	}
+	if (active == false)
+	{
+		i = 0;
+	}
+}

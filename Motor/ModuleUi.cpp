@@ -6,7 +6,8 @@
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
-#include "GL/gl3w.h"            
+#include "GL/gl3w.h" 
+#include "ModuleWindow.h"
 
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
@@ -135,9 +136,9 @@ bool ModuleUI::Init()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-	show_window = false;
-	About = false;
-
+	show_About = false;
+	show_Configuration = false;
+	active2 = false;
 	show_demo_window = true;
 	show_another_window = true;
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -191,7 +192,7 @@ update_status ModuleUI::Update(float dt)
 			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors/issues", NULL, NULL, SW_SHOWNORMAL);
 
 		if (ImGui::MenuItem("About")) 
-			show_window = true;
+			show_About = true;
 		
 
 		ImGui::EndMenu();
@@ -199,6 +200,9 @@ update_status ModuleUI::Update(float dt)
 
 	if (ImGui::BeginMenu("View"))
 	{
+		if (ImGui::MenuItem("Configuration"))
+			show_Configuration = true;
+
 		ImGui::EndMenu();
 	}
 
@@ -207,8 +211,8 @@ update_status ModuleUI::Update(float dt)
 	if (!show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
 	
-	AboutMenu(show_window);
-
+	AboutMenu(show_About);
+	Configuration(show_Configuration);
 
 
 	// Rendering
@@ -228,9 +232,6 @@ update_status ModuleUI::Update(float dt)
 	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());*/
-
-
-
 	return UPDATE_CONTINUE;
 }
 
@@ -249,13 +250,14 @@ void ModuleUI::AboutMenu(bool show_windoww)
 		ImGui::Text("Albert Garcia github -->"); ImGui::SameLine();  
 		if (ImGui::Button("Albert github"))
 		{
-			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors/issues", NULL, NULL, SW_SHOWNORMAL);
+			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n", NULL, NULL, SW_SHOWNORMAL);
 		} 
 		ImGui::Text("Pol de la Torre github -->"); ImGui::SameLine(); 
 		if (ImGui::Button("Pol github"))
 		{
-			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors/issues", NULL, NULL, SW_SHOWNORMAL);
+			ShellExecuteA(NULL, "open", "https://github.com/polf780", NULL, NULL, SW_SHOWNORMAL);
 		}
+		ImGui::Separator();
 		ImGui::Text("3rd Party libraries used");
 		ImGui::BulletText("SDL 2.0");
 		ImGui::BulletText("SDL Mixer 2.0");
@@ -266,7 +268,7 @@ void ModuleUI::AboutMenu(bool show_windoww)
 		ImGui::BulletText("OpenGL 3.1");
 		ImGui::BulletText("Assimp 3.1.1");
 		ImGui::BulletText("Devil 1.7.8");
-
+		ImGui::Separator();
 		ImGui::Text("License:");
 		ImGui::Text("MIT License");
 		ImGui::TextWrapped("Copyright 2020 Pol de la Torre Solé & Albert Garcia Belerda ");
@@ -290,8 +292,97 @@ void ModuleUI::AboutMenu(bool show_windoww)
 	}
 	if (show_windoww == false)
 	{
-		show_window = false;
+		show_About = false;
 		
 	}
 }
+
+void ModuleUI::Configuration(bool show_config)
+{
+
+	if (show_config == true)
+	{
+		ImGui::Begin("Configuration", &show_config);
+
+		ImGui::MenuItem("Wellcome to the Configuration menu", NULL, false, false);
+		if (ImGui::BeginMenu("Options"))
+		{
+			ImGui::MenuItem("Save");
+			ImGui::MenuItem("Load");
+			ImGui::MenuItem("Reset to Default");
+			ImGui::End();
+		}
+		if (ImGui::CollapsingHeader("Application"))
+		{
+
+		}
+		if (ImGui::CollapsingHeader("Window"))
+		{
+			static bool active = false;
+			ImGui::Checkbox("Active", &active);
+			static float f1 = 1.0f;
+			
+			ImGui::SliderFloat("Brightness", &f1, 0.0f, 1.0f, "%.3f");
+			SDL_SetWindowBrightness(App->window->window, f1);
+			
+			static int i1 = App->window->screen_surface->w;
+			ImGui::SliderInt("width", &i1, 640, 1920);
+			
+			static int i2 = App->window->screen_surface->h;
+			ImGui::SliderInt("height", &i2, 480, 1080);
+			SDL_SetWindowSize(App->window->window, i1, i2);
+			
+			ImGui::Text("Refresh rate: ");
+			
+			
+			ImGui::Checkbox("Fullscreen", &active2); ImGui::SameLine();
+			App->window->Fullscreen_UI(active2);
+			
+		
+			static bool active3 = false;
+			ImGui::Checkbox("Resizable", &active3);
+			if(ImGui::IsItemHovered())
+			ImGui::SetTooltip("Restart to apply");
+			
+			
+			static bool active4 = false;
+			ImGui::Checkbox("Borderless", &active4); ImGui::SameLine();
+			if (active4 == true) {
+				SDL_SetWindowBordered(App->window->window, SDL_FALSE);
+			}
+			else {
+				SDL_SetWindowBordered(App->window->window, SDL_TRUE);
+			}
+		
+			static bool active5 = false;
+			ImGui::Checkbox("Full Desktop", &active5);
+			if (active5 == true)
+			{
+				SDL_SetWindowSize(App->window->window, 1920, 1080);
+				SDL_SetWindowPosition(App->window->window, 0, 0);
+				
+			}
+		}
+		if (ImGui::CollapsingHeader("File System"))
+		{
+
+		}
+		if (ImGui::CollapsingHeader("Input"))
+		{
+
+		}
+		if (ImGui::CollapsingHeader("Hardware"))
+		{
+
+		}
+		ImGui::End();
+	}
+
+	if (show_config == false)
+	{
+		show_Configuration = false;
+
+	}
+}
+
 
