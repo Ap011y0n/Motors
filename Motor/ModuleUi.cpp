@@ -190,10 +190,9 @@ update_status ModuleUI::Update(float dt)
 		if (ImGui::MenuItem("Report bug"))
 			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors/issues", NULL, NULL, SW_SHOWNORMAL);
 
-		if (ImGui::MenuItem("About")) {
+		if (ImGui::MenuItem("About")) 
 			show_window = true;
-			About = true;
-		}
+		
 
 		ImGui::EndMenu();
 	}
@@ -207,26 +206,10 @@ update_status ModuleUI::Update(float dt)
 
 	if (!show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
-
-	if (About)
-		AboutMenu(show_window);
-
-
-
-
-	/*ImGui::Begin("Menu");
-
-	if (ImGui::Button("Quit"))
-	{
-		return UPDATE_STOP;
-	}
-	ImGui::End();*/
-
-
-
-
-
 	
+	AboutMenu(show_window);
+
+
 
 	// Rendering
 	ImGui::Render();
@@ -252,17 +235,63 @@ update_status ModuleUI::Update(float dt)
 }
 
 
-void ModuleUI::AboutMenu(bool show_window)
+void ModuleUI::AboutMenu(bool show_windoww)
 {
-	if (show_window == true)
+	if (show_windoww == true)
 	{
-		ImGui::Begin("About Nidhogg engine", &show_window);
-		ImGui::Text("This is a Text longer than 19 characters aaaaaaaaaaaaaaaaaaaaah");
-		ImGui::End();
-	}
-	else {
-		ImGui::End();
-	}
+		
+		ImGui::Begin("About", &show_windoww);
+		ImGui::Text("NIDHOGG ENGINE"); //ImGui::SameLine(); ImGui::Text("Nidhogg engine ");
+		ImGui::Text("");
+		ImGui::TextWrapped("This will be the next best 3D Game Engine");
+		ImGui::Text("");
+		ImGui::Text("Made by:");
+		ImGui::Text("Albert Garcia github -->"); ImGui::SameLine();  
+		if (ImGui::Button("Albert github"))
+		{
+			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors/issues", NULL, NULL, SW_SHOWNORMAL);
+		} 
+		ImGui::Text("Pol de la Torre github -->"); ImGui::SameLine(); 
+		if (ImGui::Button("Pol github"))
+		{
+			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors/issues", NULL, NULL, SW_SHOWNORMAL);
+		}
+		ImGui::Text("3rd Party libraries used");
+		ImGui::BulletText("SDL 2.0");
+		ImGui::BulletText("SDL Mixer 2.0");
+		ImGui::BulletText("Cereal 1.2.2");
+		ImGui::BulletText("Glew 2.0.0");
+		ImGui::BulletText("ImGui 1.78");
+		ImGui::BulletText("MathGeoLib 1.5");
+		ImGui::BulletText("OpenGL 3.1");
+		ImGui::BulletText("Assimp 3.1.1");
+		ImGui::BulletText("Devil 1.7.8");
 
+		ImGui::Text("License:");
+		ImGui::Text("");
+		ImGui::TextWrapped("Copyright 2020 Pol de la Torre Solé & Albert Garcia Belerda ");
+		ImGui::TextWrapped("Permission is hereby granted, free of charge, to any person obtaining a copy"); 
+		ImGui::TextWrapped("of this softwareand associated documentation files(the Software), to deal");
+		ImGui::TextWrapped("in the Software without restriction, including without limitation the rights ");
+		ImGui::TextWrapped("to use, copy, modify, merge, publish, distribute, sublicense, and /or sell ");
+		ImGui::TextWrapped("copies of the Software, and to permit persons to whom the Software is");
+		ImGui::TextWrapped("furnished to do so, subject to the following conditions :");
+		ImGui::TextWrapped("");
+		ImGui::TextWrapped("The above copyright noticeand this permission notice shall be included in all");
+		ImGui::TextWrapped("copies or substantial portions of the Software.");
+		ImGui::TextWrapped("THE SOFTWARE IS PROVIDED ¡'AS IS`, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR");
+		ImGui::TextWrapped("IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,");
+		ImGui::TextWrapped("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE");
+		ImGui::TextWrapped("AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER");
+		ImGui::TextWrapped("LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,");
+		ImGui::TextWrapped("OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE");
+		ImGui::TextWrapped("SOFTWARE.");
+		ImGui::End();
+	}
+	if (show_windoww == false)
+	{
+		show_window = false;
+		
+	}
 }
 
