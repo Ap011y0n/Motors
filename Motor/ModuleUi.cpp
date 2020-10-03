@@ -268,7 +268,7 @@ void ModuleUI::AboutMenu(bool show_windoww)
 		ImGui::BulletText("Devil 1.7.8");
 
 		ImGui::Text("License:");
-		ImGui::Text("");
+		ImGui::Text("MIT License");
 		ImGui::TextWrapped("Copyright 2020 Pol de la Torre Solé & Albert Garcia Belerda ");
 		ImGui::TextWrapped("Permission is hereby granted, free of charge, to any person obtaining a copy"); 
 		ImGui::TextWrapped("of this softwareand associated documentation files(the Software), to deal");
