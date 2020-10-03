@@ -9,12 +9,16 @@ public:
 	ModuleUI(Application* app, bool start_enabled = true);
 	~ModuleUI();
 
-	bool Start();
+	bool Init();
+
 	update_status Update(float dt);
 	bool CleanUp();
 
 public:
+	SDL_GLContext gl_context;
+
 	bool show_demo_window;
 	ImVec4 clear_color;
 	bool show_another_window;
+
 };
