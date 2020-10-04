@@ -90,9 +90,9 @@ void Application::FinishUpdate()
 	}
 
 	uint32_t last_frame_ms = ms_timer.Read();
-	if (capped_ms > 0 && last_frame_ms < capped_ms)
+	if (cap > 0 && last_frame_ms < cap)
 	{
-		SDL_Delay(capped_ms - last_frame_ms);
+		SDL_Delay(cap - last_frame_ms);
 	}
 }
 
@@ -152,9 +152,9 @@ int Application::GetFPS()
 	return last_sec_frame_count;
 }
 
-void Application::SetMaxFPS(int max_fps)
+void Application::Maxfps(int max_fps)
 {
 	fps = max_fps;
 	if (fps == 0) fps = -1;
-	capped_ms = 1000 / fps;
+	cap = 1000 / fps;
 }

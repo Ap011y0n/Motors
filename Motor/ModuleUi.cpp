@@ -336,11 +336,6 @@ void ModuleUI::Configuration(bool show_config)
 
 			static char buf2[32] = "";
 			ImGui::InputText("Organitzation", buf2, IM_ARRAYSIZE(buf));
-
-			static int i1 = 0;
-			ImGui::SliderInt("Max fps", &i1, 0, 144);
-
-			ImGui::Text("Limit Framerate: "); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1.f)); ImGui::Text("%d",i1); ImGui::PopStyleColor();
 			PlotGraph();
 		}
 		if (ImGui::CollapsingHeader("Window"))
@@ -361,6 +356,8 @@ void ModuleUI::Configuration(bool show_config)
 			if (ImGui::IsItemHovered())
 				SDL_SetWindowSize(App->window->window, i1, i2);
 					
+			ImGui::Text("Refresh rate: "); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1.f)); ImGui::SameLine(); ImGui::Text("%d ",App->GetFPS()); ImGui::PopStyleColor();
+
 			ImGui::Checkbox("Fullscreen", &active2); ImGui::SameLine();
 			App->window->Fullscreen_UI(active2);
 			
@@ -450,28 +447,27 @@ void ModuleUI::StoreLog(const char* message)
 
 void ModuleUI::PlotGraph()
 {
+	if (ImGui::SliderInt("Maximum FPS", &max_fps, -1, 200, NULL))
+	{
+		App->Maxfps(max_fps);
+	}
 	bool active = true;
 	int fps = App->GetFPS();
-
-	//Get frames
-	if (frames.size() > 100) //Max seconds to show
+	if (fpsecond.size() > 120) 
 	{
-		for (int i = 1; i < frames.size(); i++)
+		for (int i = 1; i < fpsecond.size(); i++)
 		{
-			frames[i - 1] = frames[i];      //with this we change the frist for the 2nd
+			fpsecond[i - 1] = fpsecond[i];      //with this we change the frist for the 2nd to update all
 		}
-		frames[frames.size() - 1] = fps;
+		fpsecond[fpsecond.size() - 1] = fps;
 	}
 	else
 	{
-		frames.push_back(fps);
+		fpsecond.push_back(fps);
 	}
 	char text[20];
 	sprintf_s(text, 20, "Frames: %d", fps);
 	ImGui::Text(text);
-	ImGui::PlotHistogram("Framerate", &frames[0], frames.size(), 0, text, 0.0f, 100.0f, ImVec2(300, 100));
-	if (ImGui::SliderInt("Max FPS", &max_fps, -1, 200, NULL))
-	{
-		App->SetMaxFPS(max_fps);
-	}
+	ImGui::PlotHistogram("Framerate", &fpsecond[0], fpsecond.size(), 0, text, 0.0f, 100.0f, ImVec2(450, 100));
+	
 }

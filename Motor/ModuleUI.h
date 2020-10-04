@@ -30,7 +30,7 @@ public:
 	bool show_another_window;
 	bool active2 = false;
 	bool show_About;
-	vector<float> frames;
+	vector <float> fpsecond;
 	bool show_Configuration;
 	int max_fps = 144;
 private:
