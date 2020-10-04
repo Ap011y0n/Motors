@@ -86,9 +86,9 @@ int main(int argc, char ** argv)
 		}
 	}
 
+	LOG("Exiting game '%s'...\n", TITLE);
 	delete App;
 
-	//LOG("Exiting game '%s'...\n", TITLE);
 	return main_return;
 }
 
@@ -110,7 +110,7 @@ void log(const char file[], int line, const char* format, ...)
 	if(App)
 	if (App->UI)
 	{
-		App->UI->StoreLog(tmp_string);
+		App->UI->StoreLog(tmp_string2);
 	}
 
 }
