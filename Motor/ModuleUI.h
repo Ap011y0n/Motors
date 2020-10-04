@@ -18,7 +18,7 @@ public:
 
 public:
 	SDL_GLContext gl_context;
-
+	ImGuiIO* io;
 	bool show_demo_window;
 	ImVec4 clear_color;
 	bool show_another_window;
