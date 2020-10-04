@@ -32,6 +32,11 @@ private:
 	float	dt;
 	list<Module*> list_modules;
 
+	int fps = 60;
+	int capped_ms = -1;
+	int frame_count = 0;
+	int last_sec_frame_count = 0;
+	Timer last_sec_frame_time;
 public:
 
 	Application();
@@ -41,6 +46,8 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	int GetFPS();
+	void SetMaxFPS(int max_fps);
 private:
 
 	void AddModule(Module* mod);

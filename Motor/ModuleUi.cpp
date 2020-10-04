@@ -138,11 +138,11 @@ bool ModuleUI::Init()
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
-
+	c1 = 0;
+	show_demo_window = false;
 	show_About = false;
 	show_Configuration = false;
 	active2 = false;
-	show_demo_window = true;
 	show_another_window = true;
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -174,7 +174,7 @@ update_status ModuleUI::Update(float dt)
 
 	ImGui::BeginMainMenuBar(); //this creates the top bar
 
-	ImGui::Begin("Console");
+	/*ImGui::Begin("Console");
 	
 		for (int i = 0; i < consoleOutput.size(); i++)
 		{
@@ -182,7 +182,7 @@ update_status ModuleUI::Update(float dt)
 			ImGui::Text(text);
 		}
 	ImGui::End();
-	
+	*/
 
 	if (ImGui::BeginMenu("File"))
 	{
@@ -196,7 +196,7 @@ update_status ModuleUI::Update(float dt)
 	if (ImGui::BeginMenu("Help"))
 	{
 		if (ImGui::MenuItem("Gui demo"))
-			show_demo_window = false;
+			show_demo_window = true;
 
 		if (ImGui::MenuItem("Documentation"))
 			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors", NULL, NULL, SW_SHOWNORMAL);
@@ -224,7 +224,7 @@ update_status ModuleUI::Update(float dt)
 
 	ImGui::EndMainMenuBar();
 
-	if (!show_demo_window)
+	if (show_demo_window == true)
 		ImGui::ShowDemoWindow(&show_demo_window);
 	
 	AboutMenu(show_About);
@@ -330,7 +330,18 @@ void ModuleUI::Configuration(bool show_config)
 		}
 		if (ImGui::CollapsingHeader("Application"))
 		{
+			static char buf[32] = "";
+			ImGui::InputText("App name", buf, IM_ARRAYSIZE(buf));
+			SDL_SetWindowTitle(App->window->window, buf);
 
+			static char buf2[32] = "";
+			ImGui::InputText("Organitzation", buf2, IM_ARRAYSIZE(buf));
+
+			static int i1 = 0;
+			ImGui::SliderInt("Max fps", &i1, 0, 144);
+
+			ImGui::Text("Limit Framerate: "); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1.f)); ImGui::Text("%d",i1); ImGui::PopStyleColor();
+			PlotGraph();
 		}
 		if (ImGui::CollapsingHeader("Window"))
 		{
@@ -349,10 +360,7 @@ void ModuleUI::Configuration(bool show_config)
 			ImGui::SliderInt("height", &i2, 480, 1080);
 			if (ImGui::IsItemHovered())
 				SDL_SetWindowSize(App->window->window, i1, i2);
-			
-			ImGui::Text("Refresh rate: ");
-			
-			
+					
 			ImGui::Checkbox("Fullscreen", &active2); ImGui::SameLine();
 			App->window->Fullscreen_UI(active2);
 			
@@ -374,11 +382,13 @@ void ModuleUI::Configuration(bool show_config)
 		
 			static bool active5 = false;
 			ImGui::Checkbox("Full Desktop", &active5);
-			if (active5 == true)
+			if (active5 == true && c1==0)
 			{
 				SDL_SetWindowSize(App->window->window, 1920, 1080);
 				SDL_SetWindowPosition(App->window->window, 0, 0);
-				
+				c1++;
+			}if (active5 == false) {
+				c1=0;
 			}
 		}
 		if (ImGui::CollapsingHeader("File System"))
@@ -391,7 +401,34 @@ void ModuleUI::Configuration(bool show_config)
 		}
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
-
+			static bool active = false;
+			ImGui::Checkbox("Active", &active);
+			ImGui::Text("SDL Version :"); ImGui::SameLine(); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1.f)); ImGui::Text("2.0.12"); ImGui::PopStyleColor();
+			ImGui::Separator(); ImGui::Spacing();
+			ImGui::Text("Number of logical CPU cores:"); ImGui::SameLine(); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1.f)); ImGui::Text("%d cores (Cache: %dkb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize()); ImGui::PopStyleColor();
+			
+			ImGui::Text("System Ram:"); ImGui::SameLine(); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1.f)); ImGui::Text("%dGB", (SDL_GetSystemRAM()/1000)); ImGui::PopStyleColor(); ImGui::Spacing();
+			
+			ImGui::Text("Caps:"); ImGui::SameLine(); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1.f));
+			if (SDL_HasRDTSC())ImGui::Text("RDTSC,"); ImGui::SameLine();
+			if (SDL_HasMMX())ImGui::Text("MMX,"); ImGui::SameLine();
+			if (SDL_HasMMX())ImGui::Text("MMX,"); ImGui::SameLine();
+			if (SDL_HasAltiVec())ImGui::Text("AltiVec,"); ImGui::SameLine();
+			if (SDL_Has3DNow())ImGui::Text("3DNow,"); ImGui::SameLine();
+			if (SDL_HasSSE())ImGui::Text("SSE,"); ImGui::SameLine();
+			if (SDL_HasSSE2())ImGui::Text("SSE2,"); ImGui::SameLine();
+			if (SDL_HasSSE3())ImGui::Text("SSE3,"); ImGui::SameLine();
+			if (SDL_HasSSE41())ImGui::Text("SSE41,"); ImGui::SameLine();
+			if (SDL_HasSSE42())ImGui::Text("SSE42,"); ImGui::SameLine();
+			if (SDL_HasAVX())ImGui::Text("AVX,"); ImGui::SameLine();
+			if (SDL_HasAVX2())ImGui::Text("AVX2,"); ImGui::SameLine();
+			if (SDL_HasAVX512F())ImGui::Text("AVX512F,"); ImGui::SameLine();
+			if (SDL_HasARMSIMD())ImGui::Text("ARMSIMD,"); ImGui::SameLine();
+			if (SDL_HasNEON())ImGui::Text("NEON, ");
+			ImGui::PopStyleColor();
+		
+			ImGui::Separator();
+			ImGui::Spacing();
 		}
 		ImGui::End();
 	}
@@ -409,6 +446,32 @@ void ModuleUI::StoreLog(const char* message)
 	str = message;
 	
 	consoleOutput.push_back(str);
+}
 
-	
+void ModuleUI::PlotGraph()
+{
+	bool active = true;
+	int fps = App->GetFPS();
+
+	//Get frames
+	if (frames.size() > 100) //Max seconds to show
+	{
+		for (int i = 1; i < frames.size(); i++)
+		{
+			frames[i - 1] = frames[i];      //with this we change the frist for the 2nd
+		}
+		frames[frames.size() - 1] = fps;
+	}
+	else
+	{
+		frames.push_back(fps);
+	}
+	char text[20];
+	sprintf_s(text, 20, "Frames: %d", fps);
+	ImGui::Text(text);
+	ImGui::PlotHistogram("Framerate", &frames[0], frames.size(), 0, text, 0.0f, 100.0f, ImVec2(300, 100));
+	if (ImGui::SliderInt("Max FPS", &max_fps, -1, 200, NULL))
+	{
+		App->SetMaxFPS(max_fps);
+	}
 }

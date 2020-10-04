@@ -21,6 +21,7 @@ public:
 	void AboutMenu(bool window);
 	void Configuration(bool config);
 	void StoreLog(const char* message);
+	void PlotGraph();
 
 public:
 	ImGuiIO* io;
@@ -29,11 +30,12 @@ public:
 	bool show_another_window;
 	bool active2 = false;
 	bool show_About;
-
+	vector<float> frames;
 	bool show_Configuration;
+	int max_fps = 144;
 private:
 	SDL_GLContext gl_context;
-
+	int c1;
 	vector<string> consoleOutput;
 
 };
