@@ -30,9 +30,13 @@ public:
 	bool show_another_window;
 	bool active2 = false;
 	bool show_About;
+	bool resizable_bool = false;
+	bool border_bool;
 	vector <float> fpsecond;
 	bool show_Configuration;
 	int max_fps = 144;
+	int i = 0;
+	int e = 0;
 private:
 	SDL_GLContext gl_context;
 	int c1;

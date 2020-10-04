@@ -144,6 +144,10 @@ bool ModuleUI::Init()
 	show_Configuration = false;
 	active2 = false;
 	show_another_window = true;
+	resizable_bool = false;
+	border_bool = false;
+	i = 0;
+	e = 1;
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	return ret;
@@ -356,36 +360,53 @@ void ModuleUI::Configuration(bool show_config)
 			if (ImGui::IsItemHovered())
 				SDL_SetWindowSize(App->window->window, i1, i2);
 					
-			ImGui::Text("Refresh rate: "); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1.f)); ImGui::SameLine(); ImGui::Text("%d ",App->GetFPS()); ImGui::PopStyleColor();
+			ImGui::Text("Refresh rate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%d ",App->GetFPS());
 
 			ImGui::Checkbox("Fullscreen", &active2); ImGui::SameLine();
 			App->window->Fullscreen_UI(active2);
 			
 		
-			static bool active3 = false;
-			ImGui::Checkbox("Resizable", &active3);
-			if(ImGui::IsItemHovered())
-			ImGui::SetTooltip("Restart to apply");
 			
-			
-			static bool active4 = false;
-			ImGui::Checkbox("Borderless", &active4); ImGui::SameLine();
-			if (active4 == true) {
+			ImGui::Checkbox("Resizable", &resizable_bool);
+			static int j = 0;
+			if (resizable_bool == false && j == 0)
+			{
+				j = 1;
+				SDL_SetWindowResizable(App->window->window, SDL_FALSE);
+			}
+			else if (resizable_bool == true && j == 1)
+			{
+				j = 0;
+				SDL_SetWindowResizable(App->window->window, SDL_TRUE);
+			}
+
+			static int j2 = 0;
+			ImGui::Checkbox("Borderless", &border_bool); ImGui::SameLine();
+			if (border_bool == false && j2 == 0)
+			{
+				j2 = 1;
+				SDL_SetWindowBordered(App->window->window, SDL_TRUE );
+			}
+			else if (border_bool == true && j2 == 1)
+			{
+				j2 = 0;
 				SDL_SetWindowBordered(App->window->window, SDL_FALSE);
 			}
-			else {
-				SDL_SetWindowBordered(App->window->window, SDL_TRUE);
-			}
-		
-			static bool active5 = false;
-			ImGui::Checkbox("Full Desktop", &active5);
-			if (active5 == true && c1==0)
+
+			static bool bool_fullscreeen_Desktop = false;
+			ImGui::Checkbox("Full Desktop", &bool_fullscreeen_Desktop);
+
+			if (bool_fullscreeen_Desktop == true && i == 0)
 			{
-				SDL_SetWindowSize(App->window->window, 1920, 1080);
-				SDL_SetWindowPosition(App->window->window, 0, 0);
-				c1++;
-			}if (active5 == false) {
-				c1=0;
+				e = 0;
+				i++;
+				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			}
+			if (bool_fullscreeen_Desktop == false && e == 0)
+			{
+				SDL_SetWindowFullscreen(App->window->window, 0);
+				i = 0;
+				e++;
 			}
 		}
 		if (ImGui::CollapsingHeader("File System"))
@@ -398,13 +419,15 @@ void ModuleUI::Configuration(bool show_config)
 		}
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
+			SDL_version compiled;
+			SDL_VERSION(&compiled);
 			static bool active = false;
 			ImGui::Checkbox("Active", &active);
-			ImGui::Text("SDL Version :"); ImGui::SameLine(); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1.f)); ImGui::Text("2.0.12"); ImGui::PopStyleColor();
+			ImGui::Text("SDL Version :"); ImGui::SameLine();  ImGui::TextColored(ImVec4(1, 1, 0, 1.f),"%d.%d.%d",compiled.major, compiled.minor, compiled.patch);
 			ImGui::Separator(); ImGui::Spacing();
-			ImGui::Text("Number of logical CPU cores:"); ImGui::SameLine(); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1.f)); ImGui::Text("%d cores (Cache: %dkb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize()); ImGui::PopStyleColor();
+			ImGui::Text("Number of logical CPU cores:"); ImGui::SameLine();  ImGui::TextColored(ImVec4(1, 1, 0, 1.f),"%d cores (Cache: %dkb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize()); 
 			
-			ImGui::Text("System Ram:"); ImGui::SameLine(); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1.f)); ImGui::Text("%dGB", (SDL_GetSystemRAM()/1000)); ImGui::PopStyleColor(); ImGui::Spacing();
+			ImGui::Text("System Ram:"); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f),"%dGB", (SDL_GetSystemRAM()/1000));ImGui::Spacing();
 			
 			ImGui::Text("Caps:"); ImGui::SameLine(); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1.f));
 			if (SDL_HasRDTSC())ImGui::Text("RDTSC,"); ImGui::SameLine();
