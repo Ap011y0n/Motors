@@ -342,11 +342,13 @@ void ModuleUI::Configuration(bool show_config)
 			SDL_SetWindowBrightness(App->window->window, f1);
 			
 			static int i1 = App->window->screen_surface->w;
-			ImGui::SliderInt("width", &i1, 640, 1920);
-			
 			static int i2 = App->window->screen_surface->h;
+			ImGui::SliderInt("width", &i1, 640, 1920);
+			if (ImGui::IsItemHovered())
+				SDL_SetWindowSize(App->window->window, i1, i2);
 			ImGui::SliderInt("height", &i2, 480, 1080);
-			SDL_SetWindowSize(App->window->window, i1, i2);
+			if (ImGui::IsItemHovered())
+				SDL_SetWindowSize(App->window->window, i1, i2);
 			
 			ImGui::Text("Refresh rate: ");
 			
