@@ -19,7 +19,8 @@ bool ModuleWindow::Init()
 {
 	LOG("Init SDL window & surface");
 	bool ret = true;
-
+	i = 0;
+	e = 1;
 	
 
 
@@ -107,11 +108,16 @@ void ModuleWindow::Fullscreen_UI(bool active)
 {
 	if (active == true && i == 0)
 	{
+		e = 0;
 		i++;
 		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+		LOG("FULLSCREEEN");
 	}
-	if (active == false)
+	if (active == false && e == 0)
 	{
+		SDL_SetWindowFullscreen(window, 0);
 		i = 0;
+		e++;
+		LOG("WINDOWED");
 	}
 }

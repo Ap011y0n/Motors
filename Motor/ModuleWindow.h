@@ -28,7 +28,8 @@ public:
 
 	bool fullscren_Ui;
 	bool setUIfullscreen;
-	int i=0;
+	int i = 0;
+	int e = 0;
 };
 
 #endif // __ModuleWindow_H__
