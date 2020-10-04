@@ -163,20 +163,26 @@ bool ModuleUI::CleanUp()
 // Update: draw background
 update_status ModuleUI::Update(float dt)
 {
+
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		for (int i = 0; i < consoleOutput.size(); i++)
-		{
-			const char* text = consoleOutput[i].c_str();
-			OutputDebugString(text);
-		}
+		LOG("Hello World");
 	}
-	
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
 	ImGui::BeginMainMenuBar(); //this creates the top bar
+
+	ImGui::Begin("Console");
+	
+		for (int i = 0; i < consoleOutput.size(); i++)
+		{
+			const char* text = consoleOutput[i].c_str();
+			ImGui::Text(text);
+		}
+	ImGui::End();
+	
 
 	if (ImGui::BeginMenu("File"))
 	{
@@ -401,5 +407,6 @@ void ModuleUI::StoreLog(const char* message)
 	str = message;
 	
 	consoleOutput.push_back(str);
+
 	
 }
