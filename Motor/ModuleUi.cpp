@@ -10,6 +10,7 @@
 #include "ModuleWindow.h"
 
 
+
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 #include "GL/gl3w.h"           // Initialize with gl3wInit()
 #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
@@ -31,6 +32,7 @@ using namespace gl;
 #else
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
+
 
 ModuleUI::ModuleUI(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -161,7 +163,14 @@ bool ModuleUI::CleanUp()
 // Update: draw background
 update_status ModuleUI::Update(float dt)
 {
-
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	{
+		for (int i = 0; i < consoleOutput.size(); i++)
+		{
+			const char* text = consoleOutput[i].c_str();
+			OutputDebugString(text);
+		}
+	}
 	
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
@@ -386,4 +395,11 @@ void ModuleUI::Configuration(bool show_config)
 	}
 }
 
-
+void ModuleUI::StoreLog(const char* message)
+{
+	string str;
+	str = message;
+	
+	consoleOutput.push_back(str);
+	
+}

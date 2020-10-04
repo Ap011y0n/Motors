@@ -118,6 +118,7 @@ bool Application::CleanUp()
 	list<Module*>::reverse_iterator item;
 	item = list_modules.rbegin();
 
+	
 	while (item != list_modules.rend() && ret == true)
 	{
 		ret = (*item)->CleanUp();

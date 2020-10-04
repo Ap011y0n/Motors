@@ -15,13 +15,17 @@ enum main_states
 	MAIN_EXIT
 };
 
+
+
+Application* App = nullptr;
+
 int main(int argc, char ** argv)
 {
 	LOG("Starting game '%s'...", TITLE);
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
-	Application* App = NULL;
+	
 
 	while (state != MAIN_EXIT)
 	{
@@ -66,7 +70,7 @@ int main(int argc, char ** argv)
 			break;
 
 		case MAIN_FINISH:
-
+			App->UI = nullptr;
 			LOG("-------------- Application CleanUp --------------");
 			if (App->CleanUp() == false)
 			{
@@ -83,6 +87,30 @@ int main(int argc, char ** argv)
 	}
 
 	delete App;
-	LOG("Exiting game '%s'...\n", TITLE);
+
+	//LOG("Exiting game '%s'...\n", TITLE);
 	return main_return;
+}
+
+
+void log(const char file[], int line, const char* format, ...)
+{
+	static char tmp_string[4096];
+	static char tmp_string2[4096];
+	static va_list  ap;
+
+	// Construct the string from variable arguments
+	va_start(ap, format);
+	vsprintf_s(tmp_string, 4096, format, ap);
+	va_end(ap);
+	sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
+
+	OutputDebugString(tmp_string2);
+
+	if(App)
+	if (App->UI)
+	{
+		App->UI->StoreLog(tmp_string);
+	}
+
 }

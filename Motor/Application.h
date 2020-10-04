@@ -14,6 +14,7 @@
 
 using namespace std;
 
+
 class Application
 {
 public:
@@ -46,3 +47,4 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 };
+

@@ -2,6 +2,11 @@
 #include "Module.h"
 #include "Globals.h"
 #include "imgui.h"
+#include<iostream> 
+#include<string>
+
+using namespace std;
+
 
 class ModuleUI : public Module
 {
@@ -15,9 +20,9 @@ public:
 	bool CleanUp();
 	void AboutMenu(bool window);
 	void Configuration(bool config);
+	void StoreLog(const char* message);
 
 public:
-	SDL_GLContext gl_context;
 	ImGuiIO* io;
 	bool show_demo_window;
 	ImVec4 clear_color;
@@ -26,4 +31,9 @@ public:
 	bool show_About;
 
 	bool show_Configuration;
+private:
+	SDL_GLContext gl_context;
+
+	vector<string> consoleOutput;
+
 };
