@@ -1,4 +1,7 @@
-#pragma once
+#ifndef _APPLICATION_H
+#define _APPLICATION_H
+
+
 
 #include "Globals.h"
 #include "Timer.h"
@@ -55,3 +58,6 @@ private:
 	void FinishUpdate();
 };
 
+extern Application* App;
+
+#endif // !_APPLICATION_H

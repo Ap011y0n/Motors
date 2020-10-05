@@ -30,6 +30,7 @@ public:
 	bool setUIfullscreen;
 	int i = 0;
 	int e = 0;
+	const char* glsl_version;
 };
 
 #endif // __ModuleWindow_H__

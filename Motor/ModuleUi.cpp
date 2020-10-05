@@ -44,25 +44,10 @@ ModuleUI::~ModuleUI()
 
 bool ModuleUI::Init()
 {
-	// Decide GL+GLSL versions
-#if __APPLE__
-	// GL 3.2 Core + GLSL 150
-	const char* glsl_version = "#version 150";
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG); // Always required on Mac
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-#else
-	// GL 3.0 + GLSL 130
-	const char* glsl_version = "#version 130";
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-#endif
 
-	gl_context = SDL_GL_CreateContext(App->window->window);
-	SDL_GL_MakeCurrent(App->window->window, gl_context);
+
+	App->renderer3D->context = SDL_GL_CreateContext(App->window->window);
+	SDL_GL_MakeCurrent(App->window->window, App->renderer3D->context);
 
 	// Initialize OpenGL loader
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
@@ -102,6 +87,7 @@ bool ModuleUI::Init()
 	   // Setup Dear ImGui style
 	ImGui::StyleColorsDark();
 	//ImGui::StyleColorsClassic();
+	//ImGui::StyleColorsLight();
 	 // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 	ImGuiStyle& style = ImGui::GetStyle();
 	if (io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -111,8 +97,8 @@ bool ModuleUI::Init()
 	}
 
 	// Setup Platform/Renderer bindings
-	ImGui_ImplSDL2_InitForOpenGL(App->window->window, gl_context);
-	ImGui_ImplOpenGL3_Init(glsl_version);
+	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
+	ImGui_ImplOpenGL3_Init(App->window->glsl_version);
 
 	// Load Fonts
 // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
@@ -161,7 +147,6 @@ bool ModuleUI::CleanUp()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
-	SDL_GL_DeleteContext(gl_context);
 	return true;
 }
 
@@ -369,10 +354,16 @@ void ModuleUI::Configuration(bool show_config)
 			static int i2 = App->window->screen_surface->h;
 			ImGui::SliderInt("width", &i1, 640, 1920);
 			if (ImGui::IsItemHovered())
+			{
 				SDL_SetWindowSize(App->window->window, i1, i2);
+				App->renderer3D->OnResize(i1, i2);
+			}
 			ImGui::SliderInt("height", &i2, 480, 1080);
 			if (ImGui::IsItemHovered())
+			{
 				SDL_SetWindowSize(App->window->window, i1, i2);
+				App->renderer3D->OnResize(i1, i2);
+			}
 					
 			ImGui::Text("Refresh rate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%d ",App->GetFPS());
 

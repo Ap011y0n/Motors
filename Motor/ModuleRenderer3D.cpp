@@ -23,7 +23,7 @@ bool ModuleRenderer3D::Init()
 	bool ret = true;
 	
 	//Create context
-	context = SDL_GL_CreateContext(App->window->window);
+	
 	if(context == NULL)
 	{
 		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -54,18 +54,7 @@ bool ModuleRenderer3D::Init()
 			ret = false;
 		}
 
-		//Initialize Modelview Matrix
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-
-		//Check for error
-		error = glGetError();
-		if(error != GL_NO_ERROR)
-		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			ret = false;
-		}
-		
+			
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glClearDepth(1.0f);
 		
@@ -111,10 +100,13 @@ bool ModuleRenderer3D::Init()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
+	glClearColor(0.f, 0.f, 0.f, 1.f);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
 	glLoadMatrixf(App->camera->GetViewMatrix());
 
 	// light 0 on cam pos

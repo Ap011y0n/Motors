@@ -39,7 +39,6 @@ public:
 	int i = 0;
 	int e = 0;
 private:
-	SDL_GLContext gl_context;
 	int c1;
 	vector<string> consoleOutput;
 
