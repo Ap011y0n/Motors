@@ -6,7 +6,9 @@
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
-#include "GL/gl3w.h"            
+#include "GL/gl3w.h" 
+#include "ModuleWindow.h"
+
 
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
@@ -31,8 +33,10 @@ using namespace gl;
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
+
 ModuleUI::ModuleUI(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	io = new ImGuiIO;
 }
 
 ModuleUI::~ModuleUI()
@@ -40,25 +44,10 @@ ModuleUI::~ModuleUI()
 
 bool ModuleUI::Init()
 {
-	// Decide GL+GLSL versions
-#if __APPLE__
-	// GL 3.2 Core + GLSL 150
-	const char* glsl_version = "#version 150";
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG); // Always required on Mac
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-#else
-	// GL 3.0 + GLSL 130
-	const char* glsl_version = "#version 130";
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-#endif
 
-	gl_context = SDL_GL_CreateContext(App->window->window);
-	SDL_GL_MakeCurrent(App->window->window, gl_context);
+
+	App->renderer3D->context = SDL_GL_CreateContext(App->window->window);
+	SDL_GL_MakeCurrent(App->window->window, App->renderer3D->context);
 
 	// Initialize OpenGL loader
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
@@ -87,28 +76,29 @@ bool ModuleUI::Init()
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+	*io = ImGui::GetIO(); (void)io;
+	io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+	io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+	io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 	//io.ConfigViewportsNoAutoMerge = true;
 	//io.ConfigViewportsNoTaskBarIcon = true;
 
 	   // Setup Dear ImGui style
 	ImGui::StyleColorsDark();
 	//ImGui::StyleColorsClassic();
+	//ImGui::StyleColorsLight();
 	 // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 	ImGuiStyle& style = ImGui::GetStyle();
-	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	if (io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
 		style.WindowRounding = 0.0f;
 		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 	}
 
 	// Setup Platform/Renderer bindings
-	ImGui_ImplSDL2_InitForOpenGL(App->window->window, gl_context);
-	ImGui_ImplOpenGL3_Init(glsl_version);
+	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
+	ImGui_ImplOpenGL3_Init(App->window->glsl_version);
 
 	// Load Fonts
 // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
@@ -134,9 +124,17 @@ bool ModuleUI::Init()
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
-
-	show_demo_window = true;
+	c1 = 0;
+	show_demo_window = false;
+	show_console = false;
+	show_About = false;
+	show_Configuration = false;
+	active2 = false;
 	show_another_window = true;
+	resizable_bool = false;
+	border_bool = false;
+	i = 0;
+	e = 1;
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	return ret;
@@ -149,7 +147,6 @@ bool ModuleUI::CleanUp()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
-	SDL_GL_DeleteContext(gl_context);
 	return true;
 }
 
@@ -157,29 +154,90 @@ bool ModuleUI::CleanUp()
 update_status ModuleUI::Update(float dt)
 {
 
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	{
+		LOG("Hello World");
+	}
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
+	ImGui::BeginMainMenuBar(); //this creates the top bar
 
-		ImGui::Begin("Menu");
 
+	if (ImGui::BeginMenu("Console"))
+	{
+		
+			show_console = true;
+
+		ImGui::EndMenu();
+	}
+	
+
+
+	if (show_console)
+	{
+		ImGui::Begin("Console", &show_console);
+
+		for (int i = 0; i < consoleOutput.size(); i++)
+		{
+			const char* text = consoleOutput[i].c_str();
+			ImGui::Text(text);
+		}
+		ImGui::End();
+	}
+	
+
+	if (ImGui::BeginMenu("File"))
+	{
 		if (ImGui::Button("Quit"))
 		{
 			return UPDATE_STOP;
 		}
+		ImGui::EndMenu();
+	}
 
-		ImGui::End();
-	
+	if (ImGui::BeginMenu("Help"))
+	{
+		if (ImGui::MenuItem("Gui demo"))
+			show_demo_window = true;
 
+		if (ImGui::MenuItem("Documentation"))
+			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors", NULL, NULL, SW_SHOWNORMAL);
+
+		if (ImGui::MenuItem("Download latest"))
+			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors/releases", NULL, NULL, SW_SHOWNORMAL);
+
+		if (ImGui::MenuItem("Report bug"))
+			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors/issues", NULL, NULL, SW_SHOWNORMAL);
+
+		if (ImGui::MenuItem("About")) 
+			show_About = true;
+		
+
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::BeginMenu("View"))
+	{
+		if (ImGui::MenuItem("Configuration"))
+			show_Configuration = true;
+
+		ImGui::EndMenu();
+	}
+
+	ImGui::EndMainMenuBar();
+
+	if (show_demo_window == true)
+		ImGui::ShowDemoWindow(&show_demo_window);
 	
+	AboutMenu(show_About);
+	Configuration(show_Configuration);
+
 
 	// Rendering
 	ImGui::Render();
-	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+	glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
 	//glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	//glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -194,9 +252,251 @@ update_status ModuleUI::Update(float dt)
 	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());*/
-
-
-
 	return UPDATE_CONTINUE;
 }
 
+
+void ModuleUI::AboutMenu(bool show_windoww)
+{
+	if (show_windoww == true)
+	{
+		
+		ImGui::Begin("About", &show_windoww);
+		ImGui::Text("NIDHOGG ENGINE"); //ImGui::SameLine(); ImGui::Text("Nidhogg engine ");
+		ImGui::Text("");
+		ImGui::TextWrapped("This will be the next best 3D Game Engine");
+		ImGui::Text("");
+		ImGui::Text("Made by:");
+		ImGui::Text("Albert Garcia github -->"); ImGui::SameLine();  
+		if (ImGui::Button("Albert github"))
+		{
+			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n", NULL, NULL, SW_SHOWNORMAL);
+		} 
+		ImGui::Text("Pol de la Torre github -->"); ImGui::SameLine(); 
+		if (ImGui::Button("Pol github"))
+		{
+			ShellExecuteA(NULL, "open", "https://github.com/polf780", NULL, NULL, SW_SHOWNORMAL);
+		}
+		ImGui::Separator();
+		ImGui::Text("3rd Party libraries used");
+		ImGui::BulletText("SDL 2.0");
+		ImGui::BulletText("SDL Mixer 2.0");
+		ImGui::BulletText("Cereal 1.2.2");
+		ImGui::BulletText("Glew 2.0.0");
+		ImGui::BulletText("ImGui 1.78");
+		ImGui::BulletText("MathGeoLib 1.5");
+		ImGui::BulletText("OpenGL 3.1");
+		ImGui::BulletText("Assimp 3.1.1");
+		ImGui::BulletText("Devil 1.7.8");
+		ImGui::Separator();
+		ImGui::Text("License:");
+		ImGui::Text("MIT License");
+		ImGui::TextWrapped("Copyright 2020 Pol de la Torre Solé & Albert Garcia Belerda ");
+		ImGui::TextWrapped("Permission is hereby granted, free of charge, to any person obtaining a copy"); 
+		ImGui::TextWrapped("of this softwareand associated documentation files(the Software), to deal");
+		ImGui::TextWrapped("in the Software without restriction, including without limitation the rights ");
+		ImGui::TextWrapped("to use, copy, modify, merge, publish, distribute, sublicense, and /or sell ");
+		ImGui::TextWrapped("copies of the Software, and to permit persons to whom the Software is");
+		ImGui::TextWrapped("furnished to do so, subject to the following conditions :");
+		ImGui::TextWrapped("");
+		ImGui::TextWrapped("The above copyright noticeand this permission notice shall be included in all");
+		ImGui::TextWrapped("copies or substantial portions of the Software.");
+		ImGui::TextWrapped("THE SOFTWARE IS PROVIDED ¡'AS IS`, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR");
+		ImGui::TextWrapped("IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,");
+		ImGui::TextWrapped("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE");
+		ImGui::TextWrapped("AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER");
+		ImGui::TextWrapped("LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,");
+		ImGui::TextWrapped("OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE");
+		ImGui::TextWrapped("SOFTWARE.");
+		ImGui::End();
+	}
+	if (show_windoww == false)
+	{
+		show_About = false;
+		
+	}
+}
+
+void ModuleUI::Configuration(bool show_config)
+{
+
+	if (show_config == true)
+	{
+		ImGui::Begin("Configuration", &show_config);
+
+		ImGui::MenuItem("Wellcome to the Configuration menu", NULL, false, false);
+		if (ImGui::BeginMenu("Options"))
+		{
+			ImGui::MenuItem("Save");
+			ImGui::MenuItem("Load");
+			ImGui::MenuItem("Reset to Default");
+			ImGui::End();
+		}
+		if (ImGui::CollapsingHeader("Application"))
+		{
+			static char buf[32] = "";
+			ImGui::InputText("App name", buf, IM_ARRAYSIZE(buf));
+			SDL_SetWindowTitle(App->window->window, buf);
+
+			static char buf2[32] = "";
+			ImGui::InputText("Organitzation", buf2, IM_ARRAYSIZE(buf));
+			PlotGraph();
+		}
+		if (ImGui::CollapsingHeader("Window"))
+		{
+			static bool active = false;
+			ImGui::Checkbox("Active", &active);
+			static float f1 = 1.0f;
+			
+			ImGui::SliderFloat("Brightness", &f1, 0.0f, 1.0f, "%.3f");
+			SDL_SetWindowBrightness(App->window->window, f1);
+			
+			static int i1 = App->window->screen_surface->w;
+			static int i2 = App->window->screen_surface->h;
+			ImGui::SliderInt("width", &i1, 640, 1920);
+			if (ImGui::IsItemHovered())
+			{
+				SDL_SetWindowSize(App->window->window, i1, i2);
+				App->renderer3D->OnResize(i1, i2);
+			}
+			ImGui::SliderInt("height", &i2, 480, 1080);
+			if (ImGui::IsItemHovered())
+			{
+				SDL_SetWindowSize(App->window->window, i1, i2);
+				App->renderer3D->OnResize(i1, i2);
+			}
+					
+			ImGui::Text("Refresh rate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%d ",App->GetFPS());
+
+			ImGui::Checkbox("Fullscreen", &active2); ImGui::SameLine();
+			App->window->Fullscreen_UI(active2);
+			
+		
+			
+			ImGui::Checkbox("Resizable", &resizable_bool);
+			static int j = 0;
+			if (resizable_bool == false && j == 0)
+			{
+				j = 1;
+				SDL_SetWindowResizable(App->window->window, SDL_FALSE);
+			}
+			else if (resizable_bool == true && j == 1)
+			{
+				j = 0;
+				SDL_SetWindowResizable(App->window->window, SDL_TRUE);
+			}
+
+			static int j2 = 0;
+			ImGui::Checkbox("Borderless", &border_bool); ImGui::SameLine();
+			if (border_bool == false && j2 == 0)
+			{
+				j2 = 1;
+				SDL_SetWindowBordered(App->window->window, SDL_TRUE );
+			}
+			else if (border_bool == true && j2 == 1)
+			{
+				j2 = 0;
+				SDL_SetWindowBordered(App->window->window, SDL_FALSE);
+			}
+
+			static bool bool_fullscreeen_Desktop = false;
+			ImGui::Checkbox("Full Desktop", &bool_fullscreeen_Desktop);
+
+			if (bool_fullscreeen_Desktop == true && i == 0)
+			{
+				e = 0;
+				i++;
+				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			}
+			if (bool_fullscreeen_Desktop == false && e == 0)
+			{
+				SDL_SetWindowFullscreen(App->window->window, 0);
+				i = 0;
+				e++;
+			}
+		}
+		if (ImGui::CollapsingHeader("File System"))
+		{
+
+		}
+		if (ImGui::CollapsingHeader("Input"))
+		{
+
+		}
+		if (ImGui::CollapsingHeader("Hardware"))
+		{
+			SDL_version compiled;
+			SDL_VERSION(&compiled);
+			static bool active = false;
+			ImGui::Checkbox("Active", &active);
+			ImGui::Text("SDL Version :"); ImGui::SameLine();  ImGui::TextColored(ImVec4(1, 1, 0, 1.f),"%d.%d.%d",compiled.major, compiled.minor, compiled.patch);
+			ImGui::Separator(); ImGui::Spacing();
+			ImGui::Text("Number of logical CPU cores:"); ImGui::SameLine();  ImGui::TextColored(ImVec4(1, 1, 0, 1.f),"%d cores (Cache: %dkb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize()); 
+			
+			ImGui::Text("System Ram:"); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f),"%dGB", (SDL_GetSystemRAM()/1000));ImGui::Spacing();
+			
+			ImGui::Text("Caps:"); ImGui::SameLine(); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1.f));
+			if (SDL_HasRDTSC())ImGui::Text("RDTSC,"); ImGui::SameLine();
+			if (SDL_HasMMX())ImGui::Text("MMX,"); ImGui::SameLine();
+			if (SDL_HasMMX())ImGui::Text("MMX,"); ImGui::SameLine();
+			if (SDL_HasAltiVec())ImGui::Text("AltiVec,"); ImGui::SameLine();
+			if (SDL_Has3DNow())ImGui::Text("3DNow,"); ImGui::SameLine();
+			if (SDL_HasSSE())ImGui::Text("SSE,"); ImGui::SameLine();
+			if (SDL_HasSSE2())ImGui::Text("SSE2,"); ImGui::SameLine();
+			if (SDL_HasSSE3())ImGui::Text("SSE3,"); ImGui::SameLine();
+			if (SDL_HasSSE41())ImGui::Text("SSE41,"); ImGui::SameLine();
+			if (SDL_HasSSE42())ImGui::Text("SSE42,"); ImGui::SameLine();
+			if (SDL_HasAVX())ImGui::Text("AVX,"); ImGui::SameLine();
+			if (SDL_HasAVX2())ImGui::Text("AVX2,"); ImGui::SameLine();
+			if (SDL_HasAVX512F())ImGui::Text("AVX512F,"); ImGui::SameLine();
+			if (SDL_HasARMSIMD())ImGui::Text("ARMSIMD,"); ImGui::SameLine();
+			if (SDL_HasNEON())ImGui::Text("NEON, ");
+			ImGui::PopStyleColor();
+		
+			ImGui::Separator();
+			ImGui::Spacing();
+		}
+		ImGui::End();
+	}
+
+	if (show_config == false)
+	{
+		show_Configuration = false;
+
+	}
+}
+
+void ModuleUI::StoreLog(const char* message)
+{
+	string str;
+	str = message;
+	
+	consoleOutput.push_back(str);
+}
+
+void ModuleUI::PlotGraph()
+{
+	if (ImGui::SliderInt("Maximum FPS", &max_fps, -1, 200, NULL))
+	{
+		App->Maxfps(max_fps);
+	}
+	bool active = true;
+	int fps = App->GetFPS();
+	if (fpsecond.size() > 120) 
+	{
+		for (int i = 1; i < fpsecond.size(); i++)
+		{
+			fpsecond[i - 1] = fpsecond[i];      //with this we change the frist for the 2nd to update all
+		}
+		fpsecond[fpsecond.size() - 1] = fps;
+	}
+	else
+	{
+		fpsecond.push_back(fps);
+	}
+	char text[20];
+	sprintf_s(text, 20, "Frames: %d", fps);
+	ImGui::Text(text);
+	ImGui::PlotHistogram("Framerate", &fpsecond[0], fpsecond.size(), 0, text, 0.0f, 100.0f, ImVec2(450, 100));
+	
+}

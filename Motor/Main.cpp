@@ -15,13 +15,17 @@ enum main_states
 	MAIN_EXIT
 };
 
+
+
+Application* App = nullptr;
+
 int main(int argc, char ** argv)
 {
 	LOG("Starting game '%s'...", TITLE);
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
-	Application* App = NULL;
+	
 
 	while (state != MAIN_EXIT)
 	{
@@ -66,7 +70,7 @@ int main(int argc, char ** argv)
 			break;
 
 		case MAIN_FINISH:
-
+			App->UI = nullptr;
 			LOG("-------------- Application CleanUp --------------");
 			if (App->CleanUp() == false)
 			{
@@ -82,7 +86,10 @@ int main(int argc, char ** argv)
 		}
 	}
 
-	delete App;
 	LOG("Exiting game '%s'...\n", TITLE);
+	delete App;
+
 	return main_return;
 }
+
+

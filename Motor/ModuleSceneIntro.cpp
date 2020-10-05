@@ -3,7 +3,8 @@
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
 #include "ModuleWindow.h"
-       
+#include "ModuleUI.h"
+           
 
 #ifdef _DEBUG
 #pragma comment( lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib" )
@@ -49,6 +50,9 @@ update_status ModuleSceneIntro::Update(float dt)
 	PrimPlane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();
+	Cube cube(1, 1, 1);
+	cube.SetPos(0, 0, 0);
+	cube.Render();
 
 	return UPDATE_CONTINUE;
 }

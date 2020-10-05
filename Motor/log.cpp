@@ -1,6 +1,6 @@
 #pragma once
 #include "Globals.h"
-
+#include "Application.h"
 void log(const char file[], int line, const char* format, ...)
 {
 	static char tmp_string[4096];
@@ -14,4 +14,11 @@ void log(const char file[], int line, const char* format, ...)
 	sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
 
 	OutputDebugString(tmp_string2);
+
+	if (App)
+		if (App->UI)
+		{
+			App->UI->StoreLog(tmp_string2);
+		}
+
 }

@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "Timer.h"
 
 Application::Application()
 {
@@ -64,7 +65,8 @@ bool Application::Init()
 			it = *item_list;
 			ret = it->Start();
 	}
-	
+
+	last_sec_frame_time.Start();
 	ms_timer.Start();
 	return ret;
 }
@@ -72,13 +74,26 @@ bool Application::Init()
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-	dt = (float)ms_timer.Read() / 1000.0f;
+	frame_count++;
+	ms_timer.ReadSec();
 	ms_timer.Start();
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	if (last_sec_frame_time.Read() > 1000)
+	{
+		last_sec_frame_time.Start();
+		last_sec_frame_count = frame_count;
+		frame_count = 0;
+	}
+
+	uint32_t last_frame_ms = ms_timer.Read();
+	if (cap > 0 && last_frame_ms < cap)
+	{
+		SDL_Delay(cap - last_frame_ms);
+	}
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -118,6 +133,7 @@ bool Application::CleanUp()
 	list<Module*>::reverse_iterator item;
 	item = list_modules.rbegin();
 
+	
 	while (item != list_modules.rend() && ret == true)
 	{
 		ret = (*item)->CleanUp();
@@ -130,4 +146,15 @@ bool Application::CleanUp()
 void Application::AddModule(Module* mod)
 {
 	list_modules.push_back(mod);
+}
+int Application::GetFPS()
+{
+	return last_sec_frame_count;
+}
+
+void Application::Maxfps(int max_fps)
+{
+	fps = max_fps;
+	if (fps == 0) fps = -1;
+	cap = 1000 / fps;
 }
