@@ -26,6 +26,7 @@ public:
 public:
 	ImGuiIO* io;
 	bool show_demo_window;
+	bool show_console;
 	ImVec4 clear_color;
 	bool show_another_window;
 	bool active2 = false;

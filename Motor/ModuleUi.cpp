@@ -140,6 +140,7 @@ bool ModuleUI::Init()
 	App->camera->LookAt(vec3(0, 0, 0));
 	c1 = 0;
 	show_demo_window = false;
+	show_console = false;
 	show_About = false;
 	show_Configuration = false;
 	active2 = false;
@@ -178,15 +179,28 @@ update_status ModuleUI::Update(float dt)
 
 	ImGui::BeginMainMenuBar(); //this creates the top bar
 
-	/*ImGui::Begin("Console");
+	if (ImGui::BeginMenu("Console"))
+	{
+		
+			show_console = true;
+
+		ImGui::EndMenu();
+	}
 	
+	
+
+	if (show_console)
+	{
+		ImGui::Begin("Console", &show_console);
+
 		for (int i = 0; i < consoleOutput.size(); i++)
 		{
 			const char* text = consoleOutput[i].c_str();
 			ImGui::Text(text);
 		}
-	ImGui::End();
-	*/
+		ImGui::End();
+	}
+	
 
 	if (ImGui::BeginMenu("File"))
 	{
