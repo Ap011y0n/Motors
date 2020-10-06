@@ -349,7 +349,7 @@ void ModuleUI::Configuration(bool show_config)
 			static float f1 = 1.0f;
 			
 			ImGui::SliderFloat("Brightness", &f1, 0.0f, 1.0f, "%.3f");
-			if (ImGui::IsItemHovered())
+			if (ImGui::IsItemActive())
 			{
 				SDL_SetWindowBrightness(App->window->window, f1);
 			}
@@ -357,13 +357,13 @@ void ModuleUI::Configuration(bool show_config)
 			static int i1 = App->window->screen_surface->w;
 			static int i2 = App->window->screen_surface->h;
 			ImGui::SliderInt("width", &i1, 640, 1920);
-			if (ImGui::IsItemHovered())
+			if (ImGui::IsItemActive())
 			{
 				SDL_SetWindowSize(App->window->window, i1, i2);
 				App->renderer3D->OnResize(i1, i2);
 			}
 			ImGui::SliderInt("height", &i2, 480, 1080);
-			if (ImGui::IsItemHovered())
+			if (ImGui::IsItemActive())
 			{
 				SDL_SetWindowSize(App->window->window, i1, i2);
 				App->renderer3D->OnResize(i1, i2);
