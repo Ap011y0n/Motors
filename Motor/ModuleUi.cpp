@@ -455,6 +455,10 @@ void ModuleUI::Configuration(bool show_config)
 		
 			ImGui::Separator();
 			ImGui::Spacing();
+			const GLubyte* vendor = gl3wGetString(GL_VENDOR); // Returns the vendor
+			const GLubyte* renderer = gl3wGetString(GL_RENDERER); // Returns a hint to the model
+			ImGui::Text("Brand: ");  ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s", vendor);
+			ImGui::Text("Graphic Card: ");  ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s", renderer);
 		}
 		ImGui::End();
 	}
