@@ -349,7 +349,10 @@ void ModuleUI::Configuration(bool show_config)
 			static float f1 = 1.0f;
 			
 			ImGui::SliderFloat("Brightness", &f1, 0.0f, 1.0f, "%.3f");
-			SDL_SetWindowBrightness(App->window->window, f1);
+			if (ImGui::IsItemHovered())
+			{
+				SDL_SetWindowBrightness(App->window->window, f1);
+			}
 			
 			static int i1 = App->window->screen_surface->w;
 			static int i2 = App->window->screen_surface->h;
