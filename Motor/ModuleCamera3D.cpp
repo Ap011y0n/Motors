@@ -12,6 +12,8 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 
 	Position = vec3(0.0f, 0.0f, 5.0f);
 	Reference = vec3(0.0f, 0.0f, 0.0f);
+
+	
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -22,7 +24,7 @@ bool ModuleCamera3D::Start()
 {
 	LOG("Setting up the camera");
 	bool ret = true;
-
+	background.Set(0.f, 0.f, 0.f, 1.f);
 	return ret;
 }
 
