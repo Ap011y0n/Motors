@@ -445,13 +445,15 @@ void ModuleUI::Configuration(bool show_config)
 			if (io.MouseDownDuration[i] >= 0.0f) 
 			{
 				ImGui::SameLine(); 
-				ImGui::Text("b%d (%.02f secs)", i, io.MouseDownDuration[i]); 
+				ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "b%d (%.02f secs)", i, io.MouseDownDuration[i]);
 			}
+
+			ImGui::Text("Keys down:");
 			for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
 				if (io.KeysDownDuration[i] >= 0.0f)
 				{
 					ImGui::SameLine();
-					ImGui::Text("%d (0x%X) (%.02f secs)", i, i, io.KeysDownDuration[i]);
+					ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%d (0x%X) (%.02f secs)", i, i, io.KeysDownDuration[i]);
 				}
 		}
 		if (ImGui::CollapsingHeader("Hardware"))
