@@ -39,6 +39,7 @@ public:
 	int max_fps = 61;
 	int i = 0;
 	int e = 0;
+	ImVec2 MouseVelocity;
 private:
 	int c1;
 	vector<string> consoleOutput;

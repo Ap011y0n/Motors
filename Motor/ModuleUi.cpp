@@ -430,7 +430,29 @@ void ModuleUI::Configuration(bool show_config)
 		}
 		if (ImGui::CollapsingHeader("Input"))
 		{
+			int mousex=0; int mousey=0;
+			SDL_GetMouseState(&mousex, &mousey);
+			ImGui::Text("Mouse Position:"); ImGui::SameLine();  ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%dx %dy", mousex,mousey);
 
+			ImGuiIO& io = ImGui::GetIO();
+			ImGui::Text("Mouse Motion: ");  ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f),"% g, % g", io.MouseDelta.x, io.MouseDelta.y);
+
+			ImGui::Text("Mouse wheel:"); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%.0f",io.MouseWheel);
+			ImGui::Separator();
+
+			ImGui::Text("Mouse down:");     
+			for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++) 
+			if (io.MouseDownDuration[i] >= 0.0f) 
+			{
+				ImGui::SameLine(); 
+				ImGui::Text("b%d (%.02f secs)", i, io.MouseDownDuration[i]); 
+			}
+			for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
+				if (io.KeysDownDuration[i] >= 0.0f)
+				{
+					ImGui::SameLine();
+					ImGui::Text("%d (0x%X) (%.02f secs)", i, i, io.KeysDownDuration[i]);
+				}
 		}
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
