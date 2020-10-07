@@ -17,6 +17,7 @@ public:
 	bool Init();
 
 	update_status Update(float dt);
+	update_status PostUpdate(float dt);
 	bool CleanUp();
 	void AboutMenu(bool window);
 	void Configuration(bool config);
@@ -35,7 +36,7 @@ public:
 	bool border_bool;
 	vector <float> fpsecond;
 	bool show_Configuration;
-	int max_fps = 144;
+	int max_fps = 61;
 	int i = 0;
 	int e = 0;
 private:

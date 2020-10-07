@@ -135,6 +135,8 @@ bool ModuleUI::Init()
 	border_bool = false;
 	i = 0;
 	e = 1;
+	int max_fps = 61;
+	App->Maxfps(max_fps);
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	return ret;
@@ -153,7 +155,6 @@ bool ModuleUI::CleanUp()
 // Update: draw background
 update_status ModuleUI::Update(float dt)
 {
-
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		LOG("Hello World");
@@ -234,7 +235,12 @@ update_status ModuleUI::Update(float dt)
 	AboutMenu(show_About);
 	Configuration(show_Configuration);
 
+	return UPDATE_CONTINUE;
+}
 
+// Update: draw background
+update_status ModuleUI::PostUpdate(float dt)
+{
 	// Rendering
 	ImGui::Render();
 	glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
@@ -252,9 +258,9 @@ update_status ModuleUI::Update(float dt)
 	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());*/
+
 	return UPDATE_CONTINUE;
 }
-
 
 void ModuleUI::AboutMenu(bool show_windoww)
 {
@@ -368,7 +374,7 @@ void ModuleUI::Configuration(bool show_config)
 				SDL_SetWindowSize(App->window->window, i1, i2);
 				App->renderer3D->OnResize(i1, i2);
 			}
-					
+			
 			ImGui::Text("Refresh rate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%d ",App->GetFPS());
 
 			ImGui::Checkbox("Fullscreen", &active2); ImGui::SameLine();
