@@ -350,8 +350,8 @@ void ModuleUI::Configuration(bool show_config)
 		}
 		if (ImGui::CollapsingHeader("Window"))
 		{
-			static bool active = false;
-			ImGui::Checkbox("Active", &active);
+			static bool Wireframe_visible = false;
+			ImGui::Checkbox("Wirframe visible", &Wireframe_visible);
 			static float f1 = 1.0f;
 			
 			ImGui::SliderFloat("Brightness", &f1, 0.0f, 1.0f, "%.3f");
