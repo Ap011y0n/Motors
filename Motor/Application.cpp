@@ -10,6 +10,7 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	UI = new ModuleUI(this);
+	PrimManager = new PrimitiveManager(this);
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
@@ -21,6 +22,8 @@ Application::Application()
 	AddModule(audio);
 	
 	// Scenes
+	AddModule(PrimManager);
+
 	AddModule(scene_intro);
 	AddModule(UI);
 
@@ -31,13 +34,9 @@ Application::Application()
 Application::~Application()
 {
 	// release modules
-	list<Module*>::reverse_iterator item;
-	item = list_modules.rbegin();
-
-	while (item != list_modules.rend())
-	{
-		delete* item;
-		item++;
+	for (int i = list_modules.size() - 1; i >= 0; i--) {
+	
+		delete list_modules[i];
 	}
 	list_modules.clear();
 
@@ -49,21 +48,21 @@ bool Application::Init()
 
 	// Call Init() in all modules
 
-	list<Module*>::iterator item_list;
+
 	Module* it;
 
-	for (item_list = list_modules.begin(); item_list != list_modules.end() && ret == true; ++item_list) {
+	for (int i = 0; i < list_modules.size() && ret == true; i++) {
 
-			it = *item_list;
+		it = list_modules[i];
 			ret = it->Init();
 	}
 
 	// After all Init calls we call Start() in all modules
 	LOG("Application Start --------------");
-	for (item_list = list_modules.begin(); item_list != list_modules.end() && ret == true; ++item_list) {
+	for (int i = 0; i < list_modules.size() && ret == true; i++) {
 
-			it = *item_list;
-			ret = it->Start();
+		it = list_modules[i];
+		ret = it->Start();
 	}
 
 	last_sec_frame_time.Start();
@@ -102,24 +101,24 @@ update_status Application::Update()
 	update_status ret = UPDATE_CONTINUE;
 	PrepareUpdate();
 	
-	list<Module*>::iterator item_list;
+
 	Module* it;
 
-	for (item_list = list_modules.begin(); item_list != list_modules.end() && ret == UPDATE_CONTINUE; ++item_list) {
+	for (int i = 0; i < list_modules.size() && ret == UPDATE_CONTINUE; i++) {
 
-			it = *item_list;
+			it = list_modules[i];
 			ret = it->PreUpdate(dt);
 	}
 
-	for (item_list = list_modules.begin(); item_list != list_modules.end() && ret == UPDATE_CONTINUE; ++item_list) {
+	for (int i = 0; i < list_modules.size() && ret == UPDATE_CONTINUE; i++) {
 
-			it = *item_list;
+			it = list_modules[i];
 			ret = it->Update(dt);
 	}
 
-	for (item_list = list_modules.begin(); item_list != list_modules.end() && ret == UPDATE_CONTINUE; ++item_list) {
+	for (int i = 0; i < list_modules.size() && ret == UPDATE_CONTINUE; i++) {
 
-			it = *item_list;
+			it = list_modules[i];
 			ret = it->PostUpdate(dt);
 	}
 
@@ -130,14 +129,11 @@ update_status Application::Update()
 bool Application::CleanUp()
 {
 	bool ret = true;
-	list<Module*>::reverse_iterator item;
-	item = list_modules.rbegin();
-
 	
-	while (item != list_modules.rend() && ret == true)
-	{
-		ret = (*item)->CleanUp();
-		item++;
+
+	for (int i = list_modules.size() - 1; i >= 0 && ret == true; i--) {
+
+		ret = list_modules[i]->CleanUp();
 	}
 
 	return ret;

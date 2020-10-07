@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
+#include "PrimitiveManager.h"
 #include "ModuleWindow.h"
 #include "ModuleUI.h"
            
@@ -30,6 +31,16 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+	vec3 size(2.f, 2.f, 1.f);
+	vec3 pos(0.f, 0.f, 0.f);
+	App->PrimManager->CreateCube(size, pos);
+	pos.Set(3.f, 0.f, 0.f);
+	App->PrimManager->CreateSphere(0.5f, pos);
+	pos.Set(6.f, 0.f, 0.f);
+	App->PrimManager->CreateCylinder(0.5f, 0.5f, pos);
+	vec4 coords(0, 1, 0, 0);
+	App->PrimManager->CreatePlane(coords);
+	App->PrimManager->CreateLine(pos, size);
 
 	return ret;
 }
@@ -47,12 +58,8 @@ update_status ModuleSceneIntro::Update(float dt)
 {
 
 
-	PrimPlane p(0, 1, 0, 0);
-	p.axis = true;
-	p.Render();
-	Cube cube(1, 1, 1);
-	cube.SetPos(0, 0, 0);
-	cube.Render();
+	
+	
 
 	return UPDATE_CONTINUE;
 }

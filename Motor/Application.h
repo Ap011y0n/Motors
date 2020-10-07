@@ -13,7 +13,9 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleUI.h"
-#include <list>
+#include "PrimitiveManager.h"
+
+#include <vector>
 
 using namespace std;
 
@@ -28,12 +30,13 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleUI* UI;
+	PrimitiveManager* PrimManager;
 
 private:
 
 	Timer	ms_timer;
 	float	dt;
-	list<Module*> list_modules;
+	vector<Module*> list_modules;
 
 	int fps = 60;
 	int cap = -1;
