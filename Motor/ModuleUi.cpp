@@ -133,6 +133,7 @@ bool ModuleUI::Init()
 	show_another_window = true;
 	resizable_bool = false;
 	border_bool = false;
+	Wireframe_bool = false;
 	i = 0;
 	e = 1;
 	int max_fps = 61;
@@ -351,9 +352,61 @@ void ModuleUI::Configuration(bool show_config)
 		if (ImGui::CollapsingHeader("Window"))
 		{
 			static bool Wireframe_visible = false;
-			ImGui::Checkbox("Wirframe visible", &Wireframe_visible);
-			static float f1 = 1.0f;
+			ImGui::Checkbox("Wirframe visible", &Wireframe_visible); ImGui::SameLine();
+			if (Wireframe_visible) {
+				Wireframe_bool = true;
+			}
+			else {
+				Wireframe_bool = false;
+			}
+
+			static bool Depth = false;
+			ImGui::Checkbox("Deph", &Depth);
+			if (Depth) {
+				App->PrimManager->depth_bool = true;
+			}
+			else {
+				App->PrimManager->depth_bool = false;
+			}
+
+			static bool cullface = false;
+			ImGui::Checkbox("CullFace", &cullface); ImGui::SameLine();
+			if (cullface) {
+				App->PrimManager->cullface_bool = true;
+			}
+			else {
+				App->PrimManager->cullface_bool = false;
+			}
+
+			static bool texture2D = false;
+			ImGui::Checkbox("Texture 2D", &texture2D); 
+			if (texture2D) {
+				App->PrimManager->texture2D_bool = true;
+			}
+			else {
+				App->PrimManager->texture2D_bool = false;
+			}
 			
+			static bool Lighting = false;
+			ImGui::Checkbox("Lighting", &Lighting); ImGui::SameLine();
+			if (Lighting) {
+				App->PrimManager->LIGHTING_bool = true;
+			}
+			else {
+				App->PrimManager->LIGHTING_bool = false;
+			}
+
+			static bool Color = false;
+			ImGui::Checkbox("Colors", &Color);
+			if (Color) {
+				App->PrimManager->Color_bool = true;
+			}
+			else {
+				App->PrimManager->Color_bool = false;
+			}
+
+			
+			static float f1 = 1.0f;
 			ImGui::SliderFloat("Brightness", &f1, 0.0f, 1.0f, "%.3f");
 			if (ImGui::IsItemActive())
 			{

@@ -21,5 +21,10 @@ public:
 
 private:
 	vector<Primitive*> prim_list;
-
+public:
+	bool depth_bool;
+	bool cullface_bool;
+	bool texture2D_bool;
+	bool LIGHTING_bool;
+	bool Color_bool;
 };

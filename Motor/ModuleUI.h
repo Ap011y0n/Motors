@@ -34,6 +34,7 @@ public:
 	bool show_About;
 	bool resizable_bool = false;
 	bool border_bool;
+	bool Wireframe_bool;
 	vector <float> fpsecond;
 	bool show_Configuration;
 	int max_fps = 61;

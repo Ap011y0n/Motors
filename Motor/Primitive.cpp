@@ -4,6 +4,7 @@
 #include <gl/GLU.h>
 #include "Primitive.h"
 #include "glut/glut.h"
+#include "Application.h"
 
 #pragma comment (lib, "glut/glut32.lib")
 
@@ -70,6 +71,7 @@ void Primitive::Render() const
 // ------------------------------------------------------------
 void Primitive::InnerRender() const
 {
+
 	glPointSize(5.0f);
 
 	glBegin(GL_POINTS);
@@ -111,7 +113,12 @@ Cube::Cube(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, siz
 }
 
 void Cube::InnerRender() const
-{	
+{
+	if (App->UI->Wireframe_bool)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	float sx = size.x * 0.5f;
 	float sy = size.y * 0.5f;
 	float sz = size.z * 0.5f;
@@ -170,6 +177,11 @@ Sphere::Sphere(float radius) : Primitive(), radius(radius)
 
 void Sphere::InnerRender() const
 {
+	if (App->UI->Wireframe_bool)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	glutSolidSphere(radius, 25, 25);
 }
 
@@ -187,6 +199,11 @@ Cylinder::Cylinder(float radius, float height) : Primitive(), radius(radius), he
 
 void Cylinder::InnerRender() const
 {
+	if (App->UI->Wireframe_bool)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	int n = 30;
 
 	// Cylinder Bottom

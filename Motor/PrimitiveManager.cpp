@@ -3,7 +3,8 @@
 #include "PrimitiveManager.h"
 #include "Primitive.h"
 #include "ModuleWindow.h"
-          
+#include "GL/gl3w.h"    
+
 
 
 PrimitiveManager::PrimitiveManager(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -17,9 +18,8 @@ PrimitiveManager::~PrimitiveManager()
 bool PrimitiveManager::Start()
 {
 	bool ret = true;
-
-
-
+	depth_bool = false;
+	cullface_bool = false;	
 	return ret;
 }
 
@@ -37,12 +37,56 @@ update_status PrimitiveManager::PostUpdate(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
 		for (int i = 0; i < prim_list.size(); i++) {
+			
 			prim_list[i]->wire = !prim_list[i]->wire;
 		}
 	}
+	if (depth_bool) 
+	{
+		glDisable(GL_DEPTH_TEST);
+	}
+	else 
+	{
+		glEnable(GL_DEPTH_TEST);
+	}
 
+	if (cullface_bool) 
+	{
+		glEnable(GL_CULL_FACE);
+	}
+	else {
+		glDisable(GL_CULL_FACE);
+	}
+
+	if (texture2D_bool) 
+	{
+		glDisable(GL_TEXTURE_2D);
+	}
+	else 
+	{
+		glEnable(GL_TEXTURE_2D);
+	}
+
+	if (LIGHTING_bool) {
+		//glDisable(GL_LIGHTING);
+	}
+	else 
+	{
+		//glEnable(GL_LIGHTING);
+	}
+	
+	if (Color_bool) 
+	{
+		//glEnable(GL_COLOR_MATERIAL);
+	}
+	else 
+	{
+		//glEnable(GL_COLOR_MATERIAL);
+	}
 	for (int i = 0; i < prim_list.size(); i++) {
+		
 		prim_list[i]->Render();
+		
 	}
 	
 
