@@ -25,9 +25,6 @@
     <Filter Include="Sources\sources">
       <UniqueIdentifier>{3617d6a0-1e1d-40ba-872d-c2e300003b29}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\glew">
-      <UniqueIdentifier>{9f7c83fa-2a9d-48ab-bd13-1591b376f0ae}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">

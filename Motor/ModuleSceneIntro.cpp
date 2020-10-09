@@ -146,22 +146,22 @@ update_status ModuleSceneIntro::Update(float dt)
 	uint indices[36] = {	
 		// front
 			0, 1, 2,
-			2, 3, 0,
+			2, 3, 1,
 			// right
-			1, 5, 6,
-			6, 2, 1,
-			// back
-			7, 6, 5,
-			5, 4, 7,
-			// left
-			4, 0, 3,
-			3, 7, 4,
-			// bottom
-			4, 5, 1,
-			1, 0, 4,
-			// top
-			3, 2, 6,
-			6, 7, 3
+			1, 3, 5,
+			3, 5, 7,
+			//// back
+			7, 4, 5,
+			6, 7, 4,
+			//// left
+			6, 0, 4,
+			0, 6, 2,
+			//// bottom
+			4, 5, 0,
+			5, 1, 0,
+			//// top
+			6, 2, 3,
+			3, 7, 6
 	};
 
 	int num_indices = 36;
@@ -169,39 +169,39 @@ update_status ModuleSceneIntro::Update(float dt)
 	float vertices[24] =
 	{ 
 		// front
-			 0.0,  0.0,  0.0,
-			 1.0,  0.0,  0.0,
-			 1.0,  1.0,  0.0,
-			 0.0,  1.0,  0.0,
+			 0.0, 0.0,  0.0,
+			 1.0, 0.0,  0.0,
+			 0.0, 1.0,  0.0,
+			 1.0, 1.0,  0.0,
+
 			// back
-			 0.0,  0.0, -1.0,
-			 1.0,  0.0, -1.0,
-			 1.0,  1.0, -1.0,
-			 0.0,  1.0, -1.0
+			 0.0, 0.0, -1.0,
+			 1.0, 0.0, -1.0,
+			 0.0, 1.0, -1.0,
+			 1.0, 1.0, -1.0,
 	};
 	int num_vertices = 8;
+
 	uint my_indices = 0;
-	uint my_vertex = 1;
+	uint my_vertex = 0;
 
-
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glGenBuffers(1, (GLuint*)&(my_vertex));
 	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)* num_vertices * 3, vertices, GL_STATIC_DRAW);
-
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	// … bind and use other buffers
 
 	glGenBuffers(1, (GLuint*)&(my_indices));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)* num_indices, indices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+
+
 	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 
 	//*---------
-	glDrawArrays(GL_TRIANGLES, 0, num_vertices);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
 
