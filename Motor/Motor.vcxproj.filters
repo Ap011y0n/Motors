@@ -25,7 +25,7 @@
     <Filter Include="Sources\sources">
       <UniqueIdentifier>{3617d6a0-1e1d-40ba-872d-c2e300003b29}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\gl3w">
+    <Filter Include="Sources\glew">
       <UniqueIdentifier>{9f7c83fa-2a9d-48ab-bd13-1591b376f0ae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -96,12 +96,6 @@
     <ClInclude Include="imgui_impl_sdl.h">
       <Filter>Sources\sources</Filter>
     </ClInclude>
-    <ClInclude Include="GL\gl3w.h">
-      <Filter>Sources\gl3w</Filter>
-    </ClInclude>
-    <ClInclude Include="GL\glcorearb.h">
-      <Filter>Sources\gl3w</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleUI.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
@@ -169,9 +163,6 @@
     </ClCompile>
     <ClCompile Include="imgui_impl_sdl.cpp">
       <Filter>Sources\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GL\gl3w.c">
-      <Filter>Sources\gl3w</Filter>
     </ClCompile>
     <ClCompile Include="ModuleUi.cpp">
       <Filter>Sources\Modules</Filter>

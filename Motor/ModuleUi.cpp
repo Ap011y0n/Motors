@@ -6,7 +6,6 @@
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
-#include "GL/gl3w.h" 
 #include "ModuleWindow.h"
 
 
@@ -14,7 +13,7 @@
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 #include "GL/gl3w.h"           // Initialize with gl3wInit()
 #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-#include <GL/glew.h>            // Initialize with glewInit()
+#include "glew/include/glew.h"          // Initialize with glewInit()
 #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
 #include <glad/glad.h>          // Initialize with gladLoadGL()
 #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD2)
@@ -53,7 +52,7 @@ bool ModuleUI::Init()
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 	bool err = gl3wInit() != 0;
 #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-	bool err = glewInit() != GLEW_OK;
+	bool err = glewInit();
 #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
 	bool err = gladLoadGL() == 0;
 #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD2)
@@ -541,10 +540,10 @@ void ModuleUI::Configuration(bool show_config)
 		
 			ImGui::Separator();
 			ImGui::Spacing();
-			const GLubyte* vendor = gl3wGetString(GL_VENDOR); // Returns the vendor
-			const GLubyte* renderer = gl3wGetString(GL_RENDERER); // Returns a hint to the model
-			ImGui::Text("Brand: ");  ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s", vendor);
-			ImGui::Text("Graphic Card: ");  ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s", renderer);
+			//const GLubyte* vendor = gl3wGetString(GL_VENDOR); // Returns the vendor
+			//const GLubyte* renderer = gl3wGetString(GL_RENDERER); // Returns a hint to the model
+			//ImGui::Text("Brand: ");  ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s", vendor);
+			//ImGui::Text("Graphic Card: ");  ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s", renderer);
 		}
 		ImGui::End();
 	}

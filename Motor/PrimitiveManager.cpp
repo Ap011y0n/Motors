@@ -3,7 +3,7 @@
 #include "PrimitiveManager.h"
 #include "Primitive.h"
 #include "ModuleWindow.h"
-#include "GL/gl3w.h"    
+#include "glew/include/glew.h"
 
 
 
