@@ -93,11 +93,12 @@ update_status PrimitiveManager::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void PrimitiveManager::CreateCube(vec3 size, vec3 pos)
+Cube* PrimitiveManager::CreateCube(vec3 size, vec3 pos)
 {
 	Cube* cube = new Cube(size.x, size.y, size.z);
 	cube->SetPos(pos.x, pos.y, pos.z);
 	prim_list.push_back((Primitive*)cube);
+	return cube;
 }
 
 void PrimitiveManager::CreateSphere(float radius, vec3 pos)

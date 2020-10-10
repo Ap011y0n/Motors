@@ -1,15 +1,17 @@
 
 #include "Globals.h"
+#include "Primitive.h"
+#include "Application.h"
+
+#include "Glew/include/glew.h"
+#include "SDL/include/SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
-#include "Primitive.h"
-#include "glut/glut.h"
-#include "Application.h"
 
 #pragma comment (lib, "glut/glut32.lib")
 
 // ------------------------------------------------------------
-Primitive::Primitive() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(PrimitiveTypes::Primitive_Point)
+Primitive::Primitive() : color(White), wire(false), axis(false), type(PrimitiveTypes::Primitive_Point)
 {}
 
 // ------------------------------------------------------------
@@ -110,58 +112,91 @@ Cube::Cube() : Primitive(), size(1.0f, 1.0f, 1.0f)
 Cube::Cube(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, sizeY, sizeZ)
 {
 	type = PrimitiveTypes::Primitive_Cube;
+
+	uint indices[36] = {
+		// front
+			0, 1, 2,
+			2, 3, 1,
+			// right
+			1, 3, 5,
+			3, 5, 7,
+			//// back
+			7, 4, 5,
+			6, 7, 4,
+			//// left
+			6, 0, 4,
+			0, 6, 2,
+			//// bottom
+			4, 5, 0,
+			5, 1, 0,
+			//// top
+			6, 2, 3,
+			3, 7, 6
+	};
+	for (int i = 0; i < 36; i++)
+	{
+		index[i] = indices[i];
+
+	}
+	num_indices = 36;
+
+	float vertices[24] =
+	{
+		// front
+			 0.0, 0.0,  0.0,
+			 1.0 * sizeX, 0.0,  0.0,
+			 0.0, 1.0 * sizeY,  0.0,
+			 1.0 * sizeX, 1.0 * sizeY,  0.0,
+
+			 // back
+			  0.0, 0.0, -1.0 * sizeZ,
+			  1.0 * sizeX, 0.0, -1.0 * sizeZ,
+			  0.0, 1.0 * sizeY, -1.0 * sizeZ,
+			  1.0 * sizeX, 1.0 * sizeY, -1.0 * sizeZ,
+	};
+	num_vertices = 8;
+	for (int i = 0; i < 24; i++)
+	{
+		vert[i] = vertices[i];
+
+	}
+	my_indices = 0;
+	my_vertex = 0;
+	glGenBuffers(1, (GLuint*)&(my_vertex));
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vert, GL_STATIC_DRAW);
+	// … bind and use other buffers
+
+	glGenBuffers(1, (GLuint*)&(my_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, index, GL_STATIC_DRAW);
+
+
 }
 
 void Cube::InnerRender() const
 {
-	if (App->UI->Wireframe_bool)
+	if (wire)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	float sx = size.x * 0.5f;
-	float sy = size.y * 0.5f;
-	float sz = size.z * 0.5f;
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glBegin(GL_QUADS);
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glVertex3f(-sx, -sy, sz);
-	glVertex3f( sx, -sy, sz);
-	glVertex3f( sx,  sy, sz);
-	glVertex3f(-sx,  sy, sz);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 
-	glNormal3f(0.0f, 0.0f, -1.0f);
-	glVertex3f( sx, -sy, -sz);
-	glVertex3f(-sx, -sy, -sz);
-	glVertex3f(-sx,  sy, -sz);
-	glVertex3f( sx,  sy, -sz);
+	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 
-	glNormal3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(sx, -sy,  sz);
-	glVertex3f(sx, -sy, -sz);
-	glVertex3f(sx,  sy, -sz);
-	glVertex3f(sx,  sy,  sz);
 
-	glNormal3f(-1.0f, 0.0f, 0.0f);
-	glVertex3f(-sx, -sy, -sz);
-	glVertex3f(-sx, -sy,  sz);
-	glVertex3f(-sx,  sy,  sz);
-	glVertex3f(-sx,  sy, -sz);
 
-	glNormal3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-sx, sy,  sz);
-	glVertex3f( sx, sy,  sz);
-	glVertex3f( sx, sy, -sz);
-	glVertex3f(-sx, sy, -sz);
 
-	glNormal3f(0.0f, -1.0f, 0.0f);
-	glVertex3f(-sx, -sy, -sz);
-	glVertex3f( sx, -sy, -sz);
-	glVertex3f( sx, -sy,  sz);
-	glVertex3f(-sx, -sy,  sz);
-
-	glEnd();
+	//*---------
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 // SPHERE ============================================
@@ -182,7 +217,7 @@ void Sphere::InnerRender() const
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	glutSolidSphere(radius, 25, 25);
+	//glutSolidSphere(radius, 25, 25);
 }
 
 

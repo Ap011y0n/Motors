@@ -29,8 +29,8 @@ public:
 public:
 	
 	Color color;
-	mat4x4 transform;
 	bool axis,wire;
+	mat4x4 transform;
 
 protected:
 	PrimitiveTypes type;
@@ -41,10 +41,17 @@ class Cube : public Primitive
 {
 public :
 	Cube();
-	Cube(float sizeX, float sizeY, float sizeZ);
+	Cube(float sizeX = 1.f, float sizeY = 1.f, float sizeZ = 1.f);
 	void InnerRender() const;
 public:
 	vec3 size;
+	uint my_indices = 0;
+	uint my_vertex = 0;
+	int num_vertices;
+	int num_indices;
+	float vert[24];
+	uint index[36];
+
 };
 
 // ============================================
