@@ -40,11 +40,11 @@ bool ModuleSceneIntro::Start()
 	vec3 size(1.f, 1.f, 1.f);
 	vec3 pos(0.f, 1.f, 0.f);
 	Cube* cube = App->PrimManager->CreateCube(size);
-	cube->SetPos(pos.x, pos.y, pos.z);
-	cube->SetRotation(45, pos);
-	cube->Scale(1.f, 2.f, 1.f);
-	cube->axis = true;
-	cube->wire = true;
+	//cube->SetPos(pos.x, pos.y, pos.z);
+	//cube->SetRotation(45, pos);
+	//cube->Scale(1.f, 2.f, 1.f);
+	//cube->axis = true;
+	//cube->wire = true;
 	//pos.Set(3.f, 0.f, 0.f);
 	//App->PrimManager->CreateSphere(0.5f, pos);
 	//pos.Set(6.f, 0.f, 0.f);

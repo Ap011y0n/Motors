@@ -8,7 +8,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
-#pragma comment (lib, "glut/glut32.lib")
+
 
 // ------------------------------------------------------------
 Primitive::Primitive() : color(White), wire(false), axis(false), type(PrimitiveTypes::Primitive_Point)
