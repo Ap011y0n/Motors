@@ -47,10 +47,8 @@ bool ModuleSceneIntro::Start()
 	vec4 coords(0, 1, 0, 0);
 	App->PrimManager->CreatePlane(coords);
 	//App->PrimManager->CreateLine(pos, size);
-
-
-	
-
+	firstCube();
+	secondCube();
 	return ret;
 }
 
@@ -143,7 +141,39 @@ update_status ModuleSceneIntro::Update(float dt)
 	glDrawArrays(GL_TRIANGLES, 0, num_vertices);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	*/
-	uint indices[36] = {	
+
+	
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+
+	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+
+
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex2);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices2);
+
+	glDrawElements(GL_TRIANGLES, num_indices2, GL_UNSIGNED_INT, NULL);
+
+	//*---------
+	glDisableClientState(GL_VERTEX_ARRAY);
+	
+
+
+	return UPDATE_CONTINUE;
+}
+
+void ModuleSceneIntro::firstCube()
+{
+
+	uint indices[36] = {
 		// front
 			0, 1, 2,
 			2, 3, 1,
@@ -163,49 +193,107 @@ update_status ModuleSceneIntro::Update(float dt)
 			6, 2, 3,
 			3, 7, 6
 	};
+	for (int i = 0; i < 36; i++)
+	{
+		index[i] = indices[i];
 
-	int num_indices = 36;
+	}
+	num_indices = 36;
 
 	float vertices[24] =
-	{ 
+	{
 		// front
 			 0.0, 0.0,  0.0,
 			 1.0, 0.0,  0.0,
 			 0.0, 1.0,  0.0,
 			 1.0, 1.0,  0.0,
 
-			// back
-			 0.0, 0.0, -1.0,
-			 1.0, 0.0, -1.0,
-			 0.0, 1.0, -1.0,
-			 1.0, 1.0, -1.0,
+			 // back
+			  0.0, 0.0, -1.0,
+			  1.0, 0.0, -1.0,
+			  0.0, 1.0, -1.0,
+			  1.0, 1.0, -1.0,
 	};
-	int num_vertices = 8;
+	num_vertices = 8;
 
-	uint my_indices = 0;
-	uint my_vertex = 0;
+	for (int i = 0; i < 24; i++)
+	{
+		vert[i] = vertices[i];
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
+	}
+	my_indices = 0;
+	my_vertex = 0;
 	glGenBuffers(1, (GLuint*)&(my_vertex));
 	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)* num_vertices * 3, vertices, GL_STATIC_DRAW);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vert, GL_STATIC_DRAW);
 	// … bind and use other buffers
 
 	glGenBuffers(1, (GLuint*)&(my_indices));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)* num_indices, indices, GL_STATIC_DRAW);
-
-
-	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
-
-	//*---------
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, index, GL_STATIC_DRAW);
 	
-
-
-	return UPDATE_CONTINUE;
 }
 
+void ModuleSceneIntro::secondCube()
+{
+
+	uint indices[36] = {
+		// front
+			0, 1, 2,
+			2, 3, 1,
+			// right
+			1, 3, 5,
+			3, 5, 7,
+			//// back
+			7, 4, 5,
+			6, 7, 4,
+			//// left
+			6, 0, 4,
+			0, 6, 2,
+			//// bottom
+			4, 5, 0,
+			5, 1, 0,
+			//// top
+			6, 2, 3,
+			3, 7, 6
+	};
+	for (int i = 0; i < 36; i++)
+	{
+		index2[i] = indices[i];
+
+	}
+	num_indices2 = 36;
+
+	float vertices[24] =
+	{
+		// front
+			 0.0, 0.0,  3.0,
+			 1.0, 0.0,  3.0,
+			 0.0, 1.0,  3.0,
+			 1.0, 1.0,  3.0,
+
+			 // back
+			  0.0, 0.0, 2.0,
+			  1.0, 0.0, 2.0,
+			  0.0, 1.0, 2.0,
+			  1.0, 1.0, 2.0,
+	};
+	num_vertices2 = 8;
+
+	for (int i = 0; i < 24; i++)
+	{
+		vert2[i] = vertices[i];
+
+	}
+	my_indices2 = 0;
+	my_vertex2 = 0;
+	glGenBuffers(1, (GLuint*)&(my_vertex2));
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices2 * 3, vert2, GL_STATIC_DRAW);
+
+	glGenBuffers(1, (GLuint*)&(my_indices2));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices2);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices2, index2, GL_STATIC_DRAW);
+	
+}
