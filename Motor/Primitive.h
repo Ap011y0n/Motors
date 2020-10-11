@@ -95,6 +95,8 @@ protected:
 public:
 	uint my_indices = 0;
 	uint my_vertex = 0;
+	float vert[16704];
+	uint index[32430];
 	float radius;
 };
 

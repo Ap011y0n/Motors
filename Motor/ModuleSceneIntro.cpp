@@ -36,20 +36,24 @@ bool ModuleSceneIntro::Start()
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
+	vec3 pos(1.f, 0.f, 0.f);
 
 	vec3 size(1.f, 1.f, 1.f);
-	vec3 pos(0.f, 0.f, 0.f);
 	Cube* cube = App->PrimManager->CreateCube(size, pos);
-	//Pyramid* pyramid = App->PrimManager->CreatePyramid(size);
+	Pyramid* pyramid = App->PrimManager->CreatePyramid(size);
 	//pyramid->wire = false;
 	//cube->SetPos(pos.x, pos.y, pos.z);
 	//cube->SetRotation(45, pos);
 	//cube->Scale(1.f, 2.f, 1.f);
 	//cube->axis = true;
 	//cube->wire = true;
-	//pos.Set(3.f, 0.f, 0.f);
-	PrimSphere* sphere = App->PrimManager->CreateSphere(1, 12, 24, pos);
-	sphere->wire = true;
+	pos.Set(2.5f, 0.5f, 0.f);
+	PrimSphere* sphere = App->PrimManager->CreateSphere(0.5, 12, 24, pos);
+	//sphere->wire = true;
+	pos.Set(3.f, 0.f, 0.f);
+
+	//PrimSphere* sphere2 = App->PrimManager->CreateSphere(1, 100, 200, pos);
+	//sphere2->wire = true;
 	//pos.Set(6.f, 0.f, 0.f);
 	//App->PrimManager->CreateCylinder(0.5f, 0.5f, pos);
 	vec4 coords(0, 1, 0, 0);
@@ -172,8 +176,12 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	////*---------
 	//glDisableClientState(GL_VERTEX_ARRAY);
-	
+	/*if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		vec3 size(1.f, 1.f, 1.f);
+		Cube* cube = App->PrimManager->CreateCube(size);
 
+	}*/
 
 	return UPDATE_CONTINUE;
 }

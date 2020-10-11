@@ -288,7 +288,8 @@ PrimSphere::PrimSphere() : Primitive(), radius(1.0f)
 PrimSphere::PrimSphere(float radius, unsigned int rings, unsigned int sectors) : Primitive(), radius(radius)
 {
 	type = PrimitiveTypes::Primitive_Sphere;
-
+	if (rings > 48)rings = 48;
+	if (sectors > 116)sectors = 116;
 	float const R = 1. / (float)(rings - 1);
 	float const S = 1. / (float)(sectors - 1);
 
@@ -323,6 +324,25 @@ PrimSphere::PrimSphere(float radius, unsigned int rings, unsigned int sectors) :
 		}
 	}
 
+	my_indices = 0;
+	my_vertex = 0;
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vert[i] = vertices[i];
+	}
+	for (int i = 0; i < indices.size(); i++)
+	{
+		index[i] = indices[i];
+	}
+	glGenBuffers(1, (GLuint*)&(my_vertex));
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), vert, GL_STATIC_DRAW);
+	// … bind and use other buffers
+
+	glGenBuffers(1, (GLuint*)&(my_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * indices.size(), index, GL_STATIC_DRAW);
 
 }
 
@@ -332,16 +352,31 @@ void PrimSphere::InnerRender() const
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+//// OLD// not working with buffer drawing
+//	//glMatrixMode(GL_MODELVIEW);
+//	//glPushMatrix();
+//	//glTranslatef(0, 0, 0);
+//
+//	glEnableClientState(GL_VERTEX_ARRAY);
+//	//16704
+//	//32430
+//	glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
+//	glDrawElements(GL_TRIANGLES, (indices.size()), GL_UNSIGNED_SHORT, &indices[0]);
+//	//glPopMatrix();
+//	glDisableClientState(GL_VERTEX_ARRAY);
 
-	//glMatrixMode(GL_MODELVIEW);
-	//glPushMatrix();
-	//glTranslatef(0, 0, 0);
-
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
-	glDrawElements(GL_TRIANGLES, (indices.size()), GL_UNSIGNED_SHORT, &indices[0]);
-	//glPopMatrix();
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+
 }
 
 
