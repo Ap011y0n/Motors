@@ -3,6 +3,14 @@
 #include "glmath.h"
 #include "Color.h"
 
+#include <vector>
+
+using namespace std;
+
+typedef float GLfloat;
+typedef unsigned short GLushort;
+
+
 enum PrimitiveTypes
 {
 	Primitive_Point,
@@ -74,13 +82,20 @@ public:
 };
 
 // ============================================
-class Sphere : public Primitive
+class PrimSphere : public Primitive
 {
 public:
-	Sphere();
-	Sphere(float radius);
+	PrimSphere();
+	PrimSphere(float radius, unsigned int rings, unsigned int sectors);
 	void InnerRender() const;
+protected:
+	vector<GLfloat> vertices;
+	vector<GLfloat> normals;
+	vector<GLfloat> texcoords;
+	vector<GLushort> indices;
 public:
+	uint my_indices = 0;
+	uint my_vertex = 0;
 	float radius;
 };
 

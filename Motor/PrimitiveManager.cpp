@@ -110,11 +110,12 @@ Pyramid* PrimitiveManager::CreatePyramid(vec3 size, vec3 pos)
 }
 
 
-void PrimitiveManager::CreateSphere(float radius, vec3 pos)
+PrimSphere* PrimitiveManager::CreateSphere(float radius, unsigned int rings, unsigned int sectors, vec3 pos)
 {
-	Sphere* sphere = new Sphere(radius);
+	PrimSphere* sphere = new PrimSphere(radius, rings, sectors);
 	sphere->SetPos(pos.x, pos.y, pos.z);
 	prim_list.push_back((Primitive*)sphere);
+	return sphere;
 }
 
 void PrimitiveManager::CreateCylinder(float radius, float height, vec3 pos)
