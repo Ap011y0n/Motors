@@ -291,38 +291,36 @@ PrimSphere::PrimSphere(float radius, unsigned int rings, unsigned int sectors) :
 
 	float const R = 1. / (float)(rings - 1);
 	float const S = 1. / (float)(sectors - 1);
-	int r, s;
 
-	vertices.resize(rings * sectors * 3);
-	normals.resize(rings * sectors * 3);
-	texcoords.resize(rings * sectors * 2);
-	vector<GLfloat>::iterator v = vertices.begin();
-	vector<GLfloat>::iterator n = normals.begin();
-	vector<GLfloat>::iterator t = texcoords.begin();
-	for (r = 0; r < rings; r++) for (s = 0; s < sectors; s++) {
-		float const y = sin(-M_PI_2 + M_PI * r * R);
-		float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
-		float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
+	for (int r = 0; r < rings; ++r) {
+		for (int s = 0; s < sectors; ++s) {
+			float const y = sin(-M_PI_2 + M_PI * r * R);
+			float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
+			float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
 
-		*t++ = s * S;
-		*t++ = r * R;
+			vertices.push_back(x * radius);
+			vertices.push_back(y * radius);
+			vertices.push_back(z * radius);
 
-		*v++ = x * radius;
-		*v++ = y * radius;
-		*v++ = z * radius;
+			int curRow = r * sectors;
+			int nextRow = (r + 1) * sectors;
+			if (s + 1 != sectors && r+1 != rings) {
+				//if ((curRow + s) < rings * sectors)
+					indices.push_back(curRow + s);
+			//	if ((nextRow + s) < rings * sectors)
+					indices.push_back(nextRow + s);
+			//	if (nextRow + (s + 1) < rings * sectors)
+					indices.push_back(nextRow + (s + 1));
 
-		*n++ = x;
-		*n++ = y;
-		*n++ = z;
-	}
-
-	indices.resize(rings * sectors * 4);
-	vector<GLushort>::iterator i = indices.begin();
-	for (r = 0; r < rings; r++) for (s = 0; s < sectors; s++) {
-		*i++ = r * sectors + s;
-		*i++ = r * sectors + (s + 1);
-		*i++ = (r + 1) * sectors + (s + 1);
-		*i++ = (r + 1) * sectors + s;
+				//if ((curRow + s) < rings * sectors )
+				indices.push_back(curRow + s);
+				//if (nextRow + (s + 1) < rings * sectors )
+				indices.push_back(nextRow + (s + 1));
+			//	if (curRow + (s + 1)  < rings * sectors )
+				indices.push_back(curRow + (s + 1));
+			}
+		
+		}
 	}
 
 
@@ -335,19 +333,15 @@ void PrimSphere::InnerRender() const
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glTranslatef(0, 0, -5);
+	//glMatrixMode(GL_MODELVIEW);
+	//glPushMatrix();
+	//glTranslatef(0, 0, 0);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
-	glNormalPointer(GL_FLOAT, 0, &normals[0]);
-	glTexCoordPointer(2, GL_FLOAT, 0, &texcoords[0]);
-	glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_SHORT, &indices[0]);
-	glPopMatrix();
+	glDrawElements(GL_TRIANGLES, (indices.size()), GL_UNSIGNED_SHORT, &indices[0]);
+	//glPopMatrix();
 }
 
 

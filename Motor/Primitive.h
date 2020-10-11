@@ -91,7 +91,6 @@ public:
 protected:
 	vector<GLfloat> vertices;
 	vector<GLfloat> normals;
-	vector<GLfloat> texcoords;
 	vector<GLushort> indices;
 public:
 	uint my_indices = 0;
