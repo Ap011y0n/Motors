@@ -38,8 +38,10 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	vec3 size(1.f, 1.f, 1.f);
-	vec3 pos(0.f, 1.f, 0.f);
-	Cube* cube = App->PrimManager->CreateCube(size);
+	vec3 pos(1.5f, 0.f, 0.f);
+	//Cube* cube = App->PrimManager->CreateCube(size, pos);
+	Pyramid* pyramid = App->PrimManager->CreatePyramid(size);
+	pyramid->wire = false;
 	//cube->SetPos(pos.x, pos.y, pos.z);
 	//cube->SetRotation(45, pos);
 	//cube->Scale(1.f, 2.f, 1.f);

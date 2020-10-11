@@ -10,7 +10,8 @@ enum PrimitiveTypes
 	Primitive_Plane,
 	Primitive_Cube,
 	Primitive_Sphere,
-	Primitive_Cylinder
+	Primitive_Cylinder,
+	Primitive_Pyramid
 };
 
 class Primitive
@@ -50,6 +51,24 @@ public:
 	int num_vertices;
 	int num_indices;
 	float vert[24];
+	uint index[36];
+
+};
+
+// ============================================
+class Pyramid : public Primitive
+{
+public:
+	Pyramid();
+	Pyramid(float sizeX = 1.f, float sizeY = 1.f, float sizeZ = 1.f);
+	void InnerRender() const;
+public:
+	vec3 size;
+	uint my_indices = 0;
+	uint my_vertex = 0;
+	int num_vertices;
+	int num_indices;
+	float vert[12];
 	uint index[36];
 
 };
@@ -100,3 +119,4 @@ public:
 	vec3 normal;
 	float constant;
 };
+

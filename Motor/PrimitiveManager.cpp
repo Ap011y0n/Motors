@@ -101,6 +101,15 @@ Cube* PrimitiveManager::CreateCube(vec3 size, vec3 pos)
 	return cube;
 }
 
+Pyramid* PrimitiveManager::CreatePyramid(vec3 size, vec3 pos)
+{
+	Pyramid* pyramid = new Pyramid(size.x, size.y, size.z);
+	pyramid->SetPos(pos.x, pos.y, pos.z);
+	prim_list.push_back((Primitive*)pyramid);
+	return pyramid;
+}
+
+
 void PrimitiveManager::CreateSphere(float radius, vec3 pos)
 {
 	Sphere* sphere = new Sphere(radius);

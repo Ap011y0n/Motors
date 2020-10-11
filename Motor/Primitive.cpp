@@ -193,9 +193,89 @@ void Cube::InnerRender() const
 	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 
 
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
 
 
-	//*---------
+// PYRAMID ============================================
+Pyramid::Pyramid() : Primitive(), size(1.0f, 1.0f, 1.0f)
+{
+	type = PrimitiveTypes::Primitive_Pyramid;
+}
+
+Pyramid::Pyramid(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, sizeY, sizeZ)
+{
+	type = PrimitiveTypes::Primitive_Pyramid;
+
+	uint indices[12] = {
+		// base
+		0, 1, 2,
+		//front
+		0, 1, 3,
+		// right
+		1, 2, 3,
+		//// left
+		0, 2, 3,
+
+
+	};
+	for (int i = 0; i < 12; i++)
+	{
+		index[i] = indices[i];
+
+	}
+	num_indices = 12;
+
+	float vertices[12] =
+	{
+		// base
+			 0.0, 0.0,  0.0,
+			 1.0 * sizeX, 0.0,  0.0,
+			 0.5 * sizeX, 0,  -0.86 * sizeZ,
+
+
+			 // top
+				   0.5 * sizeX, 0.86 * sizeY, -0.33 * sizeZ,
+
+	};
+	num_vertices = 4;
+	for (int i = 0; i < 12; i++)
+	{
+		vert[i] = vertices[i];
+
+	}
+	my_indices = 0;
+	my_vertex = 0;
+	glGenBuffers(1, (GLuint*)&(my_vertex));
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vert, GL_STATIC_DRAW);
+	// … bind and use other buffers
+
+	glGenBuffers(1, (GLuint*)&(my_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, index, GL_STATIC_DRAW);
+
+
+}
+
+void Pyramid::InnerRender() const
+{
+	if (wire)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+
+	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 

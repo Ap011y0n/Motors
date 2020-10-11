@@ -4,7 +4,7 @@
 
 class Primitive;
 class Cube;
-
+class Pyramid;
 class PrimitiveManager : public Module
 {
 public:
@@ -15,6 +15,7 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 	Cube* CreateCube(vec3 size, vec3 pos = (0.f,0.f,0.f));
+	Pyramid* CreatePyramid(vec3 size, vec3 pos = (0.f, 0.f, 0.f));
 	void CreateSphere(float radius, vec3 pos = (0.f, 0.f, 0.f));
 	void CreateCylinder(float radius, float height, vec3 pos = (0.f, 0.f, 0.f));
 	void CreateLine(vec3 origin, vec3 dest);
