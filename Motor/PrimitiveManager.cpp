@@ -118,11 +118,12 @@ PrimSphere* PrimitiveManager::CreateSphere(float radius, unsigned int rings, uns
 	return sphere;
 }
 
-void PrimitiveManager::CreateCylinder(float radius, float height, vec3 pos)
+PrimCylinder* PrimitiveManager::CreateCylinder(float radius, float height, int sides, vec3 pos)
 {
-	Cylinder* cylinder = new Cylinder(radius, height);
+	PrimCylinder* cylinder = new PrimCylinder(radius, height, sides);
 	cylinder->SetPos(pos.x, pos.y, pos.z);
 	prim_list.push_back((Primitive*)cylinder);
+	return cylinder;
 }
 
 void PrimitiveManager::CreateLine(vec3 origin, vec3 dest)

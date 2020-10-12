@@ -381,55 +381,154 @@ void PrimSphere::InnerRender() const
 
 
 // CYLINDER ============================================
-Cylinder::Cylinder() : Primitive(), radius(1.0f), height(1.0f)
+PrimCylinder::PrimCylinder() : Primitive(), radius(1.0f), height(1.0f), sides (30)
 {
 	type = PrimitiveTypes::Primitive_Cylinder;
 }
 
-Cylinder::Cylinder(float radius, float height) : Primitive(), radius(radius), height(height)
+PrimCylinder::PrimCylinder(float radius, float height, int sides) : Primitive(), radius(radius), height(height), sides(sides)
 {
 	type = PrimitiveTypes::Primitive_Cylinder;
+
+	int n = sides;
+	if (n > 100) n = 100;
+
+	// Cylinder Bottom
+	float y = -height * 0.5f;
+	float x = 0;
+	float z = 0;
+	vertices.push_back(x);
+	vertices.push_back(y);
+	vertices.push_back(z);
+	y = height * 0.5f;
+	x = 0;
+	z = 0;
+	vertices.push_back(x);
+	vertices.push_back(y);
+	vertices.push_back(z);
+
+	int start = vertices.size();
+	for (int i = 360; i >= 0; i -= (360 / n))
+	{
+		float a = i * M_PI / 180; // degrees to radians
+
+		float const y = -height * 0.5f;
+		float const x = radius * cos(a);
+		float const z = radius * sin(a);
+		vertices.push_back(x);
+		vertices.push_back(y);
+		vertices.push_back(z);
+	}
+
+	for (int i = start; i < vertices.size(); i+= 3 )
+	{
+		uint ind = i / 3;
+		if (i + 3 != vertices.size())
+		{
+			indices.push_back(ind);
+			indices.push_back(ind + 1);
+			indices.push_back(0);
+		}
+	
+	}
+
+	start = vertices.size();
+	for (int i = 0; i <= 360; i += (360 / n))
+	{
+		float a = i * M_PI / 180; // degrees to radians
+		glVertex3f(height * 0.5f, radius * cos(a), radius * sin(a));
+		float const y = height * 0.5f;
+		float const x = radius * cos(a);
+		float const z = radius * sin(a);
+
+		vertices.push_back(x);
+		vertices.push_back(y);
+		vertices.push_back(z);
+	}
+
+	for (int i = start; i < vertices.size(); i += 3)
+	{
+		uint ind = i / 3;
+		if (i + 3 != vertices.size())
+		{
+			indices.push_back(ind);
+			indices.push_back(ind + 1);
+			indices.push_back(1);
+		}
+
+	}
+	int half = (vertices.size() - 6) / 2;
+	int max = half + 6;
+	for (int i = 6; i < max; i += 3)
+	{
+		uint ind = i / 3;
+		if (i + 3 != max)
+		{
+			indices.push_back(ind);
+			indices.push_back(ind + 1);
+			indices.push_back(vertices.size()/3 - ind);
+		}
+
+	}
+
+	for (int i = max; i < vertices.size(); i += 3)
+	{
+		uint ind = i / 3;
+		if (i + 3 != vertices.size())
+		{
+			indices.push_back(ind);
+			indices.push_back(ind + 1);
+			indices.push_back(half / 3 - (ind - max/3));
+		}
+
+	}
+
+	my_indices = 0;
+	my_vertex = 0;
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vert[i] = vertices[i];
+	}
+	for (int i = 0; i < indices.size(); i++)
+	{
+		index[i] = indices[i];
+	}
+	glGenBuffers(1, (GLuint*)&(my_vertex));
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), vert, GL_STATIC_DRAW);
+	// … bind and use other buffers
+
+	glGenBuffers(1, (GLuint*)&(my_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * indices.size(), index, GL_STATIC_DRAW);
 }
 
-void Cylinder::InnerRender() const
+void PrimCylinder::InnerRender() const
 {
-	if (App->UI->Wireframe_bool)
+	if (wire)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	int n = 30;
-
-	// Cylinder Bottom
-	glBegin(GL_POLYGON);
 	
-	for(int i = 360; i >= 0; i -= (360 / n))
-	{
-		float a = i * M_PI / 180; // degrees to radians
-		glVertex3f(-height*0.5f, radius * cos(a), radius * sin(a));
-	}
-	glEnd();
+
 
 	// Cylinder Top
-	glBegin(GL_POLYGON);
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	for(int i = 0; i <= 360; i += (360 / n))
-	{
-		float a = i * M_PI / 180; // degrees to radians
-		glVertex3f(height * 0.5f, radius * cos(a), radius * sin(a));
-	}
-	glEnd();
+	
 
 	// Cylinder "Cover"
-	glBegin(GL_QUAD_STRIP);
-	for(int i = 0; i < 480; i += (360 / n))
-	{
-		float a = i * M_PI / 180; // degrees to radians
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-		glVertex3f(height*0.5f,  radius * cos(a), radius * sin(a) );
-		glVertex3f(-height*0.5f, radius * cos(a), radius * sin(a) );
-	}
-	glEnd();
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	
 }
 
 // LINE ==================================================

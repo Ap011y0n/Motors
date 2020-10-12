@@ -47,15 +47,16 @@ bool ModuleSceneIntro::Start()
 	//cube->Scale(1.f, 2.f, 1.f);
 	//cube->axis = true;
 	//cube->wire = true;
-	pos.Set(2.5f, 0.5f, 0.f);
+	pos.Set(2.5f, 0.5f, -0.5f);
 	PrimSphere* sphere = App->PrimManager->CreateSphere(0.5, 12, 24, pos);
 	//sphere->wire = true;
-	pos.Set(3.f, 0.f, 0.f);
+	pos.Set(3.5f, 0.5f, -0.5f);
 
 	//PrimSphere* sphere2 = App->PrimManager->CreateSphere(1, 100, 200, pos);
 	//sphere2->wire = true;
 	//pos.Set(6.f, 0.f, 0.f);
-	//App->PrimManager->CreateCylinder(0.5f, 0.5f, pos);
+	PrimCylinder *cylinder = App->PrimManager->CreateCylinder(0.5f, 1.f, 30, pos);
+
 	vec4 coords(0, 1, 0, 0);
 	App->PrimManager->CreatePlane(coords);
 	//App->PrimManager->CreateLine(pos, size);

@@ -90,7 +90,6 @@ public:
 	void InnerRender() const;
 protected:
 	vector<GLfloat> vertices;
-	vector<GLfloat> normals;
 	vector<GLushort> indices;
 public:
 	uint my_indices = 0;
@@ -101,13 +100,21 @@ public:
 };
 
 // ============================================
-class Cylinder : public Primitive
+class PrimCylinder : public Primitive
 {
 public:
-	Cylinder();
-	Cylinder(float radius, float height);
+	PrimCylinder();
+	PrimCylinder(float radius, float height, int sides);
 	void InnerRender() const;
+protected:
+	vector<GLfloat> vertices;
+	vector<GLushort> indices;
+	int sides;
 public:
+	uint my_indices = 0;
+	uint my_vertex = 0;
+	float vert[732];
+	uint index[1440];
 	float radius;
 	float height;
 };
