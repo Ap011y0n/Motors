@@ -20,6 +20,8 @@ bool PrimitiveManager::Start()
 	bool ret = true;
 	depth_bool = false;
 	cullface_bool = false;	
+	LIGHTING_bool = false;
+	Color_bool = false;
 	return ret;
 }
 
@@ -68,20 +70,20 @@ update_status PrimitiveManager::PostUpdate(float dt)
 	}
 
 	if (LIGHTING_bool) {
-		//glDisable(GL_LIGHTING);
+		glDisable(GL_LIGHTING);
 	}
 	else 
 	{
-		//glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHTING);
 	}
 	
 	if (Color_bool) 
 	{
-		//glEnable(GL_COLOR_MATERIAL);
+		glEnable(GL_COLOR_MATERIAL);
 	}
 	else 
 	{
-		//glEnable(GL_COLOR_MATERIAL);
+		glEnable(GL_COLOR_MATERIAL);
 	}
 	for (int i = 0; i < prim_list.size(); i++) {
 		

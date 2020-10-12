@@ -23,7 +23,9 @@ public:
 	void Configuration(bool config);
 	void StoreLog(const char* message);
 	void PlotGraph();
-
+	void ShowAppinDockSpace(bool* p_open);
+	void HierarchyWin();
+	void InspectorWin();
 public:
 	ImGuiIO* io;
 	bool show_demo_window;
@@ -40,6 +42,7 @@ public:
 	int max_fps = 61;
 	int i = 0;
 	int e = 0;
+	bool p_open;
 	ImVec2 MouseVelocity;
 private:
 	int c1;
