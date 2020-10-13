@@ -71,7 +71,6 @@ void Primitive::Render() const
 // ------------------------------------------------------------
 void Primitive::InnerRender() const
 {
-
 	glPointSize(5.0f);
 
 	glBegin(GL_POINTS);
@@ -114,6 +113,7 @@ Cube::Cube(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, siz
 
 void Cube::InnerRender() const
 {
+	glColor4ub(255, 0.0, 0.0, 0.0);
 	if (App->UI->Wireframe_bool)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
@@ -124,7 +124,6 @@ void Cube::InnerRender() const
 	float sz = size.z * 0.5f;
 
 	glBegin(GL_QUADS);
-
 	glNormal3f(0.0f, 0.0f, 1.0f);
 	glVertex3f(-sx, -sy, sz);
 	glVertex3f( sx, -sy, sz);
@@ -160,7 +159,6 @@ void Cube::InnerRender() const
 	glVertex3f( sx, -sy, -sz);
 	glVertex3f( sx, -sy,  sz);
 	glVertex3f(-sx, -sy,  sz);
-
 	glEnd();
 }
 

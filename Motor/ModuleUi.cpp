@@ -404,7 +404,7 @@ void ModuleUI::Configuration(bool show_config)
 			}
 			
 			static bool Lighting = false;
-			ImGui::Checkbox("Lighting", &Lighting); ImGui::SameLine();
+			ImGui::Checkbox("No Lighting", &Lighting); ImGui::SameLine();
 			if (Lighting) {
 				App->PrimManager->LIGHTING_bool = true;
 			}
@@ -413,7 +413,7 @@ void ModuleUI::Configuration(bool show_config)
 			}
 
 			static bool Color = false;
-			ImGui::Checkbox("Colors", &Color);
+			ImGui::Checkbox("Disable Colors", &Color);
 			if (Color) {
 				App->PrimManager->Color_bool = true;
 			}

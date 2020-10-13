@@ -43,55 +43,14 @@ update_status PrimitiveManager::PostUpdate(float dt)
 			prim_list[i]->wire = !prim_list[i]->wire;
 		}
 	}
-	if (depth_bool) 
-	{
-		glDisable(GL_DEPTH_TEST);
-	}
-	else 
-	{
-		glEnable(GL_DEPTH_TEST);
-	}
+	MenuOptions();
 
-	if (cullface_bool) 
-	{
-		glEnable(GL_CULL_FACE);
-	}
-	else {
-		glDisable(GL_CULL_FACE);
-	}
-
-	if (texture2D_bool) 
-	{
-		glDisable(GL_TEXTURE_2D);
-	}
-	else 
-	{
-		glEnable(GL_TEXTURE_2D);
-	}
-
-	if (LIGHTING_bool) {
-		glDisable(GL_LIGHTING);
-	}
-	else 
-	{
-		glEnable(GL_LIGHTING);
-	}
-	
-	if (Color_bool) 
-	{
-		glEnable(GL_COLOR_MATERIAL);
-	}
-	else 
-	{
-		glEnable(GL_COLOR_MATERIAL);
-	}
 	for (int i = 0; i < prim_list.size(); i++) {
 		
 		prim_list[i]->Render();
 		
 	}
 	
-
 	return UPDATE_CONTINUE;
 }
 
@@ -127,4 +86,53 @@ void PrimitiveManager::CreatePlane(vec4 coords, bool axis)
 	PrimPlane* plane = new PrimPlane(coords.x, coords.y, coords.z, coords.w);
 	plane->axis = true;
 	prim_list.push_back((Primitive*)plane);
+}
+
+void PrimitiveManager::MenuOptions() 
+{
+	if (depth_bool)
+	{
+		glDisable(GL_DEPTH_TEST);
+	}
+	else
+	{
+		glEnable(GL_DEPTH_TEST);
+	}
+
+	if (cullface_bool)
+	{
+		glEnable(GL_CULL_FACE);
+	}
+	else {
+		glDisable(GL_CULL_FACE);
+	}
+
+	if (texture2D_bool)
+	{
+		glDisable(GL_TEXTURE_2D);
+	}
+	else
+	{
+		glEnable(GL_TEXTURE_2D);
+	}
+
+	if (LIGHTING_bool) {
+		glDisable(GL_LIGHTING);
+	}
+	else
+	{
+		glEnable(GL_LIGHTING);
+	}
+
+	if (Color_bool)
+	{
+		glDisable(GL_COLOR_MATERIAL);
+	}
+	else
+	{
+		glEnable(GL_COLOR_MATERIAL);
+	}
+
+
+
 }
