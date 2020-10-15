@@ -3,6 +3,14 @@
 #include "glmath.h"
 #include "Color.h"
 
+#include <vector>
+
+using namespace std;
+
+typedef float GLfloat;
+typedef unsigned short GLushort;
+
+
 enum PrimitiveTypes
 {
 	Primitive_Point,
@@ -10,7 +18,8 @@ enum PrimitiveTypes
 	Primitive_Plane,
 	Primitive_Cube,
 	Primitive_Sphere,
-	Primitive_Cylinder
+	Primitive_Cylinder,
+	Primitive_Pyramid
 };
 
 class Primitive
@@ -29,8 +38,8 @@ public:
 public:
 	
 	Color color;
-	mat4x4 transform;
 	bool axis,wire;
+	mat4x4 transform;
 
 protected:
 	PrimitiveTypes type;
@@ -41,31 +50,71 @@ class Cube : public Primitive
 {
 public :
 	Cube();
-	Cube(float sizeX, float sizeY, float sizeZ);
+	Cube(float sizeX = 1.f, float sizeY = 1.f, float sizeZ = 1.f);
 	void InnerRender() const;
 public:
 	vec3 size;
+	uint my_indices = 0;
+	uint my_vertex = 0;
+	int num_vertices;
+	int num_indices;
+	float vert[24];
+	uint index[36];
+
 };
 
 // ============================================
-class Sphere : public Primitive
+class Pyramid : public Primitive
 {
 public:
-	Sphere();
-	Sphere(float radius);
+	Pyramid();
+	Pyramid(float sizeX = 1.f, float sizeY = 1.f, float sizeZ = 1.f);
 	void InnerRender() const;
 public:
+	vec3 size;
+	uint my_indices = 0;
+	uint my_vertex = 0;
+	int num_vertices;
+	int num_indices;
+	float vert[12];
+	uint index[36];
+
+};
+
+// ============================================
+class PrimSphere : public Primitive
+{
+public:
+	PrimSphere();
+	PrimSphere(float radius, unsigned int rings, unsigned int sectors);
+	void InnerRender() const;
+protected:
+	vector<GLfloat> vertices;
+	vector<GLushort> indices;
+public:
+	uint my_indices = 0;
+	uint my_vertex = 0;
+	float vert[16704];
+	uint index[32430];
 	float radius;
 };
 
 // ============================================
-class Cylinder : public Primitive
+class PrimCylinder : public Primitive
 {
 public:
-	Cylinder();
-	Cylinder(float radius, float height);
+	PrimCylinder();
+	PrimCylinder(float radius, float height, int sides);
 	void InnerRender() const;
+protected:
+	vector<GLfloat> vertices;
+	vector<GLushort> indices;
+	int sides;
 public:
+	uint my_indices = 0;
+	uint my_vertex = 0;
+	float vert[732];
+	uint index[1440];
 	float radius;
 	float height;
 };
@@ -75,11 +124,17 @@ class Line : public Primitive
 {
 public:
 	Line();
-	Line(float x, float y, float z);
+	Line(float x, float y, float z, float x2, float y2, float z2);
 	void InnerRender() const;
 public:
 	vec3 origin;
 	vec3 destination;
+	int num_vertices;
+	int num_indices;
+	uint my_indices = 0;
+	uint my_vertex = 0;
+	float vert[6];
+	uint index[2];
 };
 
 // ============================================
@@ -89,7 +144,15 @@ public:
 	PrimPlane();
 	PrimPlane(float x, float y, float z, float d);
 	void InnerRender() const;
+protected:
+	vector<GLfloat> vertices;
+	vector<GLushort> indices;
 public:
+	uint my_indices = 0;
+	uint my_vertex = 0;
+	float vert[4812];
+	uint index[1605];
 	vec3 normal;
 	float constant;
 };
+
