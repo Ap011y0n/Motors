@@ -186,21 +186,8 @@ update_status ModuleUI::Update(float dt)
 
 		ImGui::EndMenu();
 	}
-
-
-
-	if (show_console)
-	{
-		ImGui::Begin("Console", &show_console);
-
-		for (int i = 0; i < consoleOutput.size(); i++)
-		{
-			const char* text = consoleOutput[i].c_str();
-			ImGui::Text(text);
-		}
-		ImGui::End();
-	}
-
+	/*static bool show_app_layout = false;
+	if (show_app_layout)*/ ShowExampleAppLayout(/*&show_app_layout*/);
 
 	if (ImGui::BeginMenu("File"))
 	{
@@ -673,5 +660,37 @@ void ModuleUI::HierarchyWin()
 void ModuleUI::InspectorWin()
 {
 	ImGui::Begin("Inspector");
+	ImGui::End();
+}
+
+void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
+{
+	ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
+	if (ImGui::Begin("Example: Simple layout"/*, p_open*/))
+	{
+		{
+			ImGui::BeginGroup();
+			if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
+			{
+				if (ImGui::BeginTabItem("Console"))
+				{
+					for (int i = 0; i < consoleOutput.size(); i++)
+					{
+						const char* text = consoleOutput[i].c_str();
+						ImGui::Text(text);
+					}
+					ImGui::EndTabItem();
+				}
+				if (ImGui::BeginTabItem("Project"))
+				{
+					ImGui::Text("Folders...");
+					ImGui::EndTabItem();
+				}
+				ImGui::EndTabBar();
+			}
+			
+			ImGui::EndGroup();
+		}
+	}
 	ImGui::End();
 }

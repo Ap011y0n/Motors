@@ -26,6 +26,7 @@ public:
 	void ShowAppinDockSpace(bool* p_open);
 	void HierarchyWin();
 	void InspectorWin();
+	void ShowExampleAppLayout(/*bool* p_open*/);
 public:
 	ImGuiIO* io;
 	bool show_demo_window;
