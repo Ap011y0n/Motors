@@ -65,6 +65,9 @@ bool ModuleRenderer3D::Init()
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_TEXTURE_2D);
 		//Check for error
 		error = glGetError();
 		if(error != GL_NO_ERROR)

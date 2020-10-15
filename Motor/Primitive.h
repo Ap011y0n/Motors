@@ -138,7 +138,14 @@ public:
 	PrimPlane();
 	PrimPlane(float x, float y, float z, float d);
 	void InnerRender() const;
+protected:
+	vector<GLfloat> vertices;
+	vector<GLushort> indices;
 public:
+	uint my_indices = 0;
+	uint my_vertex = 0;
+	float vert[2406];
+	uint index[4812];
 	vec3 normal;
 	float constant;
 };

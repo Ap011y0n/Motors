@@ -565,17 +565,66 @@ PrimPlane::PrimPlane() : Primitive(), normal(0, 1, 0), constant(1)
 PrimPlane::PrimPlane(float x, float y, float z, float d) : Primitive(), normal(x, y, z), constant(d)
 {
 	type = PrimitiveTypes::Primitive_Plane;
+
+	float d1 = 99;
+	for (float i = -d1; i <= d1; i += 1.0f)
+	{
+		vertices.push_back(i);
+		vertices.push_back(0.0f);
+		vertices.push_back(-d1);
+
+		vertices.push_back(i);
+		vertices.push_back(0.0f);
+		vertices.push_back(d1);
+
+		vertices.push_back(-d1);
+		vertices.push_back(0.0f);
+		vertices.push_back(i);
+
+		vertices.push_back(d1);
+		vertices.push_back(0.0f);
+		vertices.push_back(i);
+
+	}
+
+	
+
+	int size = d1 * 8 + 4 ;
+	for (int i = 0; i <= size; i++)
+	{
+		indices.push_back(i);
+	
+	}
+
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vert[i] = vertices[i];
+	}
+	for (int i = 0; i < indices.size(); i++)
+	{
+		index[i] = indices[i];
+	}
+
+	glGenBuffers(1, (GLuint*)&(my_vertex));
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), vert, GL_STATIC_DRAW);
+	// … bind and use other buffers
+
+	glGenBuffers(1, (GLuint*)&(my_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * indices.size(), index, GL_STATIC_DRAW);
 }
 
 void PrimPlane::InnerRender() const
-{
+{/*
 	glLineWidth(1.0f);
 
 	glBegin(GL_LINES);
 
 	float d = 200.0f;
 
-	for(float i = -d; i <= d; i += 1.0f)
+	for (float i = -d; i <= d; i += 1.0f)
 	{
 		glVertex3f(i, 0.0f, -d);
 		glVertex3f(i, 0.0f, d);
@@ -583,5 +632,16 @@ void PrimPlane::InnerRender() const
 		glVertex3f(d, 0.0f, i);
 	}
 
-	glEnd();
+	glEnd();*/
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+
+	glDrawElements(GL_LINES, indices.size(), GL_UNSIGNED_INT, NULL);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
 }

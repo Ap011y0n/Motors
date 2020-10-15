@@ -36,10 +36,16 @@ bool ModuleSceneIntro::Start()
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
-	vec3 pos(1.f, 0.f, 0.f);
 
+	//for (float i = -100; i < 100; i++)
+	//{
+	//	vec3 pos(i, 0.f, 0.f);
+	//	vec3 pos2(0.f, 0.f, i+1);
+	//	vec3 size(1.f, 1.f, 1.f);
+	//	Cube* cube = App->PrimManager->CreateCube(size, pos);
+	//	Cube* cube2 = App->PrimManager->CreateCube(size, pos2);
+	//}
 	vec3 size(1.f, 1.f, 1.f);
-	Cube* cube = App->PrimManager->CreateCube(size, pos);
 	Pyramid* pyramid = App->PrimManager->CreatePyramid(size);
 	//pyramid->wire = false;
 	//cube->SetPos(pos.x, pos.y, pos.z);
@@ -47,14 +53,17 @@ bool ModuleSceneIntro::Start()
 	//cube->Scale(1.f, 2.f, 1.f);
 	//cube->axis = true;
 	//cube->wire = true;
-	pos.Set(2.5f, 0.5f, -0.5f);
+	vec3 pos(1.5f, 0.5f, -0.5f);
 	PrimSphere* sphere = App->PrimManager->CreateSphere(0.5, 12, 24, pos);
+	pos.Set(-1.3f, 0.f, 0.f);
+	Cube* cube = App->PrimManager->CreateCube(size, pos);
+
 	//sphere->wire = true;
-	pos.Set(3.5f, 0.5f, -0.5f);
+	//pos.Set(3.5f, 0.5f, -0.5f);
 
 	//PrimSphere* sphere2 = App->PrimManager->CreateSphere(1, 100, 200, pos);
 	//sphere2->wire = true;
-	//pos.Set(6.f, 0.f, 0.f);
+	pos.Set(3.f, 0.5f, -0.5f);
 	PrimCylinder *cylinder = App->PrimManager->CreateCylinder(0.5f, 1.f, 30, pos);
 
 	vec4 coords(0, 1, 0, 0);
