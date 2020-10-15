@@ -93,31 +93,42 @@ update_status PrimitiveManager::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void PrimitiveManager::CreateCube(vec3 size, vec3 pos)
+Cube* PrimitiveManager::CreateCube(vec3 size, vec3 pos)
 {
 	Cube* cube = new Cube(size.x, size.y, size.z);
 	cube->SetPos(pos.x, pos.y, pos.z);
 	prim_list.push_back((Primitive*)cube);
+	return cube;
 }
 
-void PrimitiveManager::CreateSphere(float radius, vec3 pos)
+Pyramid* PrimitiveManager::CreatePyramid(vec3 size, vec3 pos)
 {
-	Sphere* sphere = new Sphere(radius);
+	Pyramid* pyramid = new Pyramid(size.x, size.y, size.z);
+	pyramid->SetPos(pos.x, pos.y, pos.z);
+	prim_list.push_back((Primitive*)pyramid);
+	return pyramid;
+}
+
+
+PrimSphere* PrimitiveManager::CreateSphere(float radius, unsigned int rings, unsigned int sectors, vec3 pos)
+{
+	PrimSphere* sphere = new PrimSphere(radius, rings, sectors);
 	sphere->SetPos(pos.x, pos.y, pos.z);
 	prim_list.push_back((Primitive*)sphere);
+	return sphere;
 }
 
-void PrimitiveManager::CreateCylinder(float radius, float height, vec3 pos)
+PrimCylinder* PrimitiveManager::CreateCylinder(float radius, float height, int sides, vec3 pos)
 {
-	Cylinder* cylinder = new Cylinder(radius, height);
+	PrimCylinder* cylinder = new PrimCylinder(radius, height, sides);
 	cylinder->SetPos(pos.x, pos.y, pos.z);
 	prim_list.push_back((Primitive*)cylinder);
+	return cylinder;
 }
 
 void PrimitiveManager::CreateLine(vec3 origin, vec3 dest)
 {
-	Line* line = new Line(dest.x, dest.y, dest.z);
-	line->origin.Set(origin.x, origin.y, origin.z);
+	Line* line = new Line(origin.x, origin.y, origin.z, dest.x, dest.y, dest.z);
 	prim_list.push_back((Primitive*)line);
 }
 void PrimitiveManager::CreatePlane(vec4 coords, bool axis)
