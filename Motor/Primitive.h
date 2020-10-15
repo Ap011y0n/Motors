@@ -124,11 +124,17 @@ class Line : public Primitive
 {
 public:
 	Line();
-	Line(float x, float y, float z);
+	Line(float x, float y, float z, float x2, float y2, float z2);
 	void InnerRender() const;
 public:
 	vec3 origin;
 	vec3 destination;
+	int num_vertices;
+	int num_indices;
+	uint my_indices = 0;
+	uint my_vertex = 0;
+	float vert[6];
+	uint index[2];
 };
 
 // ============================================
@@ -144,8 +150,8 @@ protected:
 public:
 	uint my_indices = 0;
 	uint my_vertex = 0;
-	float vert[2406];
-	uint index[4812];
+	float vert[4812];
+	uint index[1605];
 	vec3 normal;
 	float constant;
 };

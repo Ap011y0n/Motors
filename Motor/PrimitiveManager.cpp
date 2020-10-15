@@ -128,8 +128,7 @@ PrimCylinder* PrimitiveManager::CreateCylinder(float radius, float height, int s
 
 void PrimitiveManager::CreateLine(vec3 origin, vec3 dest)
 {
-	Line* line = new Line(dest.x, dest.y, dest.z);
-	line->origin.Set(origin.x, origin.y, origin.z);
+	Line* line = new Line(origin.x, origin.y, origin.z, dest.x, dest.y, dest.z);
 	prim_list.push_back((Primitive*)line);
 }
 void PrimitiveManager::CreatePlane(vec4 coords, bool axis)

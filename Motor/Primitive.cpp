@@ -537,23 +537,69 @@ Line::Line() : Primitive(), origin(0, 0, 0), destination(1, 1, 1)
 	type = PrimitiveTypes::Primitive_Line;
 }
 
-Line::Line(float x, float y, float z) : Primitive(), origin(0, 0, 0), destination(x, y, z)
+Line::Line(float x, float y, float z, float x2, float y2, float z2) : Primitive(), origin(x, y, z), destination(x2, y2, z2)
 {
 	type = PrimitiveTypes::Primitive_Line;
+	uint indices[2] = {
+		0, 1,
+	};
+
+	for (int i = 0; i < 2; i++)
+	{
+		index[i] = indices[i];
+
+	}
+	num_indices = 2;
+
+	float vertices[6] =
+	{
+		// base
+			 origin.x, origin.y,  origin.z,
+			 destination.x, destination.y,  destination.z,
+			
+
+	};
+	num_vertices = 2;
+	for (int i = 0; i < 6; i++)
+	{
+		vert[i] = vertices[i];
+
+	}
+	my_indices = 0;
+	my_vertex = 0;
+	glGenBuffers(1, (GLuint*)&(my_vertex));
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vert, GL_STATIC_DRAW);
+	// … bind and use other buffers
+
+	glGenBuffers(1, (GLuint*)&(my_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, index, GL_STATIC_DRAW);
+
 }
 
 void Line::InnerRender() const
 {
 	glLineWidth(2.0f);
 
-	glBegin(GL_LINES);
+	/*glBegin(GL_LINES);
 
 	glVertex3f(origin.x, origin.y, origin.z);
 	glVertex3f(destination.x, destination.y, destination.z);
 
-	glEnd();
+	glEnd();*/
 
-	glLineWidth(1.0f);
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+
+	glDrawElements(GL_LINES, num_indices, GL_UNSIGNED_INT, NULL);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 // PLANE ==================================================
@@ -566,7 +612,7 @@ PrimPlane::PrimPlane(float x, float y, float z, float d) : Primitive(), normal(x
 {
 	type = PrimitiveTypes::Primitive_Plane;
 
-	float d1 = 99;
+	float d1 = 200;
 	for (float i = -d1; i <= d1; i += 1.0f)
 	{
 		vertices.push_back(i);
@@ -590,7 +636,7 @@ PrimPlane::PrimPlane(float x, float y, float z, float d) : Primitive(), normal(x
 	
 
 	int size = d1 * 8 + 4 ;
-	for (int i = 0; i <= size; i++)
+	for (int i = 0; i < size; i++)
 	{
 		indices.push_back(i);
 	

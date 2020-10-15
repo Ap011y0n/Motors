@@ -71,6 +71,11 @@ bool ModuleSceneIntro::Start()
 	//App->PrimManager->CreateLine(pos, size);
 	/*firstCube();
 	secondCube();*/
+	vec3 origin(1, 1, 0);
+	vec3 dest(0, 2, 2);
+
+	App->PrimManager->CreateLine(origin, dest);
+
 	return ret;
 }
 
