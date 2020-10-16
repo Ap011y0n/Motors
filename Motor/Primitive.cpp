@@ -133,6 +133,9 @@ Cube::Cube(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, siz
 			6, 2, 3,
 			3, 7, 6
 	};
+
+	index = new uint[36];
+
 	for (int i = 0; i < 36; i++)
 	{
 		index[i] = indices[i];
@@ -155,6 +158,9 @@ Cube::Cube(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, siz
 			  1.0 * sizeX, 1.0 * sizeY, -1.0 * sizeZ,
 	};
 	num_vertices = 8;
+
+	vert = new float[24];
+
 	for (int i = 0; i < 24; i++)
 	{
 		vert[i] = vertices[i];
@@ -207,6 +213,7 @@ Pyramid::Pyramid(float sizeX, float sizeY, float sizeZ) : Primitive(), size(size
 {
 	type = PrimitiveTypes::Primitive_Pyramid;
 
+	index = new uint[12];
 	uint indices[12] = {
 		// base
 		0, 1, 2,
@@ -225,7 +232,7 @@ Pyramid::Pyramid(float sizeX, float sizeY, float sizeZ) : Primitive(), size(size
 
 	}
 	num_indices = 12;
-
+	vert = new float[12];
 	float vertices[12] =
 	{
 		// base
@@ -326,10 +333,13 @@ PrimSphere::PrimSphere(float radius, unsigned int rings, unsigned int sectors) :
 
 	my_indices = 0;
 	my_vertex = 0;
+	vert = new float[vertices.size()];
 	for (int i = 0; i < vertices.size(); i++)
 	{
 		vert[i] = vertices[i];
 	}
+	index = new uint[indices.size()];
+
 	for (int i = 0; i < indices.size(); i++)
 	{
 		index[i] = indices[i];
@@ -485,10 +495,12 @@ PrimCylinder::PrimCylinder(float radius, float height, int sides) : Primitive(),
 
 	my_indices = 0;
 	my_vertex = 0;
+	vert = new float[vertices.size()];
 	for (int i = 0; i < vertices.size(); i++)
 	{
 		vert[i] = vertices[i];
 	}
+	index = new uint[indices.size()];
 	for (int i = 0; i < indices.size(); i++)
 	{
 		index[i] = indices[i];
@@ -543,7 +555,7 @@ Line::Line(float x, float y, float z, float x2, float y2, float z2) : Primitive(
 	uint indices[2] = {
 		0, 1,
 	};
-
+	index = new uint[2];
 	for (int i = 0; i < 2; i++)
 	{
 		index[i] = indices[i];
@@ -560,6 +572,7 @@ Line::Line(float x, float y, float z, float x2, float y2, float z2) : Primitive(
 
 	};
 	num_vertices = 2;
+	vert = new float[6];
 	for (int i = 0; i < 6; i++)
 	{
 		vert[i] = vertices[i];
@@ -642,10 +655,12 @@ PrimPlane::PrimPlane(float x, float y, float z, float d) : Primitive(), normal(x
 	
 	}
 
+	vert = new float[vertices.size()];
 	for (int i = 0; i < vertices.size(); i++)
 	{
 		vert[i] = vertices[i];
 	}
+	index = new uint[indices.size()];
 	for (int i = 0; i < indices.size(); i++)
 	{
 		index[i] = indices[i];

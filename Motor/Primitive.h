@@ -58,8 +58,8 @@ public:
 	uint my_vertex = 0;
 	int num_vertices;
 	int num_indices;
-	float vert[24];
-	uint index[36];
+	float* vert;
+	uint* index;
 
 };
 
@@ -76,8 +76,8 @@ public:
 	uint my_vertex = 0;
 	int num_vertices;
 	int num_indices;
-	float vert[12];
-	uint index[36];
+	float* vert;
+	uint* index;
 
 };
 
@@ -94,8 +94,10 @@ protected:
 public:
 	uint my_indices = 0;
 	uint my_vertex = 0;
-	float vert[16704];
-	uint index[32430];
+	/*float vert[16704];
+	uint index[32430];*/
+	float* vert;
+	uint* index;
 	float radius;
 };
 
@@ -113,8 +115,10 @@ protected:
 public:
 	uint my_indices = 0;
 	uint my_vertex = 0;
-	float vert[732];
-	uint index[1440];
+	//float vert[732];
+	//uint index[1440];
+	float* vert;
+	uint* index;
 	float radius;
 	float height;
 };
@@ -133,8 +137,8 @@ public:
 	int num_indices;
 	uint my_indices = 0;
 	uint my_vertex = 0;
-	float vert[6];
-	uint index[2];
+	float* vert;
+	uint* index;
 };
 
 // ============================================
@@ -150,8 +154,10 @@ protected:
 public:
 	uint my_indices = 0;
 	uint my_vertex = 0;
-	float vert[4812];
-	uint index[1605];
+	//float vert[4812];
+	//uint index[1605];
+	float* vert;
+	uint* index;
 	vec3 normal;
 	float constant;
 };
