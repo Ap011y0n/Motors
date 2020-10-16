@@ -32,6 +32,7 @@ bool FBXloader::Start()
 // Load assets
 bool FBXloader::CleanUp()
 {
+	aiDetachAllLogStreams();
 	return true;
 }
 
