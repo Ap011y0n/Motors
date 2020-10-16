@@ -51,6 +51,8 @@ class Cube : public Primitive
 public :
 	Cube();
 	Cube(float sizeX = 1.f, float sizeY = 1.f, float sizeZ = 1.f);
+	~Cube();
+
 	void InnerRender() const;
 public:
 	vec3 size;
@@ -68,6 +70,8 @@ class Pyramid : public Primitive
 {
 public:
 	Pyramid();
+	~Pyramid();
+
 	Pyramid(float sizeX = 1.f, float sizeY = 1.f, float sizeZ = 1.f);
 	void InnerRender() const;
 public:
@@ -87,6 +91,8 @@ class PrimSphere : public Primitive
 public:
 	PrimSphere();
 	PrimSphere(float radius, unsigned int rings, unsigned int sectors);
+	~PrimSphere();
+
 	void InnerRender() const;
 protected:
 	vector<GLfloat> vertices;
@@ -106,6 +112,8 @@ class PrimCylinder : public Primitive
 {
 public:
 	PrimCylinder();
+	~PrimCylinder();
+
 	PrimCylinder(float radius, float height, int sides);
 	void InnerRender() const;
 protected:
@@ -128,6 +136,8 @@ class Line : public Primitive
 {
 public:
 	Line();
+	~Line();
+
 	Line(float x, float y, float z, float x2, float y2, float z2);
 	void InnerRender() const;
 public:
@@ -146,6 +156,8 @@ class PrimPlane : public Primitive
 {
 public:
 	PrimPlane();
+	~PrimPlane();
+
 	PrimPlane(float x, float y, float z, float d);
 	void InnerRender() const;
 protected:

@@ -29,7 +29,11 @@ bool PrimitiveManager::Start()
 bool PrimitiveManager::CleanUp()
 {
 	LOG("Unloading Primitive Manager");
+	for (int i = 0; i < prim_list.size(); i++) {
 
+		delete prim_list[i];
+
+	}
 	return true;
 }
 

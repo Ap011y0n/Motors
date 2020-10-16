@@ -107,7 +107,11 @@ Cube::Cube() : Primitive(), size(1.0f, 1.0f, 1.0f)
 {
 	type = PrimitiveTypes::Primitive_Cube;
 }
-
+Cube::~Cube()
+{
+	glDeleteBuffers(sizeof(float) * num_vertices * 3, (GLuint*)&my_vertex);
+	glDeleteBuffers(sizeof(uint) * num_indices, (GLuint*)&my_indices);
+}
 Cube::Cube(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, sizeY, sizeZ)
 {
 	type = PrimitiveTypes::Primitive_Cube;
@@ -177,13 +181,18 @@ Cube::Cube(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, siz
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, index, GL_STATIC_DRAW);
 
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	delete[] vert;
+	delete[] index;
 
 }
 
 void Cube::InnerRender() const
 {
 
-	glColor4ub(255, 0.0, 0.0, 0.0);
+	//glColor4ub(255, 0.0, 0.0, 0.0);
 	//if (App->UI->Wireframe_bool)
 
 	if (wire)
@@ -191,47 +200,47 @@ void Cube::InnerRender() const
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	float sx = size.x * 0.5f;
-	float sy = size.y * 0.5f;
-	float sz = size.z * 0.5f;
+	//float sx = size.x * 0.5f;
+	//float sy = size.y * 0.5f;
+	//float sz = size.z * 0.5f;
 
-	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glVertex3f(-sx, -sy, sz);
-	glVertex3f( sx, -sy, sz);
-	glVertex3f( sx,  sy, sz);
-	glVertex3f(-sx,  sy, sz);
+	//glBegin(GL_QUADS);
+	//glNormal3f(0.0f, 0.0f, 1.0f);
+	//glVertex3f(-sx, -sy, sz);
+	//glVertex3f( sx, -sy, sz);
+	//glVertex3f( sx,  sy, sz);
+	//glVertex3f(-sx,  sy, sz);
 
-	glNormal3f(0.0f, 0.0f, -1.0f);
-	glVertex3f( sx, -sy, -sz);
-	glVertex3f(-sx, -sy, -sz);
-	glVertex3f(-sx,  sy, -sz);
-	glVertex3f( sx,  sy, -sz);
+	//glNormal3f(0.0f, 0.0f, -1.0f);
+	//glVertex3f( sx, -sy, -sz);
+	//glVertex3f(-sx, -sy, -sz);
+	//glVertex3f(-sx,  sy, -sz);
+	//glVertex3f( sx,  sy, -sz);
 
-	glNormal3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(sx, -sy,  sz);
-	glVertex3f(sx, -sy, -sz);
-	glVertex3f(sx,  sy, -sz);
-	glVertex3f(sx,  sy,  sz);
+	//glNormal3f(1.0f, 0.0f, 0.0f);
+	//glVertex3f(sx, -sy,  sz);
+	//glVertex3f(sx, -sy, -sz);
+	//glVertex3f(sx,  sy, -sz);
+	//glVertex3f(sx,  sy,  sz);
 
-	glNormal3f(-1.0f, 0.0f, 0.0f);
-	glVertex3f(-sx, -sy, -sz);
-	glVertex3f(-sx, -sy,  sz);
-	glVertex3f(-sx,  sy,  sz);
-	glVertex3f(-sx,  sy, -sz);
+	//glNormal3f(-1.0f, 0.0f, 0.0f);
+	//glVertex3f(-sx, -sy, -sz);
+	//glVertex3f(-sx, -sy,  sz);
+	//glVertex3f(-sx,  sy,  sz);
+	//glVertex3f(-sx,  sy, -sz);
 
-	glNormal3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-sx, sy,  sz);
-	glVertex3f( sx, sy,  sz);
-	glVertex3f( sx, sy, -sz);
-	glVertex3f(-sx, sy, -sz);
+	//glNormal3f(0.0f, 1.0f, 0.0f);
+	//glVertex3f(-sx, sy,  sz);
+	//glVertex3f( sx, sy,  sz);
+	//glVertex3f( sx, sy, -sz);
+	//glVertex3f(-sx, sy, -sz);
 
-	glNormal3f(0.0f, -1.0f, 0.0f);
-	glVertex3f(-sx, -sy, -sz);
-	glVertex3f( sx, -sy, -sz);
-	glVertex3f( sx, -sy,  sz);
-	glVertex3f(-sx, -sy,  sz);
-	glEnd();
+	//glNormal3f(0.0f, -1.0f, 0.0f);
+	//glVertex3f(-sx, -sy, -sz);
+	//glVertex3f( sx, -sy, -sz);
+	//glVertex3f( sx, -sy,  sz);
+	//glVertex3f(-sx, -sy,  sz);
+	//glEnd();
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -245,6 +254,9 @@ void Cube::InnerRender() const
 
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 
@@ -252,6 +264,12 @@ void Cube::InnerRender() const
 Pyramid::Pyramid() : Primitive(), size(1.0f, 1.0f, 1.0f)
 {
 	type = PrimitiveTypes::Primitive_Pyramid;
+}
+
+Pyramid::~Pyramid()
+{
+	glDeleteBuffers(sizeof(float) * num_vertices * 3, (GLuint*)&my_vertex);
+	glDeleteBuffers(sizeof(uint) * num_indices, (GLuint*)&my_indices);
 }
 
 Pyramid::Pyramid(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, sizeY, sizeZ)
@@ -308,6 +326,11 @@ Pyramid::Pyramid(float sizeX, float sizeY, float sizeZ) : Primitive(), size(size
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, index, GL_STATIC_DRAW);
 
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	delete[] vert;
+	delete[] index;
 
 }
 
@@ -329,6 +352,9 @@ void Pyramid::InnerRender() const
 	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 // SPHERE ============================================
@@ -336,6 +362,13 @@ PrimSphere::PrimSphere() : Primitive(), radius(1.0f)
 {
 	type = PrimitiveTypes::Primitive_Sphere;
 }
+
+PrimSphere::~PrimSphere()
+{
+	glDeleteBuffers(sizeof(float) * vertices.size(), (GLuint*)&my_vertex);
+	glDeleteBuffers(sizeof(uint) * sizeof(uint) * indices.size(), (GLuint*)&my_indices);
+}
+
 
 PrimSphere::PrimSphere(float radius, unsigned int rings, unsigned int sectors) : Primitive(), radius(radius)
 {
@@ -399,6 +432,11 @@ PrimSphere::PrimSphere(float radius, unsigned int rings, unsigned int sectors) :
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * indices.size(), index, GL_STATIC_DRAW);
 
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	delete[] vert;
+	delete[] index;
 }
 
 void PrimSphere::InnerRender() const
@@ -432,6 +470,9 @@ void PrimSphere::InnerRender() const
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 }
 
 
@@ -440,6 +481,13 @@ PrimCylinder::PrimCylinder() : Primitive(), radius(1.0f), height(1.0f), sides (3
 {
 	type = PrimitiveTypes::Primitive_Cylinder;
 }
+
+PrimCylinder::~PrimCylinder()
+{
+	glDeleteBuffers(sizeof(float) * vertices.size(), (GLuint*)&my_vertex);
+	glDeleteBuffers(sizeof(uint) * sizeof(uint) * indices.size(), (GLuint*)&my_indices);
+}
+
 
 PrimCylinder::PrimCylinder(float radius, float height, int sides) : Primitive(), radius(radius), height(height), sides(sides)
 {
@@ -559,6 +607,12 @@ PrimCylinder::PrimCylinder(float radius, float height, int sides) : Primitive(),
 	glGenBuffers(1, (GLuint*)&(my_indices));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * indices.size(), index, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	delete[] vert;
+	delete[] index;
 }
 
 void PrimCylinder::InnerRender() const
@@ -585,6 +639,9 @@ void PrimCylinder::InnerRender() const
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
 }
 
@@ -592,6 +649,12 @@ void PrimCylinder::InnerRender() const
 Line::Line() : Primitive(), origin(0, 0, 0), destination(1, 1, 1)
 {
 	type = PrimitiveTypes::Primitive_Line;
+}
+
+Line::~Line()
+{
+	glDeleteBuffers(sizeof(float) * num_vertices * 3, (GLuint*)&my_vertex);
+	glDeleteBuffers(sizeof(uint) * sizeof(uint) * num_indices, (GLuint*)&my_indices);
 }
 
 Line::Line(float x, float y, float z, float x2, float y2, float z2) : Primitive(), origin(x, y, z), destination(x2, y2, z2)
@@ -635,6 +698,11 @@ Line::Line(float x, float y, float z, float x2, float y2, float z2) : Primitive(
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, index, GL_STATIC_DRAW);
 
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	delete[] vert;
+	delete[] index;
+
 }
 
 void Line::InnerRender() const
@@ -658,12 +726,21 @@ void Line::InnerRender() const
 	glDrawElements(GL_LINES, num_indices, GL_UNSIGNED_INT, NULL);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 // PLANE ==================================================
 PrimPlane::PrimPlane() : Primitive(), normal(0, 1, 0), constant(1)
 {
 	type = PrimitiveTypes::Primitive_Plane;
+}
+
+PrimPlane::~PrimPlane()
+{
+	glDeleteBuffers(sizeof(float) * vertices.size(), (GLuint*)&my_vertex);
+	glDeleteBuffers(sizeof(uint) * sizeof(uint) * indices.size(), (GLuint*)&my_indices);
 }
 
 PrimPlane::PrimPlane(float x, float y, float z, float d) : Primitive(), normal(x, y, z), constant(d)
@@ -690,8 +767,6 @@ PrimPlane::PrimPlane(float x, float y, float z, float d) : Primitive(), normal(x
 		vertices.push_back(i);
 
 	}
-
-	
 
 	int size = d1 * 8 + 4 ;
 	for (int i = 0; i < size; i++)
@@ -720,6 +795,13 @@ PrimPlane::PrimPlane(float x, float y, float z, float d) : Primitive(), normal(x
 	glGenBuffers(1, (GLuint*)&(my_indices));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * indices.size(), index, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	delete[] vert;
+	delete[] index;
+	
 }
 
 void PrimPlane::InnerRender() const
@@ -750,4 +832,7 @@ void PrimPlane::InnerRender() const
 	glDrawElements(GL_LINES, indices.size(), GL_UNSIGNED_INT, NULL);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
