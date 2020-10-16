@@ -14,6 +14,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleUI.h"
 #include "PrimitiveManager.h"
+#include "FBXloader.h"
 
 #include <vector>
 
@@ -31,7 +32,7 @@ public:
 	ModuleCamera3D* camera;
 	ModuleUI* UI;
 	PrimitiveManager* PrimManager;
-
+	FBXloader* FBX;
 private:
 
 	Timer	ms_timer;
