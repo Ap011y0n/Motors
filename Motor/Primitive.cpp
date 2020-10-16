@@ -73,7 +73,6 @@ void Primitive::Render() const
 // ------------------------------------------------------------
 void Primitive::InnerRender() const
 {
-
 	glPointSize(5.0f);
 
 	glBegin(GL_POINTS);
@@ -183,10 +182,56 @@ Cube::Cube(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, siz
 
 void Cube::InnerRender() const
 {
+
+	glColor4ub(255, 0.0, 0.0, 0.0);
+	//if (App->UI->Wireframe_bool)
+
 	if (wire)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	float sx = size.x * 0.5f;
+	float sy = size.y * 0.5f;
+	float sz = size.z * 0.5f;
+
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glVertex3f(-sx, -sy, sz);
+	glVertex3f( sx, -sy, sz);
+	glVertex3f( sx,  sy, sz);
+	glVertex3f(-sx,  sy, sz);
+
+	glNormal3f(0.0f, 0.0f, -1.0f);
+	glVertex3f( sx, -sy, -sz);
+	glVertex3f(-sx, -sy, -sz);
+	glVertex3f(-sx,  sy, -sz);
+	glVertex3f( sx,  sy, -sz);
+
+	glNormal3f(1.0f, 0.0f, 0.0f);
+	glVertex3f(sx, -sy,  sz);
+	glVertex3f(sx, -sy, -sz);
+	glVertex3f(sx,  sy, -sz);
+	glVertex3f(sx,  sy,  sz);
+
+	glNormal3f(-1.0f, 0.0f, 0.0f);
+	glVertex3f(-sx, -sy, -sz);
+	glVertex3f(-sx, -sy,  sz);
+	glVertex3f(-sx,  sy,  sz);
+	glVertex3f(-sx,  sy, -sz);
+
+	glNormal3f(0.0f, 1.0f, 0.0f);
+	glVertex3f(-sx, sy,  sz);
+	glVertex3f( sx, sy,  sz);
+	glVertex3f( sx, sy, -sz);
+	glVertex3f(-sx, sy, -sz);
+
+	glNormal3f(0.0f, -1.0f, 0.0f);
+	glVertex3f(-sx, -sy, -sz);
+	glVertex3f( sx, -sy, -sz);
+	glVertex3f( sx, -sy,  sz);
+	glVertex3f(-sx, -sy,  sz);
+	glEnd();
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glEnableClientState(GL_VERTEX_ARRAY);

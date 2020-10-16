@@ -133,6 +133,7 @@ bool ModuleUI::Init()
 	resizable_bool = false;
 	border_bool = false;
 	Wireframe_bool = false;
+	p_open = false;
 	i = 0;
 	e = 1;
 	int max_fps = 61;
@@ -157,37 +158,36 @@ update_status ModuleUI::Update(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
+		p_open = true;
 		LOG("Hello World");
 	}
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+	{
+		p_open = false;
+		LOG("Hello World");
+	}
+	
+
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
-	ImGui::BeginMainMenuBar(); //this creates the top bar
+	if (p_open) 
+	{
+		ShowAppinDockSpace(&p_open);
+	}
 
+	ImGui::BeginMainMenuBar(); //this creates the top bar
 
 	if (ImGui::BeginMenu("Console"))
 	{
-		
-			show_console = true;
+
+		show_console = true;
 
 		ImGui::EndMenu();
 	}
-	
-
-
-	if (show_console)
-	{
-		ImGui::Begin("Console", &show_console);
-
-		for (int i = 0; i < consoleOutput.size(); i++)
-		{
-			const char* text = consoleOutput[i].c_str();
-			ImGui::Text(text);
-		}
-		ImGui::End();
-	}
-	
+	/*static bool show_app_layout = false;
+	if (show_app_layout)*/ ShowExampleAppLayout(/*&show_app_layout*/);
 
 	if (ImGui::BeginMenu("File"))
 	{
@@ -212,9 +212,9 @@ update_status ModuleUI::Update(float dt)
 		if (ImGui::MenuItem("Report bug"))
 			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n/Motors/issues", NULL, NULL, SW_SHOWNORMAL);
 
-		if (ImGui::MenuItem("About")) 
+		if (ImGui::MenuItem("About"))
 			show_About = true;
-		
+
 
 		ImGui::EndMenu();
 	}
@@ -228,13 +228,17 @@ update_status ModuleUI::Update(float dt)
 	}
 
 	ImGui::EndMainMenuBar();
+	if (p_open) {
+		ImGui::End();
+	}
 
 	if (show_demo_window == true)
 		ImGui::ShowDemoWindow(&show_demo_window);
-	
+
 	AboutMenu(show_About);
 	Configuration(show_Configuration);
-
+	HierarchyWin(); 
+	InspectorWin();
 	return UPDATE_CONTINUE;
 }
 
@@ -387,7 +391,7 @@ void ModuleUI::Configuration(bool show_config)
 			}
 			
 			static bool Lighting = false;
-			ImGui::Checkbox("Lighting", &Lighting); ImGui::SameLine();
+			ImGui::Checkbox("No Lighting", &Lighting); ImGui::SameLine();
 			if (Lighting) {
 				App->PrimManager->LIGHTING_bool = true;
 			}
@@ -396,7 +400,7 @@ void ModuleUI::Configuration(bool show_config)
 			}
 
 			static bool Color = false;
-			ImGui::Checkbox("Colors", &Color);
+			ImGui::Checkbox("Disable Colors", &Color);
 			if (Color) {
 				App->PrimManager->Color_bool = true;
 			}
@@ -586,4 +590,107 @@ void ModuleUI::PlotGraph()
 	ImGui::Text(text);
 	ImGui::PlotHistogram("Framerate", &fpsecond[0], fpsecond.size(), 0, text, 0.0f, 100.0f, ImVec2(450, 100));
 	
+}
+
+void ModuleUI::ShowAppinDockSpace(bool* p_open)
+{
+	static bool opt_fullscreen = true;
+	static bool opt_padding = false;
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+	// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+	// because it would be confusing to have two docking targets within each others.
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+	if (opt_fullscreen)
+	{
+		ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->GetWorkPos());
+		ImGui::SetNextWindowSize(viewport->GetWorkSize());
+		ImGui::SetNextWindowViewport(viewport->ID);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+	}
+	else
+	{
+		dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
+	}
+
+	// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
+	// and handle the pass-thru hole, so we ask Begin() to not render a background.
+	if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+		window_flags |= ImGuiWindowFlags_NoBackground;
+
+	// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
+	// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
+	// all active windows docked into it will lose their parent and become undocked.
+	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
+	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
+	if (!opt_padding)
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::Begin("DockSpace Demo", p_open, window_flags);
+	if (!opt_padding)
+		ImGui::PopStyleVar();
+
+	if (opt_fullscreen)
+		ImGui::PopStyleVar(2);
+
+	// DockSpace
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+	{
+		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+	}
+	else {
+		ImGuiIO& io = ImGui::GetIO();
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+	}
+	
+}
+
+void ModuleUI::HierarchyWin()
+{
+	ImGui::Begin("Hierarchy");
+	ImGui::End();
+}
+
+void ModuleUI::InspectorWin()
+{
+	ImGui::Begin("Inspector");
+	ImGui::End();
+}
+
+void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
+{
+	ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
+	if (ImGui::Begin("Example: Simple layout"/*, p_open*/))
+	{
+		{
+			ImGui::BeginGroup();
+			if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
+			{
+				if (ImGui::BeginTabItem("Console"))
+				{
+					for (int i = 0; i < consoleOutput.size(); i++)
+					{
+						const char* text = consoleOutput[i].c_str();
+						ImGui::Text(text);
+					}
+					ImGui::EndTabItem();
+				}
+				if (ImGui::BeginTabItem("Project"))
+				{
+					ImGui::Text("Folders...");
+					ImGui::EndTabItem();
+				}
+				ImGui::EndTabBar();
+			}
+			
+			ImGui::EndGroup();
+		}
+	}
+	ImGui::End();
 }
