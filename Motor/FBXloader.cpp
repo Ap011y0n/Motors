@@ -12,7 +12,7 @@
 #include "Assimp/include/postprocess.h"
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
-
+#include <string.h>
 
 FBXloader::FBXloader(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
