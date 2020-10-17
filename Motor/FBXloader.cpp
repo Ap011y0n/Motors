@@ -150,19 +150,26 @@ bool FBXloader::CleanUp()
 update_status FBXloader::PostUpdate(float dt)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
 	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_vertex);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	/*glEnableClientState(GL_NORMAL_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_normals);
-	glNormalPointer(GL_FLOAT, 0, NULL);*/
+	glNormalPointer(GL_FLOAT, 0, NULL);
+
+
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_tex);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ourMesh.id_index);
 
 	glDrawElements(GL_TRIANGLES, ourMesh.num_index, GL_UNSIGNED_INT, NULL);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
-	//glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
