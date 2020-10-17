@@ -31,7 +31,7 @@ bool FBXloader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	std::string file_path("Assets/BakerHouse.fbx");
+	std::string file_path("Assets/warrior.FBX");
 
 	const aiScene* scene = aiImportFile(file_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())

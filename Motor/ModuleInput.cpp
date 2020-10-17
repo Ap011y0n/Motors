@@ -5,6 +5,8 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 
+#include <string.h>
+
 #define MAX_KEYS 300
 
 ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -87,6 +89,9 @@ update_status ModuleInput::PreUpdate(float dt)
 	mouse_x_motion = mouse_y_motion = 0;
 
 	bool quit = false;
+
+	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
+
 	SDL_Event e;
 	while(SDL_PollEvent(&e))
 	{
@@ -111,10 +116,19 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_WINDOWEVENT:
-			{
+			
 				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
 					App->renderer3D->OnResize(e.window.data1, e.window.data2);
-			}
+				break;
+			
+			case SDL_DROPFILE: 
+			     // In case if dropped file
+				std::string file_path = e.drop.file;
+				// Shows directory of dropped file
+				LOG("%s", file_path.c_str());
+				
+				break;
+			
 		}
 	}
 
