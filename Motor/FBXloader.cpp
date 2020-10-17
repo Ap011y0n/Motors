@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "FBXloader.h"
+#include "PrimitiveManager.h"
 
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
@@ -30,25 +31,56 @@ bool FBXloader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	std::string file_path("Assets/warrior.FBX");
+	std::string file_path("Assets/BakerHouse.fbx");
 
 	const aiScene* scene = aiImportFile(file_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+
 		for (int i = 0; i < scene->mNumMeshes; i++) {
-			ourMesh.num_vertex = scene->mMeshes[i]->mNumVertices;
+
+			const aiMesh* mesh = scene->mMeshes[i];
+			ourMesh.num_vertex = mesh->mNumVertices;
 			ourMesh.vertex = new float[ourMesh.num_vertex * 3];
-			memcpy(ourMesh.vertex, scene->mMeshes[i]->mVertices, sizeof(float) * ourMesh.num_vertex * 3);
+			memcpy(ourMesh.vertex, mesh->mVertices, sizeof(float) * ourMesh.num_vertex * 3);
 			LOG("New mesh with %d vertices", ourMesh.num_vertex);
 
-			if (scene->mMeshes[i]->HasFaces())
+			ourMesh.num_normals = mesh->mNumVertices;
+			ourMesh.normals = new float[ourMesh.num_vertex * 3];
+		/*	for (int p = 0; p < ourMesh.num_vertex; p++)
 			{
-				ourMesh.num_index = scene->mMeshes[i]->mNumFaces * 3;
+				LOG("%f", mesh->mNormals[p].x);
+				LOG("%f", mesh->mNormals[p].y);
+				LOG("%f", mesh->mNormals[p].z);
+			}*/
+			
+
+			memcpy(ourMesh.normals, mesh->mNormals, sizeof(float) * ourMesh.num_vertex * 3);
+
+			if (mesh->HasTextureCoords(0)) {  // Assuming only one texture is attached to this mesh
+
+				ourMesh.texCoords = (float*)malloc(sizeof(float) * 2 * mesh->mNumVertices);
+				ourMesh.num_tex = mesh->mNumVertices * 2;
+				for (unsigned int k = 0; k < mesh->mNumVertices; ++k) {
+					// Go through the array of texture coordinates and copy them to a one-dimensional array. 
+					// Note that in Assimp the texture coordinates are not stored in a "flat" array. 
+					// The mTextureCoords variable in aiMesh is a 2D array. 
+					// The first dimension is the number of textures associated with this mesh. 
+					// The second dimension is the number of vertices. 
+					// Assimp uses aiVector3D to store texture coordinates, but a texture coordinate only uses the first two components. 
+					ourMesh.texCoords[k * 2] = mesh->mTextureCoords[0][k].x;
+					ourMesh.texCoords[k * 2 + 1] = mesh->mTextureCoords[0][k].y;
+
+				}
+			}
+			if (mesh->HasFaces())
+			{
+				ourMesh.num_index = mesh->mNumFaces * 3;
 				ourMesh.index = new uint[ourMesh.num_index]; // assume each face is a triangle
-				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; j++)
+				for (uint j = 0; j < mesh->mNumFaces; j++)
 				{
-					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
+					if (mesh->mFaces[j].mNumIndices != 3)
 					{
 						LOG("WARNING, geometry face with != 3 indices!");
 					}
@@ -56,21 +88,39 @@ bool FBXloader::Start()
 					{
 						for (int x = 0; x < 3; x++)
 						{
-							ourMesh.index[j * 3 + x] = scene->mMeshes[i]->mFaces[j].mIndices[x];
+							ourMesh.index[j * 3 + x] = mesh->mFaces[j].mIndices[x];
 						}
 						//memcpy(&ourMesh.index[i * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
 					}
 				}
 			}
 		}
-	
+		for (int i = 0; i < ourMesh.num_vertex; i ++)
+		{
+			vec3 origin(ourMesh.vertex[i*3], ourMesh.vertex[i*3+1], ourMesh.vertex[i * 3 + 2]);
+			vec3 destination(ourMesh.normals[i], ourMesh.normals[i + 1], ourMesh.normals[i + 2]);
+			destination += origin;
+			
+			App->PrimManager->CreateLine(origin, destination);
+		}
 	
 	ourMesh.id_index = 0;
 	ourMesh.id_vertex = 0;
+	ourMesh.id_normals = 0;
+	ourMesh.id_tex = 0;
+
 	glGenBuffers(1, (GLuint*)&(ourMesh.id_vertex));
 	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_vertex);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * ourMesh.num_vertex * 3, ourMesh.vertex, GL_STATIC_DRAW);
 	
+	glGenBuffers(1, (GLuint*)&(ourMesh.id_tex));
+	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_tex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * ourMesh.num_tex, ourMesh.texCoords, GL_STATIC_DRAW);
+
+	glGenBuffers(1, (GLuint*)&(ourMesh.id_normals));
+	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_normals);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * ourMesh.num_normals * 3, ourMesh.normals, GL_STATIC_DRAW);
+
 
 	glGenBuffers(1, (GLuint*)&(ourMesh.id_index));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ourMesh.id_index);
@@ -100,15 +150,19 @@ bool FBXloader::CleanUp()
 update_status FBXloader::PostUpdate(float dt)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
-
 	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_vertex);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	/*glEnableClientState(GL_NORMAL_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_normals);
+	glNormalPointer(GL_FLOAT, 0, NULL);*/
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ourMesh.id_index);
 
 	glDrawElements(GL_TRIANGLES, ourMesh.num_index, GL_UNSIGNED_INT, NULL);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+	//glDisableClientState(GL_NORMAL_ARRAY);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

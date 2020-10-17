@@ -708,6 +708,7 @@ Line::Line(float x, float y, float z, float x2, float y2, float z2) : Primitive(
 void Line::InnerRender() const
 {
 	glLineWidth(2.0f);
+	glColor4ub(255, 0.0, 0.0, 0.0);
 
 	/*glBegin(GL_LINES);
 
@@ -729,6 +730,8 @@ void Line::InnerRender() const
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glColor4ub(255, 255, 255, 0.0);
+
 }
 
 // PLANE ==================================================
