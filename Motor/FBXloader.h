@@ -33,11 +33,15 @@ public:
 	bool Start();
 	update_status PostUpdate(float dt);
 	bool CleanUp();
+	uint FillArrayBuffer(uint size, float* array);
+	uint FillElementArrayBuffer(uint size, uint* array);
+	bool LoadFBX(const char* path);
+	void PrintMeshes();
 
 private:
 
 public:
-	mesh ourMesh;
-
+	//mesh ourMesh;
+	vector<mesh*> meshes;
 };
 

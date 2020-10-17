@@ -31,111 +31,6 @@ bool FBXloader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	std::string file_path("Assets/warrior.FBX");
-
-	const aiScene* scene = aiImportFile(file_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
-	if (scene != nullptr && scene->HasMeshes())
-	{
-		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-
-		for (int i = 0; i < scene->mNumMeshes; i++) {
-
-			const aiMesh* mesh = scene->mMeshes[i];
-			ourMesh.num_vertex = mesh->mNumVertices;
-			ourMesh.vertex = new float[ourMesh.num_vertex * 3];
-			memcpy(ourMesh.vertex, mesh->mVertices, sizeof(float) * ourMesh.num_vertex * 3);
-			LOG("New mesh with %d vertices", ourMesh.num_vertex);
-
-			ourMesh.num_normals = mesh->mNumVertices;
-			ourMesh.normals = new float[ourMesh.num_vertex * 3];
-		/*	for (int p = 0; p < ourMesh.num_vertex; p++)
-			{
-				LOG("%f", mesh->mNormals[p].x);
-				LOG("%f", mesh->mNormals[p].y);
-				LOG("%f", mesh->mNormals[p].z);
-			}*/
-			
-
-			memcpy(ourMesh.normals, mesh->mNormals, sizeof(float) * ourMesh.num_vertex * 3);
-
-			if (mesh->HasTextureCoords(0)) {  // Assuming only one texture is attached to this mesh
-
-				ourMesh.texCoords = (float*)malloc(sizeof(float) * 2 * mesh->mNumVertices);
-				ourMesh.num_tex = mesh->mNumVertices * 2;
-				for (unsigned int k = 0; k < mesh->mNumVertices; ++k) {
-					// Go through the array of texture coordinates and copy them to a one-dimensional array. 
-					// Note that in Assimp the texture coordinates are not stored in a "flat" array. 
-					// The mTextureCoords variable in aiMesh is a 2D array. 
-					// The first dimension is the number of textures associated with this mesh. 
-					// The second dimension is the number of vertices. 
-					// Assimp uses aiVector3D to store texture coordinates, but a texture coordinate only uses the first two components. 
-					ourMesh.texCoords[k * 2] = mesh->mTextureCoords[0][k].x;
-					ourMesh.texCoords[k * 2 + 1] = mesh->mTextureCoords[0][k].y;
-
-				}
-			}
-			if (mesh->HasFaces())
-			{
-				ourMesh.num_index = mesh->mNumFaces * 3;
-				ourMesh.index = new uint[ourMesh.num_index]; // assume each face is a triangle
-				for (uint j = 0; j < mesh->mNumFaces; j++)
-				{
-					if (mesh->mFaces[j].mNumIndices != 3)
-					{
-						LOG("WARNING, geometry face with != 3 indices!");
-					}
-					else
-					{
-						for (int x = 0; x < 3; x++)
-						{
-							ourMesh.index[j * 3 + x] = mesh->mFaces[j].mIndices[x];
-						}
-						//memcpy(&ourMesh.index[i * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
-					}
-				}
-			}
-		}
-		for (int i = 0; i < ourMesh.num_vertex; i ++)
-		{
-			vec3 origin(ourMesh.vertex[i*3], ourMesh.vertex[i*3+1], ourMesh.vertex[i * 3 + 2]);
-			vec3 destination(ourMesh.normals[i], ourMesh.normals[i + 1], ourMesh.normals[i + 2]);
-			destination += origin;
-			
-			App->PrimManager->CreateLine(origin, destination);
-		}
-	
-	ourMesh.id_index = 0;
-	ourMesh.id_vertex = 0;
-	ourMesh.id_normals = 0;
-	ourMesh.id_tex = 0;
-
-	glGenBuffers(1, (GLuint*)&(ourMesh.id_vertex));
-	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * ourMesh.num_vertex * 3, ourMesh.vertex, GL_STATIC_DRAW);
-	
-	glGenBuffers(1, (GLuint*)&(ourMesh.id_tex));
-	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_tex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * ourMesh.num_tex, ourMesh.texCoords, GL_STATIC_DRAW);
-
-	glGenBuffers(1, (GLuint*)&(ourMesh.id_normals));
-	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_normals);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * ourMesh.num_normals * 3, ourMesh.normals, GL_STATIC_DRAW);
-
-
-	glGenBuffers(1, (GLuint*)&(ourMesh.id_index));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ourMesh.id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * ourMesh.num_index, ourMesh.index, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	aiReleaseImport(scene);
-	}
-	else
-		LOG("Error loading scene %s", file_path.c_str());
-
-
 	return ret;
 }
 
@@ -149,29 +44,171 @@ bool FBXloader::CleanUp()
 // Update: draw background
 update_status FBXloader::PostUpdate(float dt)
 {
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	PrintMeshes();
+	
+	return UPDATE_CONTINUE;
+}
 
-	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_vertex);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+void FBXloader::PrintMeshes()
+{
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_normals);
-	glNormalPointer(GL_FLOAT, 0, NULL);
+		glBindBuffer(GL_ARRAY_BUFFER, meshes[i]->id_vertex);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ARRAY_BUFFER, meshes[i]->id_normals);
+		glNormalPointer(GL_FLOAT, 0, NULL);
 
 
-	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ARRAY_BUFFER, ourMesh.id_tex);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+		glBindBuffer(GL_ARRAY_BUFFER, meshes[i]->id_tex);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ourMesh.id_index);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshes[i]->id_index);
 
-	glDrawElements(GL_TRIANGLES, ourMesh.num_index, GL_UNSIGNED_INT, NULL);
+		glDrawElements(GL_TRIANGLES, meshes[i]->num_index, GL_UNSIGNED_INT, NULL);
 
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+
+}
+
+uint FBXloader::FillArrayBuffer( uint size, float *array)
+{
+	uint id = 0;
+	glGenBuffers(1, (GLuint*)&(id));
+	glBindBuffer(GL_ARRAY_BUFFER, id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, array, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	return id;
+}
+
+uint FBXloader::FillElementArrayBuffer(uint size, uint* array)
+{
+	uint id = 0;
+	glGenBuffers(1, (GLuint*)&(id));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * size, array, GL_STATIC_DRAW);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	return UPDATE_CONTINUE;
+
+	return id;
+}
+
+// Load assets
+bool FBXloader::LoadFBX(const char* path)
+{
+	bool ret = true;
+	mesh* NewMesh = new mesh();
+
+	
+	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
+	if (scene != nullptr && scene->HasMeshes())
+	{
+		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+
+		for (int i = 0; i < scene->mNumMeshes; i++) {
+
+			const aiMesh* mesh = scene->mMeshes[i];
+			NewMesh->num_vertex = mesh->mNumVertices;
+			NewMesh->vertex = new float[NewMesh->num_vertex * 3];
+			memcpy(NewMesh->vertex, mesh->mVertices, sizeof(float) * NewMesh->num_vertex * 3);
+			LOG("New mesh with %d vertices", NewMesh->num_vertex);
+
+			NewMesh->num_normals = mesh->mNumVertices;
+			NewMesh->normals = new float[NewMesh->num_vertex * 3];
+		
+
+			memcpy(NewMesh->normals, mesh->mNormals, sizeof(float) * NewMesh->num_vertex * 3);
+
+			if (mesh->HasTextureCoords(0)) {  // Assuming only one texture is attached to this mesh
+
+				NewMesh->texCoords = (float*)malloc(sizeof(float) * 2 * mesh->mNumVertices);
+				NewMesh->num_tex = mesh->mNumVertices * 2;
+				for (unsigned int k = 0; k < mesh->mNumVertices; ++k) {
+					
+					NewMesh->texCoords[k * 2] = mesh->mTextureCoords[0][k].x;
+					NewMesh->texCoords[k * 2 + 1] = mesh->mTextureCoords[0][k].y;
+
+				}
+			}
+			if (mesh->HasFaces())
+			{
+				NewMesh->num_index = mesh->mNumFaces * 3;
+				NewMesh->index = new uint[NewMesh->num_index]; // assume each face is a triangle
+				for (uint j = 0; j < mesh->mNumFaces; j++)
+				{
+					if (mesh->mFaces[j].mNumIndices != 3)
+					{
+						LOG("WARNING, geometry face with != 3 indices!");
+					}
+					else
+					{
+						vec3 origin(0, 0, 0);
+						vec3 dest(0, 0, 0);
+						for (int x = 0; x < 3; x++)
+						{
+							NewMesh->index[j * 3 + x] = mesh->mFaces[j].mIndices[x];
+
+							/*vec3 add_origin(ourMesh.vertex[ourMesh.index[j * 3 + x]],
+								ourMesh.vertex[ourMesh.index[j * 3 + x] + 1],
+								ourMesh.vertex[ourMesh.index[j * 3 + x] + 2]);
+							vec3 add_dest(ourMesh.normals[ourMesh.index[j * 3 + x]],
+								ourMesh.normals[ourMesh.index[j * 3 + x] + 1],
+								ourMesh.normals[ourMesh.index[j * 3 + x] + 2]);
+							origin += add_origin;
+							dest += add_dest;*/
+
+						}
+						/*origin /= 3;
+						dest *= -1;
+						dest += origin;
+
+						dest /= 3;
+						dest.Set(1, 1, 1);
+						App->PrimManager->CreateLine(origin, dest);*/
+						//memcpy(&ourMesh.index[i * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
+					}
+				}
+			}
+		}
+
+		for (int i = 0; i < NewMesh->num_vertex; i++)
+		{
+			vec3 origin(NewMesh->vertex[i * 3], NewMesh->vertex[i * 3 + 1], NewMesh->vertex[i * 3 + 2]);
+			vec3 destination(NewMesh->normals[i * 3], NewMesh->normals[i * 3 + 1], NewMesh->normals[i * 3 + 2]);
+			destination *= 1;
+			destination += origin;
+
+			App->PrimManager->CreateLine(origin, destination);
+		}
+
+		NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
+		
+		NewMesh->id_tex = FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
+		
+		NewMesh->id_normals = FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
+
+		NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
+
+		
+		meshes.push_back(NewMesh);
+
+		aiReleaseImport(scene);
+	}
+	else
+		LOG("Error loading scene %s", path);
+
+
+	return ret;
 }
