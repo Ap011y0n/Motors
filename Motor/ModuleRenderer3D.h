@@ -18,8 +18,11 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
-
+	void GenerateSceneBuffers();
 public:
+	uint frameBuffer=0;
+	uint texColorBuffer=0;
+	uint rboDepthStencil=0;
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;

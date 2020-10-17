@@ -7,6 +7,7 @@ ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(app, s
 {
 	window = NULL;
 	screen_surface = NULL;
+	//windowSize = Vec2(SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 // Destructor
@@ -21,9 +22,6 @@ bool ModuleWindow::Init()
 	bool ret = true;
 	i = 0;
 	e = 1;
-	
-
-
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
 	{

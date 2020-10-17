@@ -38,6 +38,7 @@ bool ModuleInput::Init()
 // Called every draw update
 update_status ModuleInput::PreUpdate(float dt)
 {
+	App->renderer3D->OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	SDL_PumpEvents();
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
@@ -113,7 +114,10 @@ update_status ModuleInput::PreUpdate(float dt)
 			case SDL_WINDOWEVENT:
 			{
 				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
-					App->renderer3D->OnResize(e.window.data1, e.window.data2);
+				//App->window->windowSize = Vec2(e.window.data1, e.window.data2);
+				
+				//App->UI->OnResize(e.window.data1, e.window.data2);
+				break;
 			}
 		}
 	}

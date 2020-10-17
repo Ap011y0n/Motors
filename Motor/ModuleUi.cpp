@@ -172,6 +172,14 @@ update_status ModuleUI::Update(float dt)
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
+	/*ImVec2 winSize = ImGui::GetWindowSize();
+	if (winSize.x != windowSize.x || winSize.y != windowSize.y)
+		OnResize2(Vec2(winSize.x, winSize.y));*/
+
+	ImGui::Begin("hi");
+	ImGui::Image((ImTextureID)App->renderer3D->texColorBuffer, ImVec2(App->window->screen_surface->w, App->window->screen_surface->h), ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::End();
+
 	if (p_open) 
 	{
 		ShowAppinDockSpace(&p_open);
@@ -245,6 +253,7 @@ update_status ModuleUI::Update(float dt)
 // Update: draw background
 update_status ModuleUI::PostUpdate(float dt)
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	// Rendering
 	ImGui::Render();
 	glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
@@ -257,7 +266,7 @@ update_status ModuleUI::PostUpdate(float dt)
 	ImGui::UpdatePlatformWindows();
 	ImGui::RenderPlatformWindowsDefault();
 	SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-
+	
 	/*glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -693,4 +702,31 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 		}
 	}
 	ImGui::End();
+}
+
+
+void ModuleUI::OnResize2(Vec2 newSize)
+{
+	//Getting window size - some margins - separator (7)
+	win_size = newSize;
+
+	//Calculating the image size according to the window size.
+	/*img_size = App->window->windowSize;// -Vec2(0.0f, 25.0f); //Removing the tab area
+	if (img_size.x > win_size.x - 10.0f)
+	{
+		img_size /= (img_size.x / (win_size.x - 10.0f));
+	}
+	if (img_size.y > win_size.y - 10.0f)
+	{
+		img_size /= (img_size.y / (win_size.y - 10.0f));
+	}
+	img_offset = Vec2(win_size.x - 5.0f - img_size.x, win_size.y - 5.0f - img_size.y) / 2;*/
+
+}
+
+
+void ModuleUI::OnResize(int screen_width, int screen_height)
+{
+	/*ImGuiContext& g = *ImGui::GetCurrentContext();
+	float iconbar_size = 30.0f;*/
 }

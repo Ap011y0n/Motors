@@ -3,7 +3,8 @@
 
 #include "Module.h"
 #include "SDL/include/SDL.h"
-
+#include "imgui.h"
+#include "Vec2.h"
 class Application;
 
 class ModuleWindow : public Module
@@ -31,6 +32,8 @@ public:
 	int i = 0;
 	int e = 0;
 	const char* glsl_version;
+public:
+	Vec2 windowSize;
 };
 
 #endif // __ModuleWindow_H__
