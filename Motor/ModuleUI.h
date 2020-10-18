@@ -28,7 +28,7 @@ public:
 	void HierarchyWin();
 	void InspectorWin();
 	void ShowExampleAppLayout(/*bool* p_open*/);
-	void OnResize2(Vec2 newSize);
+	void Change_Window_size(Vec2 newSize);
 	void OnResize(int screen_width, int screen_height);
 public:
 	ImGuiIO* io;

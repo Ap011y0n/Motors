@@ -171,19 +171,23 @@ update_status ModuleUI::Update(float dt)
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
-
-	/*ImVec2 winSize = ImGui::GetWindowSize();
-	if (winSize.x != windowSize.x || winSize.y != windowSize.y)
-		OnResize2(Vec2(winSize.x, winSize.y));*/
-
-	ImGui::Begin("hi");
-	ImGui::Image((ImTextureID)App->renderer3D->texColorBuffer, ImVec2(App->window->screen_surface->w, App->window->screen_surface->h), ImVec2(0, 1), ImVec2(1, 0));
-	ImGui::End();
-
 	if (p_open) 
 	{
 		ShowAppinDockSpace(&p_open);
 	}
+	ImGui::Begin("Game");
+
+	ImGui::Image((ImTextureID)App->renderer3D->texColorBuffer, ImVec2(win_size.x, win_size.y), ImVec2(0, 1), ImVec2(1, 0));
+	ImVec2 winSize = ImGui::GetWindowSize();   //this will pick the current window size
+	if (winSize.x != windowSize.x || winSize.y != windowSize.y)
+	{
+		Change_Window_size(Vec2(winSize.x, winSize.y));
+	}
+	ImGui::SetCursorPos(ImVec2(img_offset.x, img_offset.y));
+	img_corner = Vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y) + Vec2(0, img_size.y);
+	img_corner.y = App->window->windowSize.y - img_corner.y;
+
+	ImGui::End();
 
 	ImGui::BeginMainMenuBar(); //this creates the top bar
 
@@ -705,13 +709,13 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 }
 
 
-void ModuleUI::OnResize2(Vec2 newSize)
+void ModuleUI::Change_Window_size(Vec2 newSize)
 {
 	//Getting window size - some margins - separator (7)
 	win_size = newSize;
 
 	//Calculating the image size according to the window size.
-	/*img_size = App->window->windowSize;// -Vec2(0.0f, 25.0f); //Removing the tab area
+	img_size = App->window->windowSize ;
 	if (img_size.x > win_size.x - 10.0f)
 	{
 		img_size /= (img_size.x / (win_size.x - 10.0f));
@@ -720,7 +724,7 @@ void ModuleUI::OnResize2(Vec2 newSize)
 	{
 		img_size /= (img_size.y / (win_size.y - 10.0f));
 	}
-	img_offset = Vec2(win_size.x - 5.0f - img_size.x, win_size.y - 5.0f - img_size.y) / 2;*/
+	img_offset = Vec2(win_size.x - 5.0f - img_size.x, win_size.y - 5.0f - img_size.y) / 2;
 
 }
 
