@@ -122,7 +122,7 @@ SDL_RWops* FileSystem::Load(const char* path) const
 
 uint FileSystem::Load(const char* path, char** buffer) const
 {
-	uint ret;
+	uint ret = 0;
 
 	std::string fileStr, extensionStr;
 	SplitFilePath(path, nullptr, &fileStr, &extensionStr);
