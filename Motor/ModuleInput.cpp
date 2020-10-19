@@ -5,6 +5,7 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 #include "FBXloader.h"
+#include "FileSystem.h"
 
 #include <string.h>
 
@@ -127,7 +128,11 @@ update_status ModuleInput::PreUpdate(float dt)
 				std::string file_path = e.drop.file;
 				// Shows directory of dropped file
 				LOG("%s", file_path.c_str());
-				App->FBX->LoadFBX(file_path.c_str());
+				char* buffer = nullptr;
+				uint fileSize = 0;
+				fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+				App->FBX->LoadFBX(buffer, fileSize);
+
 				break;
 			
 		}

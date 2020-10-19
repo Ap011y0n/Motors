@@ -15,6 +15,7 @@
 #include "ModuleUI.h"
 #include "PrimitiveManager.h"
 #include "FBXloader.h"
+#include "FileSystem.h"
 
 #include <vector>
 
@@ -33,6 +34,7 @@ public:
 	ModuleUI* UI;
 	PrimitiveManager* PrimManager;
 	FBXloader* FBX;
+	FileSystem* file_system;
 private:
 
 	Timer	ms_timer;

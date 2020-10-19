@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "FBXloader.h"
 #include "PrimitiveManager.h"
+#include "FileSystem.h"
 
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
@@ -106,13 +107,14 @@ uint FBXloader::FillElementArrayBuffer(uint size, uint* array)
 }
 
 // Load assets
-bool FBXloader::LoadFBX(const char* path)
+bool FBXloader::LoadFBX(const char* buffer, uint size)
 {
 	bool ret = true;
 	mesh* NewMesh = new mesh();
 
 	
-	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
+	const aiScene* scene = aiImportFileFromMemory(buffer, size, aiProcessPreset_TargetRealtime_MaxQuality, nullptr);
+	
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
@@ -207,7 +209,7 @@ bool FBXloader::LoadFBX(const char* path)
 		aiReleaseImport(scene);
 	}
 	else
-		LOG("Error loading scene %s", path);
+		LOG("Error loading scene");
 
 
 	return ret;

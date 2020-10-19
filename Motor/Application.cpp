@@ -12,6 +12,7 @@ Application::Application()
 	UI = new ModuleUI(this);
 	PrimManager = new PrimitiveManager(this);
 	FBX = new FBXloader(this);
+	file_system = new FileSystem(this);
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
@@ -20,6 +21,7 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
+	AddModule(file_system);
 	AddModule(audio);
 	
 	// Scenes
