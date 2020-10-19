@@ -21,6 +21,7 @@
 
 #include "MathGeoLib/include/MathGeoLib.h"
 
+
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -37,6 +38,35 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+	int i, j, c;
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glShadeModel(GL_FLAT);
+	glEnable(GL_DEPTH_TEST);
+	for (i = 0; i < checkImageHeight; i++) {
+		for (j = 0; j < checkImageWidth; j++) {
+			c = ((((i & 0x8) == 0) ^ ((j & 0x8)) == 0)) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	glGenTextures(1, &texName);
+	glBindTexture(GL_TEXTURE_2D, texName);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+		GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+		GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth,
+		checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+		checkImage);
+
 	//for (float i = -100; i < 100; i++)
 	//{
 	//	vec3 pos(i, 0.f, 0.f);
@@ -45,36 +75,36 @@ bool ModuleSceneIntro::Start()
 	//	Cube* cube = App->PrimManager->CreateCube(size, pos);
 	//	Cube* cube2 = App->PrimManager->CreateCube(size, pos2);
 	//}
-	vec3 size(1.f, 1.f, 1.f);
-	Pyramid* pyramid = App->PrimManager->CreatePyramid(size);
+	//vec3 size(1.f, 1.f, 1.f);
+	//Pyramid* pyramid = App->PrimManager->CreatePyramid(size);
 	//pyramid->wire = false;
 	//cube->SetPos(pos.x, pos.y, pos.z);
 	//cube->SetRotation(45, pos);
 	//cube->Scale(1.f, 2.f, 1.f);
 	//cube->axis = true;
 	//cube->wire = true;
-	vec3 pos(1.5f, 0.5f, -0.5f);
-	PrimSphere* sphere = App->PrimManager->CreateSphere(0.5, 12, 24, pos);
-	pos.Set(-1.3f, 0.f, 0.f);
-	Cube* cube = App->PrimManager->CreateCube(size, pos);
+	//vec3 pos(1.5f, 0.5f, -0.5f);
+	//PrimSphere* sphere = App->PrimManager->CreateSphere(0.5, 12, 24, pos);
+	//pos.Set(-1.3f, 0.f, 0.f);
+	//Cube* cube = App->PrimManager->CreateCube(size, pos);
 
 	//sphere->wire = true;
 	//pos.Set(3.5f, 0.5f, -0.5f);
 
 	//PrimSphere* sphere2 = App->PrimManager->CreateSphere(1, 100, 200, pos);
 	//sphere2->wire = true;
-	pos.Set(3.f, 0.5f, -0.5f);
-	PrimCylinder *cylinder = App->PrimManager->CreateCylinder(0.5f, 1.f, 30, pos);
+	//pos.Set(3.f, 0.5f, -0.5f);
+	//PrimCylinder *cylinder = App->PrimManager->CreateCylinder(0.5f, 1.f, 30, pos);
 
 	vec4 coords(0, 1, 0, 0);
 	App->PrimManager->CreatePlane(coords);
 	//App->PrimManager->CreateLine(pos, size);
 	/*firstCube();
 	secondCube();*/
-	vec3 origin(1, 1, 0);
-	vec3 dest(0, 2, 2);
+	//vec3 origin(1, 1, 0);
+	//vec3 dest(0, 2, 2);
 
-	App->PrimManager->CreateLine(origin, dest);
+	//App->PrimManager->CreateLine(origin, dest);
 
 	return ret;
 }
@@ -197,6 +227,24 @@ update_status ModuleSceneIntro::Update(float dt)
 		Cube* cube = App->PrimManager->CreateCube(size);
 
 	}*/
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glBindTexture(GL_TEXTURE_2D, texName);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0, 0.0); glVertex3f(-2.0, -1.0, 0.0);
+	glTexCoord2f(0.0, 1.0); glVertex3f(-2.0, 1.0, 0.0);
+	glTexCoord2f(1.0, 1.0); glVertex3f(0.0, 1.0, 0.0);
+	glTexCoord2f(1.0, 0.0); glVertex3f(0.0, -1.0, 0.0);
+	
+	glTexCoord2f(0.0, 0.0); glVertex3f(1.0, -1.0, 0.0);
+	glTexCoord2f(0.0, 1.0); glVertex3f(1.0, 1.0, 0.0);
+	glTexCoord2f(1.0, 1.0); glVertex3f(2.41421, 1.0, -1.41421);
+	glTexCoord2f(1.0, 0.0); glVertex3f(2.41421, -1.0, -1.41421);
+	glEnd();
+	glFlush();
+	glDisable(GL_TEXTURE_2D);
 
 	return UPDATE_CONTINUE;
 }
