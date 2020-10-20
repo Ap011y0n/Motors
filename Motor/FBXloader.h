@@ -2,6 +2,12 @@
 #include "Module.h"
 #include "Globals.h"
 
+#define checkImageWidth 64
+#define checkImageHeight 64
+
+typedef unsigned char GLubyte;
+typedef unsigned int GLuint;
+
 struct mesh
 {
 	uint id_index = 0; // index in VRAM
@@ -43,5 +49,8 @@ private:
 public:
 	//mesh ourMesh;
 	vector<mesh*> meshes;
+	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
+	GLuint texName;
+
 };
 

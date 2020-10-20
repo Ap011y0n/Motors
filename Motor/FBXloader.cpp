@@ -32,6 +32,35 @@ bool FBXloader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
+	int i, j, c;
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glShadeModel(GL_FLAT);
+	glEnable(GL_DEPTH_TEST);
+	for (i = 0; i < checkImageHeight; i++) {
+		for (j = 0; j < checkImageWidth; j++) {
+			c = ((((i & 0x8) == 0) ^ ((j & 0x8)) == 0)) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	glGenTextures(1, &texName);
+	glBindTexture(GL_TEXTURE_2D, texName);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+		GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+		GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth,
+		checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+		checkImage);
+
 	return ret;
 }
 
@@ -67,8 +96,13 @@ void FBXloader::PrintMeshes()
 
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 		glBindBuffer(GL_ARRAY_BUFFER, meshes[i]->id_tex);
-
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshes[i]->id_index);
+
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_CULL_FACE);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texName);
 
 		glDrawElements(GL_TRIANGLES, meshes[i]->num_index, GL_UNSIGNED_INT, NULL);
 
@@ -78,6 +112,8 @@ void FBXloader::PrintMeshes()
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glDisable(GL_TEXTURE_2D);
+
 	}
 
 }

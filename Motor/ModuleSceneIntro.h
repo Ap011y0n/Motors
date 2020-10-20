@@ -2,11 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 
-#define checkImageWidth 64
-#define checkImageHeight 64
 
-typedef unsigned char GLubyte;
-typedef unsigned int GLuint;
 
 
 class ModuleSceneIntro : public Module
@@ -36,7 +32,5 @@ public:
 	float vert2[24];
 	uint index2[36];
 
-	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
-	GLuint texName;
 
 };
