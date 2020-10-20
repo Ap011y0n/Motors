@@ -14,6 +14,16 @@
 #include "Assimp/include/postprocess.h"
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
+
+#include "DevIL/include/ilu.h"
+#include "DevIL/include/ilut.h"
+
+#pragma comment( lib, "DevIL/libx86/DevIL.lib" )
+
+#pragma comment( lib, "DevIL/libx86/ILU.lib" )
+#pragma comment( lib, "DevIL/libx86/ILUT.lib" )
+
+
 #include <string.h>
 
 FBXloader::FBXloader(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -32,7 +42,41 @@ bool FBXloader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	int i, j, c;
+
+	ilInit();
+	iluInit();
+	ilutRenderer(ILUT_OPENGL);
+
+	std:string path = "Assets/Baker_house.png";
+
+	char* buffer = nullptr;
+	uint fileSize = 0;
+	
+	texbuffer = 0;
+	ILuint imageName = 0;
+
+	
+	glGenTextures(1, &texbuffer);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+	ilGenImages(1, &imageName);
+	ilBindImage(imageName);
+	fileSize = App->file_system->Load(path.c_str(), &buffer);
+
+	ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, fileSize);
+
+	texbuffer = ilutGLBindTexImage();
+
+	uint texbuffer;
+	
+
+	ilDeleteImages(1, &imageName);
+
+	
+	/*int i, j, c;
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 	glEnable(GL_DEPTH_TEST);
@@ -48,8 +92,9 @@ bool FBXloader::Start()
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-	glGenTextures(1, &texName);
-	glBindTexture(GL_TEXTURE_2D, texName);
+	 glGenTextures(1, &texName);
+   glBindTexture(GL_TEXTURE_2D, texName);
+
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -59,7 +104,9 @@ bool FBXloader::Start()
 		GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth,
 		checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-		checkImage);
+		checkImage);*/
+
+
 
 	return ret;
 }
@@ -102,7 +149,7 @@ void FBXloader::PrintMeshes()
 		glEnable(GL_CULL_FACE);
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texName);
+		glBindTexture(GL_TEXTURE_2D, texbuffer);
 
 		glDrawElements(GL_TRIANGLES, meshes[i]->num_index, GL_UNSIGNED_INT, NULL);
 
@@ -171,9 +218,9 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 
 			if (mesh->HasTextureCoords(0)) {  // Assuming only one texture is attached to this mesh
 
-				NewMesh->texCoords = (float*)malloc(sizeof(float) * 2 * mesh->mNumVertices);
+				NewMesh->texCoords = new float[mesh->mNumVertices * 2];
 				NewMesh->num_tex = mesh->mNumVertices * 2;
-				for (unsigned int k = 0; k < mesh->mNumVertices; ++k) {
+				for (unsigned int k = 0; k < mesh->mNumVertices; k++) {
 					
 					NewMesh->texCoords[k * 2] = mesh->mTextureCoords[0][k].x;
 					NewMesh->texCoords[k * 2 + 1] = mesh->mTextureCoords[0][k].y;
@@ -228,7 +275,7 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 			destination *= 1;
 			destination += origin;
 
-			App->PrimManager->CreateLine(origin, destination);
+			//App->PrimManager->CreateLine(origin, destination);
 		}
 
 		NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);

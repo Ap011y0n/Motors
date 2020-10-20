@@ -7,6 +7,7 @@
 
 typedef unsigned char GLubyte;
 typedef unsigned int GLuint;
+typedef unsigned int   ILuint;
 
 struct mesh
 {
@@ -50,7 +51,7 @@ public:
 	//mesh ourMesh;
 	vector<mesh*> meshes;
 	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
-	GLuint texName;
+	uint texbuffer;
 
 };
 
