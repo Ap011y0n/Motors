@@ -101,7 +101,7 @@ bool ModuleRenderer3D::Init()
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
+	GenerateSceneBuffers();
 	return ret;
 }
 
@@ -157,85 +157,10 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
-	GenerateSceneBuffers();
-
 }
 
 void ModuleRenderer3D::GenerateSceneBuffers()
 {
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	/*glGenFramebuffers(1, &frameBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-	
-	//Generating texture to render to
-	glGenTextures(1, &texColorBuffer);
-	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, 800, 600, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, texColorBuffer, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	//Generating the depth buffer
-	glGenRenderbuffers(1, &rboDepthStencil);
-	glBindRenderbuffer(GL_RENDERBUFFER, rboDepthStencil);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT,800, 600);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil);
-
-	glGenFramebuffers(1, &frameBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);*/
-
-
-	
-	/*glGenTextures(1, &texColorBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-	glGenTextures(1, &texColorBuffer);
-	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
-	glGenRenderbuffers(1, &rboDepthStencil);
-	glBindRenderbuffer(GL_RENDERBUFFER, rboDepthStencil);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil);
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);*/
-
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	
-	//TODO: move into a function
-	//Generating buffers for scene render
-	/*glGenFramebuffers(1, &frameBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-
-	//Generating texture to render to
-	glGenTextures(1, &texColorBuffer);
-	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,App->window->windowSize.x , App->window->windowSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	//Generating the depth buffer
-	glGenRenderbuffers(1, &rboDepthStencil);
-	glBindRenderbuffer(GL_RENDERBUFFER, rboDepthStencil);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, App->window->windowSize.x, App->window->windowSize.y);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil);
-
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-	//Configuring frame buffer
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);*/
-
 	glGenFramebuffers(1, &frameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 	glGenTextures(1, &texColorBuffer);
@@ -254,16 +179,13 @@ void ModuleRenderer3D::GenerateSceneBuffers()
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, App->window->screen_surface->w, App->window->screen_surface->h);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil);
 
-	//glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) 
 	{
 		LOG("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
 	}
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
 	{
-		LOG("NOOO Error creating screen buffer");
+		LOG("  NOOO Error creating screen buffer");
 	}
 	
 }

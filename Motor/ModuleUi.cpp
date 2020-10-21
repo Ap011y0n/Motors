@@ -435,13 +435,13 @@ void ModuleUI::Configuration(bool show_config)
 			if (ImGui::IsItemActive())
 			{
 				SDL_SetWindowSize(App->window->window, i1, i2);
-				App->renderer3D->OnResize(i1, i2);
+				//App->renderer3D->OnResize(i1, i2); if we don not coment this will change the width and heigh from the
 			}
 			ImGui::SliderInt("height", &i2, 480, 1080);
 			if (ImGui::IsItemActive())
 			{
 				SDL_SetWindowSize(App->window->window, i1, i2);
-				App->renderer3D->OnResize(i1, i2);
+				//App->renderer3D->OnResize(i1, i2);
 			}
 			
 			ImGui::Text("Refresh rate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%d ",App->GetFPS());
