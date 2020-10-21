@@ -74,7 +74,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="FileSystem.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="FBXloader.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="imconfig.h" />
@@ -101,7 +103,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="FBXloader.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
