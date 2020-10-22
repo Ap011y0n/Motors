@@ -4,6 +4,7 @@
 #include "imgui.h"
 #include<iostream> 
 #include<string>
+#include "Vec2.h"
 
 using namespace std;
 
@@ -27,6 +28,8 @@ public:
 	void HierarchyWin();
 	void InspectorWin();
 	void ShowExampleAppLayout(/*bool* p_open*/);
+	void Change_Window_size(Vec2 newSize);
+	void OnResize(int screen_width, int screen_height);
 public:
 	ImGuiIO* io;
 	bool show_demo_window;
@@ -45,6 +48,12 @@ public:
 	int e = 0;
 	bool p_open;
 	ImVec2 MouseVelocity;
+	ImVec2 windowSize = { 0, 0 };
+	Vec2 win_size;
+	Vec2 img_offset;
+	Vec2 img_corner;
+	Vec2 img_size;
+	ImGuiWindowClass* windowClass = nullptr;
 private:
 	int c1;
 	vector<string> consoleOutput;

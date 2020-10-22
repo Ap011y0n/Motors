@@ -99,6 +99,7 @@
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="PrimitiveManager.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Vec2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
@@ -125,6 +126,7 @@
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="PrimitiveManager.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="imgui.natvis" />

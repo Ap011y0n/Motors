@@ -25,6 +25,9 @@
     <Filter Include="Sources\sources">
       <UniqueIdentifier>{3617d6a0-1e1d-40ba-872d-c2e300003b29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Math">
+      <UniqueIdentifier>{c1ece6c9-94dd-4056-bbfe-4aae8e6818da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -99,6 +102,9 @@
     <ClInclude Include="PrimitiveManager.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Vec2.h">
+      <Filter>Sources\Math</Filter>
+    </ClInclude>
     <ClInclude Include="FBXloader.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
@@ -172,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="PrimitiveManager.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Vec2.cpp">
+      <Filter>Sources\Math</Filter>
     </ClCompile>
     <ClCompile Include="FBXloader.cpp">
       <Filter>Sources\Modules</Filter>

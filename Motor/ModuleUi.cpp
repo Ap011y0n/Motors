@@ -171,11 +171,23 @@ update_status ModuleUI::Update(float dt)
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
-
 	if (p_open) 
 	{
 		ShowAppinDockSpace(&p_open);
 	}
+	ImGui::Begin("Game");
+
+	ImGui::Image((ImTextureID)App->renderer3D->texColorBuffer, ImVec2(win_size.x, win_size.y), ImVec2(0, 1), ImVec2(1, 0));
+	ImVec2 winSize = ImGui::GetWindowSize();   //this will pick the current window size
+	if (winSize.x != windowSize.x || winSize.y != windowSize.y)
+	{
+		Change_Window_size(Vec2(winSize.x, winSize.y));
+	}
+	ImGui::SetCursorPos(ImVec2(img_offset.x, img_offset.y));
+	img_corner = Vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y) + Vec2(0, img_size.y);
+	img_corner.y = App->window->windowSize.y - img_corner.y;
+
+	ImGui::End();
 
 	ImGui::BeginMainMenuBar(); //this creates the top bar
 
@@ -245,6 +257,7 @@ update_status ModuleUI::Update(float dt)
 // Update: draw background
 update_status ModuleUI::PostUpdate(float dt)
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	// Rendering
 	ImGui::Render();
 	glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
@@ -257,7 +270,7 @@ update_status ModuleUI::PostUpdate(float dt)
 	ImGui::UpdatePlatformWindows();
 	ImGui::RenderPlatformWindowsDefault();
 	SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-
+	
 	/*glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -422,13 +435,13 @@ void ModuleUI::Configuration(bool show_config)
 			if (ImGui::IsItemActive())
 			{
 				SDL_SetWindowSize(App->window->window, i1, i2);
-				App->renderer3D->OnResize(i1, i2);
+				//App->renderer3D->OnResize(i1, i2); if we don not coment this will change the width and heigh from the
 			}
 			ImGui::SliderInt("height", &i2, 480, 1080);
 			if (ImGui::IsItemActive())
 			{
 				SDL_SetWindowSize(App->window->window, i1, i2);
-				App->renderer3D->OnResize(i1, i2);
+				//App->renderer3D->OnResize(i1, i2);
 			}
 			
 			ImGui::Text("Refresh rate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%d ",App->GetFPS());
@@ -693,4 +706,31 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 		}
 	}
 	ImGui::End();
+}
+
+
+void ModuleUI::Change_Window_size(Vec2 newSize)
+{
+	//Getting window size - some margins - separator (7)
+	win_size = newSize;
+
+	//Calculating the image size according to the window size.
+	img_size = App->window->windowSize ;
+	if (img_size.x > win_size.x - 10.0f)
+	{
+		img_size /= (img_size.x / (win_size.x - 10.0f));
+	}
+	if (img_size.y > win_size.y - 10.0f)
+	{
+		img_size /= (img_size.y / (win_size.y - 10.0f));
+	}
+	img_offset = Vec2(win_size.x - 5.0f - img_size.x, win_size.y - 5.0f - img_size.y) / 2;
+
+}
+
+
+void ModuleUI::OnResize(int screen_width, int screen_height)
+{
+	/*ImGuiContext& g = *ImGui::GetCurrentContext();
+	float iconbar_size = 30.0f;*/
 }
