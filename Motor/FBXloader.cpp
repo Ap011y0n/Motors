@@ -47,7 +47,7 @@ bool FBXloader::Start()
 	iluInit();
 	ilutRenderer(ILUT_OPENGL);
 
-	std:string path = "Assets/Baker_house.png";
+	std:string path = "Assets/Baker_house.dds";
 
 	char* buffer = nullptr;
 	uint fileSize = 0;
@@ -141,15 +141,18 @@ void FBXloader::PrintMeshes()
 		glNormalPointer(GL_FLOAT, 0, NULL);
 
 
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 		glBindBuffer(GL_ARRAY_BUFFER, meshes[i]->id_tex);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshes[i]->id_index);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_CULL_FACE);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texbuffer);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshes[i]->id_index);
+
+		
 
 		glDrawElements(GL_TRIANGLES, meshes[i]->num_index, GL_UNSIGNED_INT, NULL);
 
@@ -193,7 +196,7 @@ uint FBXloader::FillElementArrayBuffer(uint size, uint* array)
 bool FBXloader::LoadFBX(const char* buffer, uint size)
 {
 	bool ret = true;
-	mesh* NewMesh = new mesh();
+	
 
 	
 	const aiScene* scene = aiImportFileFromMemory(buffer, size, aiProcessPreset_TargetRealtime_MaxQuality, nullptr);
@@ -203,7 +206,7 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 
 		for (int i = 0; i < scene->mNumMeshes; i++) {
-
+			mesh* NewMesh = new mesh();
 			const aiMesh* mesh = scene->mMeshes[i];
 			NewMesh->num_vertex = mesh->mNumVertices;
 			NewMesh->vertex = new float[NewMesh->num_vertex * 3];
@@ -266,28 +269,29 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 					}
 				}
 			}
+
+			for (int i = 0; i < NewMesh->num_vertex; i++)
+			{
+				vec3 origin(NewMesh->vertex[i * 3], NewMesh->vertex[i * 3 + 1], NewMesh->vertex[i * 3 + 2]);
+				vec3 destination(NewMesh->normals[i * 3], NewMesh->normals[i * 3 + 1], NewMesh->normals[i * 3 + 2]);
+				destination *= 1;
+				destination += origin;
+
+				//App->PrimManager->CreateLine(origin, destination);
+			}
+
+			NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
+
+			NewMesh->id_tex = FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
+
+			NewMesh->id_normals = FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
+
+			NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
+
+
+			meshes.push_back(NewMesh);
 		}
-
-		for (int i = 0; i < NewMesh->num_vertex; i++)
-		{
-			vec3 origin(NewMesh->vertex[i * 3], NewMesh->vertex[i * 3 + 1], NewMesh->vertex[i * 3 + 2]);
-			vec3 destination(NewMesh->normals[i * 3], NewMesh->normals[i * 3 + 1], NewMesh->normals[i * 3 + 2]);
-			destination *= 1;
-			destination += origin;
-
-			//App->PrimManager->CreateLine(origin, destination);
-		}
-
-		NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
 		
-		NewMesh->id_tex = FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
-		
-		NewMesh->id_normals = FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
-
-		NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
-
-		
-		meshes.push_back(NewMesh);
 
 		aiReleaseImport(scene);
 	}
