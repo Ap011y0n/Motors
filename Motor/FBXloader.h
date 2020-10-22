@@ -27,6 +27,8 @@ struct mesh
 	uint num_tex;
 	float* texCoords;
 
+	uint texbuffer;
+	bool hastexture;
 };
 
 
@@ -42,8 +44,10 @@ public:
 	bool CleanUp();
 	uint FillArrayBuffer(uint size, float* array);
 	uint FillElementArrayBuffer(uint size, uint* array);
+	uint LoadTexBuffer(const char* path);
 	bool LoadFBX(const char* buffer, uint size);
 	void PrintMeshes();
+
 
 private:
 
@@ -51,7 +55,7 @@ public:
 	//mesh ourMesh;
 	vector<mesh*> meshes;
 	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
-	uint texbuffer;
+
 
 };
 

@@ -47,34 +47,8 @@ bool FBXloader::Start()
 	iluInit();
 	ilutRenderer(ILUT_OPENGL);
 
-	std:string path = "Assets/Baker_house.dds";
-
-	char* buffer = nullptr;
-	uint fileSize = 0;
 	
-	texbuffer = 0;
-	ILuint imageName = 0;
-
 	
-	glGenTextures(1, &texbuffer);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-
-	ilGenImages(1, &imageName);
-	ilBindImage(imageName);
-	fileSize = App->file_system->Load(path.c_str(), &buffer);
-
-	ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, fileSize);
-
-	texbuffer = ilutGLBindTexImage();
-
-	uint texbuffer;
-	
-
-	ilDeleteImages(1, &imageName);
-
 	
 	/*int i, j, c;
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -144,11 +118,15 @@ void FBXloader::PrintMeshes()
 		glBindBuffer(GL_ARRAY_BUFFER, meshes[i]->id_tex);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
-		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_CULL_FACE);
+		if (meshes[i]->hastexture)
+		{
+			glEnable(GL_TEXTURE_2D);
+			glEnable(GL_CULL_FACE);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texbuffer);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, meshes[i]->texbuffer);
+		}
+	
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshes[i]->id_index);
 
@@ -207,7 +185,30 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 
 		for (int i = 0; i < scene->mNumMeshes; i++) {
 			mesh* NewMesh = new mesh();
+
 			const aiMesh* mesh = scene->mMeshes[i];
+
+
+			aiString str;
+			aiString folder;
+			folder.Set("Assets/");
+			NewMesh->texbuffer = 0;
+			aiMaterial* newMaterial = scene->mMaterials[mesh->mMaterialIndex];
+			if (newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &str) != 0)
+			{
+				LOG("couldn't find diffuse texture")
+			}
+			else
+			{
+				folder.Append(str.C_Str());
+				NewMesh->texbuffer = LoadTexBuffer(folder.C_Str());
+				if (NewMesh->texbuffer != 0)
+					NewMesh->hastexture = true;
+				else
+					NewMesh->hastexture = false;
+			}
+			
+
 			NewMesh->num_vertex = mesh->mNumVertices;
 			NewMesh->vertex = new float[NewMesh->num_vertex * 3];
 			memcpy(NewMesh->vertex, mesh->mVertices, sizeof(float) * NewMesh->num_vertex * 3);
@@ -216,9 +217,7 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 			NewMesh->num_normals = mesh->mNumVertices;
 			NewMesh->normals = new float[NewMesh->num_vertex * 3];
 		
-
 			memcpy(NewMesh->normals, mesh->mNormals, sizeof(float) * NewMesh->num_vertex * 3);
-
 			if (mesh->HasTextureCoords(0)) {  // Assuming only one texture is attached to this mesh
 
 				NewMesh->texCoords = new float[mesh->mNumVertices * 2];
@@ -248,24 +247,7 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 						{
 							NewMesh->index[j * 3 + x] = mesh->mFaces[j].mIndices[x];
 
-							/*vec3 add_origin(ourMesh.vertex[ourMesh.index[j * 3 + x]],
-								ourMesh.vertex[ourMesh.index[j * 3 + x] + 1],
-								ourMesh.vertex[ourMesh.index[j * 3 + x] + 2]);
-							vec3 add_dest(ourMesh.normals[ourMesh.index[j * 3 + x]],
-								ourMesh.normals[ourMesh.index[j * 3 + x] + 1],
-								ourMesh.normals[ourMesh.index[j * 3 + x] + 2]);
-							origin += add_origin;
-							dest += add_dest;*/
-
 						}
-						/*origin /= 3;
-						dest *= -1;
-						dest += origin;
-
-						dest /= 3;
-						dest.Set(1, 1, 1);
-						App->PrimManager->CreateLine(origin, dest);*/
-						//memcpy(&ourMesh.index[i * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
 					}
 				}
 			}
@@ -300,4 +282,39 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 
 
 	return ret;
+}
+
+uint FBXloader::LoadTexBuffer(const char* path)
+{
+	char* buffer = nullptr;
+	uint fileSize = 0;
+
+	uint texbuffer = 0;
+	ILuint imageName = 0;
+
+	fileSize = App->file_system->Load(path, &buffer);
+	
+	if (fileSize != 0)
+	{
+		glGenTextures(1, &texbuffer);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+		ilGenImages(1, &imageName);
+		ilBindImage(imageName);
+
+		ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, fileSize);
+
+		texbuffer = ilutGLBindTexImage();
+		ilDeleteImages(1, &imageName);
+
+	}
+	else
+	{
+		LOG("couldn't find texture with path %s", path);
+	}
+	
+	return texbuffer;
 }
