@@ -139,8 +139,24 @@ update_status ModuleInput::PreUpdate(float dt)
 				LOG("%s", file_path.c_str());
 				char* buffer = nullptr;
 				uint fileSize = 0;
-				fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-				App->FBX->LoadFBX(buffer, fileSize);
+				std::string fileStr, extensionStr;
+				App->file_system->SplitFilePath(file_path.c_str(), &fileStr, &extensionStr);
+				std::string relativePath = "";
+				relativePath.append("Assets").append("/").append(fileStr).append(extensionStr);
+				FileType type = App->file_system->SetFileType(extensionStr);
+				switch (type)
+				{
+				case FileType::UNKNOWN:
+					break;
+				case FileType::FBX:
+					fileSize = App->file_system->Load(relativePath.c_str(), &buffer);
+					App->FBX->LoadFBX(buffer, fileSize);
+					break;
+				case  FileType::IMAGE:
+					App->FBX->ChangeTexture(relativePath.c_str());
+					break;
+				}
+				
 
 				break;
 			

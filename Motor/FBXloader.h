@@ -47,6 +47,7 @@ public:
 	uint LoadTexBuffer(const char* path);
 	bool LoadFBX(const char* buffer, uint size);
 	void PrintMeshes();
+	void ChangeTexture(const char* path);
 
 
 private:

@@ -59,18 +59,8 @@ bool FileSystem::CleanUp()
 	return false;
 }
 
-std::string FileSystem::NormalizePath(const char* full_path) const
-{
-	std::string newPath(full_path);
-	for (int i = 0; i < newPath.size(); ++i)
-	{
-		if (newPath[i] == '\\')
-			newPath[i] = '/';
-	}
-	return newPath;
-}
 
-void FileSystem::SplitFilePath(const char* full_path, std::string* path, std::string* file, std::string* extension) const
+void FileSystem::SplitFilePath(const char* full_path, std::string* file, std::string* extension) const
 {
 	if (full_path != nullptr)
 	{
@@ -78,22 +68,15 @@ void FileSystem::SplitFilePath(const char* full_path, std::string* path, std::st
 		size_t pos_separator = full.find_last_of("\\/");
 		size_t pos_dot = full.find_last_of(".");
 
-		if (path != nullptr)
-		{
-			if (pos_separator < full.length())
-				*path = full.substr(0, pos_separator + 1);
-			else
-				path->clear();
-		}
 
 		if (file != nullptr)
 		{
 			if (pos_separator < full.length())
-				*file = full.substr(pos_separator + 1, pos_dot - pos_separator - 1);
+				*file = full.substr(pos_separator + 1, pos_dot - pos_separator);
 			else
 				*file = full.substr(0, pos_dot);
 		}
-		file->append(".");
+
 		if (extension != nullptr)
 		{
 			if (pos_dot < full.length())
@@ -104,14 +87,29 @@ void FileSystem::SplitFilePath(const char* full_path, std::string* path, std::st
 	}
 }
 
+FileType FileSystem::SetFileType(std::string extension)
+{
+	FileType ret = FileType::UNKNOWN;
+	transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+
+	if (extension == "fbx")
+	{
+		ret = FileType::FBX;
+	}
+
+	if (extension == "png" || extension == "dds")
+	{
+		ret = FileType::IMAGE;
+	}
+
+	return ret;
+}
+
 SDL_RWops* FileSystem::Load(const char* path) const
 {
 	char* buffer;
 	uint bytes = Load(path, &buffer);
 
-	// TODO 5 (Solved): Check what is: https://wiki.libsdl.org/SDL_RWops
-	// We will need a new method to load Music, FX and Textures from the memory.
-	// Try to investigate SDL_RWops and Related Functions.
 
 	// Read-only memory buffer for use with RWops, retruns a pointer to a new SDL_RWops structure
 	SDL_RWops* ret = SDL_RWFromConstMem(buffer, bytes);
@@ -124,17 +122,12 @@ uint FileSystem::Load(const char* path, char** buffer) const
 {
 	uint ret = 0;
 
-	std::string fileStr, extensionStr;
-	SplitFilePath(path, nullptr, &fileStr, &extensionStr);
-	std::string relativePath = "";
-	relativePath.append("Assets").append("/").append(fileStr).append(extensionStr);
-
 	// TODO 3 (Solved): You want to return the number of bytes it has read from the file that we passed to this function. 
 	// Maybe you want to search readBytes in the documentation, and investigate from there how to build the function.
 
 	// The reading offset is set to the first byte of the file.
 	// Returns a filehandle on success that we will need for the PHYSFS_fileLength
-	PHYSFS_file* file = PHYSFS_openRead(relativePath.c_str());
+	PHYSFS_file* file = PHYSFS_openRead(path);
 
 	// Check for end-of-file state on a PhysicsFS filehandle.
 	if (file != nullptr)

@@ -47,44 +47,25 @@ bool FBXloader::Start()
 	iluInit();
 	ilutRenderer(ILUT_OPENGL);
 
-	
-	
-	
-	/*int i, j, c;
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glShadeModel(GL_FLAT);
-	glEnable(GL_DEPTH_TEST);
-	for (i = 0; i < checkImageHeight; i++) {
-		for (j = 0; j < checkImageWidth; j++) {
-			c = ((((i & 0x8) == 0) ^ ((j & 0x8)) == 0)) * 255;
-			checkImage[i][j][0] = (GLubyte)c;
-			checkImage[i][j][1] = (GLubyte)c;
-			checkImage[i][j][2] = (GLubyte)c;
-			checkImage[i][j][3] = (GLubyte)255;
-		}
-	}
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	 glGenTextures(1, &texName);
-   glBindTexture(GL_TEXTURE_2D, texName);
-
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-		GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-		GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth,
-		checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-		checkImage);*/
-
-
-
 	return ret;
 }
 
+void FBXloader::ChangeTexture(const char* path)
+{
+	LOG("changing all textures to %s", path);
+
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		glDeleteTextures(1, &(GLuint)meshes[i]->texbuffer);
+		meshes[i]->texbuffer = LoadTexBuffer(path);
+		if (meshes[i]->texbuffer != 0)
+			meshes[i]->hastexture = true;
+		else
+			meshes[i]->hastexture = false;
+	}
+
+
+}
 // Load assets
 bool FBXloader::CleanUp()
 {

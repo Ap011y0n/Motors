@@ -7,7 +7,12 @@
 #include "SDL/include/SDL.h"
 
 #pragma comment( lib, "PhysFS/libx86/physfs.lib" )
-
+enum class FileType
+{
+	UNKNOWN,
+	FBX,
+	IMAGE
+};
 class FileSystem : public Module
 {
 public:
@@ -15,9 +20,8 @@ public:
 	FileSystem(Application* app, bool start_enabled = true);
 	~FileSystem();
 
-	std::string NormalizePath(const char* path) const;
-	void FileSystem::SplitFilePath(const char* full_path, std::string* path, std::string* file, std::string* extension) const;
-
+	void SplitFilePath(const char* full_path, std::string* file, std::string* extension) const;
+	FileType SetFileType(std::string file);
 
 	// Called before render is available
 	bool Init();

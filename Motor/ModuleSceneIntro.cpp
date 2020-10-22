@@ -38,11 +38,11 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-	std::string file_path = "Assets/BakerHouse.fbx";
-	char* buffer = nullptr;
-	uint fileSize = 0;
-	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	App->FBX->LoadFBX(buffer, fileSize);
+	//std::string file_path = "Assets/BakerHouse.fbx";
+	//char* buffer = nullptr;
+	//uint fileSize = 0;
+	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	//App->FBX->LoadFBX(buffer, fileSize);
 	//for (float i = -100; i < 100; i++)
 	//{
 	//	vec3 pos(i, 0.f, 0.f);
