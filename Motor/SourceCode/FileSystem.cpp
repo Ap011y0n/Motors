@@ -4,6 +4,9 @@
 #include "Assimp/include/cfileio.h"
 #include "Assimp/include/types.h"
 
+#pragma comment( lib, "PhysFS/libx86/physfs.lib" )
+#include "PhysFS/include/physfs.h"
+
 FileSystem::FileSystem(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 
