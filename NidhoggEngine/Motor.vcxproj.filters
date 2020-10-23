@@ -28,6 +28,9 @@
     <Filter Include="Sources\Math">
       <UniqueIdentifier>{c1ece6c9-94dd-4056-bbfe-4aae8e6818da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Modules\GameObjects">
+      <UniqueIdentifier>{53dc4b5f-416b-445c-be9a-ba8c4d9d5b64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Color.h">
@@ -65,9 +68,6 @@
     </ClInclude>
     <ClInclude Include="SourceCode\ModuleSceneIntro.h">
       <Filter>Sources\Modules\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\FBXloader.h">
-      <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\FileSystem.h">
       <Filter>Sources\Modules</Filter>
@@ -111,6 +111,12 @@
     <ClInclude Include="SourceCode\Globals.h">
       <Filter>Sources</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\FBXloader.h">
+      <Filter>Sources\Modules\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\GameObject.h">
+      <Filter>Sources\Modules\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Color.cpp">
@@ -142,9 +148,6 @@
     </ClCompile>
     <ClCompile Include="SourceCode\ModuleSceneIntro.cpp">
       <Filter>Sources\Modules\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\FBXloader.cpp">
-      <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\FileSystem.cpp">
       <Filter>Sources\Modules</Filter>
@@ -187,6 +190,12 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Main.cpp">
       <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\FBXloader.cpp">
+      <Filter>Sources\Modules\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\GameObject.cpp">
+      <Filter>Sources\Modules\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 
-
+class GameObject;
 
 
 class ModuleSceneIntro : public Module
@@ -14,6 +14,7 @@ public:
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp();
+	GameObject* CreateGameObject(const char* name);
 	void firstCube();
 	void secondCube();
 
@@ -32,5 +33,6 @@ public:
 	float vert2[24];
 	uint index2[36];
 
+	vector<GameObject*> gameObjects;
 
 };

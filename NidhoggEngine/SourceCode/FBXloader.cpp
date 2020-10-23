@@ -3,6 +3,7 @@
 #include "FBXloader.h"
 #include "PrimitiveManager.h"
 #include "FileSystem.h"
+#include "GameObject.h"
 
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"

@@ -5,7 +5,7 @@
 #include "PrimitiveManager.h"
 #include "ModuleWindow.h"
 #include "ModuleUI.h"
-           
+#include "GameObject.h"   
 
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
@@ -38,6 +38,8 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+	GameObject* object = CreateGameObject("test");
+	object->CreateComponent(ComponentType::MESH);
 	//std::string file_path = "Assets/BakerHouse.fbx";
 	//char* buffer = nullptr;
 	//uint fileSize = 0;
@@ -224,6 +226,11 @@ update_status ModuleSceneIntro::Update(float dt)
 	//glFlush();
 	//glDisable(GL_TEXTURE_2D);
 
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		gameObjects[i]->Update(dt);
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -353,4 +360,11 @@ void ModuleSceneIntro::secondCube()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices2);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices2, index2, GL_STATIC_DRAW);
 	
+}
+
+GameObject* ModuleSceneIntro::CreateGameObject(const char* name)
+{
+	GameObject* newGameObject = new GameObject(name);
+	gameObjects.push_back(newGameObject);
+	return newGameObject;
 }
