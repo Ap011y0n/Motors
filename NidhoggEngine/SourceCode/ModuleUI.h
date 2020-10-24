@@ -24,7 +24,7 @@ public:
 	void Configuration(bool config);
 	void StoreLog(const char* message);
 	void PlotGraph();
-	void ShowAppinDockSpace(bool* p_open);
+	void ShowAppinDockSpace(bool* p_open = NULL);
 	void HierarchyWin();
 	void InspectorWin();
 	void ShowExampleAppLayout(/*bool* p_open*/);
@@ -46,7 +46,7 @@ public:
 	int max_fps = 61;
 	int i = 0;
 	int e = 0;
-	bool p_open;
+	bool* open_docking;
 	ImVec2 MouseVelocity;
 	ImVec2 windowSize = { 0, 0 };
 	Vec2 win_size;

@@ -75,11 +75,16 @@ bool ModuleUI::Init()
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	*io = ImGui::GetIO(); (void)io;
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
+	/* *io = ImGui::GetIO(); (void)io;
 	io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 	io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-	io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+	io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    */     // Enable Multi-Viewport / Platform Windows
 	//io.ConfigViewportsNoAutoMerge = true;
 	//io.ConfigViewportsNoTaskBarIcon = true;
 
@@ -89,7 +94,7 @@ bool ModuleUI::Init()
 	//ImGui::StyleColorsLight();
 	 // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 	ImGuiStyle& style = ImGui::GetStyle();
-	if (io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
 		style.WindowRounding = 0.0f;
 		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
@@ -133,7 +138,6 @@ bool ModuleUI::Init()
 	resizable_bool = false;
 	border_bool = false;
 	Wireframe_bool = false;
-	p_open = false;
 	i = 0;
 	e = 1;
 	int max_fps = 61;
@@ -156,25 +160,14 @@ bool ModuleUI::CleanUp()
 // Update: draw background
 update_status ModuleUI::Update(float dt)
 {
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		p_open = true;
-		LOG("Hello World");
-	}
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		p_open = false;
-		LOG("Hello World");
-	}
-	
-
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
-	if (p_open) 
-	{
-		ShowAppinDockSpace(&p_open);
-	}
+
+	
+	ShowAppinDockSpace(open_docking);
+	
+
 	ImGui::Begin("Game");
 	ImVec2 winSize = ImGui::GetWindowSize();   //this will pick the current window size
 	if (winSize.x != windowSize.x || winSize.y != windowSize.y)
@@ -240,9 +233,6 @@ update_status ModuleUI::Update(float dt)
 	}
 
 	ImGui::EndMainMenuBar();
-	if (p_open) {
-		ImGui::End();
-	}
 
 	if (show_demo_window == true)
 		ImGui::ShowDemoWindow(&show_demo_window);
@@ -607,8 +597,8 @@ void ModuleUI::PlotGraph()
 
 void ModuleUI::ShowAppinDockSpace(bool* p_open)
 {
-	static bool opt_fullscreen = true;
-	static bool opt_padding = false;
+	static bool opt_fullscreen_persistant = true;
+	bool opt_fullscreen = opt_fullscreen_persistant;
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
 	// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
@@ -625,10 +615,6 @@ void ModuleUI::ShowAppinDockSpace(bool* p_open)
 		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
 		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 	}
-	else
-	{
-		dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
-	}
 
 	// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
 	// and handle the pass-thru hole, so we ask Begin() to not render a background.
@@ -640,11 +626,9 @@ void ModuleUI::ShowAppinDockSpace(bool* p_open)
 	// all active windows docked into it will lose their parent and become undocked.
 	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
 	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
-	if (!opt_padding)
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::Begin("DockSpace Demo", p_open, window_flags);
-	if (!opt_padding)
-		ImGui::PopStyleVar();
+	ImGui::PopStyleVar();
 
 	if (opt_fullscreen)
 		ImGui::PopStyleVar(2);
@@ -661,6 +645,8 @@ void ModuleUI::ShowAppinDockSpace(bool* p_open)
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 	}
+
+	ImGui::End();
 	
 }
 
