@@ -176,8 +176,6 @@ update_status ModuleUI::Update(float dt)
 		ShowAppinDockSpace(&p_open);
 	}
 	ImGui::Begin("Game");
-
-	ImGui::Image((ImTextureID)App->renderer3D->texColorBuffer, ImVec2(win_size.x, win_size.y), ImVec2(0, 1), ImVec2(1, 0));
 	ImVec2 winSize = ImGui::GetWindowSize();   //this will pick the current window size
 	if (winSize.x != windowSize.x || winSize.y != windowSize.y)
 	{
@@ -187,6 +185,8 @@ update_status ModuleUI::Update(float dt)
 	img_corner = Vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y) + Vec2(0, img_size.y);
 	img_corner.y = App->window->windowSize.y - img_corner.y;
 
+	ImGui::Image((ImTextureID)App->renderer3D->texColorBuffer, ImVec2(img_size.x, img_size.y), ImVec2(0, 1), ImVec2(1, 0));
+	
 	ImGui::End();
 
 	ImGui::BeginMainMenuBar(); //this creates the top bar
