@@ -42,9 +42,6 @@
     <ClInclude Include="SourceCode\Light.h">
       <Filter>Sources\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Primitive.h">
-      <Filter>Sources\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\imconfig.h">
       <Filter>Sources\imgui</Filter>
     </ClInclude>
@@ -93,9 +90,6 @@
     <ClInclude Include="SourceCode\ModuleWindow.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\PrimitiveManager.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\imgui_impl_opengl3.h">
       <Filter>Sources\sources</Filter>
     </ClInclude>
@@ -117,6 +111,12 @@
     <ClInclude Include="SourceCode\GameObject.h">
       <Filter>Sources\Modules\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\PrimitiveManager.h">
+      <Filter>Sources\Modules\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Primitive.h">
+      <Filter>Sources\Modules\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Color.cpp">
@@ -126,9 +126,6 @@
       <Filter>Sources\Containers</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Light.cpp">
-      <Filter>Sources\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Primitive.cpp">
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\imgui.cpp">
@@ -170,9 +167,6 @@
     <ClCompile Include="SourceCode\ModuleWindow.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\PrimitiveManager.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\imgui_impl_opengl3.cpp">
       <Filter>Sources\sources</Filter>
     </ClCompile>
@@ -195,6 +189,12 @@
       <Filter>Sources\Modules\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\GameObject.cpp">
+      <Filter>Sources\Modules\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\PrimitiveManager.cpp">
+      <Filter>Sources\Modules\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Primitive.cpp">
       <Filter>Sources\Modules\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>

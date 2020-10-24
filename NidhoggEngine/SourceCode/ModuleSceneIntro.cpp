@@ -226,11 +226,47 @@ update_status ModuleSceneIntro::Update(float dt)
 	//glFlush();
 	//glDisable(GL_TEXTURE_2D);
 
+	ComponentTransform* transform = nullptr;
 	for (int i = 0; i < gameObjects.size(); i++)
 	{
-		gameObjects[i]->Update(dt);
-	}
+		
+		if (gameObjects[i]->Components[i]->type == ComponentType::TRANSFORM)
+			{
+				transform = (ComponentTransform*)gameObjects[i]->Components[i];
+			}
 
+		gameObjects[i]->Update(dt);
+
+		
+	}
+	if (transform != nullptr)
+	{
+		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		{
+			transform->SetPos(transform->pos.x, transform->pos.y, transform->pos.z - 1 * dt);
+		}
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		{
+			transform->SetPos(transform->pos.x, transform->pos.y, transform->pos.z + 1 * dt);
+		}
+		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		{
+			transform->SetPos(transform->pos.x - 1 * dt, transform->pos.y, transform->pos.z);
+		}
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		{
+			transform->SetPos(transform->pos.x + 1 * dt, transform->pos.y, transform->pos.z);
+		}
+		if (App->input->GetKey(SDL_SCANCODE_RSHIFT) == KEY_REPEAT)
+		{
+			transform->SetPos(transform->pos.x, transform->pos.y - 1 * dt, transform->pos.z);
+		}
+		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+		{
+			transform->SetPos(transform->pos.x, transform->pos.y + 1 * dt, transform->pos.z);
+		}
+	}
+	
 	return UPDATE_CONTINUE;
 }
 

@@ -24,7 +24,7 @@
 #pragma comment( lib, "SourceCode/DevIL/libx86/ILU.lib" )
 #pragma comment( lib, "SourceCode/DevIL/libx86/ILUT.lib" )
 
-
+#include "MathGeoLib/include/MathGeoLib.h"
 #include <string.h>
 
 FBXloader::FBXloader(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -161,21 +161,37 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 	GameObject* object = App->scene_intro->CreateGameObject("GameObject");
 
 	const aiScene* scene = aiImportFileFromMemory(buffer, size, aiProcessPreset_TargetRealtime_MaxQuality, nullptr);
-	
-	if (scene != nullptr && scene->HasMeshes())
-	{
-		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+	aiNode* node = scene->mRootNode;
+	//if (scene != nullptr && scene->HasMeshes())
 
-		for (int i = 0; i < scene->mNumMeshes; i++) {
+	if (node != nullptr && scene != nullptr && scene->HasMeshes())
+	{
+		LOG("%d", node->mNumMeshes);
+		ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
+
+		aiVector3D translation, scaling;
+		aiQuaternion rotation;
+		node->mTransformation.Decompose(scaling, rotation, translation);
+		NewTrans->pos.Set(translation.x, translation.y, translation.z);
+		NewTrans->scale.Set(scaling.x, scaling.y, scaling.z);
+		NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
+
+		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+		for (int i = 0; i < scene->mNumMeshes; i++)
+		//for (int n = 0; n < node->mNumChildren; n++)
+		{
+			
+
+		//for (int i = 0; i < node->mChildren[n]->mNumMeshes; i++) 
+			{
 
 			ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
 			const aiMesh* mesh = scene->mMeshes[i];
-
-
+			//const aiMesh* mesh = scene->mMeshes[node->mChildren[n]->mMeshes[i]];
 			aiString str;
 			aiString folder;
 			folder.Set("Assets/");
-			
+
 			aiMaterial* newMaterial = scene->mMaterials[mesh->mMaterialIndex];
 			if (newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &str) != 0)
 			{
@@ -258,7 +274,7 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 
 			}
 		
-
+		}
 		aiReleaseImport(scene);
 	}
 	else

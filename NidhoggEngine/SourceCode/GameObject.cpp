@@ -8,6 +8,8 @@
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
 
+#include "MathGeoLib/include/MathGeoLib.h"
+
 //*************************		GameObject
 GameObject::GameObject()
 {
@@ -115,7 +117,31 @@ ComponentMesh::~ComponentMesh()
 bool ComponentMesh::Update(float dt)
 {
 	bool ret = true;
+	ComponentMaterial* material = nullptr; 
+	ComponentTransform* transform = nullptr;
 
+	for (int i = 0; i < owner->Components.size(); i++)
+	{
+		if (owner->Components[i]->type == ComponentType::MATERIAL)
+		{
+			material = (ComponentMaterial*)owner->Components[i];
+		}
+		if (owner->Components[i]->type == ComponentType::TRANSFORM)
+		{
+			transform = (ComponentTransform*)owner->Components[i];
+		}
+	}
+
+		glPushMatrix();
+		if (transform != nullptr)
+		{
+			glMultMatrixf(transform->transform.M);
+		}
+		else
+		{
+			mat4x4 mat;
+			glMultMatrixf(mat.M);
+		}
 	
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
@@ -131,12 +157,8 @@ bool ComponentMesh::Update(float dt)
 		glBindBuffer(GL_ARRAY_BUFFER, id_tex);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
-		for (int i = 0; i < owner->Components.size(); i++)
-		{
-			if (owner->Components[i]->type == ComponentType::MATERIAL)
-			{
-				ComponentMaterial* material = (ComponentMaterial*)owner->Components[i];
-				if (material->hastexture)
+	
+				if (material != nullptr && material->hastexture)
 				{
 					glEnable(GL_TEXTURE_2D);
 					glEnable(GL_CULL_FACE);
@@ -144,9 +166,9 @@ bool ComponentMesh::Update(float dt)
 					glActiveTexture(GL_TEXTURE0);
 					glBindTexture(GL_TEXTURE_2D, material->texbuffer);
 				}
-			}
 			
-		}
+		
+		
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 
@@ -160,7 +182,8 @@ bool ComponentMesh::Update(float dt)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glDisable(GL_TEXTURE_2D);
 
-	
+		glPopMatrix();
+
 
 	return ret;
 }
@@ -195,6 +218,11 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 	type = ComponentType::TRANSFORM;
 	active = true;
 	owner = ObjectOwner;
+
+	float3 pos(0, 0, 0);
+	float3 scale(0, 0, 0);
+	Quat rot(0, 0, 0, 0);
+
 }
 
 ComponentTransform::~ComponentTransform()
@@ -204,6 +232,38 @@ ComponentTransform::~ComponentTransform()
 bool ComponentTransform::Update(float dt)
 {
 	bool ret = true;
-
+	UpdatePos(pos.x, pos.y, pos.z);
+	//UpdateRotation(pos.x, pos.y, pos.z);
+	UpdateScale(scale.x, scale.y, scale.z);
 	return ret;
 }
+void ComponentTransform::UpdatePos(float x, float y, float z)
+{
+	transform.translate(x, y, z);
+}
+
+void ComponentTransform::UpdateRotation(float angle, const vec3& u)
+{
+	transform.rotate(angle, u);
+}
+
+void ComponentTransform::UpdateScale(float x, float y, float z)
+{
+	transform.scale(x, y, z);
+}
+
+void ComponentTransform::SetPos(float x, float y, float z)
+{
+	pos.Set(x, y, z);
+}	
+void ComponentTransform::SetRotation(float x, float y, float z, float w)
+{
+	rot.Set(x, y, z, w);
+
+}
+
+void ComponentTransform::Scale(float x, float y, float z)
+{
+	scale.Set(x, y, z);
+}
+

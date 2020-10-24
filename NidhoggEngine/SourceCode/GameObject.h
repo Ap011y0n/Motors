@@ -1,5 +1,8 @@
 #pragma once
 #include "Globals.h"
+#include "glmath.h"
+
+#include "MathGeoLib/include/MathGeoLib.h"
 #include <iostream>
 #include <vector>
 
@@ -10,6 +13,7 @@ enum class ComponentType
 	MATERIAL,
 	TRANSFORM,
 };
+
 
 class GameObject;
 
@@ -78,7 +82,17 @@ public:
 //	void Enable();
 	bool Update(float dt);
 //	void Disable();
+	void			UpdatePos(float x, float y, float z);
+	void			UpdateRotation(float angle, const vec3& u);
+	void			UpdateScale(float x, float y, float z);
+	void			SetPos(float x, float y, float z);
+	void			SetRotation(float x, float y, float z, float w);
+	void			Scale(float x, float y, float z);
 public:
+	float3 pos;
+	float3 scale;
+	Quat rot;
+	mat4x4 transform;
 
 };
 
