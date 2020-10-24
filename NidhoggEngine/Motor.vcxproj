@@ -77,6 +77,7 @@
     <ClInclude Include="SourceCode\Color.h" />
     <ClInclude Include="SourceCode\FBXloader.h" />
     <ClInclude Include="SourceCode\FileSystem.h" />
+    <ClInclude Include="SourceCode\GameObject.h" />
     <ClInclude Include="SourceCode\glmath.h" />
     <ClInclude Include="SourceCode\Globals.h" />
     <ClInclude Include="SourceCode\imconfig.h" />
@@ -106,6 +107,7 @@
     <ClCompile Include="SourceCode\Color.cpp" />
     <ClCompile Include="SourceCode\FBXloader.cpp" />
     <ClCompile Include="SourceCode\FileSystem.cpp" />
+    <ClCompile Include="SourceCode\GameObject.cpp" />
     <ClCompile Include="SourceCode\glmath.cpp" />
     <ClCompile Include="SourceCode\imgui.cpp" />
     <ClCompile Include="SourceCode\imgui_demo.cpp" />

@@ -3,6 +3,7 @@
 #include "FBXloader.h"
 #include "PrimitiveManager.h"
 #include "FileSystem.h"
+#include "GameObject.h"
 
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
@@ -23,7 +24,7 @@
 #pragma comment( lib, "SourceCode/DevIL/libx86/ILU.lib" )
 #pragma comment( lib, "SourceCode/DevIL/libx86/ILUT.lib" )
 
-
+#include "MathGeoLib/include/MathGeoLib.h"
 #include <string.h>
 
 FBXloader::FBXloader(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -76,7 +77,7 @@ bool FBXloader::CleanUp()
 // Update: draw background
 update_status FBXloader::PostUpdate(float dt)
 {
-	PrintMeshes();
+	//PrintMeshes();
 	
 	return UPDATE_CONTINUE;
 }
@@ -157,36 +158,55 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 	bool ret = true;
 	
 
-	
+	GameObject* object = App->scene_intro->CreateGameObject("GameObject");
+
 	const aiScene* scene = aiImportFileFromMemory(buffer, size, aiProcessPreset_TargetRealtime_MaxQuality, nullptr);
-	
-	if (scene != nullptr && scene->HasMeshes())
+	aiNode* node = scene->mRootNode;
+	//if (scene != nullptr && scene->HasMeshes())
+
+	if (node != nullptr && scene != nullptr && scene->HasMeshes())
 	{
+		LOG("%d", node->mNumMeshes);
+		ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
+
+		aiVector3D translation, scaling;
+		aiQuaternion rotation;
+		node->mTransformation.Decompose(scaling, rotation, translation);
+		NewTrans->pos.Set(translation.x, translation.y, translation.z);
+		NewTrans->scale.Set(scaling.x, scaling.y, scaling.z);
+		NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
+
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+		for (int i = 0; i < scene->mNumMeshes; i++)
+		//for (int n = 0; n < node->mNumChildren; n++)
+		{
+			
 
-		for (int i = 0; i < scene->mNumMeshes; i++) {
-			mesh* NewMesh = new mesh();
+		//for (int i = 0; i < node->mChildren[n]->mNumMeshes; i++) 
+			{
 
+			ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
 			const aiMesh* mesh = scene->mMeshes[i];
-
-
+			//const aiMesh* mesh = scene->mMeshes[node->mChildren[n]->mMeshes[i]];
 			aiString str;
 			aiString folder;
 			folder.Set("Assets/");
-			NewMesh->texbuffer = 0;
+
 			aiMaterial* newMaterial = scene->mMaterials[mesh->mMaterialIndex];
 			if (newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &str) != 0)
 			{
-				LOG("couldn't find diffuse texture")
+				LOG("couldn't find diffuse texture");
 			}
 			else
 			{
+				ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
 				folder.Append(str.C_Str());
-				NewMesh->texbuffer = LoadTexBuffer(folder.C_Str());
-				if (NewMesh->texbuffer != 0)
-					NewMesh->hastexture = true;
+				NewTex->texture_path = folder.C_Str();
+				NewTex->texbuffer = LoadTexBuffer(folder.C_Str());
+				if (NewTex->texbuffer != 0)
+					NewTex->hastexture = true;
 				else
-					NewMesh->hastexture = false;
+					NewTex->hastexture = false;
 			}
 			
 
@@ -252,10 +272,9 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 			NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
 
 
-			meshes.push_back(NewMesh);
-		}
+			}
 		
-
+		}
 		aiReleaseImport(scene);
 	}
 	else
