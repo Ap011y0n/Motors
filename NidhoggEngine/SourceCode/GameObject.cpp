@@ -219,9 +219,9 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 	active = true;
 	owner = ObjectOwner;
 
-	float3 pos(0, 0, 0);
-	float3 scale(0, 0, 0);
-	Quat rot(0, 0, 0, 0);
+	pos.Set(0, 0, 0);
+	scale.Set(0, 0, 0);
+	rot.Set(0, 0, 0, 0);
 
 }
 
@@ -259,7 +259,6 @@ void ComponentTransform::SetPos(float x, float y, float z)
 void ComponentTransform::SetRotation(float x, float y, float z, float w)
 {
 	rot.Set(x, y, z, w);
-
 }
 
 void ComponentTransform::Scale(float x, float y, float z)

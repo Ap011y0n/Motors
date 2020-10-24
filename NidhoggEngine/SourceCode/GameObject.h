@@ -17,6 +17,7 @@ enum class ComponentType
 
 class GameObject;
 
+//Base component class, need to use childs to actually do something
 class Component
 {
 public:
@@ -24,15 +25,18 @@ public:
 	~Component();
 	virtual void Enable();
 	virtual bool Update(float dt);
-	virtual void Disable();
+	virtual void Disable(); 
 public:
-	ComponentType type = ComponentType::NONE;
+	ComponentType type = ComponentType::NONE; 	//Type of component
+
 	bool active = false;
-	GameObject* owner;
+	GameObject* owner; 	//Gameobject which is parent to this component
+
 
 
 };
 
+//Mesh, child to component
 class ComponentMesh : public Component
 {
 public:
@@ -54,12 +58,14 @@ public:
 	uint num_vertex = 0;
 	float* vertex = nullptr;
 
-	uint id_tex;
+	uint id_tex; //textures coords in VRAM
 	uint num_tex;
 	float* texCoords;
 
 
 };
+
+//Material, child to component
 class ComponentMaterial : public Component
 {
 public:
@@ -69,11 +75,12 @@ public:
 	bool Update(float dt);
 //	void Disable();
 public:
-	std::string texture_path;
-	uint texbuffer;
+	std::string texture_path; 	//path to this texture image
+	uint texbuffer;				//texture loaded in VRAM
 	bool hastexture;
 };
 
+//Transform, child to component
 class ComponentTransform : public Component
 {
 public:
@@ -82,12 +89,16 @@ public:
 //	void Enable();
 	bool Update(float dt);
 //	void Disable();
+
+	void			SetPos(float x, float y, float z);	//Call this method to change position of transform component
+	void			SetRotation(float x, float y, float z, float w);	//Call this method to change rotation of transform component
+	void			Scale(float x, float y, float z);	//Call this method to change scale of transform component
+
+private:
 	void			UpdatePos(float x, float y, float z);
 	void			UpdateRotation(float angle, const vec3& u);
 	void			UpdateScale(float x, float y, float z);
-	void			SetPos(float x, float y, float z);
-	void			SetRotation(float x, float y, float z, float w);
-	void			Scale(float x, float y, float z);
+
 public:
 	float3 pos;
 	float3 scale;
@@ -103,7 +114,7 @@ public:
 	GameObject(const char* name);
 	~GameObject();
 	bool Update(float dt);
-	Component* CreateComponent(ComponentType type);
+	Component* CreateComponent(ComponentType type); //Create a new component for this game object, needs a Component type
 	
 public:
 	bool active = false;
