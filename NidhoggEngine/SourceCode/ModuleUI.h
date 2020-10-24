@@ -19,17 +19,23 @@ public:
 
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
+
 	bool CleanUp();
+
 	void AboutMenu(bool window);
-	void Configuration(bool config);
 	void StoreLog(const char* message);
-	void PlotGraph();
 	void ShowAppinDockSpace(bool* p_open = NULL);
+
+	void Configuration(bool config);
+	void PlotGraph();
 	void HierarchyWin();
 	void InspectorWin();
+
 	void ShowExampleAppLayout(/*bool* p_open*/);
 	void Change_Window_size(Vec2 newSize);
 	void OnResize(int screen_width, int screen_height);
+
+	void GameObjectHierarchyTree(GameObject* node);
 public:
 	ImGuiIO* io;
 	bool show_demo_window;

@@ -230,16 +230,16 @@ update_status ModuleSceneIntro::Update(float dt)
 	for (int i = 0; i < gameObjects.size(); i++)
 	{
 		
-		if (gameObjects[i]->Components[i]->type == ComponentType::TRANSFORM)
+		/*if (gameObjects[i]->Components[i]->type == ComponentType::TRANSFORM)
 			{
 				transform = (ComponentTransform*)gameObjects[i]->Components[i];
-			}
+			}*/
 
 		gameObjects[i]->Update(dt);
 
 		
 	}
-	if (transform != nullptr)
+	/*if (transform != nullptr)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		{
@@ -265,7 +265,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		{
 			transform->SetPos(transform->pos.x, transform->pos.y + 1 * dt, transform->pos.z);
 		}
-	}
+	}*/
 	
 	return UPDATE_CONTINUE;
 }

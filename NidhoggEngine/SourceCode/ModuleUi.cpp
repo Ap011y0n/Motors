@@ -8,7 +8,7 @@
 #include "imgui_impl_opengl3.h"
 #include "ModuleWindow.h"
 #include "glew/include/glew.h"
-
+#include "GameObject.h"
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 #include "GL/gl3w.h"           // Initialize with gl3wInit()
@@ -652,8 +652,38 @@ void ModuleUI::ShowAppinDockSpace(bool* p_open)
 
 void ModuleUI::HierarchyWin()
 {
-	ImGui::Begin("Hierarchy");
+	ImGui::Begin("Hierarchy"); 
+	std::vector<GameObject*>::iterator node = App->scene_intro->gameObjects.begin();;
+	while (node != App->scene_intro->gameObjects.end())
+	{
+		GameObjectHierarchyTree((*node));
+		node++;
+	}
 	ImGui::End();
+}
+
+void ModuleUI::GameObjectHierarchyTree(GameObject* node)
+{
+	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+	
+	const char* GameObjname = node->Name.c_str();
+	if (ImGui::TreeNodeEx(GameObjname, node_flags))
+	{
+		if (ImGui::IsItemClicked())
+		{
+			//here we will select the node
+		}
+
+		/*std::vector<Component*>::iterator it = node->Components.begin(); //this iteraor is for the children from the own object
+	
+		while (it != node->Components.end())
+		{	
+			GameObjectHierarchyTree((*it));
+			it++;
+		}*/
+			ImGui::TreePop();
+	}
+	
 }
 
 void ModuleUI::InspectorWin()
@@ -697,20 +727,16 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 
 void ModuleUI::Change_Window_size(Vec2 newSize)
 {
-	//Getting window size - some margins - separator (7)
+	//Get window size
 	win_size = newSize;
-
-	//Calculating the image size according to the window size.
+	//Creates window size parameter
 	img_size = App->window->windowSize ;
 	if (img_size.x > win_size.x - 10.0f)
-	{
-		img_size /= (img_size.x / (win_size.x - 10.0f));
-	}
+	{img_size /= (img_size.x / (win_size.x - 10.0f));}
 	if (img_size.y > win_size.y - 10.0f)
-	{
-		img_size /= (img_size.y / (win_size.y - 10.0f));
-	}
-	img_offset = Vec2(win_size.x - 5.0f - img_size.x, win_size.y - 5.0f - img_size.y) / 2;
+	{img_size /= (img_size.y / (win_size.y - 10.0f));}
+	img_offset = Vec2(win_size.x - 5.0f - img_size.x, win_size.y - 5.0f - img_size.y);
+	img_offset = img_offset / 2;
 
 }
 
