@@ -38,8 +38,8 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-	GameObject* object = CreateGameObject("test");
-	object->CreateComponent(ComponentType::MESH);
+	//GameObject* object = CreateGameObject("test");
+	//object->CreateComponent(ComponentType::MESH);
 	//std::string file_path = "Assets/BakerHouse.fbx";
 	//char* buffer = nullptr;
 	//uint fileSize = 0;

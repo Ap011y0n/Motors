@@ -1,4 +1,12 @@
 #include "GameObject.h"
+#include "Glew/include/glew.h"
+#include "SDL/include/SDL_opengl.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
 
 //*************************		GameObject
 GameObject::GameObject()
@@ -95,9 +103,6 @@ ComponentMesh::ComponentMesh(GameObject* ObjectOwner) : Component()
 	num_tex = 0;
 	texCoords = nullptr;
 
-	texbuffer = 0;
-	hastexture = false;
-
 	type = ComponentType::MESH;
 	active = true;
 	owner = ObjectOwner;
@@ -111,6 +116,52 @@ bool ComponentMesh::Update(float dt)
 {
 	bool ret = true;
 
+	
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+
+
+		glBindBuffer(GL_ARRAY_BUFFER, id_tex);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+		for (int i = 0; i < owner->Components.size(); i++)
+		{
+			if (owner->Components[i]->type == ComponentType::MATERIAL)
+			{
+				ComponentMaterial* material = (ComponentMaterial*)owner->Components[i];
+				if (material->hastexture)
+				{
+					glEnable(GL_TEXTURE_2D);
+					glEnable(GL_CULL_FACE);
+
+					glActiveTexture(GL_TEXTURE0);
+					glBindTexture(GL_TEXTURE_2D, material->texbuffer);
+				}
+			}
+			
+		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+
+		glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glDisable(GL_TEXTURE_2D);
+
+	
+
 	return ret;
 }
 
@@ -121,6 +172,8 @@ ComponentMaterial::ComponentMaterial(GameObject* ObjectOwner) : Component()
 	type = ComponentType::MATERIAL;
 	active = true;
 	owner = ObjectOwner;
+	texbuffer = 0;
+	hastexture = false;
 }
 
 ComponentMaterial::~ComponentMaterial()

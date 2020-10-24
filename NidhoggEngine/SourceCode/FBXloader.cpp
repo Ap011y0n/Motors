@@ -77,7 +77,7 @@ bool FBXloader::CleanUp()
 // Update: draw background
 update_status FBXloader::PostUpdate(float dt)
 {
-	PrintMeshes();
+	//PrintMeshes();
 	
 	return UPDATE_CONTINUE;
 }
@@ -158,7 +158,8 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 	bool ret = true;
 	
 
-	
+	GameObject* object = App->scene_intro->CreateGameObject("GameObject");
+
 	const aiScene* scene = aiImportFileFromMemory(buffer, size, aiProcessPreset_TargetRealtime_MaxQuality, nullptr);
 	
 	if (scene != nullptr && scene->HasMeshes())
@@ -166,28 +167,30 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 
 		for (int i = 0; i < scene->mNumMeshes; i++) {
-			mesh* NewMesh = new mesh();
 
+			ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
 			const aiMesh* mesh = scene->mMeshes[i];
 
 
 			aiString str;
 			aiString folder;
 			folder.Set("Assets/");
-			NewMesh->texbuffer = 0;
+			
 			aiMaterial* newMaterial = scene->mMaterials[mesh->mMaterialIndex];
 			if (newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &str) != 0)
 			{
-				LOG("couldn't find diffuse texture")
+				LOG("couldn't find diffuse texture");
 			}
 			else
 			{
+				ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
 				folder.Append(str.C_Str());
-				NewMesh->texbuffer = LoadTexBuffer(folder.C_Str());
-				if (NewMesh->texbuffer != 0)
-					NewMesh->hastexture = true;
+				NewTex->texture_path = folder.C_Str();
+				NewTex->texbuffer = LoadTexBuffer(folder.C_Str());
+				if (NewTex->texbuffer != 0)
+					NewTex->hastexture = true;
 				else
-					NewMesh->hastexture = false;
+					NewTex->hastexture = false;
 			}
 			
 
@@ -253,8 +256,7 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 			NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
 
 
-			meshes.push_back(NewMesh);
-		}
+			}
 		
 
 		aiReleaseImport(scene);

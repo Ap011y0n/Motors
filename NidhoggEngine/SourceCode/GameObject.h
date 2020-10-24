@@ -54,8 +54,7 @@ public:
 	uint num_tex;
 	float* texCoords;
 
-	uint texbuffer;
-	bool hastexture;
+
 };
 class ComponentMaterial : public Component
 {
@@ -66,7 +65,9 @@ public:
 	bool Update(float dt);
 //	void Disable();
 public:
-
+	std::string texture_path;
+	uint texbuffer;
+	bool hastexture;
 };
 
 class ComponentTransform : public Component
