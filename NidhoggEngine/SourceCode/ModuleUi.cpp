@@ -725,31 +725,118 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 	}
 	if (transform != nullptr)
 	{
-		ImGui::Text("Pos x: %f", transform->pos.x);
-		
+		ImGui::Separator();
+		if (ImGui::TreeNode("Transform"))
+		{
+			//
+			ImGui::Columns(1);
+			ImGui::Columns(4, "mycolumns");
+			ImGui::Separator();
+			static bool active = false;
+			ImGui::Checkbox("Active",&active);
+			ImGui::Text("Position"); // ImGui::NextColumn();
+			ImGui::Text("Rotation"); //ImGui::NextColumn();
+			ImGui::Text("Scale"); ImGui::NextColumn();
+
+
+			ImGui::Text("x");
+			// Position
+			float t = transform->pos.x;
+			ImGui::SetNextItemWidth(50);
+			ImGui::DragFloat("", &t);
+			if (ImGui::IsItemActive())
+			{
+				transform->SetPos(t, transform->pos.y, transform->pos.z);
+			}
+			//Rotation
+			float r1 = transform->rot.x;
+			ImGui::SetNextItemWidth(50);
+			ImGui::DragFloat("", &r1); 
+			//Scale
+			ImGui::SetNextItemWidth(50);
+			ImGui::DragFloat("", &transform->scale.x);
+			ImGui::NextColumn();
+
+
+			ImGui::Text("y");
+			// Position
+			ImGui::SetNextItemWidth(50);
+			float t1 = transform->pos.y;
+			ImGui::DragFloat("", &t1);
+			if (ImGui::IsItemActive())
+			{
+				transform->SetPos(transform->pos.x, t1, transform->pos.z);
+			}
+			// Rotation
+			float r2 = transform->rot.y;
+			ImGui::SetNextItemWidth(50);
+			ImGui::DragFloat("", &r2);
+			//Scale
+			ImGui::SetNextItemWidth(50);
+			ImGui::DragFloat("", &transform->scale.y);
+			ImGui::NextColumn();
+
+
+			ImGui::Text("z");
+			// Position
+			ImGui::SetNextItemWidth(50);
+			float t2 = transform->pos.z;
+			ImGui::DragFloat("", &t2);
+			if (ImGui::IsItemActive())
+			{
+				transform->SetPos(transform->pos.x, transform->pos.y, t2);
+			}
+			// Rotation
+			float r3 = transform->rot.z;
+			ImGui::SetNextItemWidth(50);
+			ImGui::DragFloat("", &r3);
+			//Scale
+			ImGui::SetNextItemWidth(50);
+			ImGui::DragFloat("", &transform->scale.z);
+			ImGui::NextColumn();
+
+			ImGui::Columns(1);
+			ImGui::TreePop();
+		}
+		ImGui::Separator();
 	}
 
 	if (mesh != nullptr)
 	{
-		static bool cheked = false;
-		ImGui::Checkbox("Display normals", &cheked);
-		if (cheked)
+		if (ImGui::TreeNode("Mesh"))
 		{
-			if (mesh->triggerNormals)
+			static bool cheked = false;
+			ImGui::Checkbox("Display normals", &cheked);
+			if (cheked)
 			{
-				mesh->DisplayNormals();
-				mesh->triggerNormals = false;
+				if (mesh->triggerNormals)
+				{
+					mesh->DisplayNormals();
+					mesh->triggerNormals = false;
+				}
 			}
+			else
+			{
+				mesh->triggerNormals = true;
+			}
+			ImGui::Separator();
+			ImGui::Text("Indexes : %d", mesh->num_index / 3);
+			ImGui::Text("Vertex : %d", mesh->num_vertex);
+			ImGui::Text("Normals : %d", mesh->num_normals);
+			ImGui::TreePop();
 		}
-		else
-		{
-			mesh->triggerNormals = true;
-		}
+		ImGui::Separator();
 	}
 
 	if (material != nullptr)
 	{
-		ImGui::Image((ImTextureID)material->texbuffer, ImVec2(256, 256));
+		if (ImGui::TreeNode("Material"))
+		{
+			ImGui::Text("File:"); ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s",material->texture_path.c_str());
+			ImGui::Image((ImTextureID)material->texbuffer, ImVec2(256, 256));
+			ImGui::TreePop();
+		}
 	}
 	
 }
