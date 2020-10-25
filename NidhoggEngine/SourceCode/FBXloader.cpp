@@ -253,15 +253,15 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 				}
 			}
 
-			for (int i = 0; i < NewMesh->num_vertex; i++)
+	/*		for (int i = 0; i < NewMesh->num_vertex; i++)
 			{
 				vec3 origin(NewMesh->vertex[i * 3], NewMesh->vertex[i * 3 + 1], NewMesh->vertex[i * 3 + 2]);
 				vec3 destination(NewMesh->normals[i * 3], NewMesh->normals[i * 3 + 1], NewMesh->normals[i * 3 + 2]);
 				destination *= 1;
 				destination += origin;
 
-				//App->PrimManager->CreateLine(origin, destination);
-			}
+				App->PrimManager->CreateLine(origin, destination);
+			}*/
 
 			NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
 

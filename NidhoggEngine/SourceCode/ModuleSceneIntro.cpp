@@ -40,11 +40,12 @@ bool ModuleSceneIntro::Start()
 
 	//GameObject* object = CreateGameObject("test");
 	//object->CreateComponent(ComponentType::MESH);
-	//std::string file_path = "Assets/BakerHouse.fbx";
-	//char* buffer = nullptr;
-	//uint fileSize = 0;
-	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	//App->FBX->LoadFBX(buffer, fileSize);
+
+	std::string file_path = "Assets/BakerHouse.fbx";
+	char* buffer = nullptr;
+	uint fileSize = 0;
+	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	App->FBX->LoadFBX(buffer, fileSize);
 	//for (float i = -100; i < 100; i++)
 	//{
 	//	vec3 pos(i, 0.f, 0.f);
@@ -229,17 +230,17 @@ update_status ModuleSceneIntro::Update(float dt)
 	ComponentTransform* transform = nullptr;
 	for (int i = 0; i < gameObjects.size(); i++)
 	{
-		
-		/*if (gameObjects[i]->Components[i]->type == ComponentType::TRANSFORM)
+		for (int j = 0; j < gameObjects[i]->Components.size(); j++)
+		{
+			if (gameObjects[i]->Components[j]->type == ComponentType::TRANSFORM)
 			{
-				transform = (ComponentTransform*)gameObjects[i]->Components[i];
-			}*/
-
+				transform = (ComponentTransform*)gameObjects[i]->Components[j];
+			}
+		}
 		gameObjects[i]->Update(dt);
-
-		
 	}
-	/*if (transform != nullptr)
+
+	if (transform != nullptr)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		{
@@ -265,7 +266,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		{
 			transform->SetPos(transform->pos.x, transform->pos.y + 1 * dt, transform->pos.z);
 		}
-	}*/
+	}
 	
 	return UPDATE_CONTINUE;
 }
@@ -402,5 +403,7 @@ GameObject* ModuleSceneIntro::CreateGameObject(const char* name)
 {
 	GameObject* newGameObject = new GameObject(name);
 	gameObjects.push_back(newGameObject);
+	TreeNode* newnode = new TreeNode(newGameObject);
+	App->UI->tree_nodes.push_back(newnode);
 	return newGameObject;
 }

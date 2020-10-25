@@ -1,4 +1,7 @@
 #include "GameObject.h"
+#include "Primitive.h"
+#include "Application.h"
+
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
 #include <gl/GL.h>
@@ -108,6 +111,8 @@ ComponentMesh::ComponentMesh(GameObject* ObjectOwner) : Component()
 	type = ComponentType::MESH;
 	active = true;
 	owner = ObjectOwner;
+
+	triggerNormals = false;
 }
 
 ComponentMesh::~ComponentMesh()
@@ -188,6 +193,19 @@ bool ComponentMesh::Update(float dt)
 	return ret;
 }
 
+void ComponentMesh::DisplayNormals()
+{
+	for (int i = 0; i < num_vertex; i++)
+	{
+		vec3 origin(vertex[i * 3], vertex[i * 3 + 1], vertex[i * 3 + 2]);
+		vec3 destination(normals[i * 3], normals[i * 3 + 1], normals[i * 3 + 2]);
+		destination *= 1;
+		destination += origin;
+
+		App->PrimManager->CreateLine(origin, destination);
+	}
+	LOG("DisplayNormals");
+}
 //*************************		ComponentMaterial
 
 ComponentMaterial::ComponentMaterial(GameObject* ObjectOwner) : Component()

@@ -44,6 +44,7 @@ public:
 	~ComponentMesh();
 	//void Enable();
 	bool Update(float dt);
+	void DisplayNormals();
 	//void Disable();
 public:
 	uint id_index = 0; // index in VRAM
@@ -62,6 +63,7 @@ public:
 	uint num_tex;
 	float* texCoords;
 
+	bool triggerNormals;
 
 };
 

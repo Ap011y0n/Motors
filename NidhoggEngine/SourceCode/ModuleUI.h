@@ -7,8 +7,21 @@
 #include "Vec2.h"
 
 using namespace std;
+class GameObject;
 
-
+class TreeNode
+{
+public:
+	TreeNode(GameObject* obj)
+	{
+		object = obj;
+		isSelected = false;
+	}
+	~TreeNode();
+public:
+	GameObject* object;
+	bool isSelected;
+};
 class ModuleUI : public Module
 {
 public:
@@ -35,7 +48,8 @@ public:
 	void Change_Window_size(Vec2 newSize);
 	void OnResize(int screen_width, int screen_height);
 
-	void GameObjectHierarchyTree(GameObject* node);
+	void GameObjectHierarchyTree(GameObject* node, int id);
+	void GameObjectInspector(GameObject* obj);
 public:
 	ImGuiIO* io;
 	bool show_demo_window;
@@ -60,8 +74,10 @@ public:
 	Vec2 img_corner;
 	Vec2 img_size;
 	ImGuiWindowClass* windowClass = nullptr;
+	vector<TreeNode*> tree_nodes;
+
 private:
 	int c1;
 	vector<string> consoleOutput;
-
 };
+

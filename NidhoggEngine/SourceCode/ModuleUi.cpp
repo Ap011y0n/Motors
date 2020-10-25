@@ -628,60 +628,128 @@ void ModuleUI::ShowAppinDockSpace(bool* p_open)
 	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::Begin("DockSpace Demo", p_open, window_flags);
-	ImGui::PopStyleVar();
+ImGui::PopStyleVar();
 
-	if (opt_fullscreen)
-		ImGui::PopStyleVar(2);
+if (opt_fullscreen)
+ImGui::PopStyleVar(2);
 
-	// DockSpace
+// DockSpace
+ImGuiIO& io = ImGui::GetIO();
+if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+{
+	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+}
+else {
 	ImGuiIO& io = ImGui::GetIO();
-	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-	{
-		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-	}
-	else {
-		ImGuiIO& io = ImGui::GetIO();
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-	}
+}
 
-	ImGui::End();
-	
+ImGui::End();
+
 }
 
 void ModuleUI::HierarchyWin()
 {
-	ImGui::Begin("Hierarchy"); 
-	std::vector<GameObject*>::iterator node = App->scene_intro->gameObjects.begin();;
-	while (node != App->scene_intro->gameObjects.end())
+	ImGui::Begin("Hierarchy");
+
+	for (int i = 0; i < tree_nodes.size(); i++)
 	{
-		GameObjectHierarchyTree((*node));
-		node++;
+		GameObjectHierarchyTree(tree_nodes[i]->object, i);
 	}
 	ImGui::End();
 }
 
-void ModuleUI::GameObjectHierarchyTree(GameObject* node)
+void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 {
-	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+	ImGuiTreeNodeFlags node_flags = /*ImGuiTreeNodeFlags_OpenOnArrow | */ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 	
+
 	const char* GameObjname = node->Name.c_str();
-	if (ImGui::TreeNodeEx(GameObjname, node_flags))
+	static int selection_mask = (1 << 2);
+	const bool is_selected = (selection_mask & (1 << 0)) != 0;
+
+	if (tree_nodes[id]->isSelected)
 	{
-		if (ImGui::IsItemClicked())
+		node_flags |= ImGuiTreeNodeFlags_Selected;
+	}
+
+	bool node_open = ImGui::TreeNodeEx(GameObjname, node_flags);
+	if (ImGui::IsItemClicked())
+	{
+		for (int i = 0; i < tree_nodes.size(); i++)
 		{
-			//here we will select the node
+			tree_nodes[i]->isSelected = false;
 		}
+		tree_nodes[id]->isSelected = true;
+
+		
+	}
+	if (node_open)
+	{
+
 
 		/*std::vector<Component*>::iterator it = node->Components.begin(); //this iteraor is for the children from the own object
-	
+
 		while (it != node->Components.end())
-		{	
+		{
 			GameObjectHierarchyTree((*it));
 			it++;
 		}*/
-			ImGui::TreePop();
+		ImGui::TreePop();
+	}
+
+}
+
+void ModuleUI::GameObjectInspector(GameObject* obj)
+{
+	ComponentTransform* transform = nullptr;
+	ComponentMaterial* material = nullptr;
+	ComponentMesh* mesh = nullptr;
+
+	for (int i = 0; i < obj->Components.size(); i++)
+	{
+		if (obj->Components[i]->type == ComponentType::TRANSFORM)
+		{
+			transform = (ComponentTransform*)obj->Components[i];
+		}
+		if (obj->Components[i]->type == ComponentType::MESH)
+		{
+			mesh = (ComponentMesh*)obj->Components[i];
+		}
+		if (obj->Components[i]->type == ComponentType::MATERIAL)
+		{
+			material = (ComponentMaterial*)obj->Components[i];
+		}
+	}
+	if (transform != nullptr)
+	{
+		ImGui::Text("Pos x: %f", transform->pos.x);
+		
+	}
+
+	if (mesh != nullptr)
+	{
+		static bool cheked = false;
+		ImGui::Checkbox("Display normals", &cheked);
+		if (cheked)
+		{
+			if (mesh->triggerNormals)
+			{
+				mesh->DisplayNormals();
+				mesh->triggerNormals = false;
+			}
+		}
+		else
+		{
+			mesh->triggerNormals = true;
+		}
+	}
+
+	if (material != nullptr)
+	{
+		ImGui::Image((ImTextureID)material->texbuffer, ImVec2(256, 256));
 	}
 	
 }
@@ -689,6 +757,13 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node)
 void ModuleUI::InspectorWin()
 {
 	ImGui::Begin("Inspector");
+	for (int i = 0; i < tree_nodes.size(); i++)
+	{
+		if(tree_nodes[i]->isSelected)
+		{
+			GameObjectInspector(tree_nodes[i]->object);
+		}
+	}
 	ImGui::End();
 }
 
