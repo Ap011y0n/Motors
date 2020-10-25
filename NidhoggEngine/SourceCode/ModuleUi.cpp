@@ -753,8 +753,9 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("", &r1); 
 			//Scale
+			float s1 = transform->scale.x;;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("", &transform->scale.x);
+			ImGui::DragFloat("", &s1);
 			ImGui::NextColumn();
 
 
@@ -772,8 +773,10 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("", &r2);
 			//Scale
+			float s2 = transform->scale.y;;
+
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("", &transform->scale.y);
+			ImGui::DragFloat("", &s2);
 			ImGui::NextColumn();
 
 
@@ -787,12 +790,14 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 				transform->SetPos(transform->pos.x, transform->pos.y, t2);
 			}
 			// Rotation
+			
 			float r3 = transform->rot.z;
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("", &r3);
 			//Scale
+			float s3 = transform->scale.z;;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("", &transform->scale.z);
+			ImGui::DragFloat("", &s3);
 			ImGui::NextColumn();
 
 			ImGui::Columns(1);
