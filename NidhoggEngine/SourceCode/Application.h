@@ -5,7 +5,8 @@
 
 #include "Globals.h"
 #include "Timer.h"
-#include "Module.h"
+
+
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleAudio.h"
@@ -18,6 +19,9 @@
 #include "FileSystem.h"
 
 #include <vector>
+
+class Module;
+
 
 using namespace std;
 

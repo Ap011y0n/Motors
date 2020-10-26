@@ -8,6 +8,9 @@
 typedef unsigned char GLubyte;
 typedef unsigned int GLuint;
 typedef unsigned int   ILuint;
+class GameObject;
+struct aiScene;
+struct aiNode;
 
 struct mesh
 {
@@ -46,6 +49,7 @@ public:
 	uint FillElementArrayBuffer(uint size, uint* array);
 	uint LoadTexBuffer(const char* path);
 	bool LoadFBX(const char* buffer, uint size);
+	void LoadNode(const aiScene* scene, aiNode* node, GameObject* object);
 	void PrintMeshes();
 	void ChangeTexture(const char* path);
 

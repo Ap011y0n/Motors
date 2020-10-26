@@ -1,6 +1,18 @@
 #include "Application.h"
 #include "Timer.h"
 
+#include "Module.h"
+#include "ModuleWindow.h"
+#include "ModuleInput.h"
+#include "ModuleAudio.h"
+#include "ModuleSceneIntro.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
+#include "ModuleUI.h"
+#include "PrimitiveManager.h"
+#include "FBXloader.h"
+
+#include "FileSystem.h"
 Application::Application()
 {
 	window = new ModuleWindow(this);
