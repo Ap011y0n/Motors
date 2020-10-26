@@ -743,7 +743,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			// Position
 			float t = transform->pos.x;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("", &t);
+			ImGui::DragFloat("1", &t);
 			if (ImGui::IsItemActive())
 			{
 				transform->SetPos(t, transform->pos.y, transform->pos.z);
@@ -751,11 +751,10 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			//Rotation
 			float r1 = transform->rot.x;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("", &r1); 
+			ImGui::DragFloat("2", &r1); 
 			//Scale
-			float s1 = transform->scale.x;;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("", &s1);
+			ImGui::DragFloat("3", &transform->scale.x);
 			ImGui::NextColumn();
 
 
@@ -763,7 +762,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			// Position
 			ImGui::SetNextItemWidth(50);
 			float t1 = transform->pos.y;
-			ImGui::DragFloat("", &t1);
+			ImGui::DragFloat("4", &t1);
 			if (ImGui::IsItemActive())
 			{
 				transform->SetPos(transform->pos.x, t1, transform->pos.z);
@@ -771,12 +770,10 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			// Rotation
 			float r2 = transform->rot.y;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("", &r2);
+			ImGui::DragFloat("5", &r2);
 			//Scale
-			float s2 = transform->scale.y;;
-
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("", &s2);
+			ImGui::DragFloat("6", &transform->scale.y);
 			ImGui::NextColumn();
 
 
@@ -784,20 +781,18 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			// Position
 			ImGui::SetNextItemWidth(50);
 			float t2 = transform->pos.z;
-			ImGui::DragFloat("", &t2);
+			ImGui::DragFloat("7", &t2);
 			if (ImGui::IsItemActive())
 			{
 				transform->SetPos(transform->pos.x, transform->pos.y, t2);
 			}
 			// Rotation
-			
 			float r3 = transform->rot.z;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("", &r3);
+			ImGui::DragFloat("8", &r3);
 			//Scale
-			float s3 = transform->scale.z;;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("", &s3);
+			ImGui::DragFloat("9", &transform->scale.z);
 			ImGui::NextColumn();
 
 			ImGui::Columns(1);
