@@ -232,17 +232,6 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* object)
 				}
 			}
 
-<<<<<<< Updated upstream
-			for (int i = 0; i < NewMesh->num_vertex; i++)
-			{
-				vec3 origin(NewMesh->vertex[i * 3], NewMesh->vertex[i * 3 + 1], NewMesh->vertex[i * 3 + 2]);
-				vec3 destination(NewMesh->normals[i * 3], NewMesh->normals[i * 3 + 1], NewMesh->normals[i * 3 + 2]);
-				destination *= 1;
-				destination += origin;
-
-				//App->PrimManager->CreateLine(origin, destination);
-			}
-=======
 			/*		for (int i = 0; i < NewMesh->num_vertex; i++)
 					{
 						vec3 origin(NewMesh->vertex[i * 3], NewMesh->vertex[i * 3 + 1], NewMesh->vertex[i * 3 + 2]);
@@ -252,7 +241,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* object)
 
 						App->PrimManager->CreateLine(origin, destination);
 					}*/
->>>>>>> Stashed changes
+
 
 			NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
 
