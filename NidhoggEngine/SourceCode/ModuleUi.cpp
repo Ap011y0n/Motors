@@ -248,10 +248,24 @@ update_status ModuleUI::Update(float dt)
 	{
 		if (ImGui::BeginMenu("Create...")) {
 
-			ImGui::MenuItem("Plane", NULL);
-			ImGui::MenuItem("Cube", NULL);
-			ImGui::MenuItem("Sphere", NULL);
-			ImGui::MenuItem("Cylinder", NULL);
+			if (ImGui::MenuItem("Cube")) {
+				App->PrimManager->CreateCube(vec3(1, 1, 1), vec3(0, 0, 0));
+			}
+			if (ImGui::MenuItem("Pyramid")){
+				App->PrimManager->CreatePyramid(vec3(1, 1, 1), vec3(0, 0, 0));
+			}
+			if (ImGui::MenuItem("Sphere")) {
+				App->PrimManager->CreateSphere(float (1), unsigned int (39) , unsigned int (30),vec3(0, 0, 0));
+			}
+			if (ImGui::MenuItem("Cylinder")) {
+				App->PrimManager->CreateCylinder(float(0.5), unsigned int(1), unsigned int(20), vec3(0, 0.5, 0));
+			}
+			if (ImGui::MenuItem("Line")) {
+				App->PrimManager->CreateLine(vec3(1, 1, 0), vec3(0, 2, 2));
+			}
+			if (ImGui::MenuItem("Plane")) {
+				App->PrimManager->CreatePlane(vec4 (2,2,2,2),true);
+			}
 			ImGui::EndMenu();
 		}
 
@@ -773,7 +787,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			// Position
 			float t = transform->pos.x;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("1", &t);
+			ImGui::DragFloat(" ", &t);
 			if (ImGui::IsItemActive())
 			{
 				transform->SetPos(t, transform->pos.y, transform->pos.z);
@@ -781,10 +795,10 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			//Rotation
 			float r1 = transform->rot.x;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("2", &r1); 
+			ImGui::DragFloat("  ", &r1); 
 			//Scale
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("3", &transform->scale.x);
+			ImGui::DragFloat("   ", &transform->scale.x);
 			ImGui::NextColumn();
 
 
@@ -792,7 +806,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			// Position
 			ImGui::SetNextItemWidth(50);
 			float t1 = transform->pos.y;
-			ImGui::DragFloat("4", &t1);
+			ImGui::DragFloat("    ", &t1);
 			if (ImGui::IsItemActive())
 			{
 				transform->SetPos(transform->pos.x, t1, transform->pos.z);
@@ -800,10 +814,10 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			// Rotation
 			float r2 = transform->rot.y;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("5", &r2);
+			ImGui::DragFloat("     ", &r2);
 			//Scale
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("6", &transform->scale.y);
+			ImGui::DragFloat("      .", &transform->scale.y);
 			ImGui::NextColumn();
 
 
@@ -811,7 +825,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			// Position
 			ImGui::SetNextItemWidth(50);
 			float t2 = transform->pos.z;
-			ImGui::DragFloat("7", &t2);
+			ImGui::DragFloat("       ", &t2);
 			if (ImGui::IsItemActive())
 			{
 				transform->SetPos(transform->pos.x, transform->pos.y, t2);
@@ -819,10 +833,10 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			// Rotation
 			float r3 = transform->rot.z;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("8", &r3);
+			ImGui::DragFloat("        ", &r3);
 			//Scale
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("9", &transform->scale.z);
+			ImGui::DragFloat("         ", &transform->scale.z);
 			ImGui::NextColumn();
 
 			ImGui::Columns(1);
