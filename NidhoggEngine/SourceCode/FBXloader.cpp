@@ -261,13 +261,17 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 {
 	bool ret = true;
 	
-	GameObject* object = App->scene_intro->CreateGameObject("GameObject");
 
 	const aiScene* scene = aiImportFileFromMemory(buffer, size, aiProcessPreset_TargetRealtime_MaxQuality, nullptr);
-	aiNode* node = scene->mRootNode;
+	if (scene != nullptr)
+	{
+		aiNode* node = scene->mRootNode;
+		GameObject* object = App->scene_intro->CreateGameObject("GameObject");
+
+	
 	//if (scene != nullptr && scene->HasMeshes())
 
-	if (node != nullptr && scene != nullptr && scene->HasMeshes())
+	if (node != nullptr && scene->HasMeshes())
 	{
 		LOG("%d", node->mNumMeshes);
 		ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
@@ -282,6 +286,7 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 		LoadNode(scene, node, object);
 
 		aiReleaseImport(scene);
+	}
 	}
 	else
 		LOG("Error loading scene");
