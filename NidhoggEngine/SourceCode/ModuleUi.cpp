@@ -137,7 +137,10 @@ bool ModuleUI::Init()
 	show_another_window = true;
 	resizable_bool = false;
 	border_bool = false;
-	Wireframe_bool = false;
+	Wireframe_bool = true;
+	Hierarchy_open = true;
+	Inspector_open = true;
+	Console_open = true;
 	i = 0;
 	e = 1;
 	int max_fps = 61;
@@ -183,16 +186,7 @@ update_status ModuleUI::Update(float dt)
 	ImGui::End();
 
 	ImGui::BeginMainMenuBar(); //this creates the top bar
-
-	if (ImGui::BeginMenu("Console"))
-	{
-
-		show_console = true;
-
-		ImGui::EndMenu();
-	}
-	/*static bool show_app_layout = false;
-	if (show_app_layout)*/ ShowExampleAppLayout(/*&show_app_layout*/);
+	 
 
 	if (ImGui::BeginMenu("File"))
 	{
@@ -202,6 +196,24 @@ update_status ModuleUI::Update(float dt)
 		}
 		ImGui::EndMenu();
 	}
+
+	if (ImGui::BeginMenu("Window"))
+	{
+		if (ImGui::BeginMenu("Menus")) {
+
+			ImGui::MenuItem("Hierarchy", NULL, &Hierarchy_open);
+			ImGui::MenuItem("Inspector", NULL, &Inspector_open);
+			ImGui::MenuItem("Console", NULL, &Console_open);
+			ImGui::EndMenu();
+		}
+			
+
+		ImGui::EndMenu();
+	}
+	if (Console_open == true) {
+		ShowExampleAppLayout();
+	}
+
 
 	if (ImGui::BeginMenu("Help"))
 	{
@@ -224,10 +236,24 @@ update_status ModuleUI::Update(float dt)
 		ImGui::EndMenu();
 	}
 
-	if (ImGui::BeginMenu("View"))
+	if (ImGui::BeginMenu("Edit"))
 	{
 		if (ImGui::MenuItem("Configuration"))
 			show_Configuration = true;
+
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::BeginMenu("GameObjects"))
+	{
+		if (ImGui::BeginMenu("Create...")) {
+
+			ImGui::MenuItem("Plane", NULL);
+			ImGui::MenuItem("Cube", NULL);
+			ImGui::MenuItem("Sphere", NULL);
+			ImGui::MenuItem("Cylinder", NULL);
+			ImGui::EndMenu();
+		}
 
 		ImGui::EndMenu();
 	}
@@ -652,13 +678,17 @@ ImGui::End();
 
 void ModuleUI::HierarchyWin()
 {
-	ImGui::Begin("Hierarchy");
+	if (Hierarchy_open == true) {
 
-	for (int i = 0; i < tree_nodes.size(); i++)
-	{
-		GameObjectHierarchyTree(tree_nodes[i]->object, i);
+		ImGui::Begin("Hierarchy", &Hierarchy_open);
+
+		for (int i = 0; i < tree_nodes.size(); i++)
+		{
+			GameObjectHierarchyTree(tree_nodes[i]->object, i);
+		}
+		
+		ImGui::End();
 	}
-	ImGui::End();
 }
 
 void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
@@ -843,21 +873,24 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 
 void ModuleUI::InspectorWin()
 {
-	ImGui::Begin("Inspector");
-	for (int i = 0; i < tree_nodes.size(); i++)
+	if (Inspector_open == true)
 	{
-		if(tree_nodes[i]->isSelected)
+		ImGui::Begin("Inspector",&Inspector_open);
+		for (int i = 0; i < tree_nodes.size(); i++)
 		{
-			GameObjectInspector(tree_nodes[i]->object);
+			if (tree_nodes[i]->isSelected)
+			{
+				GameObjectInspector(tree_nodes[i]->object);
+			}
 		}
+		ImGui::End();
 	}
-	ImGui::End();
 }
 
 void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 {
 	ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
-	if (ImGui::Begin("Example: Simple layout"/*, p_open*/))
+	if (ImGui::Begin("Example: Simple layout",&Console_open))
 	{
 		{
 			ImGui::BeginGroup();
@@ -900,11 +933,4 @@ void ModuleUI::Change_Window_size(Vec2 newSize)
 	img_offset = Vec2(win_size.x - 5.0f - img_size.x, win_size.y - 5.0f - img_size.y);
 	img_offset = img_offset / 2;
 
-}
-
-
-void ModuleUI::OnResize(int screen_width, int screen_height)
-{
-	/*ImGuiContext& g = *ImGui::GetCurrentContext();
-	float iconbar_size = 30.0f;*/
 }

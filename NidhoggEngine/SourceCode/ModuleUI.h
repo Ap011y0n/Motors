@@ -46,7 +46,6 @@ public:
 
 	void ShowExampleAppLayout(/*bool* p_open*/);
 	void Change_Window_size(Vec2 newSize);
-	void OnResize(int screen_width, int screen_height);
 
 	void GameObjectHierarchyTree(GameObject* node, int id);
 	void GameObjectInspector(GameObject* obj);
@@ -61,6 +60,11 @@ public:
 	bool resizable_bool = false;
 	bool border_bool;
 	bool Wireframe_bool;
+
+	 bool Hierarchy_open;
+	 bool Inspector_open;
+	 bool Console_open;
+
 	vector <float> fpsecond;
 	bool show_Configuration;
 	int max_fps = 61;
