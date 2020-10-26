@@ -151,43 +151,22 @@ uint FBXloader::FillElementArrayBuffer(uint size, uint* array)
 
 	return id;
 }
-
-// Load assets
-bool FBXloader::LoadFBX(const char* buffer, uint size)
+void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* object)
 {
-	bool ret = true;
-	
-
-	GameObject* object = App->scene_intro->CreateGameObject("GameObject");
-
-	const aiScene* scene = aiImportFileFromMemory(buffer, size, aiProcessPreset_TargetRealtime_MaxQuality, nullptr);
-	aiNode* node = scene->mRootNode;
-	//if (scene != nullptr && scene->HasMeshes())
-
-	if (node != nullptr && scene != nullptr && scene->HasMeshes())
+	// Use scene->mNumMeshes to iterate on scene->mMeshes array
+	//for (int i = 0; i < scene->mNumMeshes; i++)
+	for (int n = 0; n < node->mNumChildren; n++)
 	{
-		LOG("%d", node->mNumMeshes);
-		ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
+		
+		LoadNode(scene, node->mChildren[n], object);
 
-		aiVector3D translation, scaling;
-		aiQuaternion rotation;
-		node->mTransformation.Decompose(scaling, rotation, translation);
-		NewTrans->pos.Set(translation.x, translation.y, translation.z);
-		NewTrans->scale.Set(scaling.x, scaling.y, scaling.z);
-		NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
-
-		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-		for (int i = 0; i < scene->mNumMeshes; i++)
-		//for (int n = 0; n < node->mNumChildren; n++)
+		for (int i = 0; i < node->mChildren[n]->mNumMeshes; i++) 
 		{
 			
 
-		//for (int i = 0; i < node->mChildren[n]->mNumMeshes; i++) 
-			{
-
 			ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
-			const aiMesh* mesh = scene->mMeshes[i];
-			//const aiMesh* mesh = scene->mMeshes[node->mChildren[n]->mMeshes[i]];
+			//const aiMesh* mesh = scene->mMeshes[i];
+			const aiMesh* mesh = scene->mMeshes[node->mChildren[n]->mMeshes[i]];
 			aiString str;
 			aiString folder;
 			folder.Set("Assets/");
@@ -208,7 +187,7 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 				else
 					NewTex->hastexture = false;
 			}
-			
+
 
 			NewMesh->num_vertex = mesh->mNumVertices;
 			NewMesh->vertex = new float[NewMesh->num_vertex * 3];
@@ -217,14 +196,14 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 
 			NewMesh->num_normals = mesh->mNumVertices;
 			NewMesh->normals = new float[NewMesh->num_vertex * 3];
-		
+
 			memcpy(NewMesh->normals, mesh->mNormals, sizeof(float) * NewMesh->num_vertex * 3);
 			if (mesh->HasTextureCoords(0)) {  // Assuming only one texture is attached to this mesh
 
 				NewMesh->texCoords = new float[mesh->mNumVertices * 2];
 				NewMesh->num_tex = mesh->mNumVertices * 2;
 				for (unsigned int k = 0; k < mesh->mNumVertices; k++) {
-					
+
 					NewMesh->texCoords[k * 2] = mesh->mTextureCoords[0][k].x;
 					NewMesh->texCoords[k * 2 + 1] = mesh->mTextureCoords[0][k].y;
 
@@ -263,6 +242,7 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 				App->PrimManager->CreateLine(origin, destination);
 			}*/
 
+
 			NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
 
 			NewMesh->id_tex = FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
@@ -272,9 +252,35 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 			NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
 
 
-			}
-		
 		}
+
+	}
+}
+// Load assets
+bool FBXloader::LoadFBX(const char* buffer, uint size)
+{
+	bool ret = true;
+	
+	GameObject* object = App->scene_intro->CreateGameObject("GameObject");
+
+	const aiScene* scene = aiImportFileFromMemory(buffer, size, aiProcessPreset_TargetRealtime_MaxQuality, nullptr);
+	aiNode* node = scene->mRootNode;
+	//if (scene != nullptr && scene->HasMeshes())
+
+	if (node != nullptr && scene != nullptr && scene->HasMeshes())
+	{
+		LOG("%d", node->mNumMeshes);
+		ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
+
+		aiVector3D translation, scaling;
+		aiQuaternion rotation;
+		node->mTransformation.Decompose(scaling, rotation, translation);
+		NewTrans->pos.Set(translation.x, translation.y, translation.z);
+		NewTrans->scale.Set(scaling.x, scaling.y, scaling.z);
+		NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
+
+		LoadNode(scene, node, object);
+
 		aiReleaseImport(scene);
 	}
 	else
