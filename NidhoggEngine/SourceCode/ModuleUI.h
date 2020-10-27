@@ -41,14 +41,15 @@ public:
 
 	void Configuration(bool config);
 	void PlotGraph();
-	void HierarchyWin();
-	void InspectorWin();
-
+	void HierarchyWin(); //hierarchy window
+	void InspectorWin(); //gameobjects list
 	void ShowExampleAppLayout(/*bool* p_open*/);
 	void Change_Window_size(Vec2 newSize);
 
 	void GameObjectHierarchyTree(GameObject* node, int id);
+	void DeactivateGameObjects(GameObject* father);
 	void GameObjectInspector(GameObject* obj);
+
 public:
 	ImGuiIO* io;
 	bool show_demo_window;
@@ -83,5 +84,6 @@ public:
 private:
 	int c1;
 	vector<string> consoleOutput;
+	GameObject* selectedObj;
 };
 

@@ -18,13 +18,20 @@ GameObject::GameObject()
 {
 	active = true;
 	Name = "NewGameObject";
+	father = nullptr;
+	isSelected = false;
 }
 
-GameObject::GameObject(const char* name)
+GameObject::GameObject(const char* name, GameObject* node)
 {
-	Name = name;
 	active = true;
-
+	Name = name;
+	father = node;
+	isSelected = false;
+	if (father != nullptr)
+	{
+		father->childs.push_back(this);
+	}
 }
 
 GameObject::~GameObject()
@@ -258,6 +265,7 @@ bool ComponentTransform::Update(float dt)
 void ComponentTransform::UpdatePos(float x, float y, float z)
 {
 	transform.translate(x, y, z);
+
 }
 
 void ComponentTransform::UpdateRotation(float angle, const vec3& u)
@@ -274,6 +282,23 @@ void ComponentTransform::SetPos(float x, float y, float z)
 {
 	pos.Set(x, y, z);
 }	
+
+void ComponentTransform::Translate(float x, float y, float z)
+{
+	pos.Set(pos.x + x, pos.y + y, pos.z + z);
+	for (int i = 0; i < owner->childs.size(); i++)
+	{
+		for (int j = 0; j < owner->childs[i]->Components.size(); j++)
+		{
+			if (owner->childs[i]->Components[j]->type == ComponentType::TRANSFORM)
+			{
+				ComponentTransform* transform = (ComponentTransform*)owner->childs[i]->Components[j];
+				transform->Translate(x, y, z);
+			}
+		}
+	}
+}
+
 void ComponentTransform::SetRotation(float x, float y, float z, float w)
 {
 	rot.Set(x, y, z, w);
@@ -282,5 +307,16 @@ void ComponentTransform::SetRotation(float x, float y, float z, float w)
 void ComponentTransform::Scale(float x, float y, float z)
 {
 	scale.Set(x, y, z);
+	for (int i = 0; i < owner->childs.size(); i++)
+	{
+		for (int j = 0; j < owner->childs[i]->Components.size(); j++)
+		{
+			if (owner->childs[i]->Components[j]->type == ComponentType::TRANSFORM)
+			{
+				ComponentTransform* transform = (ComponentTransform*)owner->childs[i]->Components[j];
+				transform->Scale(x, y, z);
+			}
+		}
+	}
 }
 

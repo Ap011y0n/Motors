@@ -93,6 +93,7 @@ public:
 //	void Disable();
 
 	void			SetPos(float x, float y, float z);	//Call this method to change position of transform component
+	void			Translate(float x, float y, float z);	//Call this method to add position to transform component
 	void			SetRotation(float x, float y, float z, float w);	//Call this method to change rotation of transform component
 	void			Scale(float x, float y, float z);	//Call this method to change scale of transform component
 
@@ -113,15 +114,17 @@ class GameObject
 {
 public:
 	GameObject();
-	GameObject(const char* name);
+	GameObject(const char* name, GameObject* father = nullptr);
 	~GameObject();
 	bool Update(float dt);
 	Component* CreateComponent(ComponentType type); //Create a new component for this game object, needs a Component type
-	
 public:
 	bool active = false;
 	std::string Name;
 	std::vector<Component*> Components;
+	std::vector<GameObject*> childs;
+	GameObject* father;
+	bool isSelected = false;
 
 };
 

@@ -3,6 +3,7 @@
 #include "ModuleUi.h"
 #include "Primitive.h"
 #include "ModuleWindow.h"
+#include "ModuleSceneIntro.h"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
@@ -141,6 +142,7 @@ bool ModuleUI::Init()
 	Hierarchy_open = true;
 	Inspector_open = true;
 	Console_open = true;
+	selectedObj = nullptr;
 	i = 0;
 	e = 1;
 	int max_fps = 61;
@@ -696,9 +698,9 @@ void ModuleUI::HierarchyWin()
 
 		ImGui::Begin("Hierarchy", &Hierarchy_open);
 
-		for (int i = 0; i < tree_nodes.size(); i++)
+		for (int i = 0; i < App->scene_intro->scene->childs.size(); i++)
 		{
-			GameObjectHierarchyTree(tree_nodes[i]->object, i);
+			GameObjectHierarchyTree(App->scene_intro->scene->childs[i], i);
 		}
 		
 		ImGui::End();
@@ -707,14 +709,14 @@ void ModuleUI::HierarchyWin()
 
 void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 {
-	ImGuiTreeNodeFlags node_flags = /*ImGuiTreeNodeFlags_OpenOnArrow | */ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 	
 
 	const char* GameObjname = node->Name.c_str();
 	static int selection_mask = (1 << 2);
 	const bool is_selected = (selection_mask & (1 << 0)) != 0;
 
-	if (tree_nodes[id]->isSelected)
+	if (node->isSelected)
 	{
 		node_flags |= ImGuiTreeNodeFlags_Selected;
 	}
@@ -722,28 +724,33 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 	bool node_open = ImGui::TreeNodeEx(GameObjname, node_flags);
 	if (ImGui::IsItemClicked())
 	{
-		for (int i = 0; i < tree_nodes.size(); i++)
-		{
-			tree_nodes[i]->isSelected = false;
-		}
-		tree_nodes[id]->isSelected = true;
-
+		
+		DeactivateGameObjects(App->scene_intro->scene);
+		
+		node->isSelected = true;
+		selectedObj = node;
 		
 	}
 	if (node_open)
 	{
-
-
-		/*std::vector<Component*>::iterator it = node->Components.begin(); //this iteraor is for the children from the own object
-
-		while (it != node->Components.end())
+		for (int i = 0; i < node->childs.size(); i++)
 		{
-			GameObjectHierarchyTree((*it));
-			it++;
-		}*/
+			GameObjectHierarchyTree(node->childs[i], i);
+		}
+
 		ImGui::TreePop();
+
 	}
 
+}
+
+void ModuleUI::DeactivateGameObjects(GameObject* father)
+{
+	father->isSelected = false;
+	for (int i = 0; i < father->childs.size(); i++)
+	{
+		DeactivateGameObjects(father->childs[i]);
+	}
 }
 
 void ModuleUI::GameObjectInspector(GameObject* obj)
@@ -790,7 +797,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::DragFloat(" ", &t);
 			if (ImGui::IsItemActive())
 			{
-				transform->SetPos(t, transform->pos.y, transform->pos.z);
+				transform->Translate(t - transform->pos.x, 0, 0);
 			}
 			//Rotation
 			float r1 = transform->rot.x;
@@ -798,7 +805,13 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::DragFloat("  ", &r1); 
 			//Scale
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("   ", &transform->scale.x);
+			float s1 = transform->scale.x;
+
+			ImGui::DragFloat("   ", &s1);
+			if (ImGui::IsItemActive())
+			{
+				transform->Scale(s1, transform->scale.y, transform->scale.z);
+			}
 			ImGui::NextColumn();
 
 
@@ -809,15 +822,20 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::DragFloat("    ", &t1);
 			if (ImGui::IsItemActive())
 			{
-				transform->SetPos(transform->pos.x, t1, transform->pos.z);
+				transform->Translate(0, t1 - transform->pos.y, 0);
 			}
 			// Rotation
 			float r2 = transform->rot.y;
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("     ", &r2);
 			//Scale
+			float s2 = transform->scale.y;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("      .", &transform->scale.y);
+			ImGui::DragFloat("      .", &s2);
+			if (ImGui::IsItemActive())
+			{
+				transform->Scale(transform->scale.x, s2, transform->scale.z);
+			}
 			ImGui::NextColumn();
 
 
@@ -828,15 +846,20 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::DragFloat("       ", &t2);
 			if (ImGui::IsItemActive())
 			{
-				transform->SetPos(transform->pos.x, transform->pos.y, t2);
+				transform->Translate(0, 0, t2 - transform->pos.z);
 			}
 			// Rotation
 			float r3 = transform->rot.z;
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("        ", &r3);
 			//Scale
+			float s3 = transform->scale.z;
 			ImGui::SetNextItemWidth(50);
-			ImGui::DragFloat("         ", &transform->scale.z);
+			ImGui::DragFloat("         ", &s3);
+			if (ImGui::IsItemActive())
+			{
+				transform->Scale(transform->scale.x, transform->scale.y, s3);
+			}
 			ImGui::NextColumn();
 
 			ImGui::Columns(1);
@@ -890,13 +913,9 @@ void ModuleUI::InspectorWin()
 	if (Inspector_open == true)
 	{
 		ImGui::Begin("Inspector",&Inspector_open);
-		for (int i = 0; i < tree_nodes.size(); i++)
-		{
-			if (tree_nodes[i]->isSelected)
-			{
-				GameObjectInspector(tree_nodes[i]->object);
-			}
-		}
+		if(selectedObj != nullptr)
+		GameObjectInspector(selectedObj);
+			
 		ImGui::End();
 	}
 }

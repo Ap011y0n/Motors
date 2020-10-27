@@ -14,9 +14,10 @@ public:
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp();
-	GameObject* CreateGameObject(const char* name);
+	GameObject* CreateGameObject(const char* name, GameObject* father = nullptr);
 	void firstCube();
 	void secondCube();
+	void UpdateGameObject(GameObject* father, float dt);
 
 public:
 
@@ -34,5 +35,5 @@ public:
 	uint index2[36];
 
 	vector<GameObject*> gameObjects;
-
+	GameObject* scene;
 };

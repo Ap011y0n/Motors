@@ -34,6 +34,7 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
+	scene = CreateGameObject("scene");
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
@@ -227,20 +228,21 @@ update_status ModuleSceneIntro::Update(float dt)
 	//glFlush();
 	//glDisable(GL_TEXTURE_2D);
 
-	ComponentTransform* transform = nullptr;
-	for (int i = 0; i < gameObjects.size(); i++)
-	{
-		for (int j = 0; j < gameObjects[i]->Components.size(); j++)
-		{
-			if (gameObjects[i]->Components[j]->type == ComponentType::TRANSFORM)
-			{
-				transform = (ComponentTransform*)gameObjects[i]->Components[j];
-			}
-		}
-		gameObjects[i]->Update(dt);
-	}
+	//ComponentTransform* transform = nullptr;
+	//for (int i = 0; i < gameObjects.size(); i++)
+	//{
+	//	for (int j = 0; j < gameObjects[i]->Components.size(); j++)
+	//	{
+	//		if (gameObjects[i]->Components[j]->type == ComponentType::TRANSFORM)
+	//		{
+	//			transform = (ComponentTransform*)gameObjects[i]->Components[j];
+	//		}
+	//	}
+	//	gameObjects[i]->Update(dt);
+	//}
 
-	if (transform != nullptr)
+	UpdateGameObject(scene, dt);
+	/*if (transform != nullptr)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		{
@@ -266,7 +268,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		{
 			transform->SetPos(transform->pos.x, transform->pos.y + 1 * dt, transform->pos.z);
 		}
-	}
+	}*/
 	
 	return UPDATE_CONTINUE;
 }
@@ -399,11 +401,20 @@ void ModuleSceneIntro::secondCube()
 	
 }
 
-GameObject* ModuleSceneIntro::CreateGameObject(const char* name)
+GameObject* ModuleSceneIntro::CreateGameObject(const char* name, GameObject* father)
 {
-	GameObject* newGameObject = new GameObject(name);
+	GameObject* newGameObject = new GameObject(name, father);
 	gameObjects.push_back(newGameObject);
 	TreeNode* newnode = new TreeNode(newGameObject);
 	App->UI->tree_nodes.push_back(newnode);
 	return newGameObject;
+}
+
+void ModuleSceneIntro::UpdateGameObject(GameObject* father, float dt)
+{
+	father->Update(dt);
+	for (int i = 0; i < father->childs.size(); i++)
+	{
+		UpdateGameObject(father->childs[i], dt);
+	}
 }

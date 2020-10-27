@@ -151,12 +151,12 @@ uint FBXloader::FillElementArrayBuffer(uint size, uint* array)
 
 	return id;
 }
-void FBXloader::LoadNode(const aiScene* scene, aiNode* node)
+void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 {
 	// Use scene->mNumMeshes to iterate on scene->mMeshes array
 	//for (int i = 0; i < scene->mNumMeshes; i++)
 	LOG("loading %s", node->mName.C_Str());
-	GameObject* object = App->scene_intro->CreateGameObject(node->mName.C_Str());
+	GameObject* object = App->scene_intro->CreateGameObject(node->mName.C_Str(), father);
 
 	ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
 
@@ -165,7 +165,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node)
 	node->mTransformation.Decompose(scaling, rotation, translation);
 
 	NewTrans->pos.Set(translation.x, translation.y, translation.z);
-	NewTrans->scale.Set(scaling.x, scaling.y, scaling.z);
+	NewTrans->scale.Set(scaling.x/scaling.x, scaling.y/scaling.y, scaling.z/scaling.z);
 	NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
 
 	for (int i = 0; i < node->mNumMeshes; i++)
@@ -180,8 +180,10 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node)
 		folder.Set("Assets/");
 
 		aiMaterial* newMaterial = scene->mMaterials[mesh->mMaterialIndex];
+	
 		if (newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &str) != 0)
 		{
+
 			LOG("couldn't find diffuse texture");
 		}
 		else
@@ -265,7 +267,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node)
 	for (int n = 0; n < node->mNumChildren; n++)
 	{
 		
-		LoadNode(scene, node->mChildren[n]);
+		LoadNode(scene, node->mChildren[n], object);
 
 	}
 }
@@ -286,10 +288,8 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 
 	if (node != nullptr && scene->HasMeshes())
 	{
-	
 
-		LoadNode(scene, node);
-
+		LoadNode(scene, node, App->scene_intro->scene);
 		aiReleaseImport(scene);
 	}
 	}
