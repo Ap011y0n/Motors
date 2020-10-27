@@ -49,7 +49,7 @@ public:
 	uint FillElementArrayBuffer(uint size, uint* array);
 	uint LoadTexBuffer(const char* path);
 	bool LoadFBX(const char* buffer, uint size);
-	void LoadNode(const aiScene* scene, aiNode* node, GameObject* object);
+	void LoadNode(const aiScene* scene, aiNode* node);
 	void PrintMeshes();
 	void ChangeTexture(const char* path);
 

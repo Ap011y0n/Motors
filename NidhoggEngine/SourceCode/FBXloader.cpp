@@ -151,108 +151,121 @@ uint FBXloader::FillElementArrayBuffer(uint size, uint* array)
 
 	return id;
 }
-void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* object)
+void FBXloader::LoadNode(const aiScene* scene, aiNode* node)
 {
 	// Use scene->mNumMeshes to iterate on scene->mMeshes array
 	//for (int i = 0; i < scene->mNumMeshes; i++)
+	LOG("loading %s", node->mName.C_Str());
+	GameObject* object = App->scene_intro->CreateGameObject(node->mName.C_Str());
+
+	ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
+
+	aiVector3D translation, scaling;
+	aiQuaternion rotation;
+	node->mTransformation.Decompose(scaling, rotation, translation);
+
+	NewTrans->pos.Set(translation.x, translation.y, translation.z);
+	NewTrans->scale.Set(scaling.x, scaling.y, scaling.z);
+	NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
+
+	for (int i = 0; i < node->mNumMeshes; i++)
+	{
+
+
+		ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
+		//const aiMesh* mesh = scene->mMeshes[i];
+		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		aiString str;
+		aiString folder;
+		folder.Set("Assets/");
+
+		aiMaterial* newMaterial = scene->mMaterials[mesh->mMaterialIndex];
+		if (newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &str) != 0)
+		{
+			LOG("couldn't find diffuse texture");
+		}
+		else
+		{
+			ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
+			folder.Append(str.C_Str());
+			NewTex->texture_path = folder.C_Str();
+			NewTex->texbuffer = LoadTexBuffer(folder.C_Str());
+			if (NewTex->texbuffer != 0)
+				NewTex->hastexture = true;
+			else
+				NewTex->hastexture = false;
+		}
+
+
+		NewMesh->num_vertex = mesh->mNumVertices;
+		NewMesh->vertex = new float[NewMesh->num_vertex * 3];
+		memcpy(NewMesh->vertex, mesh->mVertices, sizeof(float) * NewMesh->num_vertex * 3);
+		LOG("New mesh with %d vertices", NewMesh->num_vertex);
+
+		NewMesh->num_normals = mesh->mNumVertices;
+		NewMesh->normals = new float[NewMesh->num_vertex * 3];
+
+		memcpy(NewMesh->normals, mesh->mNormals, sizeof(float) * NewMesh->num_vertex * 3);
+		if (mesh->HasTextureCoords(0)) {  // Assuming only one texture is attached to this mesh
+
+			NewMesh->texCoords = new float[mesh->mNumVertices * 2];
+			NewMesh->num_tex = mesh->mNumVertices * 2;
+			for (unsigned int k = 0; k < mesh->mNumVertices; k++) {
+
+				NewMesh->texCoords[k * 2] = mesh->mTextureCoords[0][k].x;
+				NewMesh->texCoords[k * 2 + 1] = mesh->mTextureCoords[0][k].y;
+
+			}
+		}
+		if (mesh->HasFaces())
+		{
+			NewMesh->num_index = mesh->mNumFaces * 3;
+			NewMesh->index = new uint[NewMesh->num_index]; // assume each face is a triangle
+			for (uint j = 0; j < mesh->mNumFaces; j++)
+			{
+				if (mesh->mFaces[j].mNumIndices != 3)
+				{
+					LOG("WARNING, geometry face with != 3 indices!");
+				}
+				else
+				{
+					vec3 origin(0, 0, 0);
+					vec3 dest(0, 0, 0);
+					for (int x = 0; x < 3; x++)
+					{
+						NewMesh->index[j * 3 + x] = mesh->mFaces[j].mIndices[x];
+
+					}
+				}
+			}
+		}
+
+		/*		for (int i = 0; i < NewMesh->num_vertex; i++)
+				{
+					vec3 origin(NewMesh->vertex[i * 3], NewMesh->vertex[i * 3 + 1], NewMesh->vertex[i * 3 + 2]);
+					vec3 destination(NewMesh->normals[i * 3], NewMesh->normals[i * 3 + 1], NewMesh->normals[i * 3 + 2]);
+					destination *= 1;
+					destination += origin;
+
+					App->PrimManager->CreateLine(origin, destination);
+				}*/
+
+
+		NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
+
+		NewMesh->id_tex = FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
+
+		NewMesh->id_normals = FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
+
+		NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
+
+
+	}
+
 	for (int n = 0; n < node->mNumChildren; n++)
 	{
 		
-		LoadNode(scene, node->mChildren[n], object);
-
-		for (int i = 0; i < node->mChildren[n]->mNumMeshes; i++) 
-		{
-			
-
-			ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
-			//const aiMesh* mesh = scene->mMeshes[i];
-			const aiMesh* mesh = scene->mMeshes[node->mChildren[n]->mMeshes[i]];
-			aiString str;
-			aiString folder;
-			folder.Set("Assets/");
-
-			aiMaterial* newMaterial = scene->mMaterials[mesh->mMaterialIndex];
-			if (newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &str) != 0)
-			{
-				LOG("couldn't find diffuse texture");
-			}
-			else
-			{
-				ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
-				folder.Append(str.C_Str());
-				NewTex->texture_path = folder.C_Str();
-				NewTex->texbuffer = LoadTexBuffer(folder.C_Str());
-				if (NewTex->texbuffer != 0)
-					NewTex->hastexture = true;
-				else
-					NewTex->hastexture = false;
-			}
-
-
-			NewMesh->num_vertex = mesh->mNumVertices;
-			NewMesh->vertex = new float[NewMesh->num_vertex * 3];
-			memcpy(NewMesh->vertex, mesh->mVertices, sizeof(float) * NewMesh->num_vertex * 3);
-			LOG("New mesh with %d vertices", NewMesh->num_vertex);
-
-			NewMesh->num_normals = mesh->mNumVertices;
-			NewMesh->normals = new float[NewMesh->num_vertex * 3];
-
-			memcpy(NewMesh->normals, mesh->mNormals, sizeof(float) * NewMesh->num_vertex * 3);
-			if (mesh->HasTextureCoords(0)) {  // Assuming only one texture is attached to this mesh
-
-				NewMesh->texCoords = new float[mesh->mNumVertices * 2];
-				NewMesh->num_tex = mesh->mNumVertices * 2;
-				for (unsigned int k = 0; k < mesh->mNumVertices; k++) {
-
-					NewMesh->texCoords[k * 2] = mesh->mTextureCoords[0][k].x;
-					NewMesh->texCoords[k * 2 + 1] = mesh->mTextureCoords[0][k].y;
-
-				}
-			}
-			if (mesh->HasFaces())
-			{
-				NewMesh->num_index = mesh->mNumFaces * 3;
-				NewMesh->index = new uint[NewMesh->num_index]; // assume each face is a triangle
-				for (uint j = 0; j < mesh->mNumFaces; j++)
-				{
-					if (mesh->mFaces[j].mNumIndices != 3)
-					{
-						LOG("WARNING, geometry face with != 3 indices!");
-					}
-					else
-					{
-						vec3 origin(0, 0, 0);
-						vec3 dest(0, 0, 0);
-						for (int x = 0; x < 3; x++)
-						{
-							NewMesh->index[j * 3 + x] = mesh->mFaces[j].mIndices[x];
-
-						}
-					}
-				}
-			}
-
-	/*		for (int i = 0; i < NewMesh->num_vertex; i++)
-			{
-				vec3 origin(NewMesh->vertex[i * 3], NewMesh->vertex[i * 3 + 1], NewMesh->vertex[i * 3 + 2]);
-				vec3 destination(NewMesh->normals[i * 3], NewMesh->normals[i * 3 + 1], NewMesh->normals[i * 3 + 2]);
-				destination *= 1;
-				destination += origin;
-
-				App->PrimManager->CreateLine(origin, destination);
-			}*/
-
-
-			NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
-
-			NewMesh->id_tex = FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
-
-			NewMesh->id_normals = FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
-
-			NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
-
-
-		}
+		LoadNode(scene, node->mChildren[n]);
 
 	}
 }
@@ -266,24 +279,16 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 	if (scene != nullptr)
 	{
 		aiNode* node = scene->mRootNode;
-		GameObject* object = App->scene_intro->CreateGameObject("GameObject");
+		
 
 	
 	//if (scene != nullptr && scene->HasMeshes())
 
 	if (node != nullptr && scene->HasMeshes())
 	{
-		LOG("%d", node->mNumMeshes);
-		ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
+	
 
-		aiVector3D translation, scaling;
-		aiQuaternion rotation;
-		node->mTransformation.Decompose(scaling, rotation, translation);
-		NewTrans->pos.Set(translation.x, translation.y, translation.z);
-		NewTrans->scale.Set(scaling.x, scaling.y, scaling.z);
-		NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
-
-		LoadNode(scene, node, object);
+		LoadNode(scene, node);
 
 		aiReleaseImport(scene);
 	}
