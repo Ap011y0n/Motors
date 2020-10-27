@@ -155,8 +155,15 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 {
 	// Use scene->mNumMeshes to iterate on scene->mMeshes array
 	//for (int i = 0; i < scene->mNumMeshes; i++)
+	std::string name = node->mName.C_Str();
+
 	LOG("loading %s", node->mName.C_Str());
-	GameObject* object = App->scene_intro->CreateGameObject(node->mName.C_Str(), father);
+	
+	if (name == "RootNode")
+	{
+		name = "GameObject";
+	}
+	GameObject* object = App->scene_intro->CreateGameObject(name.c_str(), father);
 
 	ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
 

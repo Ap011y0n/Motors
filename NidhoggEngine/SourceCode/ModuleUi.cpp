@@ -709,7 +709,7 @@ void ModuleUI::HierarchyWin()
 
 void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 {
-	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 	
 
 	const char* GameObjname = node->Name.c_str();
@@ -758,6 +758,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 	ComponentTransform* transform = nullptr;
 	ComponentMaterial* material = nullptr;
 	ComponentMesh* mesh = nullptr;
+	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 
 	for (int i = 0; i < obj->Components.size(); i++)
 	{
@@ -777,7 +778,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 	if (transform != nullptr)
 	{
 		ImGui::Separator();
-		if (ImGui::TreeNode("Transform"))
+		if (ImGui::TreeNodeEx("Transform", node_flags))
 		{
 			//
 			ImGui::Columns(1);
@@ -870,7 +871,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 
 	if (mesh != nullptr)
 	{
-		if (ImGui::TreeNode("Mesh"))
+		if (ImGui::TreeNodeEx("Mesh", node_flags))
 		{
 			static bool cheked = false;
 			ImGui::Checkbox("Display normals", &cheked);
@@ -897,7 +898,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 
 	if (material != nullptr)
 	{
-		if (ImGui::TreeNode("Material"))
+		if (ImGui::TreeNodeEx("Material", node_flags))
 		{
 			ImGui::Text("File:"); ImGui::SameLine();
 			ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s",material->texture_path.c_str());
