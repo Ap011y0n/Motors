@@ -50,6 +50,7 @@ public:
 	void DeactivateGameObjects(GameObject* father);
 	void GameObjectInspector(GameObject* obj);
 
+	vec3 ReturnLookAtCamera(vec3 direction);
 public:
 	ImGuiIO* io;
 	bool show_demo_window;
@@ -80,7 +81,7 @@ public:
 	Vec2 img_size;
 	ImGuiWindowClass* windowClass = nullptr;
 	vector<TreeNode*> tree_nodes;
-
+	vec3 direction_camera;
 private:
 	int c1;
 	vector<string> consoleOutput;

@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
+#include "ModuleSceneIntro.h"
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -48,7 +49,7 @@ update_status ModuleCamera3D::Update(float dt)
 		speed = 50.0f * dt;
 
 	if(App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
-	if(App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
+	if(App->input->GetKey(SDL_SCANCODE_T) == KEY_REPEAT) newPos.y -= speed;
 
 	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
 	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
@@ -64,6 +65,15 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->mouse_z < 0)//
 	{
 		newPos += Z * 20.0f * dt;;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) 
+	{
+		LookAt(App->UI->direction_camera); //when no fbx this will look at 0,0,0
+	}
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN)
+	{
+		Reference = App->UI->direction_camera;
 	}
 
 	Position += newPos;
