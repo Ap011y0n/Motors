@@ -55,6 +55,19 @@ update_status PrimitiveManager::PostUpdate(float dt)
 		
 	}
 	
+	for (int i = 0; i < prim_list.size(); i++) {
+		if (prim_list[i]->to_delete)
+		{
+			if (prim_list[i] != NULL)        
+			{                      
+				delete prim_list[i];
+				prim_list[i] = NULL;
+			}                      
+			prim_list.erase(prim_list.begin() + i);
+			i--;
+		}
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -91,10 +104,11 @@ PrimCylinder* PrimitiveManager::CreateCylinder(float radius, float height, int s
 	return cylinder;
 }
 
-void PrimitiveManager::CreateLine(vec3 origin, vec3 dest)
+PrimLine* PrimitiveManager::CreateLine(vec3 origin, vec3 dest)
 {
-	Line* line = new Line(origin.x, origin.y, origin.z, dest.x, dest.y, dest.z);
+	PrimLine* line = new PrimLine(origin.x, origin.y, origin.z, dest.x, dest.y, dest.z);
 	prim_list.push_back((Primitive*)line);
+	return line;
 }
 void PrimitiveManager::CreatePlane(vec4 coords, bool axis)
 {

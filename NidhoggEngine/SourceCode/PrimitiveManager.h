@@ -7,6 +7,7 @@ class Cube;
 class Pyramid;
 class PrimSphere;
 class PrimCylinder;
+class PrimLine;
 
 class PrimitiveManager : public Module
 {
@@ -21,7 +22,7 @@ public:
 	Pyramid* CreatePyramid(vec3 size, vec3 pos = (0.f, 0.f, 0.f));
 	PrimSphere* CreateSphere(float radius, unsigned int rings, unsigned int sectors, vec3 pos = (0.f, 0.f, 0.f));
 	PrimCylinder* CreateCylinder(float radius, float height, int sides = 30, vec3 pos = (0.f, 0.f, 0.f));
-	void CreateLine(vec3 origin, vec3 dest);
+	PrimLine* CreateLine(vec3 origin, vec3 dest);
 	void CreatePlane(vec4 coords, bool axis = true);
 	void MenuOptions();
 private:

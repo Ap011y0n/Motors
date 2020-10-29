@@ -16,6 +16,7 @@
 //*************************		GameObject
 GameObject::GameObject()
 {
+	to_delete = false;
 	active = true;
 	Name = "NewGameObject";
 	father = nullptr;
@@ -24,6 +25,7 @@ GameObject::GameObject()
 
 GameObject::GameObject(const char* name, GameObject* node)
 {
+	to_delete = false;
 	active = true;
 	Name = name;
 	father = node;
@@ -35,7 +37,15 @@ GameObject::GameObject(const char* name, GameObject* node)
 }
 
 GameObject::~GameObject()
-{}
+{
+
+	for (int i = 0; i < Components.size(); i++)
+	{
+		if(Components[i] != nullptr)
+		delete Components[i];
+	}
+	Components.clear();
+}
 
 bool GameObject::Update(float dt)
 {
@@ -68,6 +78,7 @@ Component* GameObject::CreateComponent(ComponentType type)
 //*************************		Component
 Component::Component()
 {
+
 	owner = nullptr;
 	active = false;
 	type = ComponentType::NONE;
@@ -75,6 +86,7 @@ Component::Component()
 
 Component::~Component()
 {
+	LOG("deleting component");
 }
 
 void Component::Enable()
@@ -124,6 +136,14 @@ ComponentMesh::ComponentMesh(GameObject* ObjectOwner) : Component()
 
 ComponentMesh::~ComponentMesh()
 {
+	LOG("deleting component mesh");
+
+	glDeleteBuffers(1, &id_index);
+	glDeleteBuffers(1, &id_normals);
+	glDeleteBuffers(1, &id_vertex);
+	glDeleteBuffers(1, &id_tex);
+
+
 }
 
 bool ComponentMesh::Update(float dt)
@@ -147,7 +167,7 @@ bool ComponentMesh::Update(float dt)
 		glPushMatrix();
 		if (transform != nullptr)
 		{
-			glMultMatrixf(transform->transform.M);
+			glMultMatrixf(transform->transform.ptr());
 		}
 		else
 		{
@@ -176,7 +196,21 @@ bool ComponentMesh::Update(float dt)
 					glEnable(GL_CULL_FACE);
 
 					glActiveTexture(GL_TEXTURE0);
+					if(material->checkers)
+					glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
+					else
 					glBindTexture(GL_TEXTURE_2D, material->texbuffer);
+				}
+				else
+				{
+					if (material != nullptr && material->checkers)
+
+					glEnable(GL_TEXTURE_2D);
+					glEnable(GL_CULL_FACE);
+
+					glActiveTexture(GL_TEXTURE0);
+					glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
+					
 				}
 			
 		
@@ -202,16 +236,29 @@ bool ComponentMesh::Update(float dt)
 
 void ComponentMesh::DisplayNormals()
 {
-	for (int i = 0; i < num_vertex; i++)
-	{
-		vec3 origin(vertex[i * 3], vertex[i * 3 + 1], vertex[i * 3 + 2]);
-		vec3 destination(normals[i * 3], normals[i * 3 + 1], normals[i * 3 + 2]);
-		destination *= 1;
-		destination += origin;
+	LOG("Dispaying normals");
+	if (num_vertex < 5000)
+		for (int i = 0; i < num_vertex; i++)
+		{
+			vec3 origin(vertex[i * 3], vertex[i * 3 + 1], vertex[i * 3 + 2]);
+			vec3 destination(normals[i * 3], normals[i * 3 + 1], normals[i * 3 + 2]);
+			destination *= 1;
+			destination += origin;
 
-		App->PrimManager->CreateLine(origin, destination);
+			GraphicNormals.push_back(App->PrimManager->CreateLine(origin, destination));
+		}
+	else
+		LOG("Not able to display normals, mesh has too many vertices");
+}
+void ComponentMesh::HideNormals()
+{
+	for (int i = 0; i < GraphicNormals.size(); i++)
+	{
+		GraphicNormals[i]->to_delete = true;
+	
 	}
-	LOG("DisplayNormals");
+	GraphicNormals.clear();
+	LOG("HideNormals");
 }
 //*************************		ComponentMaterial
 
@@ -222,10 +269,12 @@ ComponentMaterial::ComponentMaterial(GameObject* ObjectOwner) : Component()
 	owner = ObjectOwner;
 	texbuffer = 0;
 	hastexture = false;
+	checkers = false;
 }
 
 ComponentMaterial::~ComponentMaterial()
 {
+	//glDeleteBuffers(1, &texbuffer);
 }
 
 bool ComponentMaterial::Update(float dt)
@@ -247,7 +296,8 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 	pos.Set(0, 0, 0);
 	scale.Set(0, 0, 0);
 	rot.Set(0, 0, 0, 0);
-
+	transform = transform.identity;
+	should_update = true;
 }
 
 ComponentTransform::~ComponentTransform()
@@ -257,35 +307,40 @@ ComponentTransform::~ComponentTransform()
 bool ComponentTransform::Update(float dt)
 {
 	bool ret = true;
-	UpdatePos(pos.x, pos.y, pos.z);
-	//UpdateRotation(pos.x, pos.y, pos.z);
-	UpdateScale(scale.x, scale.y, scale.z);
+	//UpdatePos(pos.x, pos.y, pos.z);
+	//vec3 axis(1, 0, 0);
+	if (should_update)
+	{
+		transform = float4x4::FromTRS(pos, rot, scale);
+		transform.Transpose();
+		should_update = false;
+	}
+
+	//UpdateScale(scale.x, scale.y, scale.z);
 	return ret;
 }
-void ComponentTransform::UpdatePos(float x, float y, float z)
-{
-	transform.translate(x, y, z);
+//void ComponentTransform::UpdatePos(float x, float y, float z)
+//{
+//	transform.Translate(x, y, z);
+//
+//}
 
+void ComponentTransform::UpdateRotation(Quat quat)
+{
+	transform = transform * quat;
 }
 
-void ComponentTransform::UpdateRotation(float angle, const vec3& u)
-{
-	transform.rotate(angle, u);
-}
+//void ComponentTransform::UpdateScale(float x, float y, float z)
+//{
+//	transform.Scale(x, y, z);
+//}
 
-void ComponentTransform::UpdateScale(float x, float y, float z)
-{
-	transform.scale(x, y, z);
-}
 
 void ComponentTransform::SetPos(float x, float y, float z)
 {
-	pos.Set(x, y, z);
-}	
-
-void ComponentTransform::Translate(float x, float y, float z)
-{
 	pos.Set(pos.x + x, pos.y + y, pos.z + z);
+	should_update = true;
+
 	for (int i = 0; i < owner->childs.size(); i++)
 	{
 		for (int j = 0; j < owner->childs[i]->Components.size(); j++)
@@ -293,20 +348,35 @@ void ComponentTransform::Translate(float x, float y, float z)
 			if (owner->childs[i]->Components[j]->type == ComponentType::TRANSFORM)
 			{
 				ComponentTransform* transform = (ComponentTransform*)owner->childs[i]->Components[j];
-				transform->Translate(x, y, z);
+				transform->SetPos(x, y, z);
 			}
 		}
 	}
 }
 
-void ComponentTransform::SetRotation(float x, float y, float z, float w)
+void ComponentTransform::SetRotation(Quat quat)
 {
-	rot.Set(x, y, z, w);
+	rot = rot * quat;
+	should_update = true;
+
+	for (int i = 0; i < owner->childs.size(); i++)
+	{
+		for (int j = 0; j < owner->childs[i]->Components.size(); j++)
+		{
+			if (owner->childs[i]->Components[j]->type == ComponentType::TRANSFORM)
+			{
+				ComponentTransform* transform = (ComponentTransform*)owner->childs[i]->Components[j];
+				transform->SetRotation(quat);
+			}
+		}
+	}
 }
 
 void ComponentTransform::Scale(float x, float y, float z)
 {
 	scale.Set(x, y, z);
+	should_update = true;
+
 	for (int i = 0; i < owner->childs.size(); i++)
 	{
 		for (int j = 0; j < owner->childs[i]->Components.size(); j++)

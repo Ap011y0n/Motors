@@ -1,10 +1,12 @@
 #pragma once
 #include "Globals.h"
 #include "glmath.h"
+#include "Primitive.h"
 
 #include "MathGeoLib/include/MathGeoLib.h"
 #include <iostream>
 #include <vector>
+
 
 enum class ComponentType
 {
@@ -22,7 +24,7 @@ class Component
 {
 public:
 	Component();
-	~Component();
+	virtual ~Component();
 	virtual void Enable();
 	virtual bool Update(float dt);
 	virtual void Disable(); 
@@ -31,7 +33,6 @@ public:
 
 	bool active = false;
 	GameObject* owner; 	//Gameobject which is parent to this component
-
 
 
 };
@@ -45,7 +46,10 @@ public:
 	//void Enable();
 	bool Update(float dt);
 	void DisplayNormals();
+	void HideNormals();
 	//void Disable();
+private:
+	vector<PrimLine*> GraphicNormals;
 public:
 	uint id_index = 0; // index in VRAM
 	uint num_index = 0;
@@ -80,6 +84,7 @@ public:
 	std::string texture_path; 	//path to this texture image
 	uint texbuffer;				//texture loaded in VRAM
 	bool hastexture;
+	bool checkers;
 };
 
 //Transform, child to component
@@ -92,21 +97,21 @@ public:
 	bool Update(float dt);
 //	void Disable();
 
-	void			SetPos(float x, float y, float z);	//Call this method to change position of transform component
-	void			Translate(float x, float y, float z);	//Call this method to add position to transform component
-	void			SetRotation(float x, float y, float z, float w);	//Call this method to change rotation of transform component
+	void			SetPos(float x, float y, float z);	//Call this method to add position to transform component
+	void			SetRotation(Quat quat);	//Call this method to change rotation of transform component
 	void			Scale(float x, float y, float z);	//Call this method to change scale of transform component
+	void			UpdateRotation(Quat quat);
 
 private:
-	void			UpdatePos(float x, float y, float z);
-	void			UpdateRotation(float angle, const vec3& u);
-	void			UpdateScale(float x, float y, float z);
+//	void			UpdatePos(float x, float y, float z);
+//	void			UpdateScale(float x, float y, float z);
 
 public:
 	float3 pos;
 	float3 scale;
 	Quat rot;
-	mat4x4 transform;
+	float4x4 transform;
+	bool should_update;
 
 };
 
@@ -119,6 +124,7 @@ public:
 	bool Update(float dt);
 	Component* CreateComponent(ComponentType type); //Create a new component for this game object, needs a Component type
 public:
+	bool to_delete = false;
 	bool active = false;
 	std::string Name;
 	std::vector<Component*> Components;

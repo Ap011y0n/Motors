@@ -2,8 +2,13 @@
 #include "Module.h"
 #include "Globals.h"
 
-class GameObject;
 
+class GameObject;
+typedef unsigned char GLubyte;
+typedef unsigned int GLuint;
+
+#define checkImageWidth 64
+#define checkImageHeight 64
 
 class ModuleSceneIntro : public Module
 {
@@ -18,6 +23,8 @@ public:
 	void firstCube();
 	void secondCube();
 	void UpdateGameObject(GameObject* father, float dt);
+	void SetDelete(GameObject* father);
+	void DeleteGameObject(GameObject* father);
 
 public:
 
@@ -36,4 +43,7 @@ public:
 
 	vector<GameObject*> gameObjects;
 	GameObject* scene;
+	 GLubyte checkImage[checkImageHeight][checkImageWidth][4];
+	 uint texName;
+
 };

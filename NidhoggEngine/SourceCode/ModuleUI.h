@@ -82,9 +82,9 @@ public:
 	ImGuiWindowClass* windowClass = nullptr;
 	vector<TreeNode*> tree_nodes;
 	vec3 direction_camera;
+	GameObject* selectedObj;
 private:
 	int c1;
 	vector<string> consoleOutput;
-	GameObject* selectedObj;
 };
 

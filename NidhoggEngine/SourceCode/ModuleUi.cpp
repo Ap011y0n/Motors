@@ -714,8 +714,8 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 	
 
 	const char* GameObjname = node->Name.c_str();
-	static int selection_mask = (1 << 2);
-	const bool is_selected = (selection_mask & (1 << 0)) != 0;
+	/*static int selection_mask = (1 << 2);
+	const bool is_selected = (selection_mask & (1 << 0)) != 0;*/
 
 	if (node->isSelected)
 	{
@@ -783,11 +783,21 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 		if (ImGui::TreeNodeEx("Transform", node_flags))
 		{
 			//
+			float3 rot = transform->rot.ToEulerXYZ();
+			rot *= 180 / pi;
+
 			ImGui::Columns(1);
 			ImGui::Columns(4, "mycolumns");
 			ImGui::Separator();
 			static bool active = false;
 			ImGui::Checkbox("Active",&active);
+			static bool hastodelete = false;
+			ImGui::Checkbox("Delete", &hastodelete);
+			if (hastodelete)
+			{
+				hastodelete = false;
+				obj->to_delete = true;
+			}
 			ImGui::Text("Position"); // ImGui::NextColumn();
 			ImGui::Text("Rotation"); //ImGui::NextColumn();
 			ImGui::Text("Scale"); ImGui::NextColumn();
@@ -800,12 +810,21 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::DragFloat(" ", &t);
 			if (ImGui::IsItemActive())
 			{
-				transform->Translate(t - transform->pos.x, 0, 0);
+				transform->SetPos(t - transform->pos.x, 0, 0);
 			}
 			//Rotation
-			float r1 = transform->rot.x;
+			float r1 = rot.x;
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("  ", &r1); 
+			if (ImGui::IsItemActive())
+			{
+				float3 axis(1, 0, 0);
+				float newrot = r1 - rot.x;
+				transform->SetRotation(Quat::RotateAxisAngle(axis, newrot * pi / 180));
+
+				//transform->rot.x = r1;
+			//	transform->UpdateRotation(r1, axis);
+			}
 			//Scale
 			ImGui::SetNextItemWidth(50);
 			float s1 = transform->scale.x;
@@ -825,12 +844,20 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::DragFloat("    ", &t1);
 			if (ImGui::IsItemActive())
 			{
-				transform->Translate(0, t1 - transform->pos.y, 0);
+				transform->SetPos(0, t1 - transform->pos.y, 0);
 			}
 			// Rotation
-			float r2 = transform->rot.y;
+			float r2 = rot.y;
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("     ", &r2);
+			if (ImGui::IsItemActive())
+			{
+				float3 axis(0, 1, 0);
+				float newrot = r2 - rot.y;
+				transform->SetRotation(Quat::RotateAxisAngle(axis, newrot * pi / 180));
+				//	transform->rot.y = r2;
+
+			}
 			//Scale
 			float s2 = transform->scale.y;
 			ImGui::SetNextItemWidth(50);
@@ -849,12 +876,22 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::DragFloat("       ", &t2);
 			if (ImGui::IsItemActive())
 			{
-				transform->Translate(0, 0, t2 - transform->pos.z);
+				transform->SetPos(0, 0, t2 - transform->pos.z);
+
 			}
 			// Rotation
-			float r3 = transform->rot.z;
+			float r3 = rot.z;
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("        ", &r3);
+			if (ImGui::IsItemActive())
+			{
+				float3 axis(0, 0, 1);
+				float newrot = r3 - rot.z;
+				transform->SetRotation(Quat::RotateAxisAngle(axis, newrot * pi / 180));
+		//		transform->UpdateRotation(r3, axis);
+			//	transform->rot.z = r3;
+
+			}
 			//Scale
 			float s3 = transform->scale.z;
 			ImGui::SetNextItemWidth(50);
@@ -862,7 +899,10 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			if (ImGui::IsItemActive())
 			{
 				transform->Scale(transform->scale.x, transform->scale.y, s3);
+
 			}
+
+			//transform->rot = Quat::FromEulerXYZ(r1 * pi / 180, r2 * pi / 180, r3 * pi / 180);
 			ImGui::NextColumn();
 
 			ImGui::Columns(1);
@@ -889,6 +929,9 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			}
 			else
 			{
+				if(!mesh->triggerNormals)
+				mesh->HideNormals();
+
 				mesh->triggerNormals = true;
 			}
 			ImGui::Separator();
@@ -904,11 +947,23 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 	{
 		if (ImGui::TreeNodeEx("Material", node_flags))
 		{
+
 			static bool Checkertexture = false;
 			ImGui::Checkbox("Checkers texture", &Checkertexture);
+
+			static bool checkers_tex = false;
+			ImGui::Checkbox("Use checkers Texture", &checkers_tex);
+			if (checkers_tex) {
+				material->checkers = true;
+			}
+			else {
+
+				material->checkers = false;
+			}
 			ImGui::Text("File:"); ImGui::SameLine();
 			ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s",material->texture_path.c_str());
 			ImGui::Image((ImTextureID)material->texbuffer, ImVec2(256, 256));
+
 			ImGui::TreePop();
 		}
 	}
