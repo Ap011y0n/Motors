@@ -93,7 +93,7 @@ public:
 //	void Disable();
 
 	void			SetPos(float x, float y, float z);	//Call this method to add position to transform component
-	void			SetRotation(float x, float y, float z);	//Call this method to change rotation of transform component
+	void			SetRotation(Quat quat);	//Call this method to change rotation of transform component
 	void			Scale(float x, float y, float z);	//Call this method to change scale of transform component
 	void			UpdateRotation(Quat quat);
 
@@ -106,6 +106,7 @@ public:
 	float3 scale;
 	Quat rot;
 	float4x4 transform;
+	bool should_update;
 
 };
 

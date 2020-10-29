@@ -781,6 +781,9 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 		if (ImGui::TreeNodeEx("Transform", node_flags))
 		{
 			//
+			float3 rot = transform->rot.ToEulerXYZ();
+			rot *= 180 / pi;
+
 			ImGui::Columns(1);
 			ImGui::Columns(4, "mycolumns");
 			ImGui::Separator();
@@ -801,13 +804,16 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 				transform->SetPos(t - transform->pos.x, 0, 0);
 			}
 			//Rotation
-			float r1 = transform->rot.x;
+			float r1 = rot.x;
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("  ", &r1); 
 			if (ImGui::IsItemActive())
 			{
-				vec3 axis(1, 0, 0);
-				transform->rot.x = r1;
+				float3 axis(1, 0, 0);
+				float newrot = r1 - rot.x;
+				transform->SetRotation(Quat::RotateAxisAngle(axis, newrot * pi / 180));
+
+				//transform->rot.x = r1;
 			//	transform->UpdateRotation(r1, axis);
 			}
 			//Scale
@@ -832,14 +838,15 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 				transform->SetPos(0, t1 - transform->pos.y, 0);
 			}
 			// Rotation
-			float r2 = transform->rot.y;
+			float r2 = rot.y;
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("     ", &r2);
 			if (ImGui::IsItemActive())
 			{
-				vec3 axis(0, 1, 0);
-			//	transform->UpdateRotation(r2, axis);
-				transform->rot.y = r2;
+				float3 axis(0, 1, 0);
+				float newrot = r2 - rot.y;
+				transform->SetRotation(Quat::RotateAxisAngle(axis, newrot * pi / 180));
+				//	transform->rot.y = r2;
 
 			}
 			//Scale
@@ -861,16 +868,19 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			if (ImGui::IsItemActive())
 			{
 				transform->SetPos(0, 0, t2 - transform->pos.z);
+
 			}
 			// Rotation
-			float r3 = transform->rot.z;
+			float r3 = rot.z;
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("        ", &r3);
 			if (ImGui::IsItemActive())
 			{
-				vec3 axis(0, 0, 1);
+				float3 axis(0, 0, 1);
+				float newrot = r3 - rot.z;
+				transform->SetRotation(Quat::RotateAxisAngle(axis, newrot * pi / 180));
 		//		transform->UpdateRotation(r3, axis);
-				transform->rot.z = r3;
+			//	transform->rot.z = r3;
 
 			}
 			//Scale
@@ -880,7 +890,10 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			if (ImGui::IsItemActive())
 			{
 				transform->Scale(transform->scale.x, transform->scale.y, s3);
+
 			}
+
+			//transform->rot = Quat::FromEulerXYZ(r1 * pi / 180, r2 * pi / 180, r3 * pi / 180);
 			ImGui::NextColumn();
 
 			ImGui::Columns(1);

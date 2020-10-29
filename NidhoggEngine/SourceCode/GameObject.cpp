@@ -248,6 +248,7 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 	scale.Set(0, 0, 0);
 	rot.Set(0, 0, 0, 0);
 	transform = transform.identity;
+	should_update = true;
 }
 
 ComponentTransform::~ComponentTransform()
@@ -259,9 +260,13 @@ bool ComponentTransform::Update(float dt)
 	bool ret = true;
 	//UpdatePos(pos.x, pos.y, pos.z);
 	//vec3 axis(1, 0, 0);
+	if (should_update)
+	{
+		transform = float4x4::FromTRS(pos, rot, scale);
+		transform.Transpose();
+		should_update = false;
+	}
 
-	transform = float4x4::FromTRS(pos, rot, scale);
-	transform.Transpose();
 	//UpdateScale(scale.x, scale.y, scale.z);
 	return ret;
 }
@@ -285,6 +290,8 @@ void ComponentTransform::UpdateRotation(Quat quat)
 void ComponentTransform::SetPos(float x, float y, float z)
 {
 	pos.Set(pos.x + x, pos.y + y, pos.z + z);
+	should_update = true;
+
 	for (int i = 0; i < owner->childs.size(); i++)
 	{
 		for (int j = 0; j < owner->childs[i]->Components.size(); j++)
@@ -298,14 +305,29 @@ void ComponentTransform::SetPos(float x, float y, float z)
 	}
 }
 
-void ComponentTransform::SetRotation(float x, float y, float z)
+void ComponentTransform::SetRotation(Quat quat)
 {
-	//rot.Set(x, y, z);
+	rot = rot * quat;
+	should_update = true;
+
+	for (int i = 0; i < owner->childs.size(); i++)
+	{
+		for (int j = 0; j < owner->childs[i]->Components.size(); j++)
+		{
+			if (owner->childs[i]->Components[j]->type == ComponentType::TRANSFORM)
+			{
+				ComponentTransform* transform = (ComponentTransform*)owner->childs[i]->Components[j];
+				transform->SetRotation(quat);
+			}
+		}
+	}
 }
 
 void ComponentTransform::Scale(float x, float y, float z)
 {
 	scale.Set(x, y, z);
+	should_update = true;
+
 	for (int i = 0; i < owner->childs.size(); i++)
 	{
 		for (int j = 0; j < owner->childs[i]->Components.size(); j++)
