@@ -8,6 +8,7 @@ class Pyramid;
 class PrimSphere;
 class PrimCylinder;
 class PrimLine;
+class PrimNormals;
 
 class PrimitiveManager : public Module
 {
@@ -23,6 +24,8 @@ public:
 	PrimSphere* CreateSphere(float radius, unsigned int rings, unsigned int sectors, vec3 pos = (0.f, 0.f, 0.f));
 	PrimCylinder* CreateCylinder(float radius, float height, int sides = 30, vec3 pos = (0.f, 0.f, 0.f));
 	PrimLine* CreateLine(vec3 origin, vec3 dest);
+	PrimNormals* CreateNormalVects(float* normal_array, int size);
+
 	void CreatePlane(vec4 coords, bool axis = true);
 	void MenuOptions();
 private:

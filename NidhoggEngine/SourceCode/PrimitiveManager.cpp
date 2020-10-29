@@ -117,6 +117,13 @@ void PrimitiveManager::CreatePlane(vec4 coords, bool axis)
 	prim_list.push_back((Primitive*)plane);
 }
 
+PrimNormals* PrimitiveManager::CreateNormalVects(float* normal_array, int size)
+{
+	PrimNormals* normals = new PrimNormals(normal_array, size);
+	prim_list.push_back((PrimNormals*)normals);
+	return normals;
+}
+
 void PrimitiveManager::MenuOptions() 
 {
 	if (depth_bool)
