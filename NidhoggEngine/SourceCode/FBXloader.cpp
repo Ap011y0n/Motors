@@ -4,7 +4,6 @@
 #include "PrimitiveManager.h"
 #include "FileSystem.h"
 #include "GameObject.h"
-#include "ModuleUI.h"
 
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
@@ -55,28 +54,15 @@ bool FBXloader::Start()
 void FBXloader::ChangeTexture(const char* path)
 {
 	LOG("changing all textures to %s", path);
-	ComponentMaterial* mat = nullptr;
-	if (App->UI->selectedObj != nullptr)
-	{
-		for (int i = 0; i < App->UI->selectedObj->Components.size(); i++)
-		{
-			if (App->UI->selectedObj->Components[i]->type == ComponentType::MATERIAL)
-			{
-				mat = (ComponentMaterial*)App->UI->selectedObj->Components[i];
-			}
-		}
-	
 
-		if (mat != nullptr)
-		{
-			glDeleteTextures(1, &(GLuint)mat->texbuffer);
-			mat->texbuffer = LoadTexBuffer(path);
-			if (mat->texbuffer != 0)
-				mat->hastexture = true;
-			else
-				mat->hastexture = false;
-		}
-	
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		glDeleteTextures(1, &(GLuint)meshes[i]->texbuffer);
+		meshes[i]->texbuffer = LoadTexBuffer(path);
+		if (meshes[i]->texbuffer != 0)
+			meshes[i]->hastexture = true;
+		else
+			meshes[i]->hastexture = false;
 	}
 
 
