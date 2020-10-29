@@ -1,10 +1,12 @@
 #pragma once
 #include "Globals.h"
 #include "glmath.h"
+#include "Primitive.h"
 
 #include "MathGeoLib/include/MathGeoLib.h"
 #include <iostream>
 #include <vector>
+
 
 enum class ComponentType
 {
@@ -22,7 +24,7 @@ class Component
 {
 public:
 	Component();
-	~Component();
+	virtual ~Component();
 	virtual void Enable();
 	virtual bool Update(float dt);
 	virtual void Disable(); 
@@ -31,7 +33,6 @@ public:
 
 	bool active = false;
 	GameObject* owner; 	//Gameobject which is parent to this component
-
 
 
 };
@@ -45,7 +46,10 @@ public:
 	//void Enable();
 	bool Update(float dt);
 	void DisplayNormals();
+	void HideNormals();
 	//void Disable();
+private:
+	vector<PrimLine*> GraphicNormals;
 public:
 	uint id_index = 0; // index in VRAM
 	uint num_index = 0;
@@ -119,6 +123,7 @@ public:
 	bool Update(float dt);
 	Component* CreateComponent(ComponentType type); //Create a new component for this game object, needs a Component type
 public:
+	bool to_delete = false;
 	bool active = false;
 	std::string Name;
 	std::vector<Component*> Components;

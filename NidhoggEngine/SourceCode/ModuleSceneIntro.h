@@ -18,6 +18,8 @@ public:
 	void firstCube();
 	void secondCube();
 	void UpdateGameObject(GameObject* father, float dt);
+	void SetDelete(GameObject* father);
+	void DeleteGameObject(GameObject* father);
 
 public:
 

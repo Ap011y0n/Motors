@@ -789,6 +789,13 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::Separator();
 			static bool active = false;
 			ImGui::Checkbox("Active",&active);
+			static bool hastodelete = false;
+			ImGui::Checkbox("Delete", &hastodelete);
+			if (hastodelete)
+			{
+				hastodelete = false;
+				obj->to_delete = true;
+			}
 			ImGui::Text("Position"); // ImGui::NextColumn();
 			ImGui::Text("Rotation"); //ImGui::NextColumn();
 			ImGui::Text("Scale"); ImGui::NextColumn();
@@ -918,6 +925,9 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			}
 			else
 			{
+				if(!mesh->triggerNormals)
+				mesh->HideNormals();
+
 				mesh->triggerNormals = true;
 			}
 			ImGui::Separator();

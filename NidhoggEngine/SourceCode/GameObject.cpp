@@ -16,6 +16,7 @@
 //*************************		GameObject
 GameObject::GameObject()
 {
+	to_delete = false;
 	active = true;
 	Name = "NewGameObject";
 	father = nullptr;
@@ -24,6 +25,7 @@ GameObject::GameObject()
 
 GameObject::GameObject(const char* name, GameObject* node)
 {
+	to_delete = false;
 	active = true;
 	Name = name;
 	father = node;
@@ -35,7 +37,15 @@ GameObject::GameObject(const char* name, GameObject* node)
 }
 
 GameObject::~GameObject()
-{}
+{
+
+	for (int i = 0; i < Components.size(); i++)
+	{
+		if(Components[i] != nullptr)
+		delete Components[i];
+	}
+	Components.clear();
+}
 
 bool GameObject::Update(float dt)
 {
@@ -68,6 +78,7 @@ Component* GameObject::CreateComponent(ComponentType type)
 //*************************		Component
 Component::Component()
 {
+
 	owner = nullptr;
 	active = false;
 	type = ComponentType::NONE;
@@ -75,6 +86,7 @@ Component::Component()
 
 Component::~Component()
 {
+	LOG("deleting component");
 }
 
 void Component::Enable()
@@ -124,6 +136,14 @@ ComponentMesh::ComponentMesh(GameObject* ObjectOwner) : Component()
 
 ComponentMesh::~ComponentMesh()
 {
+	LOG("deleting component mesh");
+
+	glDeleteBuffers(1, &id_index);
+	glDeleteBuffers(1, &id_normals);
+	glDeleteBuffers(1, &id_vertex);
+	glDeleteBuffers(1, &id_tex);
+
+
 }
 
 bool ComponentMesh::Update(float dt)
@@ -209,9 +229,19 @@ void ComponentMesh::DisplayNormals()
 		destination *= 1;
 		destination += origin;
 
-		App->PrimManager->CreateLine(origin, destination);
+		GraphicNormals.push_back(App->PrimManager->CreateLine(origin, destination));
 	}
 	LOG("DisplayNormals");
+}
+void ComponentMesh::HideNormals()
+{
+	for (int i = 0; i < GraphicNormals.size(); i++)
+	{
+		GraphicNormals[i]->to_delete = true;
+	
+	}
+	GraphicNormals.clear();
+	LOG("HideNormals");
 }
 //*************************		ComponentMaterial
 
@@ -226,6 +256,7 @@ ComponentMaterial::ComponentMaterial(GameObject* ObjectOwner) : Component()
 
 ComponentMaterial::~ComponentMaterial()
 {
+	glDeleteBuffers(1, &texbuffer);
 }
 
 bool ComponentMaterial::Update(float dt)

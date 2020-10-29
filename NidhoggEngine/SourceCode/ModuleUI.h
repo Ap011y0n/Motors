@@ -80,10 +80,10 @@ public:
 	Vec2 img_size;
 	ImGuiWindowClass* windowClass = nullptr;
 	vector<TreeNode*> tree_nodes;
+	GameObject* selectedObj;
 
 private:
 	int c1;
 	vector<string> consoleOutput;
-	GameObject* selectedObj;
 };
 

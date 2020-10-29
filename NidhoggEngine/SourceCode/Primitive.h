@@ -27,7 +27,7 @@ class Primitive
 public:
 
 	Primitive();
-
+	virtual ~Primitive();
 	virtual void	Render() const;
 	virtual void	InnerRender() const;
 	void			SetPos(float x, float y, float z);
@@ -40,6 +40,7 @@ public:
 	Color color;
 	bool axis,wire;
 	mat4x4 transform;
+	bool to_delete;
 
 protected:
 	PrimitiveTypes type;
@@ -132,13 +133,13 @@ public:
 };
 
 // ============================================
-class Line : public Primitive
+class PrimLine : public Primitive
 {
 public:
-	Line();
-	~Line();
+	PrimLine();
+	~PrimLine();
 
-	Line(float x, float y, float z, float x2, float y2, float z2);
+	PrimLine(float x, float y, float z, float x2, float y2, float z2);
 	void InnerRender() const;
 public:
 	vec3 origin;

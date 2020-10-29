@@ -14,6 +14,12 @@
 Primitive::Primitive() : color(White), wire(false), axis(false), type(PrimitiveTypes::Primitive_Point)
 {}
 
+Primitive::~Primitive()
+{
+
+
+
+}
 // ------------------------------------------------------------
 PrimitiveTypes Primitive::GetType() const
 {
@@ -106,15 +112,18 @@ void Primitive::Scale(float x, float y, float z)
 Cube::Cube() : Primitive(), size(1.0f, 1.0f, 1.0f)
 {
 	type = PrimitiveTypes::Primitive_Cube;
+	to_delete = false;
+
 }
 Cube::~Cube()
 {
-	glDeleteBuffers(sizeof(float) * num_vertices * 3, (GLuint*)&my_vertex);
-	glDeleteBuffers(sizeof(uint) * num_indices, (GLuint*)&my_indices);
+	glDeleteBuffers(1, &my_vertex);
+	glDeleteBuffers(1, &my_indices);
 }
 Cube::Cube(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, sizeY, sizeZ)
 {
 	type = PrimitiveTypes::Primitive_Cube;
+	to_delete = false;
 
 	uint indices[36] = {
 		// front
@@ -263,17 +272,21 @@ void Cube::InnerRender() const
 // PYRAMID ============================================
 Pyramid::Pyramid() : Primitive(), size(1.0f, 1.0f, 1.0f)
 {
+	to_delete = false;
+
 	type = PrimitiveTypes::Primitive_Pyramid;
 }
 
 Pyramid::~Pyramid()
 {
-	glDeleteBuffers(sizeof(float) * num_vertices * 3, (GLuint*)&my_vertex);
-	glDeleteBuffers(sizeof(uint) * num_indices, (GLuint*)&my_indices);
+	glDeleteBuffers(1, &my_vertex);
+	glDeleteBuffers(1, &my_indices);
 }
 
 Pyramid::Pyramid(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, sizeY, sizeZ)
 {
+	to_delete = false;
+
 	type = PrimitiveTypes::Primitive_Pyramid;
 
 	index = new uint[12];
@@ -360,18 +373,22 @@ void Pyramid::InnerRender() const
 // SPHERE ============================================
 PrimSphere::PrimSphere() : Primitive(), radius(1.0f)
 {
+	to_delete = false;
+
 	type = PrimitiveTypes::Primitive_Sphere;
 }
 
 PrimSphere::~PrimSphere()
 {
-	glDeleteBuffers(sizeof(float) * vertices.size(), (GLuint*)&my_vertex);
-	glDeleteBuffers(sizeof(uint) * sizeof(uint) * indices.size(), (GLuint*)&my_indices);
+	glDeleteBuffers(1, &my_vertex);
+	glDeleteBuffers(1, &my_indices);
 }
 
 
 PrimSphere::PrimSphere(float radius, unsigned int rings, unsigned int sectors) : Primitive(), radius(radius)
 {
+	to_delete = false;
+
 	type = PrimitiveTypes::Primitive_Sphere;
 	if (rings > 48)rings = 48;
 	if (sectors > 116)sectors = 116;
@@ -480,18 +497,21 @@ void PrimSphere::InnerRender() const
 PrimCylinder::PrimCylinder() : Primitive(), radius(1.0f), height(1.0f), sides (30)
 {
 	type = PrimitiveTypes::Primitive_Cylinder;
+	to_delete = false;
+
 }
 
 PrimCylinder::~PrimCylinder()
 {
-	glDeleteBuffers(sizeof(float) * vertices.size(), (GLuint*)&my_vertex);
-	glDeleteBuffers(sizeof(uint) * sizeof(uint) * indices.size(), (GLuint*)&my_indices);
+	glDeleteBuffers(1, &my_vertex);
+	glDeleteBuffers(1, &my_indices);
 }
 
 
 PrimCylinder::PrimCylinder(float radius, float height, int sides) : Primitive(), radius(radius), height(height), sides(sides)
 {
 	type = PrimitiveTypes::Primitive_Cylinder;
+	to_delete = false;
 
 	int n = sides;
 	if (n > 100) n = 100;
@@ -646,20 +666,28 @@ void PrimCylinder::InnerRender() const
 }
 
 // LINE ==================================================
-Line::Line() : Primitive(), origin(0, 0, 0), destination(1, 1, 1)
+PrimLine::PrimLine() : Primitive(), origin(0, 0, 0), destination(1, 1, 1)
 {
 	type = PrimitiveTypes::Primitive_Line;
+	to_delete = false;
+
 }
 
-Line::~Line()
+PrimLine::~PrimLine()
 {
-	glDeleteBuffers(sizeof(float) * num_vertices * 3, (GLuint*)&my_vertex);
-	glDeleteBuffers(sizeof(uint) * sizeof(uint) * num_indices, (GLuint*)&my_indices);
+	//glDeleteBuffers(sizeof(float) * num_vertices * 3, (GLuint*)&my_vertex);
+	//glDeleteBuffers(sizeof(uint) * sizeof(uint) * num_indices, (GLuint*)&my_indices);
+	
+	glDeleteBuffers(1, &my_vertex);
+	glDeleteBuffers(1, &my_indices);
+
 }
 
-Line::Line(float x, float y, float z, float x2, float y2, float z2) : Primitive(), origin(x, y, z), destination(x2, y2, z2)
+PrimLine::PrimLine(float x, float y, float z, float x2, float y2, float z2) : Primitive(), origin(x, y, z), destination(x2, y2, z2)
 {
 	type = PrimitiveTypes::Primitive_Line;
+	to_delete = false;
+
 	uint indices[2] = {
 		0, 1,
 	};
@@ -705,7 +733,7 @@ Line::Line(float x, float y, float z, float x2, float y2, float z2) : Primitive(
 
 }
 
-void Line::InnerRender() const
+void PrimLine::InnerRender() const
 {
 	glLineWidth(2.0f);
 	glColor4ub(255, 0.0, 0.0, 0.0);
@@ -737,18 +765,23 @@ void Line::InnerRender() const
 // PLANE ==================================================
 PrimPlane::PrimPlane() : Primitive(), normal(0, 1, 0), constant(1)
 {
+	to_delete = false;
 	type = PrimitiveTypes::Primitive_Plane;
 }
 
 PrimPlane::~PrimPlane()
 {
-	glDeleteBuffers(sizeof(float) * vertices.size(), (GLuint*)&my_vertex);
-	glDeleteBuffers(sizeof(uint) * sizeof(uint) * indices.size(), (GLuint*)&my_indices);
+	//glDeleteBuffers(sizeof(float) * vertices.size(), (GLuint*)&my_vertex);
+	//glDeleteBuffers(sizeof(uint) * sizeof(uint) * indices.size(), (GLuint*)&my_indices);
+	glDeleteBuffers(1, &my_vertex);
+	glDeleteBuffers(1, &my_indices);
+
 }
 
 PrimPlane::PrimPlane(float x, float y, float z, float d) : Primitive(), normal(x, y, z), constant(d)
 {
 	type = PrimitiveTypes::Primitive_Plane;
+	to_delete = false;
 
 	float d1 = 200;
 	for (float i = -d1; i <= d1; i += 1.0f)

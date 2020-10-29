@@ -242,6 +242,8 @@ update_status ModuleSceneIntro::Update(float dt)
 	//}
 
 	UpdateGameObject(scene, dt);
+	SetDelete(scene);
+	DeleteGameObject(scene);
 	/*if (transform != nullptr)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
@@ -417,4 +419,56 @@ void ModuleSceneIntro::UpdateGameObject(GameObject* father, float dt)
 	{
 		UpdateGameObject(father->childs[i], dt);
 	}
+
+}
+
+void ModuleSceneIntro::SetDelete(GameObject* father)
+{
+	if (father->father != nullptr)
+	{
+		if (father->father->to_delete)
+		{
+			father->to_delete = true;
+		}
+	}
+	for (int i = 0; i < father->childs.size(); i++)
+	{
+		SetDelete(father->childs[i]);
+	}
+	
+
+}
+void ModuleSceneIntro::DeleteGameObject(GameObject* father)
+{
+	
+	for (int i = 0; i < father->childs.size(); i++)
+	{
+		DeleteGameObject(father->childs[i]);
+	}
+	if (father->to_delete)
+	{
+		if (father->father != nullptr)
+		{
+			for (int i = 0; i < father->father->childs.size(); i++)
+			{
+				if (father->father->childs[i] == father)
+				{
+					father->father->childs.erase(father->father->childs.begin() + i);
+					i--;
+				}
+			}
+		}
+		if (father != NULL)
+		{
+			if (App->UI->selectedObj = father)
+			{
+				App->UI->selectedObj = nullptr;
+			}
+
+			delete father;
+			father = NULL;
+		}
+
+	}
+
 }
