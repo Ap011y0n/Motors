@@ -5,9 +5,7 @@
 #define checkImageWidth 64
 #define checkImageHeight 64
 
-typedef unsigned char GLubyte;
-typedef unsigned int GLuint;
-typedef unsigned int   ILuint;
+
 class GameObject;
 struct aiScene;
 struct aiNode;
@@ -59,8 +57,6 @@ private:
 public:
 	//mesh ourMesh;
 	vector<mesh*> meshes;
-	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
-
 
 };
 

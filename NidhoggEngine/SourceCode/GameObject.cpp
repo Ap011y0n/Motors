@@ -197,6 +197,7 @@ bool ComponentMesh::Update(float dt)
 
 					glActiveTexture(GL_TEXTURE0);
 					glBindTexture(GL_TEXTURE_2D, material->texbuffer);
+					//glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
 				}
 			
 		
@@ -256,7 +257,7 @@ ComponentMaterial::ComponentMaterial(GameObject* ObjectOwner) : Component()
 
 ComponentMaterial::~ComponentMaterial()
 {
-	glDeleteBuffers(1, &texbuffer);
+	//glDeleteBuffers(1, &texbuffer);
 }
 
 bool ComponentMaterial::Update(float dt)
