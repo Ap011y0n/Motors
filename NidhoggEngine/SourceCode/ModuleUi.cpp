@@ -713,8 +713,8 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 	
 
 	const char* GameObjname = node->Name.c_str();
-	static int selection_mask = (1 << 2);
-	const bool is_selected = (selection_mask & (1 << 0)) != 0;
+	/*static int selection_mask = (1 << 2);
+	const bool is_selected = (selection_mask & (1 << 0)) != 0;*/
 
 	if (node->isSelected)
 	{
@@ -804,6 +804,12 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			float r1 = transform->rot.x;
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("  ", &r1); 
+			if (ImGui::IsItemActive())
+			{
+				vec3 axis(1, 0, 0);
+				transform->rot.x = r1;
+				transform->UpdateRotation(r1, axis);
+			}
 			//Scale
 			ImGui::SetNextItemWidth(50);
 			float s1 = transform->scale.x;
@@ -829,6 +835,13 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			float r2 = transform->rot.y;
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("     ", &r2);
+			if (ImGui::IsItemActive())
+			{
+				vec3 axis(0, 1, 0);
+				transform->UpdateRotation(r2, axis);
+				transform->rot.y = r2;
+
+			}
 			//Scale
 			float s2 = transform->scale.y;
 			ImGui::SetNextItemWidth(50);
@@ -853,6 +866,13 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			float r3 = transform->rot.z;
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat("        ", &r3);
+			if (ImGui::IsItemActive())
+			{
+				vec3 axis(0, 0, 1);
+				transform->UpdateRotation(r3, axis);
+				transform->rot.z = r3;
+
+			}
 			//Scale
 			float s3 = transform->scale.z;
 			ImGui::SetNextItemWidth(50);

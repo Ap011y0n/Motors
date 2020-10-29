@@ -180,7 +180,7 @@ inline aiVector3t<TReal> aiQuaterniont<TReal>::GetEuler() const
 
 	TReal test = w*y + z*y;
 	//TReal test = x*y + z*w;
-
+    TReal PI = 3.14159265359;
 	if (test > 0.499)
 	{
 		//euler.y = 2 * std::atan2(x, w);

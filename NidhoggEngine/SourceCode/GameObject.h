@@ -94,18 +94,18 @@ public:
 
 	void			SetPos(float x, float y, float z);	//Call this method to change position of transform component
 	void			Translate(float x, float y, float z);	//Call this method to add position to transform component
-	void			SetRotation(float x, float y, float z, float w);	//Call this method to change rotation of transform component
+	void			SetRotation(float x, float y, float z);	//Call this method to change rotation of transform component
 	void			Scale(float x, float y, float z);	//Call this method to change scale of transform component
+	void			UpdateRotation(float angle, const vec3& u);
 
 private:
 	void			UpdatePos(float x, float y, float z);
-	void			UpdateRotation(float angle, const vec3& u);
 	void			UpdateScale(float x, float y, float z);
 
 public:
 	float3 pos;
 	float3 scale;
-	Quat rot;
+	float3 rot;
 	mat4x4 transform;
 
 };

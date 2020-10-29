@@ -246,7 +246,7 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 
 	pos.Set(0, 0, 0);
 	scale.Set(0, 0, 0);
-	rot.Set(0, 0, 0, 0);
+	rot.Set(0, 0, 0);
 
 }
 
@@ -258,7 +258,9 @@ bool ComponentTransform::Update(float dt)
 {
 	bool ret = true;
 	UpdatePos(pos.x, pos.y, pos.z);
-	//UpdateRotation(pos.x, pos.y, pos.z);
+	vec3 axis(1, 0, 0);
+
+	UpdateRotation(90, axis);
 	UpdateScale(scale.x, scale.y, scale.z);
 	return ret;
 }
@@ -299,9 +301,9 @@ void ComponentTransform::Translate(float x, float y, float z)
 	}
 }
 
-void ComponentTransform::SetRotation(float x, float y, float z, float w)
+void ComponentTransform::SetRotation(float x, float y, float z)
 {
-	rot.Set(x, y, z, w);
+	rot.Set(x, y, z);
 }
 
 void ComponentTransform::Scale(float x, float y, float z)

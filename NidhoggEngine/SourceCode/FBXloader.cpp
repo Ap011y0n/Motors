@@ -168,12 +168,20 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 	ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
 
 	aiVector3D translation, scaling;
+	aiVector3D euler;
 	aiQuaternion rotation;
 	node->mTransformation.Decompose(scaling, rotation, translation);
 
 	NewTrans->pos.Set(translation.x, translation.y, translation.z);
-	NewTrans->scale.Set(scaling.x/scaling.x, scaling.y/scaling.y, scaling.z/scaling.z);
-	NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
+	NewTrans->scale.Set(scaling.x/ 100, scaling.y/ 100, scaling.z/ 100);
+	 euler = rotation.GetEuler();
+	 vec3 axis(1, 0, 0);
+	 NewTrans->UpdateRotation(euler.x, axis);
+	 axis.Set(0, 1, 0);
+	 NewTrans->UpdateRotation(45, axis);
+	 axis.Set(0, 0, 1);
+	 NewTrans->UpdateRotation(euler.z, axis);
+
 
 	for (int i = 0; i < node->mNumMeshes; i++)
 	{
@@ -195,10 +203,10 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 		}
 		else
 		{
+
 			ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
-			folder.Append(str.C_Str());
-			NewTex->texture_path = folder.C_Str();
-			NewTex->texbuffer = LoadTexBuffer(folder.C_Str());
+	
+			NewTex->texbuffer = LoadTexBuffer(str.C_Str());
 			if (NewTex->texbuffer != 0)
 				NewTex->hastexture = true;
 			else
