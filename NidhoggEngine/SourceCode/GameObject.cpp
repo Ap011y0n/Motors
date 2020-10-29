@@ -261,7 +261,7 @@ bool ComponentTransform::Update(float dt)
 	//vec3 axis(1, 0, 0);
 
 	transform = float4x4::FromTRS(pos, rot, scale);
-
+	transform.Transpose();
 	//UpdateScale(scale.x, scale.y, scale.z);
 	return ret;
 }
