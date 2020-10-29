@@ -54,15 +54,29 @@ bool FBXloader::Start()
 void FBXloader::ChangeTexture(const char* path)
 {
 	LOG("changing all textures to %s", path);
-
-	for (int i = 0; i < meshes.size(); i++)
+	ComponentMaterial* mat = nullptr;
+	if (App->UI->selectedObj != nullptr)
 	{
-		glDeleteTextures(1, &(GLuint)meshes[i]->texbuffer);
-		meshes[i]->texbuffer = LoadTexBuffer(path);
-		if (meshes[i]->texbuffer != 0)
-			meshes[i]->hastexture = true;
-		else
-			meshes[i]->hastexture = false;
+		for (int i = 0; i < App->UI->selectedObj->Components.size(); i++)
+		{
+			if (App->UI->selectedObj->Components[i]->type == ComponentType::MATERIAL)
+			{
+				mat = (ComponentMaterial*)App->UI->selectedObj->Components[i];
+			}
+		}
+
+
+		if (mat != nullptr)
+		{
+			glDeleteTextures(1, &(GLuint)mat->texbuffer);
+			mat->texbuffer = LoadTexBuffer(path);
+			mat->texture_path = path;
+			if (mat->texbuffer != 0)
+				mat->hastexture = true;
+			else
+				mat->hastexture = false;
+		}
+
 	}
 
 
@@ -215,6 +229,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 			ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
 	
 			NewTex->texbuffer = LoadTexBuffer(str.C_Str());
+			NewTex->texture_path = str.C_Str();
 			if (NewTex->texbuffer != 0)
 				NewTex->hastexture = true;
 			else
