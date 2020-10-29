@@ -201,6 +201,17 @@ bool ComponentMesh::Update(float dt)
 					else
 					glBindTexture(GL_TEXTURE_2D, material->texbuffer);
 				}
+				else
+				{
+					if (material != nullptr && material->checkers)
+
+					glEnable(GL_TEXTURE_2D);
+					glEnable(GL_CULL_FACE);
+
+					glActiveTexture(GL_TEXTURE0);
+					glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
+					
+				}
 			
 		
 		
@@ -225,16 +236,19 @@ bool ComponentMesh::Update(float dt)
 
 void ComponentMesh::DisplayNormals()
 {
-	for (int i = 0; i < num_vertex; i++)
-	{
-		vec3 origin(vertex[i * 3], vertex[i * 3 + 1], vertex[i * 3 + 2]);
-		vec3 destination(normals[i * 3], normals[i * 3 + 1], normals[i * 3 + 2]);
-		destination *= 1;
-		destination += origin;
+	LOG("Dispaying normals");
+	if (num_vertex < 5000)
+		for (int i = 0; i < num_vertex; i++)
+		{
+			vec3 origin(vertex[i * 3], vertex[i * 3 + 1], vertex[i * 3 + 2]);
+			vec3 destination(normals[i * 3], normals[i * 3 + 1], normals[i * 3 + 2]);
+			destination *= 1;
+			destination += origin;
 
-		GraphicNormals.push_back(App->PrimManager->CreateLine(origin, destination));
-	}
-	LOG("DisplayNormals");
+			GraphicNormals.push_back(App->PrimManager->CreateLine(origin, destination));
+		}
+	else
+		LOG("Not able to display normals, mesh has too many vertices");
 }
 void ComponentMesh::HideNormals()
 {
