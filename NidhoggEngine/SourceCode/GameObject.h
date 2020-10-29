@@ -49,7 +49,7 @@ public:
 	void HideNormals();
 	//void Disable();
 private:
-	vector<PrimLine*> GraphicNormals;
+	PrimNormals* GraphicNormals;
 public:
 	uint id_index = 0; // index in VRAM
 	uint num_index = 0;

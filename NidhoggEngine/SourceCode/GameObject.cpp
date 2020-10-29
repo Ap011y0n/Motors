@@ -132,12 +132,16 @@ ComponentMesh::ComponentMesh(GameObject* ObjectOwner) : Component()
 	owner = ObjectOwner;
 
 	triggerNormals = false;
+	GraphicNormals = nullptr;
 }
 
 ComponentMesh::~ComponentMesh()
 {
 	LOG("deleting component mesh");
-
+	if (GraphicNormals != nullptr)
+	{
+		GraphicNormals->to_delete = true;
+	}
 	glDeleteBuffers(1, &id_index);
 	glDeleteBuffers(1, &id_normals);
 	glDeleteBuffers(1, &id_vertex);
@@ -257,7 +261,7 @@ void ComponentMesh::DisplayNormals()
 
 		}
 
-		App->PrimManager->CreateNormalVects(normal_array, num_vertex*2);
+		GraphicNormals = App->PrimManager->CreateNormalVects(normal_array, num_vertex*2);
 
 		//LOG("Dispaying normals");
 		//if (num_vertex < 5000)
@@ -278,12 +282,13 @@ void ComponentMesh::DisplayNormals()
 }
 void ComponentMesh::HideNormals()
 {
-	for (int i = 0; i < GraphicNormals.size(); i++)
+	if (GraphicNormals != nullptr)
 	{
-		GraphicNormals[i]->to_delete = true;
-	
+		GraphicNormals->to_delete = true;
+		GraphicNormals = nullptr;
 	}
-	GraphicNormals.clear();
+	
+	
 	LOG("HideNormals");
 }
 //*************************		ComponentMaterial
