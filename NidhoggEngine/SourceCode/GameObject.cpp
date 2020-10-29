@@ -147,7 +147,7 @@ bool ComponentMesh::Update(float dt)
 		glPushMatrix();
 		if (transform != nullptr)
 		{
-			glMultMatrixf(transform->transform.M);
+			glMultMatrixf(transform->transform.ptr());
 		}
 		else
 		{
@@ -246,8 +246,8 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 
 	pos.Set(0, 0, 0);
 	scale.Set(0, 0, 0);
-	rot.Set(0, 0, 0);
-
+	rot.Set(0, 0, 0, 0);
+	transform = transform.identity;
 }
 
 ComponentTransform::~ComponentTransform()
@@ -257,35 +257,32 @@ ComponentTransform::~ComponentTransform()
 bool ComponentTransform::Update(float dt)
 {
 	bool ret = true;
-	UpdatePos(pos.x, pos.y, pos.z);
-	vec3 axis(1, 0, 0);
+	//UpdatePos(pos.x, pos.y, pos.z);
+	//vec3 axis(1, 0, 0);
 
-	UpdateRotation(90, axis);
-	UpdateScale(scale.x, scale.y, scale.z);
+	transform = float4x4::FromTRS(pos, rot, scale);
+
+	//UpdateScale(scale.x, scale.y, scale.z);
 	return ret;
 }
-void ComponentTransform::UpdatePos(float x, float y, float z)
-{
-	transform.translate(x, y, z);
+//void ComponentTransform::UpdatePos(float x, float y, float z)
+//{
+//	transform.Translate(x, y, z);
+//
+//}
 
+void ComponentTransform::UpdateRotation(Quat quat)
+{
+	transform = transform * quat;
 }
 
-void ComponentTransform::UpdateRotation(float angle, const vec3& u)
-{
-	transform.rotate(angle, u);
-}
+//void ComponentTransform::UpdateScale(float x, float y, float z)
+//{
+//	transform.Scale(x, y, z);
+//}
 
-void ComponentTransform::UpdateScale(float x, float y, float z)
-{
-	transform.scale(x, y, z);
-}
 
 void ComponentTransform::SetPos(float x, float y, float z)
-{
-	pos.Set(x, y, z);
-}	
-
-void ComponentTransform::Translate(float x, float y, float z)
 {
 	pos.Set(pos.x + x, pos.y + y, pos.z + z);
 	for (int i = 0; i < owner->childs.size(); i++)
@@ -295,7 +292,7 @@ void ComponentTransform::Translate(float x, float y, float z)
 			if (owner->childs[i]->Components[j]->type == ComponentType::TRANSFORM)
 			{
 				ComponentTransform* transform = (ComponentTransform*)owner->childs[i]->Components[j];
-				transform->Translate(x, y, z);
+				transform->SetPos(x, y, z);
 			}
 		}
 	}
@@ -303,7 +300,7 @@ void ComponentTransform::Translate(float x, float y, float z)
 
 void ComponentTransform::SetRotation(float x, float y, float z)
 {
-	rot.Set(x, y, z);
+	//rot.Set(x, y, z);
 }
 
 void ComponentTransform::Scale(float x, float y, float z)

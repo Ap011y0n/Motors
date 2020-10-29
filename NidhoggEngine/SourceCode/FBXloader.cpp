@@ -170,17 +170,21 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 	aiVector3D translation, scaling;
 	aiVector3D euler;
 	aiQuaternion rotation;
+	Quat rotate;
+	float3 translate, scale;
 	node->mTransformation.Decompose(scaling, rotation, translation);
+	
+	rotate.Set(rotation.x, rotation.z, rotation.z, rotation.w);
+	translate.Set(translation.x, translation.y, translation.z);
+	scale.Set(scaling.x/100, scaling.y / 100, scaling.z / 100);
 
-	NewTrans->pos.Set(translation.x, translation.y, translation.z);
-	NewTrans->scale.Set(scaling.x/ 100, scaling.y/ 100, scaling.z/ 100);
-	 euler = rotation.GetEuler();
-	 vec3 axis(1, 0, 0);
-	 NewTrans->UpdateRotation(euler.x, axis);
-	 axis.Set(0, 1, 0);
-	 NewTrans->UpdateRotation(45, axis);
-	 axis.Set(0, 0, 1);
-	 NewTrans->UpdateRotation(euler.z, axis);
+	NewTrans->pos.Set(translate.x, translate.y, translate.z);
+	NewTrans->scale.Set(scale.x, scale.y, scale.z);
+	NewTrans->rot = rotate;
+	NewTrans->transform = float4x4::FromTRS(translate, rotate, scale);
+	
+	
+
 
 
 	for (int i = 0; i < node->mNumMeshes; i++)

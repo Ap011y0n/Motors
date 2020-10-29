@@ -798,7 +798,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::DragFloat(" ", &t);
 			if (ImGui::IsItemActive())
 			{
-				transform->Translate(t - transform->pos.x, 0, 0);
+				transform->SetPos(t - transform->pos.x, 0, 0);
 			}
 			//Rotation
 			float r1 = transform->rot.x;
@@ -808,7 +808,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			{
 				vec3 axis(1, 0, 0);
 				transform->rot.x = r1;
-				transform->UpdateRotation(r1, axis);
+			//	transform->UpdateRotation(r1, axis);
 			}
 			//Scale
 			ImGui::SetNextItemWidth(50);
@@ -829,7 +829,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::DragFloat("    ", &t1);
 			if (ImGui::IsItemActive())
 			{
-				transform->Translate(0, t1 - transform->pos.y, 0);
+				transform->SetPos(0, t1 - transform->pos.y, 0);
 			}
 			// Rotation
 			float r2 = transform->rot.y;
@@ -838,7 +838,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			if (ImGui::IsItemActive())
 			{
 				vec3 axis(0, 1, 0);
-				transform->UpdateRotation(r2, axis);
+			//	transform->UpdateRotation(r2, axis);
 				transform->rot.y = r2;
 
 			}
@@ -860,7 +860,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::DragFloat("       ", &t2);
 			if (ImGui::IsItemActive())
 			{
-				transform->Translate(0, 0, t2 - transform->pos.z);
+				transform->SetPos(0, 0, t2 - transform->pos.z);
 			}
 			// Rotation
 			float r3 = transform->rot.z;
@@ -869,7 +869,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			if (ImGui::IsItemActive())
 			{
 				vec3 axis(0, 0, 1);
-				transform->UpdateRotation(r3, axis);
+		//		transform->UpdateRotation(r3, axis);
 				transform->rot.z = r3;
 
 			}
