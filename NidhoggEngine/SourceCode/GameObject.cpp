@@ -196,8 +196,10 @@ bool ComponentMesh::Update(float dt)
 					glEnable(GL_CULL_FACE);
 
 					glActiveTexture(GL_TEXTURE0);
+					if(material->checkers)
+					glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
+					else
 					glBindTexture(GL_TEXTURE_2D, material->texbuffer);
-					//glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
 				}
 			
 		
@@ -253,6 +255,7 @@ ComponentMaterial::ComponentMaterial(GameObject* ObjectOwner) : Component()
 	owner = ObjectOwner;
 	texbuffer = 0;
 	hastexture = false;
+	checkers = false;
 }
 
 ComponentMaterial::~ComponentMaterial()

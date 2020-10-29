@@ -84,6 +84,7 @@ public:
 	std::string texture_path; 	//path to this texture image
 	uint texbuffer;				//texture loaded in VRAM
 	bool hastexture;
+	bool checkers;
 };
 
 //Transform, child to component

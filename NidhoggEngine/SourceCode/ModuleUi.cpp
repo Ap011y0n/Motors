@@ -943,9 +943,19 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 	{
 		if (ImGui::TreeNodeEx("Material", node_flags))
 		{
+			static bool checkers_tex = false;
+			ImGui::Checkbox("Use checkers Texture", &checkers_tex);
+			if (checkers_tex) {
+				material->checkers = true;
+			}
+			else {
+
+				material->checkers = false;
+			}
 			ImGui::Text("File:"); ImGui::SameLine();
 			ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s",material->texture_path.c_str());
 			ImGui::Image((ImTextureID)material->texbuffer, ImVec2(256, 256));
+
 			ImGui::TreePop();
 		}
 	}

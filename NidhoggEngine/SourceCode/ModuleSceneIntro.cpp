@@ -87,7 +87,9 @@ bool ModuleSceneIntro::Start()
 	//App->PrimManager->CreateLine(origin, dest);
 
 
-
+	//glClearColor(0.0, 0.0, 0.0, 0.0);
+	//glShadeModel(GL_FLAT);
+	//glEnable(GL_DEPTH_TEST);
 
 
 	int i, j, c;
