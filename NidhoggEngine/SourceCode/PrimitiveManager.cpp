@@ -40,13 +40,19 @@ bool PrimitiveManager::CleanUp()
 // Update: draw background
 update_status PrimitiveManager::PostUpdate(float dt)
 {
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	
+	
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN/*|| App->UI->Wireframe_bool == true*/)
 	{
-		for (int i = 0; i < prim_list.size(); i++) {
-			
+	
+		for (int i = 0; i < prim_list.size(); i++) 
+		{
+
 			prim_list[i]->wire = !prim_list[i]->wire;
 		}
+		
 	}
+	
 	MenuOptions();
 
 	for (int i = 0; i < prim_list.size(); i++) {

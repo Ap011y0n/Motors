@@ -394,12 +394,13 @@ void ModuleUI::Configuration(bool show_config)
 		{
 			static bool Wireframe_visible = false;
 			ImGui::Checkbox("Wirframe visible", &Wireframe_visible); ImGui::SameLine();
-			if (Wireframe_visible) {
+			/*if (Wireframe_visible) {
+
 				Wireframe_bool = true;
 			}
 			else {
 				Wireframe_bool = false;
-			}
+			}*/
 
 			static bool Depth = false;
 			ImGui::Checkbox("Deph", &Depth);
@@ -769,31 +770,40 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 	}
 	if (transform != nullptr)
 	{
+		static bool hastodelete = false;
+		ImGui::Checkbox("Delete", &hastodelete);
+		if (hastodelete)
+		{
+			hastodelete = false;
+			obj->to_delete = true;
+		}
+		ImGui::SameLine();
+		const char* items[] = { "Untagged" };
+		static int item_current_idx = 0;                    
+		const char* combo_label = items[item_current_idx]; 
+		if (ImGui::BeginCombo("Tag", combo_label))
+		{
+			ImGui::EndCombo();
+		}
+		
+		
+
 		ImGui::Separator();
 		if (ImGui::TreeNodeEx("Transform", node_flags))
 		{
 			//
 			float3 rot = transform->rot.ToEulerXYZ();
 			rot *= 180 / pi;
-
-			ImGui::Columns(1);
+			//ImGui::Columns(1);
 			ImGui::Columns(4, "mycolumns");
 			ImGui::Separator();
 			static bool active = false;
-			ImGui::Checkbox("Active",&active);
-			static bool hastodelete = false;
-			ImGui::Checkbox("Delete", &hastodelete);
-			if (hastodelete)
-			{
-				hastodelete = false;
-				obj->to_delete = true;
-			}
-			ImGui::Text("Position"); // ImGui::NextColumn();
-			ImGui::Text("Rotation"); //ImGui::NextColumn();
+			ImGui::Checkbox("Active",&active); ImGui::NextColumn(); ImGui::Text("x"); ImGui::NextColumn(); ImGui::Text("y"); ImGui::NextColumn(); ImGui::Text("z"); ImGui::NextColumn();
+			ImGui::Separator();
+			ImGui::Text("Position"); ImGui::Spacing(); ImGui::Spacing();// ImGui::NextColumn();
+			ImGui::Text("Rotation"); ImGui::Spacing(); ImGui::Spacing(); //ImGui::NextColumn();
 			ImGui::Text("Scale"); ImGui::NextColumn();
 
-
-			ImGui::Text("x");
 			// Position
 			float t = transform->pos.x;
 			ImGui::SetNextItemWidth(50);
@@ -827,7 +837,6 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::NextColumn();
 
 
-			ImGui::Text("y");
 			// Position
 			ImGui::SetNextItemWidth(50);
 			float t1 = transform->pos.y;
@@ -859,7 +868,6 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::NextColumn();
 
 
-			ImGui::Text("z");
 			// Position
 			ImGui::SetNextItemWidth(50);
 			float t2 = transform->pos.z;
