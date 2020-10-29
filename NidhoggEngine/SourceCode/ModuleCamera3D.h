@@ -3,6 +3,8 @@
 #include "Globals.h"
 #include "glmath.h"
 
+class GameObject;
+
 class ModuleCamera3D : public Module
 {
 public:

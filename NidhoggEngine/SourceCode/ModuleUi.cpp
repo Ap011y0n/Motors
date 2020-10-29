@@ -143,6 +143,7 @@ bool ModuleUI::Init()
 	Inspector_open = true;
 	Console_open = true;
 	selectedObj = nullptr;
+	direction_camera = { 0,0,0 };
 	i = 0;
 	e = 1;
 	int max_fps = 61;
@@ -736,6 +737,7 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 		for (int i = 0; i < node->childs.size(); i++)
 		{
 			GameObjectHierarchyTree(node->childs[i], i);
+			
 		}
 
 		ImGui::TreePop();
@@ -905,6 +907,8 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 
 			ImGui::Columns(1);
 			ImGui::TreePop();
+			
+			direction_camera = { transform->pos.x,transform->pos.y,transform->pos.z };
 		}
 		ImGui::Separator();
 	}
@@ -943,6 +947,10 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 	{
 		if (ImGui::TreeNodeEx("Material", node_flags))
 		{
+
+			static bool Checkertexture = false;
+			ImGui::Checkbox("Checkers texture", &Checkertexture);
+
 			static bool checkers_tex = false;
 			ImGui::Checkbox("Use checkers Texture", &checkers_tex);
 			if (checkers_tex) {
