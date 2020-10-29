@@ -132,12 +132,16 @@ ComponentMesh::ComponentMesh(GameObject* ObjectOwner) : Component()
 	owner = ObjectOwner;
 
 	triggerNormals = false;
+	GraphicNormals = nullptr;
 }
 
 ComponentMesh::~ComponentMesh()
 {
 	LOG("deleting component mesh");
-
+	if (GraphicNormals != nullptr)
+	{
+		GraphicNormals->to_delete = true;
+	}
 	glDeleteBuffers(1, &id_index);
 	glDeleteBuffers(1, &id_normals);
 	glDeleteBuffers(1, &id_vertex);
@@ -237,7 +241,10 @@ bool ComponentMesh::Update(float dt)
 void ComponentMesh::DisplayNormals()
 {
 	LOG("Dispaying normals");
-	if (num_vertex < 100000)
+	float* normal_array;
+	normal_array = new float[num_vertex * 6];
+
+	//if (num_vertex < 5000)
 		for (int i = 0; i < num_vertex; i++)
 		{
 			vec3 origin(vertex[i * 3], vertex[i * 3 + 1], vertex[i * 3 + 2]);
@@ -245,19 +252,43 @@ void ComponentMesh::DisplayNormals()
 			destination *= 1;
 			destination += origin;
 
-			GraphicNormals.push_back(App->PrimManager->CreateLine(origin, destination));
+			normal_array[i * 6] = origin.x;
+			normal_array[i * 6 + 1] = origin.y;
+			normal_array[i * 6 + 2] = origin.z;
+			normal_array[i * 6 + 3] = destination.x;
+			normal_array[i * 6 + 4] = destination.y;
+			normal_array[i * 6 + 5] = destination.z;
+
 		}
-	else
-		LOG("Not able to display normals, mesh has too many vertices");
+
+		GraphicNormals = App->PrimManager->CreateNormalVects(normal_array, num_vertex*2);
+
+		//LOG("Dispaying normals");
+		//if (num_vertex < 5000)
+		//	for (int i = 0; i < num_vertex; i++)
+		//	{
+		//		vec3 origin(vertex[i * 3], vertex[i * 3 + 1], vertex[i * 3 + 2]);
+		//		vec3 destination(normals[i * 3], normals[i * 3 + 1], normals[i * 3 + 2]);
+		//		destination *= 1;
+		//		destination += origin;
+
+		//		GraphicNormals.push_back(App->PrimManager->CreateLine(origin, destination));
+		//	}
+		//else
+		//	LOG("Not able to display normals, mesh has too many vertices");
+
+	//else
+	//	LOG("Not able to display normals, mesh has too many vertices");
 }
 void ComponentMesh::HideNormals()
 {
-	for (int i = 0; i < GraphicNormals.size(); i++)
+	if (GraphicNormals != nullptr)
 	{
-		GraphicNormals[i]->to_delete = true;
-	
+		GraphicNormals->to_delete = true;
+		GraphicNormals = nullptr;
 	}
-	GraphicNormals.clear();
+	
+	
 	LOG("HideNormals");
 }
 //*************************		ComponentMaterial

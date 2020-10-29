@@ -143,6 +143,7 @@ bool ModuleUI::Init()
 	Inspector_open = true;
 	Console_open = true;
 	selectedObj = nullptr;
+	direction_camera = { 0,0,0 };
 	i = 0;
 	e = 1;
 	int max_fps = 61;
@@ -295,14 +296,14 @@ update_status ModuleUI::PostUpdate(float dt)
 	glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
 	//glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	//glClear(GL_COLOR_BUFFER_BIT);
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
 	SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
 	ImGui::UpdatePlatformWindows();
 	ImGui::RenderPlatformWindowsDefault();
 	SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+	
 	/*glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -736,6 +737,7 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 		for (int i = 0; i < node->childs.size(); i++)
 		{
 			GameObjectHierarchyTree(node->childs[i], i);
+			
 		}
 
 		ImGui::TreePop();
@@ -905,6 +907,8 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 
 			ImGui::Columns(1);
 			ImGui::TreePop();
+			
+			direction_camera = { transform->pos.x,transform->pos.y,transform->pos.z };
 		}
 		ImGui::Separator();
 	}
@@ -943,6 +947,10 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 	{
 		if (ImGui::TreeNodeEx("Material", node_flags))
 		{
+
+			static bool Checkertexture = false;
+			ImGui::Checkbox("Checkers texture", &Checkertexture);
+
 			static bool checkers_tex = false;
 			ImGui::Checkbox("Use checkers Texture", &checkers_tex);
 			if (checkers_tex) {
