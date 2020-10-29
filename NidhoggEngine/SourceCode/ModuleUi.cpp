@@ -138,7 +138,7 @@ bool ModuleUI::Init()
 	show_another_window = true;
 	resizable_bool = false;
 	border_bool = false;
-	Wireframe_bool = true;
+	Wireframe_bool = false;
 	Hierarchy_open = true;
 	Inspector_open = true;
 	Console_open = true;
@@ -180,11 +180,8 @@ update_status ModuleUI::Update(float dt)
 	{
 		Change_Window_size(Vec2(winSize.x, winSize.y));
 	}
-	ImGui::SetCursorPos(ImVec2(img_offset.x, img_offset.y));
-	img_corner = Vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y) + Vec2(0, img_size.y);
-	img_corner.y = App->window->windowSize.y - img_corner.y;
-
-	ImGui::Image((ImTextureID)App->renderer3D->texColorBuffer, ImVec2(img_size.x, img_size.y), ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::SetCursorPos(ImVec2(image_offset.x, image_offset.y));
+	ImGui::Image((ImTextureID)App->renderer3D->texColorBuffer, ImVec2(image_size.x, image_size.y), ImVec2(0, 1), ImVec2(1, 0));
 	
 	ImGui::End();
 
@@ -427,7 +424,7 @@ void ModuleUI::Configuration(bool show_config)
 				App->PrimManager->cullface_bool = false;
 			}
 
-			static bool texture2D = false;
+			static bool texture2D = true;
 			ImGui::Checkbox("Texture 2D", &texture2D); 
 			if (texture2D) {
 				App->PrimManager->texture2D_bool = true;
@@ -628,9 +625,7 @@ void ModuleUI::PlotGraph()
 		fpsecond[fpsecond.size() - 1] = fps;
 	}
 	else
-	{
-		fpsecond.push_back(fps);
-	}
+	{fpsecond.push_back(fps);}
 	char text[20];
 	sprintf_s(text, 20, "Frames: %d", fps);
 	ImGui::Text(text);
@@ -947,10 +942,6 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 	{
 		if (ImGui::TreeNodeEx("Material", node_flags))
 		{
-
-			static bool Checkertexture = false;
-			ImGui::Checkbox("Checkers texture", &Checkertexture);
-
 			static bool checkers_tex = false;
 			ImGui::Checkbox("Use checkers Texture", &checkers_tex);
 			if (checkers_tex) {
@@ -1019,13 +1010,13 @@ void ModuleUI::Change_Window_size(Vec2 newSize)
 {
 	//Get window size
 	win_size = newSize;
+	float offset = 10.0f;
 	//Creates window size parameter
-	img_size = App->window->windowSize ;
-	if (img_size.x > win_size.x - 10.0f)
-	{img_size /= (img_size.x / (win_size.x - 10.0f));}
-	if (img_size.y > win_size.y - 10.0f)
-	{img_size /= (img_size.y / (win_size.y - 10.0f));}
-	img_offset = Vec2(win_size.x - 5.0f - img_size.x, win_size.y - 5.0f - img_size.y);
-	img_offset = img_offset / 2;
-
+	image_size = App->window->windowSize ;
+	if (image_size.x > win_size.x - offset)
+	{image_size /= (image_size.x / (win_size.x - offset));}
+	if (image_size.y > win_size.y - offset)
+	{image_size /= (image_size.y / (win_size.y - offset));}
+	image_offset = Vec2(win_size.x - (offset/2) - image_size.x, win_size.y - (offset / 2) - image_size.y);
+	image_offset = image_offset / 2;
 }

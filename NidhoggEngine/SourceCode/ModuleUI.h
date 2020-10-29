@@ -76,9 +76,9 @@ public:
 	ImVec2 MouseVelocity;
 	ImVec2 windowSize = { 0, 0 };
 	Vec2 win_size;
-	Vec2 img_offset;
+	Vec2 image_offset;
 	Vec2 img_corner;
-	Vec2 img_size;
+	Vec2 image_size;
 	ImGuiWindowClass* windowClass = nullptr;
 	vector<TreeNode*> tree_nodes;
 	vec3 direction_camera;
