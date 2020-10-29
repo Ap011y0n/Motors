@@ -249,23 +249,18 @@ update_status ModuleUI::Update(float dt)
 		if (ImGui::BeginMenu("Create...")) {
 
 			if (ImGui::MenuItem("Cube")) {
-				App->PrimManager->CreateCube(vec3(1, 1, 1), vec3(0, 0, 0));
+				App->PrimManager->CreateFBXCube();
 			}
 			if (ImGui::MenuItem("Pyramid")){
-				App->PrimManager->CreatePyramid(vec3(1, 1, 1), vec3(0, 0, 0));
+				App->PrimManager->CreateFBXPyramid();
 			}
 			if (ImGui::MenuItem("Sphere")) {
-				App->PrimManager->CreateSphere(float (1), unsigned int (39) , unsigned int (30),vec3(0, 0, 0));
+				App->PrimManager->CreateFBXSphere();
 			}
 			if (ImGui::MenuItem("Cylinder")) {
-				App->PrimManager->CreateCylinder(float(0.5), unsigned int(1), unsigned int(20), vec3(0, 0.5, 0));
+				App->PrimManager->CreateFBXCylinder();
 			}
-			if (ImGui::MenuItem("Line")) {
-				App->PrimManager->CreateLine(vec3(1, 1, 0), vec3(0, 2, 2));
-			}
-			if (ImGui::MenuItem("Plane")) {
-				App->PrimManager->CreatePlane(vec4 (2,2,2,2),true);
-			}
+			
 			ImGui::EndMenu();
 		}
 

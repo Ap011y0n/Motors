@@ -19,7 +19,8 @@ enum PrimitiveTypes
 	Primitive_Cube,
 	Primitive_Sphere,
 	Primitive_Cylinder,
-	Primitive_Pyramid
+	Primitive_Pyramid,
+	Primitive_Normals,
 };
 
 class Primitive
@@ -144,6 +145,24 @@ public:
 public:
 	vec3 origin;
 	vec3 destination;
+	int num_vertices;
+	int num_indices;
+	uint my_indices = 0;
+	uint my_vertex = 0;
+	float* vert;
+	uint* index;
+};
+
+class PrimNormals : public Primitive
+{
+public:
+	PrimNormals();
+	~PrimNormals();
+
+	PrimNormals(float* vert, int size);
+	void InnerRender() const;
+public:
+
 	int num_vertices;
 	int num_indices;
 	uint my_indices = 0;

@@ -71,6 +71,35 @@ update_status PrimitiveManager::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
+void PrimitiveManager::CreateFBXCube() {
+	std::string file_path = "Assets/Primitives/Cube.FBX";
+	char* buffer = nullptr;
+	uint fileSize = 0;
+	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	App->FBX->LoadFBX(buffer, fileSize);
+}
+void PrimitiveManager::CreateFBXPyramid() {
+	std::string file_path = "Assets/Primitives/Pyramid.FBX";
+	char* buffer = nullptr;
+	uint fileSize = 0;
+	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	App->FBX->LoadFBX(buffer, fileSize);
+}
+void PrimitiveManager::CreateFBXSphere() {
+	std::string file_path = "Assets/Primitives/Sphere.FBX";
+	char* buffer = nullptr;
+	uint fileSize = 0;
+	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	App->FBX->LoadFBX(buffer, fileSize);
+}
+void PrimitiveManager::CreateFBXCylinder() {
+	std::string file_path = "Assets/Primitives/Cylinder.FBX";
+	char* buffer = nullptr;
+	uint fileSize = 0;
+	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	App->FBX->LoadFBX(buffer, fileSize);
+}
+
 Cube* PrimitiveManager::CreateCube(vec3 size, vec3 pos)
 {
 	Cube* cube = new Cube(size.x, size.y, size.z);
@@ -115,6 +144,13 @@ void PrimitiveManager::CreatePlane(vec4 coords, bool axis)
 	PrimPlane* plane = new PrimPlane(coords.x, coords.y, coords.z, coords.w);
 	plane->axis = true;
 	prim_list.push_back((Primitive*)plane);
+}
+
+PrimNormals* PrimitiveManager::CreateNormalVects(float* normal_array, int size)
+{
+	PrimNormals* normals = new PrimNormals(normal_array, size);
+	prim_list.push_back((PrimNormals*)normals);
+	return normals;
 }
 
 void PrimitiveManager::MenuOptions() 
