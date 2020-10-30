@@ -238,6 +238,25 @@ update_status ModuleUI::Update(float dt)
 
 	if (ImGui::BeginMenu("Edit"))
 	{
+		if (ImGui::BeginMenu("Engine Theme"))
+		{
+			
+			if (ImGui::MenuItem("Classic"))
+			{
+				ImGui::StyleColorsClassic();
+			}
+			if (ImGui::MenuItem("Dark")) 
+			{
+				ImGui::StyleColorsDark();
+			}
+			if (ImGui::MenuItem("Light"))
+			{
+				ImGui::StyleColorsLight();
+			}
+			ImGui::EndMenu();
+			
+		}
+
 		if (ImGui::MenuItem("Configuration"))
 			show_Configuration = true;
 
@@ -378,8 +397,8 @@ void ModuleUI::Configuration(bool show_config)
 			ImGui::MenuItem("Save");
 			ImGui::MenuItem("Load");
 			ImGui::MenuItem("Reset to Default");
-			ImGui::End();
-		}
+			ImGui::EndMenu();
+		}	
 		if (ImGui::CollapsingHeader("Application"))
 		{
 			static char buf[32] = "";
@@ -394,13 +413,23 @@ void ModuleUI::Configuration(bool show_config)
 		{
 			static bool Wireframe_visible = false;
 			ImGui::Checkbox("Wirframe visible", &Wireframe_visible); ImGui::SameLine();
-			/*if (Wireframe_visible) {
-
-				Wireframe_bool = true;
+			if (Wireframe_visible)
+			{
+				if (Wireframe_bool)
+				{
+					Wireframe_bool = false;
+					App->PrimManager->ShowWireframe();
+				}
+				
 			}
 			else {
-				Wireframe_bool = false;
-			}*/
+				if (!Wireframe_bool)
+				{
+					App->PrimManager->HideWireframe();
+				}
+					Wireframe_bool = true;
+				
+			}
 
 			static bool Depth = false;
 			ImGui::Checkbox("Deph", &Depth);
@@ -956,8 +985,9 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			}
 			ImGui::Text("File:"); ImGui::SameLine();
 			ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s",material->texture_path.c_str());
+			ImGui::Text("Texture h: %d", material->texture_h ); ImGui::SameLine(); ImGui::Text(" w:%d", material->texture_w);
 			ImGui::Image((ImTextureID)material->texbuffer, ImVec2(256, 256));
-
+			
 			ImGui::TreePop();
 		}
 	}

@@ -301,6 +301,8 @@ ComponentMaterial::ComponentMaterial(GameObject* ObjectOwner) : Component()
 	texbuffer = 0;
 	hastexture = false;
 	checkers = false;
+	texture_w = 0;
+	texture_h = 0;
 }
 
 ComponentMaterial::~ComponentMaterial()

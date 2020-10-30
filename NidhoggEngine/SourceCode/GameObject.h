@@ -85,6 +85,8 @@ public:
 	uint texbuffer;				//texture loaded in VRAM
 	bool hastexture;
 	bool checkers;
+	int texture_w;
+	int texture_h;
 };
 
 //Transform, child to component

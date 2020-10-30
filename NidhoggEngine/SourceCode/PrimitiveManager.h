@@ -33,6 +33,8 @@ public:
 	void CreateFBXCylinder();
 
 	void MenuOptions();
+	void ShowWireframe();
+	void HideWireframe();
 private:
 	vector<Primitive*> prim_list;
 public:

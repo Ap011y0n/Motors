@@ -27,6 +27,7 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include <string.h>
 
+
 FBXloader::FBXloader(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -42,7 +43,8 @@ bool FBXloader::Start()
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
-
+	texture_w=0;
+	texture_h=0;
 
 	ilInit();
 	iluInit();
@@ -71,6 +73,8 @@ void FBXloader::ChangeTexture(const char* path)
 			glDeleteTextures(1, &(GLuint)mat->texbuffer);
 			mat->texbuffer = LoadTexBuffer(path);
 			mat->texture_path = path;
+			mat->texture_h = texture_h;
+			mat->texture_w = texture_w;
 			if (mat->texbuffer != 0)
 				mat->hastexture = true;
 			else
@@ -229,6 +233,8 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 			ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
 	
 			NewTex->texbuffer = LoadTexBuffer(str.C_Str());
+			NewTex->texture_h = texture_h;
+			NewTex->texture_w = texture_w;
 			NewTex->texture_path = str.C_Str();
 			if (NewTex->texbuffer != 0)
 				NewTex->hastexture = true;
@@ -358,9 +364,11 @@ uint FBXloader::LoadTexBuffer(const char* path)
 
 		ilGenImages(1, &imageName);
 		ilBindImage(imageName);
-
+	
 		ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, fileSize);
-
+		texture_h = ilGetInteger(IL_IMAGE_HEIGHT);
+		texture_w = ilGetInteger(IL_IMAGE_WIDTH);
+		
 		texbuffer = ilutGLBindTexImage();
 		ilDeleteImages(1, &imageName);
 
