@@ -142,11 +142,33 @@ ComponentMesh::~ComponentMesh()
 	{
 		GraphicNormals->to_delete = true;
 	}
+
 	glDeleteBuffers(1, &id_index);
 	glDeleteBuffers(1, &id_normals);
 	glDeleteBuffers(1, &id_vertex);
 	glDeleteBuffers(1, &id_tex);
 
+	if (vertex != nullptr)
+	{
+		delete[] vertex;
+		vertex = nullptr;
+	}
+	if (index != nullptr)
+	{
+		delete[] index;
+		index = nullptr;
+	}
+	if (normals != nullptr)
+	{
+		delete[] normals;
+		normals = nullptr;
+	}
+	
+	if (texCoords != nullptr)
+	{
+		delete[] texCoords;
+		texCoords = nullptr;
+	}
 
 }
 
@@ -167,6 +189,7 @@ bool ComponentMesh::Update(float dt)
 			transform = (ComponentTransform*)owner->Components[i];
 		}
 	}
+
 
 		glPushMatrix();
 		if (transform != nullptr)
