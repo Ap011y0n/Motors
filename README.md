@@ -23,12 +23,18 @@ There is a Main menu bar in the top side with multiple sub menus, which allows y
 - The window sub menu let you to turn on/off editor windows. 
 - Help submenu that has multiple options and information about the engine and the students.
 
+When we open the Configuration menu it appears below the Inspector, with multiple sub menus to change some aspects from the Engine:
+- Application: change name of the app, max of fps and has a graph of the current fps.
+- Window: change the width, height, Brightness and let enable or disable multiple options from the window.
+- Input: Shows all the input from the keyboard or the mouse.
+- Hardwere: Shows info like the system Ram, the graphic card name, the number of cores, all info related to    hardware. 
+
 When a Game Object is selected in the Hierarchy you can see their multiple components and you can also modify them using the mouse or the keyboard. 
 - In the transform component you can modify a Game Objects Scale, Position and Rotation.
 - On the component mesh you can display the Normals faces from de object.
 - The material component you can change the texture of the Game Object for the checkers texture and also see   the name the texture and it's width and height.
 
-The engine supports drag and drop of files like fbx, png and dds textures. To change a texture simply select a gameobject with a texture component and drag a png or a dds.   
+The engine supports drag and drop of files like fbx, png and dds textures.   
 
 #Controls
 
@@ -40,7 +46,18 @@ The engine supports drag and drop of files like fbx, png and dds textures. To ch
 - Shift + (WASD): move camera postion faster. 
 - F: Focus the camera on the slected Game Object.
 
-##Keyboard
+##Additional funcionality
+- If you move a Game Object the father will move all the children, but when selecting a children and moving    him it will move/rotate/Scale independently of the father.
+- On the inspector we can change the name of any Game Object independently. 
+- There is an option in the Menu Bar inside Edit to change the Engine Theme.
+- We have added on top of the inspector a Delete button that will delte the Game Object, when deleting a     Game Object it will also delete all his children. 
+
+##Comments
+- We have added the png of Lenna for testing purposes.
+- We have added an dds for testing purposes.
+- The changing name function loses the Focus so it's this function is still a work in progress.
+
+
 
 ## License & Copyright 
 
