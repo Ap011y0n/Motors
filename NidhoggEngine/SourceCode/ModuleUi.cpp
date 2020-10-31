@@ -861,7 +861,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::DragFloat("   ", &s1);
 			if (ImGui::IsItemActive())
 			{
-				transform->Scale(s1, transform->scale.y, transform->scale.z);
+				transform->Scale(s1 - transform->scale.x, 0, 0);
 			}
 			ImGui::NextColumn();
 
@@ -892,7 +892,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::DragFloat("      .", &s2);
 			if (ImGui::IsItemActive())
 			{
-				transform->Scale(transform->scale.x, s2, transform->scale.z);
+				transform->Scale(0, s2 - transform->scale.y, 0);
 			}
 			ImGui::NextColumn();
 
@@ -925,7 +925,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			ImGui::DragFloat("         ", &s3);
 			if (ImGui::IsItemActive())
 			{
-				transform->Scale(transform->scale.x, transform->scale.y, s3);
+				transform->Scale(0, 0, s3 - transform->scale.z);
 
 			}
 

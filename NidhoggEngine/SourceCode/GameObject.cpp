@@ -280,22 +280,7 @@ void ComponentMesh::DisplayNormals()
 				GraphicNormals->Scale(transform->scale.x, transform->scale.y, transform->scale.z);
 			}
 		}
-		//LOG("Dispaying normals");
-		//if (num_vertex < 5000)
-		//	for (int i = 0; i < num_vertex; i++)
-		//	{
-		//		vec3 origin(vertex[i * 3], vertex[i * 3 + 1], vertex[i * 3 + 2]);
-		//		vec3 destination(normals[i * 3], normals[i * 3 + 1], normals[i * 3 + 2]);
-		//		destination *= 1;
-		//		destination += origin;
 
-		//		GraphicNormals.push_back(App->PrimManager->CreateLine(origin, destination));
-		//	}
-		//else
-		//	LOG("Not able to display normals, mesh has too many vertices");
-
-	//else
-	//	LOG("Not able to display normals, mesh has too many vertices");
 }
 void ComponentMesh::HideNormals()
 {
@@ -369,21 +354,13 @@ bool ComponentTransform::Update(float dt)
 	//UpdateScale(scale.x, scale.y, scale.z);
 	return ret;
 }
-//void ComponentTransform::UpdatePos(float x, float y, float z)
-//{
-//	transform.Translate(x, y, z);
-//
-//}
+
 
 void ComponentTransform::UpdateRotation(Quat quat)
 {
 	transform = transform * quat;
 }
 
-//void ComponentTransform::UpdateScale(float x, float y, float z)
-//{
-//	transform.Scale(x, y, z);
-//}
 
 
 void ComponentTransform::SetPos(float x, float y, float z)
@@ -424,7 +401,7 @@ void ComponentTransform::SetRotation(Quat quat)
 
 void ComponentTransform::Scale(float x, float y, float z)
 {
-	scale.Set(x, y, z);
+	scale.Set(scale.x + x, scale.y + y, scale.z + z);
 	should_update = true;
 
 	for (int i = 0; i < owner->childs.size(); i++)
