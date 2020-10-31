@@ -817,7 +817,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 		//ImGui::Text("%s", obj->Name.c_str());
 		const char* obj_name = obj->Name.c_str();
 		static char str0[128] = "GameObject";
-		ImGui::InputText(obj_name, str0, IM_ARRAYSIZE(str0));
+		if(ImGui::InputText(obj_name, str0, IM_ARRAYSIZE(str0)))
 		obj->Name = str0;
 
 		ImGui::Separator();
