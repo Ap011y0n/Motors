@@ -90,7 +90,6 @@
     <ClInclude Include="SourceCode\imstb_truetype.h" />
     <ClInclude Include="SourceCode\Light.h" />
     <ClInclude Include="SourceCode\Module.h" />
-    <ClInclude Include="SourceCode\ModuleAudio.h" />
     <ClInclude Include="SourceCode\ModuleCamera3D.h" />
     <ClInclude Include="SourceCode\ModuleInput.h" />
     <ClInclude Include="SourceCode\ModuleRenderer3D.h" />
@@ -118,7 +117,6 @@
     <ClCompile Include="SourceCode\Light.cpp" />
     <ClCompile Include="SourceCode\log.cpp" />
     <ClCompile Include="SourceCode\Main.cpp" />
-    <ClCompile Include="SourceCode\ModuleAudio.cpp" />
     <ClCompile Include="SourceCode\ModuleCamera3D.cpp" />
     <ClCompile Include="SourceCode\ModuleInput.cpp" />
     <ClCompile Include="SourceCode\ModuleRenderer3D.cpp" />
