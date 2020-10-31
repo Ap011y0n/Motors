@@ -309,7 +309,7 @@ ComponentMaterial::ComponentMaterial(GameObject* ObjectOwner) : Component()
 
 ComponentMaterial::~ComponentMaterial()
 {
-	//glDeleteBuffers(1, &texbuffer);
+	glDeleteTextures(1, &(GLuint)texbuffer);
 }
 
 bool ComponentMaterial::Update(float dt)
