@@ -185,7 +185,6 @@ void ModuleRenderer3D::GenerateSceneBuffers()
 	}
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
 	{
-		LOG("  NOOO Error creating screen buffer");
 	}
 	
 }
