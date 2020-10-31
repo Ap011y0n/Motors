@@ -249,20 +249,37 @@ void ComponentMesh::DisplayNormals()
 		{
 			vec3 origin(vertex[i * 3], vertex[i * 3 + 1], vertex[i * 3 + 2]);
 			vec3 destination(normals[i * 3], normals[i * 3 + 1], normals[i * 3 + 2]);
-			destination *= 1;
 			destination += origin;
+
+			float distance_to_adjust = 0.5;
+			vec3 distance;
+			distance.x = (origin.x + (destination.x - origin.x) * distance_to_adjust);
+			distance.y = (origin.y + (destination.y - origin.y) * distance_to_adjust);
+			distance.z = (origin.z + (destination.z - origin.z) * distance_to_adjust);
+
 
 			normal_array[i * 6] = origin.x;
 			normal_array[i * 6 + 1] = origin.y;
 			normal_array[i * 6 + 2] = origin.z;
-			normal_array[i * 6 + 3] = destination.x;
-			normal_array[i * 6 + 4] = destination.y;
-			normal_array[i * 6 + 5] = destination.z;
+			normal_array[i * 6 + 3] = distance.x;
+			normal_array[i * 6 + 4] = distance.y;
+			normal_array[i * 6 + 5] = distance.z;
 
 		}
 
 		GraphicNormals = App->PrimManager->CreateNormalVects(normal_array, num_vertex*2);
+		ComponentTransform* transform = nullptr;
 
+		for (int i = 0; i < owner->Components.size(); i++)
+		{
+			
+			if (owner->Components[i]->type == ComponentType::TRANSFORM)
+			{
+				transform = (ComponentTransform*)owner->Components[i];
+				GraphicNormals->SetPos(transform->pos.x, transform->pos.y, transform->pos.z);
+				GraphicNormals->Scale(transform->scale.x, transform->scale.y, transform->scale.z);
+			}
+		}
 		//LOG("Dispaying normals");
 		//if (num_vertex < 5000)
 		//	for (int i = 0; i < num_vertex; i++)
