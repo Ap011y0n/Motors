@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{746CC4C3-787F-4B0E-AA66-E388FE3FF4F6}</ProjectGuid>
+    <RootNamespace>SDLGame</RootNamespace>
+    <ProjectName>NidhoggEngine</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Windows</SubSystem>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="SourceCode\Application.h" />
+    <ClInclude Include="SourceCode\Color.h" />
+    <ClInclude Include="SourceCode\FBXloader.h" />
+    <ClInclude Include="SourceCode\FileSystem.h" />
+    <ClInclude Include="SourceCode\GameObject.h" />
+    <ClInclude Include="SourceCode\glmath.h" />
+    <ClInclude Include="SourceCode\Globals.h" />
+    <ClInclude Include="SourceCode\imconfig.h" />
+    <ClInclude Include="SourceCode\imgui.h" />
+    <ClInclude Include="SourceCode\imgui_impl_opengl3.h" />
+    <ClInclude Include="SourceCode\imgui_impl_sdl.h" />
+    <ClInclude Include="SourceCode\imgui_internal.h" />
+    <ClInclude Include="SourceCode\imstb_rectpack.h" />
+    <ClInclude Include="SourceCode\imstb_textedit.h" />
+    <ClInclude Include="SourceCode\imstb_truetype.h" />
+    <ClInclude Include="SourceCode\Light.h" />
+    <ClInclude Include="SourceCode\Module.h" />
+    <ClInclude Include="SourceCode\ModuleCamera3D.h" />
+    <ClInclude Include="SourceCode\ModuleInput.h" />
+    <ClInclude Include="SourceCode\ModuleRenderer3D.h" />
+    <ClInclude Include="SourceCode\ModuleSceneIntro.h" />
+    <ClInclude Include="SourceCode\ModuleUI.h" />
+    <ClInclude Include="SourceCode\ModuleWindow.h" />
+    <ClInclude Include="SourceCode\Primitive.h" />
+    <ClInclude Include="SourceCode\PrimitiveManager.h" />
+    <ClInclude Include="SourceCode\Timer.h" />
+    <ClInclude Include="SourceCode\Vec2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SourceCode\Application.cpp" />
+    <ClCompile Include="SourceCode\Color.cpp" />
+    <ClCompile Include="SourceCode\FBXloader.cpp" />
+    <ClCompile Include="SourceCode\FileSystem.cpp" />
+    <ClCompile Include="SourceCode\GameObject.cpp" />
+    <ClCompile Include="SourceCode\glmath.cpp" />
+    <ClCompile Include="SourceCode\imgui.cpp" />
+    <ClCompile Include="SourceCode\imgui_demo.cpp" />
+    <ClCompile Include="SourceCode\imgui_draw.cpp" />
+    <ClCompile Include="SourceCode\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="SourceCode\imgui_impl_sdl.cpp" />
+    <ClCompile Include="SourceCode\imgui_widgets.cpp" />
+    <ClCompile Include="SourceCode\Light.cpp" />
+    <ClCompile Include="SourceCode\log.cpp" />
+    <ClCompile Include="SourceCode\Main.cpp" />
+    <ClCompile Include="SourceCode\ModuleCamera3D.cpp" />
+    <ClCompile Include="SourceCode\ModuleInput.cpp" />
+    <ClCompile Include="SourceCode\ModuleRenderer3D.cpp" />
+    <ClCompile Include="SourceCode\ModuleSceneIntro.cpp" />
+    <ClCompile Include="SourceCode\ModuleUi.cpp" />
+    <ClCompile Include="SourceCode\ModuleWindow.cpp" />
+    <ClCompile Include="SourceCode\Primitive.cpp" />
+    <ClCompile Include="SourceCode\PrimitiveManager.cpp" />
+    <ClCompile Include="SourceCode\Timer.cpp" />
+    <ClCompile Include="SourceCode\Vec2.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="SourceCode\imgui.natvis" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
