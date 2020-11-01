@@ -39,9 +39,9 @@ The engine supports drag and drop of files like fbx, png and dds textures.
 #Controls
 
 ##Camera Controls
-- Mouse left click: Rotate camera.
+- Mouse right click: Rotate camera.
 - Mouse wheel: to move forward and backwards the camera.
-- Shift + right click: Focus the camera on the selected Game Object and rotate on it's orbit.
+- Shift + left click: Focus the camera on the selected Game Object and rotate on it's orbit.
 - WASD buttons: move camera postion, forward, bacward and sideways.
 - Shift + (WASD): move camera postion faster. 
 - F: Focus the camera on the slected Game Object.
