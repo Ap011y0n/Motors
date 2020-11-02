@@ -47,7 +47,7 @@ bool ModuleSceneIntro::Start()
 	uint fileSize = 0;
 	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
 	App->FBX->LoadFBX(buffer, fileSize);
-
+	App->file_system->Save("bakerHouse.uwu", buffer, fileSize, false);
 	file_path = "Assets/p1character.FBX";
 	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
 	App->FBX->LoadFBX(buffer, fileSize);

@@ -52,7 +52,7 @@ bool FileSystem::Init()
 		LOG("File System error while adding a path or zip: %s\n", PHYSFS_getLastError());
 	}
 
-	//PHYSFS_setWriteDir("data");
+	PHYSFS_setWriteDir("Assets/library");
 	return true;
 }
 
@@ -108,18 +108,6 @@ FileType FileSystem::SetFileType(std::string extension)
 	return ret;
 }
 
-SDL_RWops* FileSystem::Load(const char* path) const
-{
-	char* buffer;
-	uint bytes = Load(path, &buffer);
-
-
-	// Read-only memory buffer for use with RWops, retruns a pointer to a new SDL_RWops structure
-	SDL_RWops* ret = SDL_RWFromConstMem(buffer, bytes);
-
-	return ret;
-}
-
 
 uint FileSystem::Load(const char* path, char** buffer) const
 {
@@ -168,13 +156,15 @@ uint FileSystem::Load(const char* path, char** buffer) const
 }
 
 // Save a whole buffer to disk
-unsigned int FileSystem::Save(const char* file, const char* buffer, unsigned int size) const
+unsigned int FileSystem::Save(const char* file, const char* buffer, unsigned int size, bool append) const
 {
 	unsigned int ret = 0;
 
-	PHYSFS_file* fs_file = PHYSFS_openWrite(file);
 
-	if (fs_file != NULL)
+	bool overwrite = PHYSFS_exists(file) != 0;
+	PHYSFS_file* fs_file = (append) ? PHYSFS_openAppend(file) : PHYSFS_openWrite(file);
+
+	if (fs_file != nullptr)
 	{
 		PHYSFS_sint64 written = PHYSFS_write(fs_file, (const void*)buffer, 1, size);
 		if (written != size)
@@ -183,7 +173,23 @@ unsigned int FileSystem::Save(const char* file, const char* buffer, unsigned int
 
 		}
 		else
+		{
+			if (append == true)
+			{
+				LOG("Added %u data to [%s%s]", size, PHYSFS_getWriteDir(), file);
+			}
+			else if (overwrite == true)
+			{
+				LOG("File [%s%s] overwritten with %u bytes", PHYSFS_getWriteDir(), file, size);
+			}
+			else
+			{
+				LOG("New file created [%s%s] of %u bytes", PHYSFS_getWriteDir(), file, size);
+			}
+
 			ret = (uint)written;
+
+		}
 
 		if (PHYSFS_close(fs_file) == 0)
 			LOG("File System error while closing file %s: %s", file, PHYSFS_getLastError());
