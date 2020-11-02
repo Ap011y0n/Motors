@@ -56,6 +56,10 @@ bool FileSystem::Init()
 	return true;
 }
 
+const char* FileSystem::GetWriteDir()
+{
+	return	PHYSFS_getWriteDir();
+}
 
 bool FileSystem::CleanUp()
 {
@@ -112,7 +116,7 @@ FileType FileSystem::SetFileType(std::string extension)
 uint FileSystem::Load(const char* path, char** buffer) const
 {
 	uint ret = 0;
-
+	LOG("Loading file from %s", path);
 	// TODO 3 (Solved): You want to return the number of bytes it has read from the file that we passed to this function. 
 	// Maybe you want to search readBytes in the documentation, and investigate from there how to build the function.
 

@@ -27,6 +27,148 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include <string.h>
 
+namespace MaterialImporter
+{
+	void Import( char* buffer, uint fileSize)
+	{
+		ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, fileSize);
+	}
+	void Save( char** fileBuffer, const char* path, std::string* newpath)
+	{
+		std::string doc(path);
+
+		ILuint size;
+		ILubyte* data;
+		ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
+		size = ilSaveL(IL_DDS, nullptr, 0); // Get the size of the data buffer
+		if (size > 0) {
+			data = new ILubyte[size]; // allocate data buffer
+			if (ilSaveL(IL_DDS, data, size) > 0)
+			{
+				*fileBuffer = (char*)data; // Save to buffer with the ilSaveIL function
+	
+				size_t pos_dot = doc.find_last_of(".");
+				doc = doc.substr(0, pos_dot);
+				doc.append(".dds");
+	
+				App->file_system->Save(doc.c_str(), *fileBuffer, size, false);
+				newpath->append("library/");
+				newpath->append(doc.c_str());
+				if (data != nullptr)
+				{
+					delete[]data;
+					data = nullptr;
+				}
+			}	
+		}
+
+	}
+	void Load(const char* fileBuffer, uint size, ComponentMaterial* ourMaterial)
+	{
+		uint texbuffer = 0;
+		glGenTextures(1, &texbuffer);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+		ILuint ImageName;
+		ilGenImages(1, &ImageName);
+		ilBindImage(ImageName);
+
+		ilLoadL(IL_TYPE_UNKNOWN, (const void*)fileBuffer, size);
+		texbuffer = ilutGLBindTexImage();
+
+		ourMaterial->texture_h = ilGetInteger(IL_IMAGE_HEIGHT);
+		ourMaterial->texture_w = ilGetInteger(IL_IMAGE_WIDTH);
+		ourMaterial->texbuffer = texbuffer;
+		ilDeleteImages(1, &ImageName);
+	}
+};
+
+namespace MeshImporter
+{
+	
+	void Save(ComponentMesh* mesh, std::string* path, const char* name)
+	{
+		//NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
+
+		//NewMesh->id_tex = FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
+
+		//NewMesh->id_normals = FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
+
+		//NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
+		std::string doc;
+
+		uint ranges[4] = { mesh->num_index, mesh->num_vertex, mesh->num_normals, mesh->num_tex };
+		uint size = sizeof(ranges) + sizeof(uint) * mesh->num_index + sizeof(float) * mesh->num_vertex * 3 + sizeof(float) * mesh->num_normals * 3 + sizeof(float) * mesh->num_tex;
+		
+		char* fileBuffer = new char[size]; // Allocate
+		char* cursor = fileBuffer;
+
+		uint bytes = sizeof(ranges); // First store ranges
+		memcpy(cursor, ranges, bytes);
+		cursor += bytes;
+		// Store indices
+		bytes = sizeof(uint) * mesh->num_index;
+		memcpy(cursor, mesh->index, bytes);
+		cursor += bytes;
+		// Store vertices
+		bytes = sizeof(float) * mesh->num_vertex * 3;
+		memcpy(cursor, mesh->vertex, bytes);
+		cursor += bytes;
+		// Store normals
+		bytes = sizeof(float) * mesh->num_normals * 3;
+		memcpy(cursor, mesh->normals, bytes);
+		cursor += bytes;
+		// Store textures
+		bytes = sizeof(float) * mesh->num_tex;
+		memcpy(cursor, mesh->texCoords, bytes);
+
+
+		doc.append(name);
+		doc.append(".uwu");
+
+		App->file_system->Save(doc.c_str(), fileBuffer, size, false);
+		path->append("library/");
+		path->append(doc.c_str());
+	}
+	void Load(char* fileBuffer, uint size, ComponentMesh* mesh)
+	{
+		char* cursor = fileBuffer;
+
+		// amount of indices / vertices / colors / normals / texture_coords
+		uint ranges[4];
+		uint bytes = sizeof(ranges);
+		memcpy(ranges, cursor, bytes);
+		cursor += bytes;
+		mesh->num_index = ranges[0];
+		mesh->num_vertex = ranges[1];
+		mesh->num_normals = ranges[2];
+		mesh->num_tex = ranges[3];
+
+		// Load indices
+		bytes = sizeof(uint) * mesh->num_index;
+		mesh->index = new uint[mesh->num_index];
+		memcpy(mesh->index, cursor, bytes);
+		cursor += bytes;
+		// Load vertex
+		bytes = sizeof(float) * mesh->num_vertex * 3;
+		mesh->vertex = new float[mesh->num_vertex * 3];
+		memcpy(mesh->vertex, cursor, bytes);
+		cursor += bytes;
+		// Load vertex
+		bytes = sizeof(float) * mesh->num_normals * 3;
+		mesh->normals = new float[mesh->num_normals * 3];
+		memcpy(mesh->normals, cursor, bytes);
+		cursor += bytes;
+		// Load vertex
+		bytes = sizeof(float) * mesh->num_tex;
+		mesh->texCoords = new float[mesh->num_tex];
+		memcpy(mesh->texCoords, cursor, bytes);
+	
+	}
+};
 
 FBXloader::FBXloader(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -231,11 +373,25 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 		{
 
 			ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
-	
-			NewTex->texbuffer = LoadTexBuffer(str.C_Str());
+			//
+			uint fileSize = 0;
+			char* buffer = nullptr;
+
+			fileSize = App->file_system->Load(str.C_Str(), &buffer);
+
+			MaterialImporter::Import(buffer, fileSize);
+			std::string path;
+			MaterialImporter::Save(&buffer, str.C_Str(), &path);
+			NewTex->texture_path = path.c_str();
+			fileSize = App->file_system->Load(path.c_str(), &buffer);
+			MaterialImporter::Load(buffer, fileSize, NewTex);
+			//
+
+		/*	NewTex->texbuffer = LoadTexBuffer(str.C_Str());
+			
 			NewTex->texture_h = texture_h;
 			NewTex->texture_w = texture_w;
-			NewTex->texture_path = str.C_Str();
+			NewTex->texture_path = str.C_Str();*/
 			if (NewTex->texbuffer != 0)
 				NewTex->hastexture = true;
 			else
@@ -295,7 +451,13 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 
 					App->PrimManager->CreateLine(origin, destination);
 				}*/
+		std::string path;
+		uint fileSize = 0;
+		char* buffer = nullptr;
 
+		MeshImporter::Save(NewMesh, &path, name.c_str());
+		fileSize = App->file_system->Load(path.c_str(), &buffer);
+		MeshImporter::Load(buffer, fileSize, NewMesh);
 
 		NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
 

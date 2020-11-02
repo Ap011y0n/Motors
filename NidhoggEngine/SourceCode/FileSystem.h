@@ -22,7 +22,7 @@ public:
 
 	void SplitFilePath(const char* full_path, std::string* file, std::string* extension) const;
 	FileType SetFileType(std::string file);
-
+	const char* GetWriteDir();
 	// Called before render is available
 	bool Init();
 
@@ -37,3 +37,5 @@ public:
 };
 
 #endif // __ASSETSMANAGER_H__
+
+
