@@ -15,6 +15,8 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	double get_Number(const char* file, const char* name);
+	void serialization_example();
 public:
 
 

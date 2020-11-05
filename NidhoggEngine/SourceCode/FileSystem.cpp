@@ -51,7 +51,7 @@ bool FileSystem::Init()
 	{
 		LOG("File System error while adding a path or zip: %s\n", PHYSFS_getLastError());
 	}
-
+	PHYSFS_setWriteDir("Assets/");
 	PHYSFS_setWriteDir("Assets/library");
 	return true;
 }
@@ -180,15 +180,15 @@ unsigned int FileSystem::Save(const char* file, const char* buffer, unsigned int
 		{
 			if (append == true)
 			{
-				LOG("Added %u data to [%s%s]", size, PHYSFS_getWriteDir(), file);
+				LOG("Added %u data to [%s/%s]", size, PHYSFS_getWriteDir(), file);
 			}
 			else if (overwrite == true)
 			{
-				LOG("File [%s%s] overwritten with %u bytes", PHYSFS_getWriteDir(), file, size);
+				LOG("File [%s/%s] overwritten with %u bytes", PHYSFS_getWriteDir(), file, size);
 			}
 			else
 			{
-				LOG("New file created [%s%s] of %u bytes", PHYSFS_getWriteDir(), file, size);
+				LOG("New file created [%s/%s] of %u bytes", PHYSFS_getWriteDir(), file, size);
 			}
 
 			ret = (uint)written;
