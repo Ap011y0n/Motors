@@ -23,6 +23,7 @@ Application::Application()
 	PrimManager = new PrimitiveManager(this);
 	FBX = new FBXloader(this);
 	file_system = new FileSystem(this);
+	serializer = new Serializer(this);
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
@@ -32,7 +33,7 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 	AddModule(file_system);
-	
+	AddModule(serializer);
 	// Scenes
 	AddModule(PrimManager);
 	AddModule(FBX);

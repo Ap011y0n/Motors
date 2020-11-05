@@ -31,6 +31,9 @@
     <Filter Include="Sources\Modules\GameObjects">
       <UniqueIdentifier>{53dc4b5f-416b-445c-be9a-ba8c4d9d5b64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\parson">
+      <UniqueIdentifier>{2d2e6ea2-ba8f-4905-a646-70e8a2da8cab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Color.h">
@@ -114,6 +117,12 @@
     <ClInclude Include="SourceCode\Primitive.h">
       <Filter>Sources\Modules\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\parson\parson.h">
+      <Filter>Sources\parson</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\serializer.h">
+      <Filter>Sources\parson</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Color.cpp">
@@ -190,6 +199,12 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Primitive.cpp">
       <Filter>Sources\Modules\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\parson\parson.c">
+      <Filter>Sources\parson</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\serializer.cpp">
+      <Filter>Sources\parson</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
