@@ -359,8 +359,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 		//const aiMesh* mesh = scene->mMeshes[i];
 		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		aiString str;
-		aiString folder;
-		folder.Set("Assets/");
+	
 
 		aiMaterial* newMaterial = scene->mMaterials[mesh->mMaterialIndex];
 	
@@ -371,17 +370,19 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 		}
 		else
 		{
-
+			std::string file, extension;
+			App->file_system->SplitFilePath(str.C_Str(), &file, &extension );
 			ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
 			//
 			uint fileSize = 0;
 			char* buffer = nullptr;
-
-			fileSize = App->file_system->Load(str.C_Str(), &buffer);
+		
+			file += extension;
+			fileSize = App->file_system->Load(file.c_str(), &buffer);
 
 			MaterialImporter::Import(buffer, fileSize);
 			std::string path;
-			MaterialImporter::Save(&buffer, str.C_Str(), &path);
+			MaterialImporter::Save(&buffer, file.c_str(), &path);
 			NewTex->texture_path = path.c_str();
 			fileSize = App->file_system->Load(path.c_str(), &buffer);
 			MaterialImporter::Load(buffer, fileSize, NewTex);

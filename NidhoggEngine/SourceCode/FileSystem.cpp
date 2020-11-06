@@ -71,7 +71,8 @@ void FileSystem::SplitFilePath(const char* full_path, std::string* file, std::st
 {
 	if (full_path != nullptr)
 	{
-		std::string full(full_path);
+		std::string full("/");
+		full += full_path;
 		size_t pos_separator = full.find_last_of("\\/");
 		size_t pos_dot = full.find_last_of(".");
 
@@ -104,7 +105,7 @@ FileType FileSystem::SetFileType(std::string extension)
 		ret = FileType::FBX;
 	}
 
-	if (extension == "png" || extension == "dds")
+	if (extension == "png" || extension == "dds" || extension == ".tga")
 	{
 		ret = FileType::IMAGE;
 	}
