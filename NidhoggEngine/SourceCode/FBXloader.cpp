@@ -343,7 +343,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 
 	
 
-	NewTrans->rot = rotate;
+	NewTrans->rot = rotate.identity;
 	NewTrans->transform = float4x4::FromTRS(translate, rotate, scale);
 	NewTrans->transform.Transpose();
 

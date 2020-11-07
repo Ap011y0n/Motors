@@ -16,7 +16,12 @@ public:
 	bool CleanUp();
 
 	double get_Number(const char* file, const char* name);
+	void get_Array(const char* file);
+
 	void serialization_example();
+	void arrayExample();
+	void arrayExample2();
+
 public:
 
 
