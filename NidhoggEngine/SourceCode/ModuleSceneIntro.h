@@ -41,7 +41,7 @@ public:
 	float vert2[24];
 	uint index2[36];
 
-	vector<GameObject*> gameObjects;
+	//vector<GameObject*> gameObjects;
 	GameObject* scene;
 	 GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 	 uint texName;

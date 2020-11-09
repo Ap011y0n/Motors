@@ -80,7 +80,6 @@ public:
 	Vec2 img_corner;
 	Vec2 image_size;
 	ImGuiWindowClass* windowClass = nullptr;
-	vector<TreeNode*> tree_nodes;
 	vec3 direction_camera;
 	GameObject* selectedObj;
 private:

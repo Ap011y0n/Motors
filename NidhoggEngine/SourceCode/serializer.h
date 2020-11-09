@@ -24,9 +24,11 @@ public:
 	void CreateNewScene();
 	JSON_Object* AddObjectToArray(JSON_Array* obj);
 	void SaveScene();
-
+	void LoadScene(const char* path);
 	void AddFloat(JSON_Object* obj, const char* name, float value);
 	void AddString(JSON_Object* obj, const char* name, const char* string);
+	void AddVec3(JSON_Array* obj, float x, float y, float z);
+	void AddVec4(JSON_Array* obj, float x, float y, float z, float w);
 	void AddComponent(JSON_Array* obj, ComponentType type, const char* path);
 	JSON_Array* AddArray(JSON_Object* obj, const char* name);
 

@@ -133,6 +133,7 @@ public:
 	std::vector<GameObject*> childs;
 	GameObject* father;
 	bool isSelected = false;
+	int UID;
 
 };
 

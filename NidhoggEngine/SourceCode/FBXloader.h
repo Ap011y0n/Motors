@@ -7,9 +7,23 @@
 
 
 class GameObject;
+class ComponentMaterial;
+class ComponentMesh;
 struct aiScene;
 struct aiNode;
 
+namespace MaterialImporter
+{
+	void Import(char* buffer, uint fileSize);
+	void Save(char** fileBuffer, const char* path, std::string* newpath);
+	void Load(const char* fileBuffer, uint size, ComponentMaterial* ourMaterial);
+}
+
+namespace MeshImporter
+{
+	void Save(ComponentMesh* mesh, std::string* path, const char* name);
+	void Load(char* fileBuffer, uint size, ComponentMesh* mesh);
+}
 struct mesh
 {
 	uint id_index = 0; // index in VRAM

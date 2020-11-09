@@ -6,6 +6,7 @@
 #include "ModuleWindow.h"
 #include "ModuleUI.h"
 #include "GameObject.h"   
+#include "serializer.h"
 
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
@@ -101,6 +102,10 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update(float dt)
 {
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	{
+		App->serializer->LoadScene("Assets/library/TEST.json");
+	}
 
 	UpdateGameObject(scene, dt);
 	SetDelete(scene);
@@ -240,9 +245,8 @@ void ModuleSceneIntro::secondCube()
 GameObject* ModuleSceneIntro::CreateGameObject(const char* name, GameObject* father)
 {
 	GameObject* newGameObject = new GameObject(name, father);
-	gameObjects.push_back(newGameObject);
-	TreeNode* newnode = new TreeNode(newGameObject);
-	App->UI->tree_nodes.push_back(newnode);
+	//gameObjects.push_back(newGameObject);
+	
 	return newGameObject;
 }
 

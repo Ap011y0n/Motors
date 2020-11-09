@@ -5,6 +5,9 @@
 #include "FileSystem.h"
 #include "GameObject.h"
 
+#include "serializer.h"
+#include "parson/parson.h"
+
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
 #include <gl/GL.h>
@@ -324,6 +327,14 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 		name = "GameObject";
 	}
 	GameObject* object = App->scene_intro->CreateGameObject(name.c_str(), father);
+	JSON_Object* JsonObj = App->serializer->AddObjectToArray(App->serializer->leaves);
+	App->serializer->AddFloat(JsonObj, "UID", object->UID);
+	App->serializer->AddFloat(JsonObj, "ParentUID", object->father->UID);
+	App->serializer->AddString(JsonObj, "Name", name.c_str());
+	JSON_Array* JsonTrans = App->serializer->AddArray(JsonObj, "Translation");
+	JSON_Array* JsonScale = App->serializer->AddArray(JsonObj, "Scale");
+	JSON_Array* JsonRot = App->serializer->AddArray(JsonObj, "Rotation");
+	JSON_Array* JsonComp = App->serializer->AddArray(JsonObj, "Components");
 
 	ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
 
@@ -340,16 +351,15 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 
 	NewTrans->pos.Set(translate.x, translate.y, translate.z);
 	NewTrans->scale.Set(scale.x, scale.y, scale.z);
+	NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
+//	NewTrans->rot = rotate.identity;
 
-	
+	App->serializer->AddVec3(JsonTrans, NewTrans->pos.x, NewTrans->pos.y, NewTrans->pos.z);
+	App->serializer->AddVec3(JsonScale, NewTrans->scale.x, NewTrans->scale.y, NewTrans->scale.z);
+	App->serializer->AddVec4(JsonRot, NewTrans->rot.x, NewTrans->rot.y, NewTrans->rot.z, NewTrans->rot.w);
 
-	NewTrans->rot = rotate.identity;
 	NewTrans->transform = float4x4::FromTRS(translate, rotate, scale);
 	NewTrans->transform.Transpose();
-
-	
-
-
 
 	for (int i = 0; i < node->mNumMeshes; i++)
 	{
@@ -384,8 +394,11 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 			std::string path;
 			MaterialImporter::Save(&buffer, file.c_str(), &path);
 			NewTex->texture_path = path.c_str();
-			fileSize = App->file_system->Load(path.c_str(), &buffer);
-			MaterialImporter::Load(buffer, fileSize, NewTex);
+			App->serializer->AddComponent(JsonComp, ComponentType::MATERIAL, NewTex->texture_path.c_str());
+			//TODO_Json: create a json component mesh with this path. No need to load anything
+		//	fileSize = App->file_system->Load(path.c_str(), &buffer);
+		//	MaterialImporter::Load(buffer, fileSize, NewTex);
+
 			//
 
 		/*	NewTex->texbuffer = LoadTexBuffer(str.C_Str());
@@ -457,7 +470,12 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 		char* buffer = nullptr;
 
 		MeshImporter::Save(NewMesh, &path, name.c_str());
-		fileSize = App->file_system->Load(path.c_str(), &buffer);
+		//TODO_Json: Pass the necessary info to json and Delete this game object
+		// Then, all of this should be done when loading a scene. Json will give us the paths needed to load this game object components
+		//for the moment, we'll create the transforms manually in the other method
+		
+		App->serializer->AddComponent(JsonComp, ComponentType::MESH, path.c_str());
+		/*fileSize = App->file_system->Load(path.c_str(), &buffer);
 		MeshImporter::Load(buffer, fileSize, NewMesh);
 
 		NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
@@ -466,10 +484,11 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 
 		NewMesh->id_normals = FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
 
-		NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
+		NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);*/
 
 
 	}
+	App->serializer->SaveScene();
 
 	for (int n = 0; n < node->mNumChildren; n++)
 	{
@@ -477,6 +496,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 		LoadNode(scene, node->mChildren[n], object);
 
 	}
+	object->to_delete = true;
 }
 // Load assets
 bool FBXloader::LoadFBX(const char* buffer, uint size)

@@ -21,6 +21,7 @@ GameObject::GameObject()
 	Name = "NewGameObject";
 	father = nullptr;
 	isSelected = false;
+	
 }
 
 GameObject::GameObject(const char* name, GameObject* node)
@@ -30,6 +31,8 @@ GameObject::GameObject(const char* name, GameObject* node)
 	Name = name;
 	father = node;
 	isSelected = false;
+	LCG rand;
+	UID = rand.Int();
 	if (father != nullptr)
 	{
 		father->childs.push_back(this);
@@ -206,15 +209,26 @@ bool ComponentMesh::Update(float dt)
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		if (id_vertex != 0)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+			glVertexPointer(3, GL_FLOAT, 0, NULL);
+		}
 
-		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
-		glNormalPointer(GL_FLOAT, 0, NULL);
+		if (id_normals != 0)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+			glNormalPointer(GL_FLOAT, 0, NULL);
+		}
+		if (id_tex != 0)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, id_tex);
+			glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+		}
+		
 
 
-		glBindBuffer(GL_ARRAY_BUFFER, id_tex);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+		
 
 	
 				if (material != nullptr && material->hastexture)
@@ -242,10 +256,12 @@ bool ComponentMesh::Update(float dt)
 			
 		
 		
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-
-		glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
+			if (id_index != 0)
+			{
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+				glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
+			}
+	
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);

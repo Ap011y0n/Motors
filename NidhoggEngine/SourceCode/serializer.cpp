@@ -19,33 +19,16 @@ Serializer::~Serializer()
 
 bool Serializer::Start()
 {
+
 	bool ret = true;
 	LOG("starting serializer");
 	//serialization_example();
 	//	int num = get_Number("Assets/library/TEST.json", "age");
 	CreateNewScene();
-	JSON_Object* obj = AddObjectToArray(leaves);
-	AddFloat(obj, "UID", 1642009359);
-	AddFloat(obj, "ParentUID", 1619219037);
-	AddString(obj, "Name", "RootNode");
-	JSON_Array* array = AddArray(obj, "Components");
 
-	AddComponent(array, ComponentType::MESH, "Library/Meshes/mesh_0.mesh");
-	AddComponent(array, ComponentType::MATERIAL, "Library/Textures/texture_0.dds");
-	SaveScene();
-
-	JSON_Object* obj2 = AddObjectToArray(leaves);
-	AddFloat(obj2, "UID", 1642009359);
-	AddFloat(obj2, "ParentUID", 1619219037);
-	AddString(obj2, "Name", "RootNode");
-	JSON_Array* array2 = AddArray(obj2, "Components");
-
-	AddComponent(array2, ComponentType::MESH, "Library/Meshes/mesh_0.mesh");
-	AddComponent(array2, ComponentType::MATERIAL, "Library/Textures/texture_0.dds");
-	SaveScene();
 
 //	arrayExample();
-	get_Array("Assets/library/TEST.json");
+	//get_Array("Assets/library/TEST.json");
 //	LOG("%d", num);
 
 	return ret;
@@ -130,6 +113,21 @@ JSON_Object* Serializer::AddObjectToArray(JSON_Array* obj)
 
 }
 
+void Serializer::AddVec3(JSON_Array* obj, float x, float y, float z)
+{
+	json_array_append_number(obj, x);
+	json_array_append_number(obj, y);
+	json_array_append_number(obj, z);
+}
+void Serializer::AddVec4(JSON_Array* obj, float x, float y, float z, float w)
+{
+	json_array_append_number(obj, x);
+	json_array_append_number(obj, y);
+	json_array_append_number(obj, z);
+	json_array_append_number(obj, w);
+
+}
+
 void Serializer::SaveScene()
 {
 	char* serialized_string = NULL;
@@ -139,6 +137,85 @@ void Serializer::SaveScene()
 	json_free_serialized_string(serialized_string);
 }
 
+void Serializer::LoadScene(const char* path)
+{
+	JSON_Value* root_value;
+	JSON_Object* main_object;
+	JSON_Array* main_array;
+
+	root_value = json_parse_file(path);
+
+	main_object = json_value_get_object(root_value);
+	main_array = json_object_get_array(main_object, "Game Objects");
+
+
+	for (int i = 0; i < json_array_get_count(main_array); i++) {
+		JSON_Object* obj_in_array = json_array_get_object(main_array, i);
+		JSON_Array* component_array = json_object_get_array(obj_in_array, "Components");
+		JSON_Array* JsonTrans = json_object_get_array(obj_in_array, "Translation");
+		JSON_Array* JsonScale = json_object_get_array(obj_in_array, "Scale");
+		JSON_Array* JsonRot = json_object_get_array(obj_in_array, "Rotation");
+	
+		int UID = json_object_get_number(obj_in_array, "UID");
+		json_object_get_number(obj_in_array, "ParentUID");
+		const char* name = json_object_get_string(obj_in_array, "Name");
+
+		GameObject* object = App->scene_intro->CreateGameObject(name, App->scene_intro->scene);
+		object->UID = UID;
+
+		ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
+		NewTrans->pos.x = json_array_get_number(JsonTrans, 0);
+		NewTrans->pos.y = json_array_get_number(JsonTrans, 1);
+		NewTrans->pos.z = json_array_get_number(JsonTrans, 2);
+
+		NewTrans->scale.x = json_array_get_number(JsonScale, 0);
+		NewTrans->scale.y = json_array_get_number(JsonScale, 1);
+		NewTrans->scale.z = json_array_get_number(JsonScale, 2);
+
+		NewTrans->rot.x = json_array_get_number(JsonRot, 0);
+		NewTrans->rot.y = json_array_get_number(JsonRot, 1);
+		NewTrans->rot.z = json_array_get_number(JsonRot, 2);
+		NewTrans->rot.w = json_array_get_number(JsonRot, 3);
+
+		NewTrans->transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
+		NewTrans->transform.Transpose();
+
+		for (int j = 0; j < json_array_get_count(component_array); j++)
+		{
+			JSON_Object* obj_in_array_in_obj = json_array_get_object(component_array, j);
+			std::string type = json_object_get_string(obj_in_array_in_obj, "Type");
+			const char* componentpath = json_object_get_string(obj_in_array_in_obj, "Path");
+			char* buffer = nullptr;
+			uint fileSize = 0;
+
+			if (type == "Mesh")
+			{
+				ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
+				fileSize = App->file_system->Load(componentpath, &buffer);
+				MeshImporter::Load(buffer, fileSize, NewMesh);
+
+				NewMesh->id_vertex = App->FBX->FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
+
+				NewMesh->id_tex = App->FBX->FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
+
+				NewMesh->id_normals = App->FBX->FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
+
+				NewMesh->id_index = App->FBX->FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
+			}
+			else if (type == "texture")
+			{
+				ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
+				fileSize = App->file_system->Load(componentpath, &buffer);
+				MaterialImporter::Load(buffer, fileSize, NewTex);
+
+				if (NewTex->texbuffer != 0)
+					NewTex->hastexture = true;
+			}
+			
+
+		}
+	}
+}
 void Serializer::AddFloat(JSON_Object* obj, const char* name, float value)
 {
 	json_object_set_number(obj, name, value);
@@ -173,7 +250,7 @@ void Serializer::AddComponent(JSON_Array* componentsArray, ComponentType type, c
 			break;
 		}
 		case ComponentType::MATERIAL: { 
-			AddString(leaf_object, "Type", "transform");
+			AddString(leaf_object, "Type", "texture");
 			AddString(leaf_object, "Path", path);
 
 			break; 
