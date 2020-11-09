@@ -147,7 +147,7 @@ void Serializer::LoadScene(const char* path)
 
 	main_object = json_value_get_object(root_value);
 	main_array = json_object_get_array(main_object, "Game Objects");
-
+	
 
 	for (int i = 0; i < json_array_get_count(main_array); i++) {
 		JSON_Object* obj_in_array = json_array_get_object(main_array, i);
@@ -157,11 +157,14 @@ void Serializer::LoadScene(const char* path)
 		JSON_Array* JsonRot = json_object_get_array(obj_in_array, "Rotation");
 	
 		int UID = json_object_get_number(obj_in_array, "UID");
-		json_object_get_number(obj_in_array, "ParentUID");
+		int parentUID = json_object_get_number(obj_in_array, "ParentUID");
 		const char* name = json_object_get_string(obj_in_array, "Name");
 
-		GameObject* object = App->scene_intro->CreateGameObject(name, App->scene_intro->scene);
+		GameObject* object = App->scene_intro->CreateGameObject(name, nullptr);
+		tempvector.push_back(object);
 		object->UID = UID;
+		object->parentUID = parentUID;
+
 
 		ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
 		NewTrans->pos.x = json_array_get_number(JsonTrans, 0);
@@ -215,7 +218,33 @@ void Serializer::LoadScene(const char* path)
 
 		}
 	}
+	sortScene();
+
+	tempvector.clear();
 }
+
+void Serializer::sortScene() {
+	for (int i = 0; i < tempvector.size(); i++)
+	{
+		for (int j = 0; j < tempvector.size(); j++)
+		{
+			if (tempvector[i]->parentUID == tempvector[j]->UID)
+			{
+				tempvector[i]->father = tempvector[j];
+				tempvector[j]->childs.push_back(tempvector[i]);
+				
+			}
+				
+		}
+		if (tempvector[i]->father == nullptr)
+		{
+			tempvector[i]->father = App->scene_intro->scene;
+			App->scene_intro->scene->childs.push_back(tempvector[i]);
+		}
+	}
+
+}
+
 void Serializer::AddFloat(JSON_Object* obj, const char* name, float value)
 {
 	json_object_set_number(obj, name, value);

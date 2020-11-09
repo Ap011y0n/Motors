@@ -25,6 +25,7 @@ public:
 	JSON_Object* AddObjectToArray(JSON_Array* obj);
 	void SaveScene();
 	void LoadScene(const char* path);
+	void sortScene();
 	void AddFloat(JSON_Object* obj, const char* name, float value);
 	void AddString(JSON_Object* obj, const char* name, const char* string);
 	void AddVec3(JSON_Array* obj, float x, float y, float z);
@@ -44,5 +45,6 @@ public:
 	JSON_Object* root_object;
 	JSON_Value* branch;
 	JSON_Array* leaves;
+	std::vector<GameObject*> tempvector;
 };
 #endif

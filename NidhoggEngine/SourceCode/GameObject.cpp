@@ -21,7 +21,9 @@ GameObject::GameObject()
 	Name = "NewGameObject";
 	father = nullptr;
 	isSelected = false;
-	
+	LCG rand;
+	UID = rand.Int();
+	parentUID = 0;
 }
 
 GameObject::GameObject(const char* name, GameObject* node)
@@ -36,6 +38,7 @@ GameObject::GameObject(const char* name, GameObject* node)
 	if (father != nullptr)
 	{
 		father->childs.push_back(this);
+		parentUID = father->UID;
 	}
 }
 

@@ -134,6 +134,7 @@ public:
 	GameObject* father;
 	bool isSelected = false;
 	int UID;
+	int parentUID;
 
 };
 
