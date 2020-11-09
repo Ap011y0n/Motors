@@ -1,22 +1,32 @@
 {
-    "array": [
+    "Game Objects": [
         {
-            "name1": 1,
-            "name2": 2,
-            "name3": 3
-        },
-        {
-            "name1": 11,
-            "name2": 12,
-            "name3": 13,
-            "array": [
+            "UID": 1642009344,
+            "ParentUID": 1619219072,
+            "Name": "RootNode",
+            "Components": [
                 {
-                    "component1": "transform",
-                    "component2": "mesh"
+                    "Type": "Mesh",
+                    "Path": "Library\/Meshes\/mesh_0.mesh"
                 },
                 {
-                    "component1": "mesh1",
-                    "component2": "texture"
+                    "Type": "transform",
+                    "Path": "Library\/Textures\/texture_0.dds"
+                }
+            ]
+        },
+        {
+            "UID": 1642009344,
+            "ParentUID": 1619219072,
+            "Name": "RootNode",
+            "Components": [
+                {
+                    "Type": "Mesh",
+                    "Path": "Library\/Meshes\/mesh_0.mesh"
+                },
+                {
+                    "Type": "transform",
+                    "Path": "Library\/Textures\/texture_0.dds"
                 }
             ]
         }
