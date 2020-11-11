@@ -314,7 +314,7 @@ uint FBXloader::FillElementArrayBuffer(uint size, uint* array)
 
 	return id;
 }
-void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
+void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father, ComponentTransform* fathertrans)
 {
 	// Use scene->mNumMeshes to iterate on scene->mMeshes array
 	//for (int i = 0; i < scene->mNumMeshes; i++)
@@ -344,7 +344,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 	Quat rotate;
 	float3 translate, scale;
 
-	ComponentTransform* fathertrans = nullptr;
+	//ComponentTransform* fathertrans = nullptr;
 
 	node->mTransformation.Decompose(scaling, rotation, translation);
 	
@@ -521,7 +521,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 	for (int n = 0; n < node->mNumChildren; n++)
 	{
 		
-		LoadNode(scene, node->mChildren[n], object);
+		LoadNode(scene, node->mChildren[n], object, NewTrans);
 
 	}
 	object->to_delete = true;

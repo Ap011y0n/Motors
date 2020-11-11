@@ -12,6 +12,7 @@
 class GameObject;
 class ComponentMaterial;
 class ComponentMesh;
+class ComponentTransform;
 struct aiScene;
 struct aiNode;
 
@@ -64,7 +65,7 @@ public:
 	uint FillElementArrayBuffer(uint size, uint* array);
 	uint LoadTexBuffer(const char* path);
 	bool LoadFBX(const char* buffer, uint size);
-	void LoadNode(const aiScene* scene, aiNode* node, GameObject* father = nullptr);
+	void LoadNode(const aiScene* scene, aiNode* node, GameObject* father = nullptr, ComponentTransform* fathertrans = nullptr);
 	void PrintMeshes();
 	void ChangeTexture(const char* path);
 
