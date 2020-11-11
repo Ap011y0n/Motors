@@ -351,8 +351,8 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 
 	NewTrans->pos.Set(translate.x, translate.y, translate.z);
 	NewTrans->scale.Set(scale.x, scale.y, scale.z);
-	NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
-//	NewTrans->rot = rotate.identity;
+	NewTrans->rot.Set(rotate.x, rotate.y, rotate.z, rotate.w);
+	//NewTrans->rot = rotate.identity;
 
 	App->serializer->AddVec3(JsonTrans, NewTrans->pos.x, NewTrans->pos.y, NewTrans->pos.z);
 	App->serializer->AddVec3(JsonScale, NewTrans->scale.x, NewTrans->scale.y, NewTrans->scale.z);
