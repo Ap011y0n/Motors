@@ -2,6 +2,9 @@
 #include "Module.h"
 #include "Globals.h"
 
+#include "MathGeoLib/include/MathGeoLib.h"
+
+
 #define checkImageWidth 64
 #define checkImageHeight 64
 

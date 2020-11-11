@@ -374,7 +374,7 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 	scale.Set(0, 0, 0);
 	rot.Set(0, 0, 0, 0);
 	transform = transform.identity;
-	should_update = true;
+	should_update = false;
 }
 
 ComponentTransform::~ComponentTransform()
