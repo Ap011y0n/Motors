@@ -1,8 +1,8 @@
 {
     "Game Objects": [
         {
-            "UID": 939292992,
-            "ParentUID": 186855232,
+            "UID": 517661600,
+            "ParentUID": 474083008,
             "Name": "GameObject",
             "Translation": [
                 0,
@@ -23,8 +23,8 @@
             "Components": []
         },
         {
-            "UID": 567214464,
-            "ParentUID": 939292992,
+            "UID": 18942468,
+            "ParentUID": 517661600,
             "Name": "Chimney",
             "Translation": [
                 0,
@@ -54,8 +54,8 @@
             ]
         },
         {
-            "UID": 1220657280,
-            "ParentUID": 939292992,
+            "UID": 1504705280,
+            "ParentUID": 517661600,
             "Name": "Baker_house",
             "Translation": [
                 0,
@@ -85,8 +85,8 @@
             ]
         },
         {
-            "UID": 1186178048,
-            "ParentUID": 186855232,
+            "UID": 804413376,
+            "ParentUID": 474083008,
             "Name": "GameObject",
             "Translation": [
                 0,
@@ -107,8 +107,8 @@
             "Components": []
         },
         {
-            "UID": 735984768,
-            "ParentUID": 1186178048,
+            "UID": 1711411840,
+            "ParentUID": 804413376,
             "Name": "Object001_$AssimpFbx$_RotationPivot",
             "Translation": [
                 3.427504,
@@ -129,8 +129,8 @@
             "Components": []
         },
         {
-            "UID": 140770960,
-            "ParentUID": 735984768,
+            "UID": 1546943104,
+            "ParentUID": 1711411840,
             "Name": "Object001_$AssimpFbx$_RotationPivotInverse",
             "Translation": [
                 -3.427504,
@@ -151,8 +151,8 @@
             "Components": []
         },
         {
-            "UID": 1759319936,
-            "ParentUID": 140770960,
+            "UID": 1316821888,
+            "ParentUID": 1546943104,
             "Name": "Object001_$AssimpFbx$_ScalingPivot",
             "Translation": [
                 3.427504,
@@ -173,8 +173,8 @@
             "Components": []
         },
         {
-            "UID": 1451919360,
-            "ParentUID": 1759319936,
+            "UID": 987977920,
+            "ParentUID": 1316821888,
             "Name": "Object001_$AssimpFbx$_ScalingPivotInverse",
             "Translation": [
                 -3.427504,
@@ -195,8 +195,8 @@
             "Components": []
         },
         {
-            "UID": 1149322624,
-            "ParentUID": 1451919360,
+            "UID": 421517600,
+            "ParentUID": 987977920,
             "Name": "Object001",
             "Translation": [
                 0,
@@ -226,8 +226,8 @@
             ]
         },
         {
-            "UID": 1724224128,
-            "ParentUID": 186855232,
+            "UID": 268508480,
+            "ParentUID": 474083008,
             "Name": "GameObject",
             "Translation": [
                 0,
@@ -248,8 +248,8 @@
             "Components": []
         },
         {
-            "UID": 1687161856,
-            "ParentUID": 1724224128,
+            "UID": 1911052800,
+            "ParentUID": 268508480,
             "Name": "Head_$AssimpFbx$_RotationPivot",
             "Translation": [
                 -3.047620,
@@ -270,8 +270,8 @@
             "Components": []
         },
         {
-            "UID": 1473958400,
-            "ParentUID": 1687161856,
+            "UID": 2027574528,
+            "ParentUID": 1911052800,
             "Name": "Head_$AssimpFbx$_RotationPivotInverse",
             "Translation": [
                 3.047620,
@@ -292,8 +292,8 @@
             "Components": []
         },
         {
-            "UID": 1411693312,
-            "ParentUID": 1473958400,
+            "UID": 1938435712,
+            "ParentUID": 2027574528,
             "Name": "Head_$AssimpFbx$_ScalingPivot",
             "Translation": [
                 -3.047620,
@@ -314,8 +314,8 @@
             "Components": []
         },
         {
-            "UID": 1257458944,
-            "ParentUID": 1411693312,
+            "UID": 1984988288,
+            "ParentUID": 1938435712,
             "Name": "Head_$AssimpFbx$_ScalingPivotInverse",
             "Translation": [
                 3.047620,
@@ -336,8 +336,8 @@
             "Components": []
         },
         {
-            "UID": 1288346752,
-            "ParentUID": 1257458944,
+            "UID": 2128244352,
+            "ParentUID": 1984988288,
             "Name": "Head",
             "Translation": [
                 0,
