@@ -341,16 +341,11 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father,
 	aiVector3D translation, scaling;
 	aiVector3D euler;
 	aiQuaternion rotation;
-	Quat rotate;
-	float3 translate, scale;
+
 
 	//ComponentTransform* fathertrans = nullptr;
 
 	node->mTransformation.Decompose(scaling, rotation, translation);
-	
-	rotate.Set(rotation.x, rotation.z, rotation.z, rotation.w);
-	translate.Set(translation.x, translation.y, translation.z);
-	scale.Set(scaling.x, scaling.y, scaling.z);
 
 	/*for (int i = 0; i < father->Components.size(); i++)
 	{
@@ -360,34 +355,20 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father,
 			
 		}
 	}*/
-	if (fathertrans != nullptr)
-	{
-		NewTrans->pos.Set(translate.x, translate.y, translate.z);
-		NewTrans->pos += fathertrans->pos;
-		NewTrans->scale.Set(scale.x, scale.y, scale.z);
-		//NewTrans->scale = NewTrans->scale * fathertrans->scale;
-		NewTrans->rot.Set(rotate.x, rotate.y, rotate.z, rotate.w);
-		NewTrans->rot = NewTrans->rot * fathertrans->rot;
-	}
-	else
-	{
-		NewTrans->pos.Set(translate.x, translate.y, translate.z);
-		NewTrans->scale.Set(scale.x, scale.y, scale.z);
-		NewTrans->rot.Set(rotate.x, rotate.y, rotate.z, rotate.w);
-	}
 	
-	//NewTrans->rot = rotate.identity;
+		NewTrans->pos.Set(translation.x, translation.y, translation.z);
+		NewTrans->scale.Set(scaling.x, scaling.y, scaling.z);
+		NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
+	
+	
+
 	//NewTrans->rot = NewTrans->rot * quat;
 	App->serializer->AddVec3(JsonTrans, NewTrans->pos.x, NewTrans->pos.y, NewTrans->pos.z);
 	App->serializer->AddVec3(JsonScale, NewTrans->scale.x, NewTrans->scale.y, NewTrans->scale.z);
 	App->serializer->AddVec4(JsonRot, NewTrans->rot.x, NewTrans->rot.y, NewTrans->rot.z, NewTrans->rot.w);
 
-	NewTrans->transform = float4x4::FromTRS(translate, rotate, scale);
+	NewTrans->transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
 
-	
-	
-	
-	NewTrans->transform.Transpose();
 
 	for (int i = 0; i < node->mNumMeshes; i++)
 	{
@@ -511,13 +492,15 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father,
 	}
 	App->serializer->SaveScene();
 
+	
+
 	for (int n = 0; n < node->mNumChildren; n++)
 	{
 		
 		LoadNode(scene, node->mChildren[n], object, NewTrans);
 
 	}
-//	object->to_delete = true;
+	//object->to_delete = true;
 }
 // Load assets
 bool FBXloader::LoadFBX(const char* buffer, uint size)
@@ -534,9 +517,8 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 	
 	//if (scene != nullptr && scene->HasMeshes())
 
-	if (node != nullptr && scene->HasMeshes())
+	if (node != nullptr)
 	{
-		Quat quat = Quat::identity;
 		LoadNode(scene, node ,App->scene_intro->scene);
 		aiReleaseImport(scene);
 	}

@@ -104,6 +104,7 @@ public:
 	void			SetRotation(Quat quat);	//Call this method to change rotation of transform component
 	void			Scale(float x, float y, float z);	//Call this method to change scale of transform component
 	void			UpdateRotation(Quat quat);
+	float4x4			AcumulateparentTransform();
 
 private:
 //	void			UpdatePos(float x, float y, float z);

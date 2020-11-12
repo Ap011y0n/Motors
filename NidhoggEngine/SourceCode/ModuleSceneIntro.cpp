@@ -43,11 +43,11 @@ bool ModuleSceneIntro::Start()
 	//GameObject* object = CreateGameObject("test");
 	//object->CreateComponent(ComponentType::MESH);
 
-	std::string file_path = "Assets/BakerHouse.fbx";
+	std::string file_path = "Street environment_V01.FBX";
 	char* buffer = nullptr;
 	uint fileSize = 0;
 	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	App->FBX->LoadFBX(buffer, fileSize);
+	//App->FBX->LoadFBX(buffer, fileSize);
 
 	file_path = "Assets/p1character.FBX";
 	fileSize = App->file_system->Load(file_path.c_str(), &buffer);

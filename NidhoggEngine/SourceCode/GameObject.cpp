@@ -196,16 +196,16 @@ bool ComponentMesh::Update(float dt)
 		}
 	}
 
-
+	
 		glPushMatrix();
 		if (transform != nullptr)
 		{
-			glMultMatrixf(transform->transform.ptr());
+			float4x4 acum = transform->AcumulateparentTransform();
+			glMultMatrixf(acum.Transposed().ptr());
 		}
 		else
 		{
-			mat4x4 mat;
-			glMultMatrixf(mat.M);
+			glLoadIdentity();
 		}
 	
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -228,9 +228,6 @@ bool ComponentMesh::Update(float dt)
 			glBindBuffer(GL_ARRAY_BUFFER, id_tex);
 			glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 		}
-		
-
-
 		
 
 	
@@ -256,8 +253,7 @@ bool ComponentMesh::Update(float dt)
 					glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
 					
 				}
-			
-		
+
 		
 			if (id_index != 0)
 			{
@@ -274,7 +270,7 @@ bool ComponentMesh::Update(float dt)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glDisable(GL_TEXTURE_2D);
 
-		glPopMatrix();
+	glPopMatrix();
 
 
 	return ret;
@@ -389,7 +385,6 @@ bool ComponentTransform::Update(float dt)
 	if (should_update)
 	{
 		transform = float4x4::FromTRS(pos, rot, scale);
-		transform.Transpose();
 		should_update = false;
 	}
 
@@ -397,6 +392,28 @@ bool ComponentTransform::Update(float dt)
 	return ret;
 }
 
+float4x4 ComponentTransform::AcumulateparentTransform()
+{
+	float4x4 parentmat;
+	parentmat = parentmat.identity;
+	ComponentTransform* parentransform = nullptr;
+	if (owner->father != nullptr)
+	{
+		 
+			for (int i = 0; i < owner->father->Components.size(); i++)
+			{
+				
+				if (owner->father->Components[i]->type == ComponentType::TRANSFORM)
+				{
+					parentransform = (ComponentTransform*)owner->father->Components[i];
+				}
+			}
+			if(parentransform != nullptr)
+		parentmat = parentransform->AcumulateparentTransform();
+	}
+
+	return parentmat * transform;
+}
 
 void ComponentTransform::UpdateRotation(Quat quat)
 {
@@ -410,17 +427,7 @@ void ComponentTransform::SetPos(float x, float y, float z)
 	pos.Set(pos.x + x, pos.y + y, pos.z + z);
 	should_update = true;
 
-	for (int i = 0; i < owner->childs.size(); i++)
-	{
-		for (int j = 0; j < owner->childs[i]->Components.size(); j++)
-		{
-			if (owner->childs[i]->Components[j]->type == ComponentType::TRANSFORM)
-			{
-				ComponentTransform* transform = (ComponentTransform*)owner->childs[i]->Components[j];
-				transform->SetPos(x, y, z);
-			}
-		}
-	}
+	
 }
 
 void ComponentTransform::SetRotation(Quat quat)
@@ -428,17 +435,7 @@ void ComponentTransform::SetRotation(Quat quat)
 	rot = rot * quat;
 	should_update = true;
 
-	for (int i = 0; i < owner->childs.size(); i++)
-	{
-		for (int j = 0; j < owner->childs[i]->Components.size(); j++)
-		{
-			if (owner->childs[i]->Components[j]->type == ComponentType::TRANSFORM)
-			{
-				ComponentTransform* transform = (ComponentTransform*)owner->childs[i]->Components[j];
-				transform->SetRotation(quat);
-			}
-		}
-	}
+
 }
 
 void ComponentTransform::Scale(float x, float y, float z)
@@ -446,16 +443,6 @@ void ComponentTransform::Scale(float x, float y, float z)
 	scale.Set(scale.x + x, scale.y + y, scale.z + z);
 	should_update = true;
 
-	for (int i = 0; i < owner->childs.size(); i++)
-	{
-		for (int j = 0; j < owner->childs[i]->Components.size(); j++)
-		{
-			if (owner->childs[i]->Components[j]->type == ComponentType::TRANSFORM)
-			{
-				ComponentTransform* transform = (ComponentTransform*)owner->childs[i]->Components[j];
-				transform->Scale(x, y, z);
-			}
-		}
-	}
+
 }
 

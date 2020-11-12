@@ -133,6 +133,7 @@ void Serializer::SaveScene()
 	char* serialized_string = NULL;
 	serialized_string = json_serialize_to_string_pretty(root_value);
 	size_t size = sprintf(serialized_string, "%s", serialized_string);
+
 	App->file_system->Save("TEST.json", serialized_string, size, false);
 	json_free_serialized_string(serialized_string);
 }
@@ -181,7 +182,7 @@ void Serializer::LoadScene(const char* path)
 		NewTrans->rot.w = json_array_get_number(JsonRot, 3);
 
 		NewTrans->transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
-		NewTrans->transform.Transpose();
+		NewTrans->transform;
 
 		for (int j = 0; j < json_array_get_count(component_array); j++)
 		{
