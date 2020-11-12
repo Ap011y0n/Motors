@@ -503,7 +503,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father,
 		//for the moment, we'll create the transforms manually in the other method
 		
 		App->serializer->AddComponent(JsonComp, ComponentType::MESH, path.c_str());
-		/*fileSize = App->file_system->Load(path.c_str(), &buffer);
+		fileSize = App->file_system->Load(path.c_str(), &buffer);
 		MeshImporter::Load(buffer, fileSize, NewMesh);
 
 		NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
@@ -512,9 +512,132 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father,
 
 		NewMesh->id_normals = FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
 
-		NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);*/
+		NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
 
 
+		NewMesh->bbox.SetNegativeInfinity();
+		float3* vertexvert = (float3*)NewMesh->vertex;
+		NewMesh->bbox.Enclose(vertexvert, NewMesh->num_vertex);
+
+		float3 minvalue(inf, inf, inf);
+		float3 maxvalue(-inf, -inf, -inf);
+	
+		for (int i = 0; i < NewMesh->num_vertex; i++)
+		{
+			if (vertexvert[i].x < minvalue.x)
+			{
+				minvalue.x = vertexvert[i].x;
+			}
+			if (vertexvert[i].y < minvalue.y)
+			{
+				minvalue.y = vertexvert[i].y;
+			}
+			if (vertexvert[i].z < minvalue.z)
+			{
+				minvalue.z = vertexvert[i].z;
+			}
+
+			if (vertexvert[i].x > maxvalue.x)
+			{
+				maxvalue.x = vertexvert[i].x;
+			}
+			if (vertexvert[i].y > maxvalue.y)
+			{
+				maxvalue.y = vertexvert[i].y;
+			}
+			if (vertexvert[i].z > maxvalue.z)
+			{
+				maxvalue.z = vertexvert[i].z;
+			}
+
+		}
+
+		minvalue = NewMesh->bbox.minPoint;
+	//	maxvalue = NewMesh->bbox.maxPoint;
+	//	maxvalue.z = 1;
+		vec3 origin, destination;
+		origin.Set(minvalue.x, minvalue.y, minvalue.z);
+		destination.Set(maxvalue.x, minvalue.y, minvalue.z);
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		origin.Set(maxvalue.x, minvalue.y, minvalue.z);
+		destination.Set(maxvalue.x, minvalue.y, maxvalue.z);
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		origin.Set(maxvalue.x, minvalue.y, maxvalue.z);
+		destination.Set(minvalue.x, minvalue.y, maxvalue.z);
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		origin.Set(minvalue.x, minvalue.y, maxvalue.z);
+		destination.Set(minvalue.x, minvalue.y, minvalue.z);
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		// **************
+
+		origin.Set(minvalue.x, maxvalue.y, minvalue.z);
+		destination.Set(maxvalue.x, maxvalue.y, minvalue.z);
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		origin.Set(maxvalue.x, maxvalue.y, minvalue.z);
+		destination.Set(maxvalue.x, maxvalue.y, maxvalue.z);
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		origin.Set(maxvalue.x, maxvalue.y, maxvalue.z);
+		destination.Set(minvalue.x, maxvalue.y, maxvalue.z);
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		origin.Set(minvalue.x, maxvalue.y, maxvalue.z);
+		destination.Set(minvalue.x, maxvalue.y, minvalue.z);
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		//*************************
+		origin.Set(minvalue.x, minvalue.y, minvalue.z);
+		destination.Set(minvalue.x, maxvalue.y, minvalue.z);
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		origin.Set(maxvalue.x, minvalue.y, minvalue.z);
+		destination.Set(maxvalue.x, maxvalue.y, minvalue.z);
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		origin.Set(maxvalue.x, minvalue.y, maxvalue.z);
+		destination.Set(maxvalue.x, maxvalue.y, maxvalue.z);
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		origin.Set(minvalue.x, minvalue.y, maxvalue.z);
+		destination.Set(minvalue.x, maxvalue.y, maxvalue.z);
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		/*vec3 origin = (NewMesh->bbox.MinX(), NewMesh->bbox.MinY(), NewMesh->bbox.MinZ());
+		vec3 destination = (NewMesh->bbox.MaxX(), NewMesh->bbox.MinY(), NewMesh->bbox.MinZ());
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		origin = (NewMesh->bbox.MaxX(), NewMesh->bbox.MinY(), NewMesh->bbox.MinZ());
+		destination = (NewMesh->bbox.MaxX(), NewMesh->bbox.MinY(), NewMesh->bbox.MaxZ());
+
+		App->PrimManager->CreateLine(origin, destination);
+	
+		origin = (NewMesh->bbox.MaxX(), NewMesh->bbox.MinY(), NewMesh->bbox.MaxZ());
+		destination = (NewMesh->bbox.MinX(), NewMesh->bbox.MinY(), NewMesh->bbox.MaxZ());
+
+		App->PrimManager->CreateLine(origin, destination);
+
+		origin = (NewMesh->bbox.MinX(), NewMesh->bbox.MinY(), NewMesh->bbox.MaxZ());
+		destination = (NewMesh->bbox.MinX(), NewMesh->bbox.MinY(), NewMesh->bbox.MinZ());
+
+		App->PrimManager->CreateLine(origin, destination);*/
 	}
 	App->serializer->SaveScene();
 
@@ -524,7 +647,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father,
 		LoadNode(scene, node->mChildren[n], object, NewTrans);
 
 	}
-	object->to_delete = true;
+//	object->to_delete = true;
 }
 // Load assets
 bool FBXloader::LoadFBX(const char* buffer, uint size)

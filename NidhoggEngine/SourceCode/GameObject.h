@@ -69,6 +69,7 @@ public:
 
 	bool triggerNormals;
 
+	AABB bbox;
 };
 
 //Material, child to component

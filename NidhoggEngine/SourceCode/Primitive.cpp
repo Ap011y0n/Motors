@@ -735,7 +735,7 @@ PrimLine::PrimLine(float x, float y, float z, float x2, float y2, float z2) : Pr
 
 void PrimLine::InnerRender() const
 {
-	glLineWidth(2.0f);
+	glLineWidth(4.0f);
 	glColor4ub(255, 0.0, 0.0, 0.0);
 
 	/*glBegin(GL_LINES);
