@@ -73,6 +73,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="SourceCode\Application.h" />
     <ClInclude Include="SourceCode\Color.h" />
     <ClInclude Include="SourceCode\FBXloader.h" />
@@ -104,6 +105,7 @@
     <ClInclude Include="SourceCode\Vec2.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="SourceCode\Application.cpp" />
     <ClCompile Include="SourceCode\Color.cpp" />
     <ClCompile Include="SourceCode\FBXloader.cpp" />

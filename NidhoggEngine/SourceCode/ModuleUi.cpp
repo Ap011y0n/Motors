@@ -283,6 +283,10 @@ update_status ModuleUI::Update(float dt)
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::MenuItem("Camera"))
+		{
+			//here we will create the camera
+		}
 		ImGui::EndMenu();
 	}
 

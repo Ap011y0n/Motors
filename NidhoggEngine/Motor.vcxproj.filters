@@ -123,6 +123,9 @@
     <ClInclude Include="SourceCode\serializer.h">
       <Filter>Sources\parson</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Sources\Modules\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Color.cpp">
@@ -205,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\serializer.cpp">
       <Filter>Sources\parson</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Sources\Modules\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

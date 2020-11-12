@@ -74,6 +74,7 @@ Component* GameObject::CreateComponent(ComponentType type)
 	case ComponentType::MESH: { ComponentMesh* mesh = new ComponentMesh(this); newComponent = mesh; break; }
 	case ComponentType::MATERIAL: { ComponentMaterial* material = new ComponentMaterial(this); newComponent = material; break; }
 	case ComponentType::TRANSFORM: { ComponentTransform* transform = new ComponentTransform(this); newComponent = transform; break; }
+	case ComponentType::CAMERA: { /*ComponentTransform* transform = new ComponentTransform(this); newComponent = transform; break;*/}
 
 	}
 	Components.push_back(newComponent);
