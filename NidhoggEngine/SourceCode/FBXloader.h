@@ -68,12 +68,12 @@ public:
 	void LoadNode(const aiScene* scene, aiNode* node, GameObject* father = nullptr, ComponentTransform* fathertrans = nullptr);
 	void PrintMeshes();
 	void ChangeTexture(const char* path);
-
+	void CreateAABB(ComponentMesh* NewMesh);
 
 private:
 
 public:
-	//mesh ourMesh;
+
 	vector<mesh*> meshes;
 	int texture_w;
 	int texture_h;

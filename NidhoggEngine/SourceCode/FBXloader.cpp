@@ -442,6 +442,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father,
 
 
 		NewMesh->num_vertex = mesh->mNumVertices;
+		
 		NewMesh->vertex = new float[NewMesh->num_vertex * 3];
 		memcpy(NewMesh->vertex, mesh->mVertices, sizeof(float) * NewMesh->num_vertex * 3);
 		LOG("New mesh with %d vertices", NewMesh->num_vertex);
@@ -484,25 +485,15 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father,
 			}
 		}
 
-		/*		for (int i = 0; i < NewMesh->num_vertex; i++)
-				{
-					vec3 origin(NewMesh->vertex[i * 3], NewMesh->vertex[i * 3 + 1], NewMesh->vertex[i * 3 + 2]);
-					vec3 destination(NewMesh->normals[i * 3], NewMesh->normals[i * 3 + 1], NewMesh->normals[i * 3 + 2]);
-					destination *= 1;
-					destination += origin;
-
-					App->PrimManager->CreateLine(origin, destination);
-				}*/
 		std::string path;
 		uint fileSize = 0;
 		char* buffer = nullptr;
 
 		MeshImporter::Save(NewMesh, &path, name.c_str());
-		//TODO_Json: Pass the necessary info to json and Delete this game object
-		// Then, all of this should be done when loading a scene. Json will give us the paths needed to load this game object components
-		//for the moment, we'll create the transforms manually in the other method
 		
 		App->serializer->AddComponent(JsonComp, ComponentType::MESH, path.c_str());
+
+		// Unnnecesary
 		fileSize = App->file_system->Load(path.c_str(), &buffer);
 		MeshImporter::Load(buffer, fileSize, NewMesh);
 
@@ -513,131 +504,10 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father,
 		NewMesh->id_normals = FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
 
 		NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
+		// Unnnecesary
 
+			CreateAABB(NewMesh);
 
-		NewMesh->bbox.SetNegativeInfinity();
-		float3* vertexvert = (float3*)NewMesh->vertex;
-		NewMesh->bbox.Enclose(vertexvert, NewMesh->num_vertex);
-
-		float3 minvalue(inf, inf, inf);
-		float3 maxvalue(-inf, -inf, -inf);
-	
-		for (int i = 0; i < NewMesh->num_vertex; i++)
-		{
-			if (vertexvert[i].x < minvalue.x)
-			{
-				minvalue.x = vertexvert[i].x;
-			}
-			if (vertexvert[i].y < minvalue.y)
-			{
-				minvalue.y = vertexvert[i].y;
-			}
-			if (vertexvert[i].z < minvalue.z)
-			{
-				minvalue.z = vertexvert[i].z;
-			}
-
-			if (vertexvert[i].x > maxvalue.x)
-			{
-				maxvalue.x = vertexvert[i].x;
-			}
-			if (vertexvert[i].y > maxvalue.y)
-			{
-				maxvalue.y = vertexvert[i].y;
-			}
-			if (vertexvert[i].z > maxvalue.z)
-			{
-				maxvalue.z = vertexvert[i].z;
-			}
-
-		}
-
-		minvalue = NewMesh->bbox.minPoint;
-	//	maxvalue = NewMesh->bbox.maxPoint;
-	//	maxvalue.z = 1;
-		vec3 origin, destination;
-		origin.Set(minvalue.x, minvalue.y, minvalue.z);
-		destination.Set(maxvalue.x, minvalue.y, minvalue.z);
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		origin.Set(maxvalue.x, minvalue.y, minvalue.z);
-		destination.Set(maxvalue.x, minvalue.y, maxvalue.z);
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		origin.Set(maxvalue.x, minvalue.y, maxvalue.z);
-		destination.Set(minvalue.x, minvalue.y, maxvalue.z);
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		origin.Set(minvalue.x, minvalue.y, maxvalue.z);
-		destination.Set(minvalue.x, minvalue.y, minvalue.z);
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		// **************
-
-		origin.Set(minvalue.x, maxvalue.y, minvalue.z);
-		destination.Set(maxvalue.x, maxvalue.y, minvalue.z);
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		origin.Set(maxvalue.x, maxvalue.y, minvalue.z);
-		destination.Set(maxvalue.x, maxvalue.y, maxvalue.z);
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		origin.Set(maxvalue.x, maxvalue.y, maxvalue.z);
-		destination.Set(minvalue.x, maxvalue.y, maxvalue.z);
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		origin.Set(minvalue.x, maxvalue.y, maxvalue.z);
-		destination.Set(minvalue.x, maxvalue.y, minvalue.z);
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		//*************************
-		origin.Set(minvalue.x, minvalue.y, minvalue.z);
-		destination.Set(minvalue.x, maxvalue.y, minvalue.z);
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		origin.Set(maxvalue.x, minvalue.y, minvalue.z);
-		destination.Set(maxvalue.x, maxvalue.y, minvalue.z);
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		origin.Set(maxvalue.x, minvalue.y, maxvalue.z);
-		destination.Set(maxvalue.x, maxvalue.y, maxvalue.z);
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		origin.Set(minvalue.x, minvalue.y, maxvalue.z);
-		destination.Set(minvalue.x, maxvalue.y, maxvalue.z);
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		/*vec3 origin = (NewMesh->bbox.MinX(), NewMesh->bbox.MinY(), NewMesh->bbox.MinZ());
-		vec3 destination = (NewMesh->bbox.MaxX(), NewMesh->bbox.MinY(), NewMesh->bbox.MinZ());
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		origin = (NewMesh->bbox.MaxX(), NewMesh->bbox.MinY(), NewMesh->bbox.MinZ());
-		destination = (NewMesh->bbox.MaxX(), NewMesh->bbox.MinY(), NewMesh->bbox.MaxZ());
-
-		App->PrimManager->CreateLine(origin, destination);
-	
-		origin = (NewMesh->bbox.MaxX(), NewMesh->bbox.MinY(), NewMesh->bbox.MaxZ());
-		destination = (NewMesh->bbox.MinX(), NewMesh->bbox.MinY(), NewMesh->bbox.MaxZ());
-
-		App->PrimManager->CreateLine(origin, destination);
-
-		origin = (NewMesh->bbox.MinX(), NewMesh->bbox.MinY(), NewMesh->bbox.MaxZ());
-		destination = (NewMesh->bbox.MinX(), NewMesh->bbox.MinY(), NewMesh->bbox.MinZ());
-
-		App->PrimManager->CreateLine(origin, destination);*/
 	}
 	App->serializer->SaveScene();
 
@@ -713,4 +583,198 @@ uint FBXloader::LoadTexBuffer(const char* path)
 	}
 	
 	return texbuffer;
+}
+
+void FBXloader::CreateAABB(ComponentMesh* NewMesh)
+{
+	NewMesh->bbox.SetNegativeInfinity();
+	float3* vertexvert = (float3*)NewMesh->vertex;
+	NewMesh->bbox.Enclose(vertexvert, NewMesh->num_vertex);
+
+	float3 minvalue(inf, inf, inf);
+	float3 maxvalue(-inf, -inf, -inf);
+
+	for (int i = 0; i < NewMesh->num_vertex; i++)
+	{
+		if (vertexvert[i].x < minvalue.x)
+		{
+			minvalue.x = vertexvert[i].x;
+		}
+		if (vertexvert[i].y < minvalue.y)
+		{
+			minvalue.y = vertexvert[i].y;
+		}
+		if (vertexvert[i].z < minvalue.z)
+		{
+			minvalue.z = vertexvert[i].z;
+		}
+
+		if (vertexvert[i].x > maxvalue.x)
+		{
+			maxvalue.x = vertexvert[i].x;
+		}
+		if (vertexvert[i].y > maxvalue.y)
+		{
+			maxvalue.y = vertexvert[i].y;
+		}
+		if (vertexvert[i].z > maxvalue.z)
+		{
+			maxvalue.z = vertexvert[i].z;
+		}
+
+	}
+	vec3 origin, destination;
+
+
+	minvalue = NewMesh->bbox.minPoint;
+	maxvalue = NewMesh->bbox.maxPoint;
+
+	float3 array[8];
+
+	NewMesh->bbox.GetCornerPoints(array);
+	/*for (int i = 0; i < 8; i++)
+	{
+		origin.Set(array[i].x, array[i].y, array[i].z);
+		if (i != 7)
+		destination.Set(array[i+1].x, array[i+1].y, array[i+1].z);
+		else
+		destination.Set(array[0].x, array[0].y, array[0].z);
+
+		App->PrimManager->CreateLine(origin, destination);
+	}
+	*/
+	//0 = back left bot
+	//2 = back left top
+	//4 = back right bot
+	//6 = back right top
+
+	//3 = front left top
+	//7 = front right top
+	//1 = front left bot
+	//5 = front right bot
+
+	origin.Set(array[0].x, array[0].y, array[0].z);
+	destination.Set(array[1].x, array[1].y, array[1].z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(array[1].x, array[1].y, array[1].z);
+	destination.Set(array[3].x, array[3].y, array[3].z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(array[3].x, array[3].y, array[3].z);
+	destination.Set(array[7].x, array[7].y, array[7].z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(array[3].x, array[3].y, array[3].z);
+	destination.Set(array[2].x, array[2].y, array[2].z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(array[0].x, array[0].y, array[0].z);
+	destination.Set(array[2].x, array[2].y, array[2].z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(array[1].x, array[1].y, array[1].z);
+	destination.Set(array[5].x, array[5].y, array[5].z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(array[7].x, array[7].y, array[7].z);
+	destination.Set(array[6].x, array[6].y, array[6].z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+
+	origin.Set(array[2].x, array[2].y, array[2].z);
+	destination.Set(array[6].x, array[6].y, array[6].z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(array[6].x, array[6].y, array[6].z);
+	destination.Set(array[4].x, array[4].y, array[4].z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(array[4].x, array[4].y, array[4].z);
+	destination.Set(array[0].x, array[0].y, array[0].z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(array[7].x, array[7].y, array[7].z);
+	destination.Set(array[5].x, array[5].y, array[5].z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(array[4].x, array[4].y, array[4].z);
+	destination.Set(array[5].x, array[5].y, array[5].z);
+
+	App->PrimManager->CreateLine(origin, destination);
+	/* MANUAL AABB DRAWING
+	origin.Set(minvalue.x, minvalue.y, minvalue.z);
+	destination.Set(maxvalue.x, minvalue.y, minvalue.z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(maxvalue.x, minvalue.y, minvalue.z);
+	destination.Set(maxvalue.x, minvalue.y, maxvalue.z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(maxvalue.x, minvalue.y, maxvalue.z);
+	destination.Set(minvalue.x, minvalue.y, maxvalue.z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(minvalue.x, minvalue.y, maxvalue.z);
+	destination.Set(minvalue.x, minvalue.y, minvalue.z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	// **************
+
+	origin.Set(minvalue.x, maxvalue.y, minvalue.z);
+	destination.Set(maxvalue.x, maxvalue.y, minvalue.z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(maxvalue.x, maxvalue.y, minvalue.z);
+	destination.Set(maxvalue.x, maxvalue.y, maxvalue.z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(maxvalue.x, maxvalue.y, maxvalue.z);
+	destination.Set(minvalue.x, maxvalue.y, maxvalue.z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(minvalue.x, maxvalue.y, maxvalue.z);
+	destination.Set(minvalue.x, maxvalue.y, minvalue.z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	//*************************
+	origin.Set(minvalue.x, minvalue.y, minvalue.z);
+	destination.Set(minvalue.x, maxvalue.y, minvalue.z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(maxvalue.x, minvalue.y, minvalue.z);
+	destination.Set(maxvalue.x, maxvalue.y, minvalue.z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(maxvalue.x, minvalue.y, maxvalue.z);
+	destination.Set(maxvalue.x, maxvalue.y, maxvalue.z);
+
+	App->PrimManager->CreateLine(origin, destination);
+
+	origin.Set(minvalue.x, minvalue.y, maxvalue.z);
+	destination.Set(minvalue.x, maxvalue.y, maxvalue.z);
+
+	App->PrimManager->CreateLine(origin, destination);
+	*/
 }

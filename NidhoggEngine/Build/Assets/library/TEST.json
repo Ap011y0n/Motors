@@ -1,8 +1,8 @@
 {
     "Game Objects": [
         {
-            "UID": 1249519232,
-            "ParentUID": 1626775680,
+            "UID": 1737065216,
+            "ParentUID": 366601760,
             "Name": "GameObject",
             "Translation": [
                 0,
@@ -21,6 +21,358 @@
                 1
             ],
             "Components": []
+        },
+        {
+            "UID": 1068749248,
+            "ParentUID": 1737065216,
+            "Name": "Chimney",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "library\/Baker_house.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "library\/Chimney.uwu"
+                }
+            ]
+        },
+        {
+            "UID": 67440176,
+            "ParentUID": 1737065216,
+            "Name": "Baker_house",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "library\/Baker_house.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "library\/Baker_house.uwu"
+                }
+            ]
+        },
+        {
+            "UID": 812903168,
+            "ParentUID": 366601760,
+            "Name": "GameObject",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 347184416,
+            "ParentUID": 812903168,
+            "Name": "Object001_$AssimpFbx$_RotationPivot",
+            "Translation": [
+                3.427504,
+                2.657754,
+                0.270888
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 2020246656,
+            "ParentUID": 347184416,
+            "Name": "Object001_$AssimpFbx$_RotationPivotInverse",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 1535451776,
+            "ParentUID": 2020246656,
+            "Name": "Object001_$AssimpFbx$_ScalingPivot",
+            "Translation": [
+                3.427504,
+                2.657754,
+                0.270888
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 1080454656,
+            "ParentUID": 1535451776,
+            "Name": "Object001_$AssimpFbx$_ScalingPivotInverse",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 727800320,
+            "ParentUID": 1080454656,
+            "Name": "Object001",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "library\/Albert Garcia Belerda_TexP1.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "library\/Object001.uwu"
+                }
+            ]
+        },
+        {
+            "UID": 1702765952,
+            "ParentUID": 366601760,
+            "Name": "GameObject",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 1496803200,
+            "ParentUID": 1702765952,
+            "Name": "Head_$AssimpFbx$_RotationPivot",
+            "Translation": [
+                -3.047620,
+                3.048193,
+                0.190201
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 1258605824,
+            "ParentUID": 1496803200,
+            "Name": "Head_$AssimpFbx$_RotationPivotInverse",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 994091712,
+            "ParentUID": 1258605824,
+            "Name": "Head_$AssimpFbx$_ScalingPivot",
+            "Translation": [
+                -3.047620,
+                3.048193,
+                0.190201
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 1152525184,
+            "ParentUID": 994091712,
+            "Name": "Head_$AssimpFbx$_ScalingPivotInverse",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 1303927040,
+            "ParentUID": 1152525184,
+            "Name": "Head",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "library\/PoldelaTorreSoléTexP1.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "library\/Head.uwu"
+                },
+                {
+                    "Type": "texture",
+                    "Path": "library\/PoldelaTorreSoléTexP1.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "library\/Head.uwu"
+                }
+            ]
         }
     ]
 }
