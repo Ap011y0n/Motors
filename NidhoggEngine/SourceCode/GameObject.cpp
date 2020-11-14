@@ -600,6 +600,7 @@ void ComponentTransform::Scale(float x, float y, float z)
 }
 
 //*************************		ComponentCamera
+
 ComponentCamera::ComponentCamera(GameObject* ObjectOwner) :Component() {
 	type = ComponentType::CAMERA;
 	active = true;

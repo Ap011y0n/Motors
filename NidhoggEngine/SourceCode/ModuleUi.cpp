@@ -1007,7 +1007,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 		if (ImGui::TreeNodeEx("Camera", node_flags))
 		{
 			ImGui::Separator();
-			ImGui::Text("Filed of View:"); 
+			ImGui::Text("Camera configuration:"); 
 	
 			float p = camera->frustrum.farPlaneDistance;
 			ImGui::SetNextItemWidth(200);
@@ -1023,6 +1023,14 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			if (ImGui::IsItemActive())
 			{
 				camera->frustrum.nearPlaneDistance = p1;
+			}
+
+			float p2 = camera->frustrum.verticalFov;
+			ImGui::SetNextItemWidth(200);
+			ImGui::DragFloat("Field of view", &p2);
+			if (ImGui::IsItemActive())
+			{
+				//camera->frustrum.verticalFov = p2;
 			}
 
 			ImGui::TreePop();
