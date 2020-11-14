@@ -329,7 +329,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father,
 	GameObject* object = App->scene_intro->CreateGameObject(name.c_str(), father);
 	JSON_Object* JsonObj = App->serializer->AddObjectToArray(App->serializer->leaves);
 	App->serializer->AddFloat(JsonObj, "UID", object->UID);
-	App->serializer->AddFloat(JsonObj, "ParentUID", object->father->UID);
+	App->serializer->AddFloat(JsonObj, "ParentUID", object->parent->UID);
 	App->serializer->AddString(JsonObj, "Name", name.c_str());
 	JSON_Array* JsonTrans = App->serializer->AddArray(JsonObj, "Translation");
 	JSON_Array* JsonScale = App->serializer->AddArray(JsonObj, "Scale");
@@ -475,19 +475,19 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father,
 		App->serializer->AddComponent(JsonComp, ComponentType::MESH, path.c_str());
 
 		// Unnnecesary
-		fileSize = App->file_system->Load(path.c_str(), &buffer);
-		MeshImporter::Load(buffer, fileSize, NewMesh);
+	//	fileSize = App->file_system->Load(path.c_str(), &buffer);
+	//	MeshImporter::Load(buffer, fileSize, NewMesh);
 
-		NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
+	//	NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
 
-		NewMesh->id_tex = FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
+	//	NewMesh->id_tex = FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
 
-		NewMesh->id_normals = FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
+	//	NewMesh->id_normals = FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
 
-		NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
+	//	NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
 		// Unnnecesary
 
-			CreateAABB(NewMesh);
+		//	CreateAABB(NewMesh);
 
 	}
 	App->serializer->SaveScene();
@@ -500,7 +500,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father,
 		LoadNode(scene, node->mChildren[n], object, NewTrans);
 
 	}
-	//object->to_delete = true;
+	object->to_delete = true;
 }
 // Load assets
 bool FBXloader::LoadFBX(const char* buffer, uint size)
@@ -635,128 +635,65 @@ void FBXloader::CreateAABB(ComponentMesh* NewMesh)
 	//1 = front left bot
 	//5 = front right bot
 
-	origin.Set(array[0].x, array[0].y, array[0].z);
-	destination.Set(array[1].x, array[1].y, array[1].z);
+	//origin.Set(array[0].x, array[0].y, array[0].z);
+	//destination.Set(array[1].x, array[1].y, array[1].z);
 
-	App->PrimManager->CreateLine(origin, destination);
+	//App->PrimManager->CreateLine(origin, destination);
 
-	origin.Set(array[1].x, array[1].y, array[1].z);
-	destination.Set(array[3].x, array[3].y, array[3].z);
+	//origin.Set(array[1].x, array[1].y, array[1].z);
+	//destination.Set(array[3].x, array[3].y, array[3].z);
 
-	App->PrimManager->CreateLine(origin, destination);
+	//App->PrimManager->CreateLine(origin, destination);
 
-	origin.Set(array[3].x, array[3].y, array[3].z);
-	destination.Set(array[7].x, array[7].y, array[7].z);
+	//origin.Set(array[3].x, array[3].y, array[3].z);
+	//destination.Set(array[7].x, array[7].y, array[7].z);
 
-	App->PrimManager->CreateLine(origin, destination);
+	//App->PrimManager->CreateLine(origin, destination);
 
-	origin.Set(array[3].x, array[3].y, array[3].z);
-	destination.Set(array[2].x, array[2].y, array[2].z);
+	//origin.Set(array[3].x, array[3].y, array[3].z);
+	//destination.Set(array[2].x, array[2].y, array[2].z);
 
-	App->PrimManager->CreateLine(origin, destination);
+	//App->PrimManager->CreateLine(origin, destination);
 
-	origin.Set(array[0].x, array[0].y, array[0].z);
-	destination.Set(array[2].x, array[2].y, array[2].z);
+	//origin.Set(array[0].x, array[0].y, array[0].z);
+	//destination.Set(array[2].x, array[2].y, array[2].z);
 
-	App->PrimManager->CreateLine(origin, destination);
+	//App->PrimManager->CreateLine(origin, destination);
 
-	origin.Set(array[1].x, array[1].y, array[1].z);
-	destination.Set(array[5].x, array[5].y, array[5].z);
+	//origin.Set(array[1].x, array[1].y, array[1].z);
+	//destination.Set(array[5].x, array[5].y, array[5].z);
 
-	App->PrimManager->CreateLine(origin, destination);
+	//App->PrimManager->CreateLine(origin, destination);
 
-	origin.Set(array[7].x, array[7].y, array[7].z);
-	destination.Set(array[6].x, array[6].y, array[6].z);
+	//origin.Set(array[7].x, array[7].y, array[7].z);
+	//destination.Set(array[6].x, array[6].y, array[6].z);
 
-	App->PrimManager->CreateLine(origin, destination);
+	//App->PrimManager->CreateLine(origin, destination);
 
 
-	origin.Set(array[2].x, array[2].y, array[2].z);
-	destination.Set(array[6].x, array[6].y, array[6].z);
+	//origin.Set(array[2].x, array[2].y, array[2].z);
+	//destination.Set(array[6].x, array[6].y, array[6].z);
 
-	App->PrimManager->CreateLine(origin, destination);
+	//App->PrimManager->CreateLine(origin, destination);
 
-	origin.Set(array[6].x, array[6].y, array[6].z);
-	destination.Set(array[4].x, array[4].y, array[4].z);
+	//origin.Set(array[6].x, array[6].y, array[6].z);
+	//destination.Set(array[4].x, array[4].y, array[4].z);
 
-	App->PrimManager->CreateLine(origin, destination);
+	//App->PrimManager->CreateLine(origin, destination);
 
-	origin.Set(array[4].x, array[4].y, array[4].z);
-	destination.Set(array[0].x, array[0].y, array[0].z);
+	//origin.Set(array[4].x, array[4].y, array[4].z);
+	//destination.Set(array[0].x, array[0].y, array[0].z);
 
-	App->PrimManager->CreateLine(origin, destination);
+	//App->PrimManager->CreateLine(origin, destination);
 
-	origin.Set(array[7].x, array[7].y, array[7].z);
-	destination.Set(array[5].x, array[5].y, array[5].z);
+	//origin.Set(array[7].x, array[7].y, array[7].z);
+	//destination.Set(array[5].x, array[5].y, array[5].z);
 
-	App->PrimManager->CreateLine(origin, destination);
+	//App->PrimManager->CreateLine(origin, destination);
 
-	origin.Set(array[4].x, array[4].y, array[4].z);
-	destination.Set(array[5].x, array[5].y, array[5].z);
+	//origin.Set(array[4].x, array[4].y, array[4].z);
+	//destination.Set(array[5].x, array[5].y, array[5].z);
 
-	App->PrimManager->CreateLine(origin, destination);
-	/* MANUAL AABB DRAWING
-	origin.Set(minvalue.x, minvalue.y, minvalue.z);
-	destination.Set(maxvalue.x, minvalue.y, minvalue.z);
-
-	App->PrimManager->CreateLine(origin, destination);
-
-	origin.Set(maxvalue.x, minvalue.y, minvalue.z);
-	destination.Set(maxvalue.x, minvalue.y, maxvalue.z);
-
-	App->PrimManager->CreateLine(origin, destination);
-
-	origin.Set(maxvalue.x, minvalue.y, maxvalue.z);
-	destination.Set(minvalue.x, minvalue.y, maxvalue.z);
-
-	App->PrimManager->CreateLine(origin, destination);
-
-	origin.Set(minvalue.x, minvalue.y, maxvalue.z);
-	destination.Set(minvalue.x, minvalue.y, minvalue.z);
-
-	App->PrimManager->CreateLine(origin, destination);
-
-	// **************
-
-	origin.Set(minvalue.x, maxvalue.y, minvalue.z);
-	destination.Set(maxvalue.x, maxvalue.y, minvalue.z);
-
-	App->PrimManager->CreateLine(origin, destination);
-
-	origin.Set(maxvalue.x, maxvalue.y, minvalue.z);
-	destination.Set(maxvalue.x, maxvalue.y, maxvalue.z);
-
-	App->PrimManager->CreateLine(origin, destination);
-
-	origin.Set(maxvalue.x, maxvalue.y, maxvalue.z);
-	destination.Set(minvalue.x, maxvalue.y, maxvalue.z);
-
-	App->PrimManager->CreateLine(origin, destination);
-
-	origin.Set(minvalue.x, maxvalue.y, maxvalue.z);
-	destination.Set(minvalue.x, maxvalue.y, minvalue.z);
-
-	App->PrimManager->CreateLine(origin, destination);
-
-	//*************************
-	origin.Set(minvalue.x, minvalue.y, minvalue.z);
-	destination.Set(minvalue.x, maxvalue.y, minvalue.z);
-
-	App->PrimManager->CreateLine(origin, destination);
-
-	origin.Set(maxvalue.x, minvalue.y, minvalue.z);
-	destination.Set(maxvalue.x, maxvalue.y, minvalue.z);
-
-	App->PrimManager->CreateLine(origin, destination);
-
-	origin.Set(maxvalue.x, minvalue.y, maxvalue.z);
-	destination.Set(maxvalue.x, maxvalue.y, maxvalue.z);
-
-	App->PrimManager->CreateLine(origin, destination);
-
-	origin.Set(minvalue.x, minvalue.y, maxvalue.z);
-	destination.Set(minvalue.x, maxvalue.y, maxvalue.z);
-
-	App->PrimManager->CreateLine(origin, destination);
-	*/
+	//App->PrimManager->CreateLine(origin, destination);
+	
 }

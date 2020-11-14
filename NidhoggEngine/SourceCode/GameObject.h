@@ -47,6 +47,8 @@ public:
 	bool Update(float dt);
 	void DisplayNormals();
 	void HideNormals();
+	void SetAABB();
+	AABB GetAABB();
 	//void Disable();
 private:
 	PrimNormals* GraphicNormals;
@@ -127,16 +129,23 @@ public:
 	~GameObject();
 	bool Update(float dt);
 	Component* CreateComponent(ComponentType type); //Create a new component for this game object, needs a Component type
+	Component* GetComponent(ComponentType type); //Create a new component for this game object, needs a Component type
+	void DisplayAABB();
+	void HideAABB();
 public:
 	bool to_delete = false;
 	bool active = false;
 	std::string Name;
 	std::vector<Component*> Components;
 	std::vector<GameObject*> childs;
-	GameObject* father;
+	GameObject* parent;
 	bool isSelected = false;
 	int UID;
 	int parentUID;
-
+	OBB obb;
+	AABB aabb;
+	bool displayAABB;
+private:
+	PrimAABB* currentAABB;
 };
 

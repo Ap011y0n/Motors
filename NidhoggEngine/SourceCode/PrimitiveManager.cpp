@@ -5,6 +5,8 @@
 #include "ModuleWindow.h"
 #include "glew/include/glew.h"
 
+#include "MathGeoLib/include/MathGeoLib.h"
+
 
 
 PrimitiveManager::PrimitiveManager(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -160,6 +162,13 @@ PrimNormals* PrimitiveManager::CreateNormalVects(float* normal_array, int size)
 	PrimNormals* normals = new PrimNormals(normal_array, size);
 	prim_list.push_back((PrimNormals*)normals);
 	return normals;
+}
+
+PrimAABB* PrimitiveManager::CreateAABB(AABB* bbox)
+{
+	PrimAABB* primAABB = new PrimAABB(bbox);
+	prim_list.push_back((PrimAABB*)primAABB);
+	return primAABB;
 }
 
 void PrimitiveManager::MenuOptions() 

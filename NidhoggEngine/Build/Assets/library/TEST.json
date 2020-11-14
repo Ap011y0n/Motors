@@ -1,8 +1,8 @@
 {
     "Game Objects": [
         {
-            "UID": 261158192,
-            "ParentUID": 1337058304,
+            "UID": 718092032,
+            "ParentUID": 2054471296,
             "Name": "GameObject",
             "Translation": [
                 0,
@@ -23,8 +23,92 @@
             "Components": []
         },
         {
-            "UID": 2134241536,
-            "ParentUID": 261158192,
+            "UID": 431299232,
+            "ParentUID": 718092032,
+            "Name": "Chimney",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "library\/Baker_house.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "library\/Chimney.uwu"
+                }
+            ]
+        },
+        {
+            "UID": 736841728,
+            "ParentUID": 718092032,
+            "Name": "Baker_house",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "library\/Baker_house.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "library\/Baker_house.uwu"
+                }
+            ]
+        },
+        {
+            "UID": 2080612992,
+            "ParentUID": 2054471296,
+            "Name": "GameObject",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 1547153024,
+            "ParentUID": 2080612992,
             "Name": "Object001_$AssimpFbx$_RotationPivot",
             "Translation": [
                 3.427504,
@@ -45,8 +129,8 @@
             "Components": []
         },
         {
-            "UID": 1689757184,
-            "ParentUID": 2134241536,
+            "UID": 1348291584,
+            "ParentUID": 1547153024,
             "Name": "Object001_$AssimpFbx$_RotationPivotInverse",
             "Translation": [
                 -3.427504,
@@ -67,8 +151,8 @@
             "Components": []
         },
         {
-            "UID": 1265532544,
-            "ParentUID": 1689757184,
+            "UID": 1232766464,
+            "ParentUID": 1348291584,
             "Name": "Object001_$AssimpFbx$_ScalingPivot",
             "Translation": [
                 3.427504,
@@ -89,8 +173,8 @@
             "Components": []
         },
         {
-            "UID": 766465344,
-            "ParentUID": 1265532544,
+            "UID": 719705408,
+            "ParentUID": 1232766464,
             "Name": "Object001_$AssimpFbx$_ScalingPivotInverse",
             "Translation": [
                 -3.427504,
@@ -111,8 +195,8 @@
             "Components": []
         },
         {
-            "UID": 404064128,
-            "ParentUID": 766465344,
+            "UID": 463267328,
+            "ParentUID": 719705408,
             "Name": "Object001",
             "Translation": [
                 0,
@@ -142,8 +226,8 @@
             ]
         },
         {
-            "UID": 123376512,
-            "ParentUID": 1337058304,
+            "UID": 723956800,
+            "ParentUID": 2054471296,
             "Name": "GameObject",
             "Translation": [
                 0,
@@ -164,8 +248,8 @@
             "Components": []
         },
         {
-            "UID": 1691241472,
-            "ParentUID": 123376512,
+            "UID": 902162624,
+            "ParentUID": 723956800,
             "Name": "Head_$AssimpFbx$_RotationPivot",
             "Translation": [
                 -3.047620,
@@ -186,8 +270,8 @@
             "Components": []
         },
         {
-            "UID": 1040191552,
-            "ParentUID": 1691241472,
+            "UID": 755865024,
+            "ParentUID": 902162624,
             "Name": "Head_$AssimpFbx$_RotationPivotInverse",
             "Translation": [
                 3.047620,
@@ -208,8 +292,8 @@
             "Components": []
         },
         {
-            "UID": 389768256,
-            "ParentUID": 1040191552,
+            "UID": 809031552,
+            "ParentUID": 755865024,
             "Name": "Head_$AssimpFbx$_ScalingPivot",
             "Translation": [
                 -3.047620,
@@ -230,8 +314,8 @@
             "Components": []
         },
         {
-            "UID": 1972880128,
-            "ParentUID": 389768256,
+            "UID": 829754752,
+            "ParentUID": 809031552,
             "Name": "Head_$AssimpFbx$_ScalingPivotInverse",
             "Translation": [
                 3.047620,
@@ -252,8 +336,8 @@
             "Components": []
         },
         {
-            "UID": 1363185152,
-            "ParentUID": 1972880128,
+            "UID": 990833792,
+            "ParentUID": 829754752,
             "Name": "Head",
             "Translation": [
                 0,
@@ -291,8 +375,8 @@
             ]
         },
         {
-            "UID": 1052595520,
-            "ParentUID": 1337058304,
+            "UID": 583424960,
+            "ParentUID": 2054471296,
             "Name": "GameObject",
             "Translation": [
                 0,
@@ -313,8 +397,8 @@
             "Components": []
         },
         {
-            "UID": 776245888,
-            "ParentUID": 1052595520,
+            "UID": 1825509376,
+            "ParentUID": 583424960,
             "Name": "Sky001_$AssimpFbx$_Translation",
             "Translation": [
                 18.153732,
@@ -335,8 +419,8 @@
             "Components": []
         },
         {
-            "UID": 710012416,
-            "ParentUID": 776245888,
+            "UID": 2038038272,
+            "ParentUID": 1825509376,
             "Name": "Sky001_$AssimpFbx$_PreRotation",
             "Translation": [
                 0,
@@ -357,8 +441,8 @@
             "Components": []
         },
         {
-            "UID": 381029280,
-            "ParentUID": 710012416,
+            "UID": 173470528,
+            "ParentUID": 2038038272,
             "Name": "Sky001_$AssimpFbx$_PostRotation",
             "Translation": [
                 0,
@@ -379,8 +463,8 @@
             "Components": []
         },
         {
-            "UID": 189129888,
-            "ParentUID": 381029280,
+            "UID": 591033408,
+            "ParentUID": 173470528,
             "Name": "Sky001",
             "Translation": [
                 0,
@@ -401,8 +485,8 @@
             "Components": []
         },
         {
-            "UID": 41300608,
-            "ParentUID": 1052595520,
+            "UID": 1433145088,
+            "ParentUID": 583424960,
             "Name": "Dummy001_$AssimpFbx$_PreRotation",
             "Translation": [
                 0,
@@ -423,8 +507,8 @@
             "Components": []
         },
         {
-            "UID": 1965068032,
-            "ParentUID": 41300608,
+            "UID": 2143255424,
+            "ParentUID": 1433145088,
             "Name": "Dummy001_$AssimpFbx$_Rotation",
             "Translation": [
                 0,
@@ -445,8 +529,8 @@
             "Components": []
         },
         {
-            "UID": 1811599488,
-            "ParentUID": 1965068032,
+            "UID": 1068120128,
+            "ParentUID": 2143255424,
             "Name": "Dummy001",
             "Translation": [
                 0,
@@ -467,8 +551,8 @@
             "Components": []
         },
         {
-            "UID": 1607934208,
-            "ParentUID": 1811599488,
+            "UID": 1784705152,
+            "ParentUID": 1068120128,
             "Name": "City_building_004",
             "Translation": [
                 -41.475891,
@@ -498,8 +582,8 @@
             ]
         },
         {
-            "UID": 251492512,
-            "ParentUID": 1811599488,
+            "UID": 2146392320,
+            "ParentUID": 1068120128,
             "Name": "City_building_001",
             "Translation": [
                 17.707165,
@@ -529,8 +613,8 @@
             ]
         },
         {
-            "UID": 449249344,
-            "ParentUID": 1811599488,
+            "UID": 1060383680,
+            "ParentUID": 1068120128,
             "Name": "City_building_007",
             "Translation": [
                 16.010492,
@@ -560,8 +644,8 @@
             ]
         },
         {
-            "UID": 43563620,
-            "ParentUID": 1811599488,
+            "UID": 1464181376,
+            "ParentUID": 1068120128,
             "Name": "City_building_008",
             "Translation": [
                 40.979996,
@@ -591,8 +675,8 @@
             ]
         },
         {
-            "UID": 1862432000,
-            "ParentUID": 1811599488,
+            "UID": 2069298944,
+            "ParentUID": 1068120128,
             "Name": "Line002",
             "Translation": [
                 -2.159772,
@@ -618,8 +702,8 @@
             ]
         },
         {
-            "UID": 1259187840,
-            "ParentUID": 1811599488,
+            "UID": 452766880,
+            "ParentUID": 1068120128,
             "Name": "Plane001",
             "Translation": [
                 -0.028603,
@@ -645,8 +729,8 @@
             ]
         },
         {
-            "UID": 826793600,
-            "ParentUID": 1811599488,
+            "UID": 589245888,
+            "ParentUID": 1068120128,
             "Name": "City_building_010",
             "Translation": [
                 25.154011,
@@ -684,8 +768,8 @@
             ]
         },
         {
-            "UID": 1398096000,
-            "ParentUID": 1811599488,
+            "UID": 1845595008,
+            "ParentUID": 1068120128,
             "Name": "City_building_011",
             "Translation": [
                 30.134541,
@@ -715,8 +799,8 @@
             ]
         },
         {
-            "UID": 1418351616,
-            "ParentUID": 1811599488,
+            "UID": 1310251008,
+            "ParentUID": 1068120128,
             "Name": "City_building_013",
             "Translation": [
                 -42.288055,
@@ -746,8 +830,8 @@
             ]
         },
         {
-            "UID": 1008851136,
-            "ParentUID": 1811599488,
+            "UID": 1869827200,
+            "ParentUID": 1068120128,
             "Name": "City_building_014",
             "Translation": [
                 -19.439707,
@@ -777,8 +861,8 @@
             ]
         },
         {
-            "UID": 1456311424,
-            "ParentUID": 1811599488,
+            "UID": 917302592,
+            "ParentUID": 1068120128,
             "Name": "City_building_016",
             "Translation": [
                 34.270424,
@@ -816,8 +900,8 @@
             ]
         },
         {
-            "UID": 155349168,
-            "ParentUID": 1811599488,
+            "UID": 1017369536,
+            "ParentUID": 1068120128,
             "Name": "City_building_017",
             "Translation": [
                 44.260082,
@@ -855,8 +939,8 @@
             ]
         },
         {
-            "UID": 1613642880,
-            "ParentUID": 1811599488,
+            "UID": 1275880320,
+            "ParentUID": 1068120128,
             "Name": "City_building_022",
             "Translation": [
                 -20.831324,
@@ -886,8 +970,8 @@
             ]
         },
         {
-            "UID": 1179007104,
-            "ParentUID": 1811599488,
+            "UID": 1645597824,
+            "ParentUID": 1068120128,
             "Name": "City_building_023",
             "Translation": [
                 42.130642,
@@ -917,8 +1001,8 @@
             ]
         },
         {
-            "UID": 1269858304,
-            "ParentUID": 1811599488,
+            "UID": 1098766464,
+            "ParentUID": 1068120128,
             "Name": "City_building_024",
             "Translation": [
                 -20.572771,
@@ -948,8 +1032,8 @@
             ]
         },
         {
-            "UID": 1609674240,
-            "ParentUID": 1811599488,
+            "UID": 1992556672,
+            "ParentUID": 1068120128,
             "Name": "City_building_026",
             "Translation": [
                 31.511889,
@@ -979,8 +1063,8 @@
             ]
         },
         {
-            "UID": 937770240,
-            "ParentUID": 1811599488,
+            "UID": 1041633408,
+            "ParentUID": 1068120128,
             "Name": "City_building_028",
             "Translation": [
                 13.387990,
@@ -1010,8 +1094,8 @@
             ]
         },
         {
-            "UID": 106226296,
-            "ParentUID": 1811599488,
+            "UID": 1426577280,
+            "ParentUID": 1068120128,
             "Name": "Object010",
             "Translation": [
                 -2.503353,
@@ -1037,8 +1121,8 @@
             ]
         },
         {
-            "UID": 455675904,
-            "ParentUID": 1811599488,
+            "UID": 709757312,
+            "ParentUID": 1068120128,
             "Name": "City_building_030",
             "Translation": [
                 -42.807240,
@@ -1068,8 +1152,8 @@
             ]
         },
         {
-            "UID": 838113344,
-            "ParentUID": 1811599488,
+            "UID": 1599940736,
+            "ParentUID": 1068120128,
             "Name": "City_building_031",
             "Translation": [
                 -34.679482,
@@ -1099,8 +1183,8 @@
             ]
         },
         {
-            "UID": 284078752,
-            "ParentUID": 1811599488,
+            "UID": 2007766016,
+            "ParentUID": 1068120128,
             "Name": "City_building_032",
             "Translation": [
                 -29.478403,
@@ -1130,8 +1214,8 @@
             ]
         },
         {
-            "UID": 1134574976,
-            "ParentUID": 1811599488,
+            "UID": 1653144576,
+            "ParentUID": 1068120128,
             "Name": "City_building_033",
             "Translation": [
                 -32.361496,
@@ -1161,8 +1245,8 @@
             ]
         },
         {
-            "UID": 1339919360,
-            "ParentUID": 1811599488,
+            "UID": 1574874752,
+            "ParentUID": 1068120128,
             "Name": "City_building_034",
             "Translation": [
                 16.049517,
@@ -1192,8 +1276,8 @@
             ]
         },
         {
-            "UID": 2127595648,
-            "ParentUID": 1811599488,
+            "UID": 1370797824,
+            "ParentUID": 1068120128,
             "Name": "City_building_035",
             "Translation": [
                 13.387990,
@@ -1223,8 +1307,8 @@
             ]
         },
         {
-            "UID": 1491756416,
-            "ParentUID": 1811599488,
+            "UID": 888679680,
+            "ParentUID": 1068120128,
             "Name": "City_building_036",
             "Translation": [
                 -31.216331,
@@ -1254,8 +1338,8 @@
             ]
         },
         {
-            "UID": 1676608384,
-            "ParentUID": 1811599488,
+            "UID": 964017792,
+            "ParentUID": 1068120128,
             "Name": "City_building_037",
             "Translation": [
                 -20.317694,
@@ -1285,8 +1369,8 @@
             ]
         },
         {
-            "UID": 1810404224,
-            "ParentUID": 1811599488,
+            "UID": 774606976,
+            "ParentUID": 1068120128,
             "Name": "City_building_038",
             "Translation": [
                 -41.649002,
@@ -1316,8 +1400,8 @@
             ]
         },
         {
-            "UID": 1188603392,
-            "ParentUID": 1811599488,
+            "UID": 497449760,
+            "ParentUID": 1068120128,
             "Name": "City_building_039",
             "Translation": [
                 -42.807240,
@@ -1347,8 +1431,8 @@
             ]
         },
         {
-            "UID": 205957952,
-            "ParentUID": 1811599488,
+            "UID": 288548256,
+            "ParentUID": 1068120128,
             "Name": "City_building_040",
             "Translation": [
                 -34.679482,
@@ -1378,8 +1462,8 @@
             ]
         },
         {
-            "UID": 1166249728,
-            "ParentUID": 1811599488,
+            "UID": 1294650624,
+            "ParentUID": 1068120128,
             "Name": "City_building_041",
             "Translation": [
                 30.695278,
@@ -1409,8 +1493,8 @@
             ]
         },
         {
-            "UID": 1444579840,
-            "ParentUID": 1052595520,
+            "UID": 1793468416,
+            "ParentUID": 583424960,
             "Name": "Camera001_$AssimpFbx$_Translation",
             "Translation": [
                 -78.312431,
@@ -1431,8 +1515,8 @@
             "Components": []
         },
         {
-            "UID": 1036970752,
-            "ParentUID": 1444579840,
+            "UID": 1250561792,
+            "ParentUID": 1793468416,
             "Name": "Camera001_$AssimpFbx$_PreRotation",
             "Translation": [
                 0,
@@ -1453,8 +1537,8 @@
             "Components": []
         },
         {
-            "UID": 676703872,
-            "ParentUID": 1036970752,
+            "UID": 1905229824,
+            "ParentUID": 1250561792,
             "Name": "Camera001_$AssimpFbx$_Rotation",
             "Translation": [
                 0,
@@ -1475,8 +1559,8 @@
             "Components": []
         },
         {
-            "UID": 2029346432,
-            "ParentUID": 676703872,
+            "UID": 1219043200,
+            "ParentUID": 1905229824,
             "Name": "Camera001",
             "Translation": [
                 0,
@@ -1497,8 +1581,8 @@
             "Components": []
         },
         {
-            "UID": 1370057344,
-            "ParentUID": 1052595520,
+            "UID": 64446460,
+            "ParentUID": 583424960,
             "Name": "Camera001.Target_$AssimpFbx$_Translation",
             "Translation": [
                 -28.132622,
@@ -1519,8 +1603,8 @@
             "Components": []
         },
         {
-            "UID": 594222720,
-            "ParentUID": 1370057344,
+            "UID": 1479654400,
+            "ParentUID": 64446460,
             "Name": "Camera001.Target_$AssimpFbx$_PreRotation",
             "Translation": [
                 0,
@@ -1541,8 +1625,8 @@
             "Components": []
         },
         {
-            "UID": 35118300,
-            "ParentUID": 594222720,
+            "UID": 746612736,
+            "ParentUID": 1479654400,
             "Name": "Camera001.Target_$AssimpFbx$_Rotation",
             "Translation": [
                 0,
@@ -1563,8 +1647,8 @@
             "Components": []
         },
         {
-            "UID": 1629972224,
-            "ParentUID": 35118300,
+            "UID": 2005103744,
+            "ParentUID": 746612736,
             "Name": "Camera001.Target",
             "Translation": [
                 0,
@@ -1585,8 +1669,8 @@
             "Components": []
         },
         {
-            "UID": 969360384,
-            "ParentUID": 1052595520,
+            "UID": 1217966592,
+            "ParentUID": 583424960,
             "Name": "Spot001_$AssimpFbx$_Translation",
             "Translation": [
                 -66.721268,
@@ -1607,8 +1691,8 @@
             "Components": []
         },
         {
-            "UID": 285912864,
-            "ParentUID": 969360384,
+            "UID": 803093056,
+            "ParentUID": 1217966592,
             "Name": "Spot001_$AssimpFbx$_PreRotation",
             "Translation": [
                 0,
@@ -1629,8 +1713,8 @@
             "Components": []
         },
         {
-            "UID": 1788170880,
-            "ParentUID": 285912864,
+            "UID": 273832096,
+            "ParentUID": 803093056,
             "Name": "Spot001_$AssimpFbx$_Rotation",
             "Translation": [
                 0,
@@ -1651,8 +1735,8 @@
             "Components": []
         },
         {
-            "UID": 1191958528,
-            "ParentUID": 1788170880,
+            "UID": 367122144,
+            "ParentUID": 273832096,
             "Name": "Spot001_$AssimpFbx$_PostRotation",
             "Translation": [
                 0,
@@ -1673,8 +1757,8 @@
             "Components": []
         },
         {
-            "UID": 581125632,
-            "ParentUID": 1191958528,
+            "UID": 1947053312,
+            "ParentUID": 367122144,
             "Name": "Spot001",
             "Translation": [
                 0,
@@ -1695,8 +1779,8 @@
             "Components": []
         },
         {
-            "UID": 334480256,
-            "ParentUID": 1052595520,
+            "UID": 1837258880,
+            "ParentUID": 583424960,
             "Name": "Spot001.Target_$AssimpFbx$_Translation",
             "Translation": [
                 28.890945,
@@ -1717,8 +1801,8 @@
             "Components": []
         },
         {
-            "UID": 2048386176,
-            "ParentUID": 334480256,
+            "UID": 1945865600,
+            "ParentUID": 1837258880,
             "Name": "Spot001.Target_$AssimpFbx$_PreRotation",
             "Translation": [
                 0,
@@ -1739,8 +1823,8 @@
             "Components": []
         },
         {
-            "UID": 1674821632,
-            "ParentUID": 2048386176,
+            "UID": 1315027584,
+            "ParentUID": 1945865600,
             "Name": "Spot001.Target_$AssimpFbx$_Rotation",
             "Translation": [
                 0,
@@ -1761,8 +1845,8 @@
             "Components": []
         },
         {
-            "UID": 1315111808,
-            "ParentUID": 1674821632,
+            "UID": 809089728,
+            "ParentUID": 1315027584,
             "Name": "Spot001.Target",
             "Translation": [
                 0,

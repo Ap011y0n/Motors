@@ -43,11 +43,11 @@ bool ModuleSceneIntro::Start()
 	//GameObject* object = CreateGameObject("test");
 	//object->CreateComponent(ComponentType::MESH);
 
-	std::string file_path = "Street environment_V01.FBX";
+	std::string file_path = "Assets/BakerHouse.fbx";
 	char* buffer = nullptr;
 	uint fileSize = 0;
 	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	//App->FBX->LoadFBX(buffer, fileSize);
+	App->FBX->LoadFBX(buffer, fileSize);
 
 	file_path = "Assets/p1character.FBX";
 	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
@@ -262,9 +262,9 @@ void ModuleSceneIntro::UpdateGameObject(GameObject* father, float dt)
 
 void ModuleSceneIntro::SetDelete(GameObject* father)
 {
-	if (father->father != nullptr)
+	if (father->parent != nullptr)
 	{
-		if (father->father->to_delete)
+		if (father->parent->to_delete)
 		{
 			father->to_delete = true;
 		}
@@ -276,37 +276,41 @@ void ModuleSceneIntro::SetDelete(GameObject* father)
 	
 
 }
-void ModuleSceneIntro::DeleteGameObject(GameObject* father)
+
+bool ModuleSceneIntro::DeleteGameObject(GameObject* parent)
 {
 	
-	for (int i = 0; i < father->childs.size(); i++)
+	for (int i = 0; i < parent->childs.size(); i++)
 	{
-		DeleteGameObject(father->childs[i]);
+		if (DeleteGameObject(parent->childs[i]))
+			i--;
 	}
-	if (father->to_delete)
+	if (parent->to_delete)
 	{
-		if (father->father != nullptr)
+		if (parent->parent != nullptr)
 		{
-			for (int i = 0; i < father->father->childs.size(); i++)
+			for (int i = 0; i < parent->parent->childs.size(); i++)
 			{
-				if (father->father->childs[i] == father)
+				if (parent->parent->childs[i] == parent)
 				{
-					father->father->childs.erase(father->father->childs.begin() + i);
+					parent->parent->childs.erase(parent->parent->childs.begin() + i);
 					i--;
 				}
 			}
 		}
-		if (father != NULL)
+		if (parent != NULL)
 		{
-			if (App->UI->selectedObj = father)
+			if (App->UI->selectedObj = parent)
 			{
 				App->UI->selectedObj = nullptr;
 			}
 
-			delete father;
-			father = NULL;
+			delete parent;
+			parent = NULL;
 		}
+		return true;
 
 	}
+	return false;
 
 }

@@ -19,11 +19,13 @@ GameObject::GameObject()
 	to_delete = false;
 	active = true;
 	Name = "NewGameObject";
-	father = nullptr;
+	parent = nullptr;
 	isSelected = false;
 	LCG rand;
 	UID = rand.Int();
 	parentUID = 0;
+	displayAABB = true;
+	currentAABB = nullptr;
 }
 
 GameObject::GameObject(const char* name, GameObject* node)
@@ -31,24 +33,32 @@ GameObject::GameObject(const char* name, GameObject* node)
 	to_delete = false;
 	active = true;
 	Name = name;
-	father = node;
+	parent = node;
 	isSelected = false;
 	LCG rand;
 	UID = rand.Int();
-	if (father != nullptr)
+	displayAABB = true;
+	if (parent != nullptr)
 	{
-		father->childs.push_back(this);
-		parentUID = father->UID;
+		parent->childs.push_back(this);
+		parentUID = parent->UID;
 	}
+	currentAABB = nullptr;
 }
 
 GameObject::~GameObject()
 {
+	this;
+	HideAABB();
 
 	for (int i = 0; i < Components.size(); i++)
 	{
-		if(Components[i] != nullptr)
-		delete Components[i];
+		if (Components[i] != nullptr)
+		{
+			Components[i]->type;
+			delete Components[i];
+
+		}
 	}
 	Components.clear();
 }
@@ -56,11 +66,37 @@ GameObject::~GameObject()
 bool GameObject::Update(float dt)
 {
 	bool ret = true;
-
-	for (int i = 0; i < Components.size(); i++)
+	this;
+	if (!to_delete)
 	{
-		Components[i]->Update(dt);
+		ComponentMesh* myMesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+		ComponentTransform* myTrans = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+		if (myMesh != nullptr)
+		{
+			obb = myMesh->GetAABB();
+			if (myTrans != nullptr)
+			{
+				obb.Transform(myTrans->AcumulateparentTransform());
+				aabb.SetNegativeInfinity();
+				aabb.Enclose(obb);
+				if (displayAABB)
+				{
+					HideAABB();
+					DisplayAABB();
+				}
+			}
+
+		}
+	
+		
+
+		for (int i = 0; i < Components.size(); i++)
+		{
+
+			Components[i]->Update(dt);
+		}
 	}
+
 
 	return ret;
 }
@@ -80,6 +116,31 @@ Component* GameObject::CreateComponent(ComponentType type)
 
 	return newComponent;
 }
+
+Component* GameObject::GetComponent(ComponentType type)
+{
+	Component* newComponent = nullptr;
+	for (int i = 0; i < Components.size(); i++)
+	{
+		if(type == Components[i]->type)
+			return Components[i];
+	}
+	
+
+	return nullptr;
+}
+
+void GameObject::HideAABB()
+{
+	if(currentAABB != nullptr)
+	currentAABB->to_delete = true;
+}
+
+void GameObject::DisplayAABB()
+{
+	currentAABB = App->PrimManager->CreateAABB(&aabb);
+}
+
 
 //*************************		Component
 Component::Component()
@@ -183,8 +244,10 @@ bool ComponentMesh::Update(float dt)
 	bool ret = true;
 	ComponentMaterial* material = nullptr; 
 	ComponentTransform* transform = nullptr;
+	material = (ComponentMaterial*)owner->GetComponent(ComponentType::MATERIAL);
+	transform = (ComponentTransform*)owner->GetComponent(ComponentType::TRANSFORM);
 
-	for (int i = 0; i < owner->Components.size(); i++)
+	/*for (int i = 0; i < owner->Components.size(); i++)
 	{
 		if (owner->Components[i]->type == ComponentType::MATERIAL)
 		{
@@ -194,7 +257,7 @@ bool ComponentMesh::Update(float dt)
 		{
 			transform = (ComponentTransform*)owner->Components[i];
 		}
-	}
+	}*/
 
 	
 		glPushMatrix();
@@ -320,6 +383,92 @@ void ComponentMesh::DisplayNormals()
 		}
 
 }
+
+void ComponentMesh::SetAABB()
+{
+	bbox.SetNegativeInfinity();
+	float3* vertexvert = (float3*)vertex;
+	bbox.Enclose(vertexvert, num_vertex);
+
+	//float3 array[8];
+	//bbox.GetCornerPoints(array);
+
+	////0 = back left bot
+	////2 = back left top
+	////4 = back right bot
+	////6 = back right top
+
+	////3 = front left top
+	////7 = front right top
+	////1 = front left bot
+	////5 = front right bot
+	//vec3 origin, destination;
+
+	//origin.Set(array[0].x, array[0].y, array[0].z);
+	//destination.Set(array[1].x, array[1].y, array[1].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[1].x, array[1].y, array[1].z);
+	//destination.Set(array[3].x, array[3].y, array[3].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[3].x, array[3].y, array[3].z);
+	//destination.Set(array[7].x, array[7].y, array[7].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[3].x, array[3].y, array[3].z);
+	//destination.Set(array[2].x, array[2].y, array[2].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[0].x, array[0].y, array[0].z);
+	//destination.Set(array[2].x, array[2].y, array[2].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[1].x, array[1].y, array[1].z);
+	//destination.Set(array[5].x, array[5].y, array[5].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[7].x, array[7].y, array[7].z);
+	//destination.Set(array[6].x, array[6].y, array[6].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+
+	//origin.Set(array[2].x, array[2].y, array[2].z);
+	//destination.Set(array[6].x, array[6].y, array[6].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[6].x, array[6].y, array[6].z);
+	//destination.Set(array[4].x, array[4].y, array[4].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[4].x, array[4].y, array[4].z);
+	//destination.Set(array[0].x, array[0].y, array[0].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[7].x, array[7].y, array[7].z);
+	//destination.Set(array[5].x, array[5].y, array[5].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[4].x, array[4].y, array[4].z);
+	//destination.Set(array[5].x, array[5].y, array[5].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+}
+AABB ComponentMesh::GetAABB()
+{
+	return bbox;
+}
 void ComponentMesh::HideNormals()
 {
 	if (GraphicNormals != nullptr)
@@ -347,6 +496,8 @@ ComponentMaterial::ComponentMaterial(GameObject* ObjectOwner) : Component()
 
 ComponentMaterial::~ComponentMaterial()
 {
+	LOG("Deleting Component Material");
+
 	glDeleteTextures(1, &(GLuint)texbuffer);
 }
 
@@ -375,6 +526,7 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 
 ComponentTransform::~ComponentTransform()
 {
+	LOG("Deleting Component Transform");
 }
 
 bool ComponentTransform::Update(float dt)
@@ -397,15 +549,15 @@ float4x4 ComponentTransform::AcumulateparentTransform()
 	float4x4 parentmat;
 	parentmat = parentmat.identity;
 	ComponentTransform* parentransform = nullptr;
-	if (owner->father != nullptr)
+	if (owner->parent != nullptr)
 	{
 		 
-			for (int i = 0; i < owner->father->Components.size(); i++)
+			for (int i = 0; i < owner->parent->Components.size(); i++)
 			{
 				
-				if (owner->father->Components[i]->type == ComponentType::TRANSFORM)
+				if (owner->parent->Components[i]->type == ComponentType::TRANSFORM)
 				{
-					parentransform = (ComponentTransform*)owner->father->Components[i];
+					parentransform = (ComponentTransform*)owner->parent->Components[i];
 				}
 			}
 			if(parentransform != nullptr)

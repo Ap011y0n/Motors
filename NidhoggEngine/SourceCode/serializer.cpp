@@ -205,6 +205,8 @@ void Serializer::LoadScene(const char* path)
 				NewMesh->id_normals = App->FBX->FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
 
 				NewMesh->id_index = App->FBX->FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
+
+				NewMesh->SetAABB();
 			}
 			else if (type == "texture")
 			{
@@ -231,15 +233,15 @@ void Serializer::sortScene() {
 		{
 			if (tempvector[i]->parentUID == tempvector[j]->UID)
 			{
-				tempvector[i]->father = tempvector[j];
+				tempvector[i]->parent = tempvector[j];
 				tempvector[j]->childs.push_back(tempvector[i]);
 				
 			}
 				
 		}
-		if (tempvector[i]->father == nullptr)
+		if (tempvector[i]->parent == nullptr)
 		{
-			tempvector[i]->father = App->scene_intro->scene;
+			tempvector[i]->parent = App->scene_intro->scene;
 			App->scene_intro->scene->childs.push_back(tempvector[i]);
 		}
 	}

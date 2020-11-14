@@ -8,6 +8,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "MathGeoLib/include/MathGeoLib.h"
 
 
 // ------------------------------------------------------------
@@ -873,10 +874,10 @@ void PrimPlane::InnerRender() const
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-// LINE ==================================================
+// NORMALS ==================================================
 PrimNormals::PrimNormals() : Primitive()
 {
-	type = PrimitiveTypes::Primitive_Line;
+	type = PrimitiveTypes::Primitive_Normals;
 	to_delete = false;
 
 }
@@ -935,6 +936,122 @@ void PrimNormals::InnerRender() const
 {
 	glLineWidth(2.0f);
 	glColor4ub(255, 0.0, 0.0, 0.0);
+
+	/*glBegin(GL_LINES);
+
+	glVertex3f(origin.x, origin.y, origin.z);
+	glVertex3f(destination.x, destination.y, destination.z);
+
+	glEnd();*/
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+
+	glDrawElements(GL_LINES, num_indices, GL_UNSIGNED_INT, NULL);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glColor4ub(255, 255, 255, 0.0);
+
+}
+
+// AABB ==================================================
+PrimAABB::PrimAABB() : Primitive()
+{
+	type = PrimitiveTypes::Primitive_AABB;
+	to_delete = false;
+
+}
+
+PrimAABB::~PrimAABB()
+{
+	//glDeleteBuffers(sizeof(float) * num_vertices * 3, (GLuint*)&my_vertex);
+	//glDeleteBuffers(sizeof(uint) * sizeof(uint) * num_indices, (GLuint*)&my_indices);
+
+	glDeleteBuffers(1, &my_vertex);
+	glDeleteBuffers(1, &my_indices);
+
+}
+
+PrimAABB::PrimAABB(AABB* bbox) : Primitive()
+{
+	type = PrimitiveTypes::Primitive_Normals;
+	to_delete = false;
+
+	float3 array[8];
+
+	bbox->GetCornerPoints(array);
+	vert = new float[24];
+	for (int i = 0; i < 8; i++)
+	{
+		vert[i * 3] = array[i].x;
+		vert[i * 3 + 1] = array[i].y;
+		vert[i * 3 + 2] = array[i].z;
+	}
+	
+	uint indices[24] = {
+		
+			0, 1,
+			1, 3,
+			
+			3, 7,
+			3, 2,
+		
+			0, 2,
+			1, 5,
+			 
+			7, 6,
+			2, 6,
+			
+			6, 4,
+			4, 0,
+			
+			7, 5,
+			4, 5,
+	};
+
+	index = new uint[24];
+
+	for (int i = 0; i < 24; i++)
+	{
+		index[i] = indices[i];
+
+	}
+	num_indices = 24;
+
+
+
+	num_vertices = 8;
+
+	my_indices = 0;
+	my_vertex = 0;
+	glGenBuffers(1, (GLuint*)&(my_vertex));
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vert, GL_STATIC_DRAW);
+	// … bind and use other buffers
+
+	glGenBuffers(1, (GLuint*)&(my_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, index, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	delete[] vert;
+	delete[] index;
+
+}
+
+void PrimAABB::InnerRender() const
+{
+	glLineWidth(2.0f);
+	glColor4ub(0.0, 255, 0.0, 0.0);
 
 	/*glBegin(GL_LINES);
 
