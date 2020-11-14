@@ -282,6 +282,10 @@ update_status ModuleUI::Update(float dt)
 			
 			ImGui::EndMenu();
 		}
+		if (ImGui::MenuItem("Camera"))
+		{
+			App->scene_intro->scene->CreateCamera();
+		}
 
 		ImGui::EndMenu();
 	}
@@ -780,6 +784,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 	ComponentTransform* transform = nullptr;
 	ComponentMaterial* material = nullptr;
 	ComponentMesh* mesh = nullptr;
+	ComponentCamera* camera = nullptr;
 	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 
 	for (int i = 0; i < obj->Components.size(); i++)
@@ -795,6 +800,10 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 		if (obj->Components[i]->type == ComponentType::MATERIAL)
 		{
 			material = (ComponentMaterial*)obj->Components[i];
+		}
+		if (obj->Components[i]->type == ComponentType::CAMERA) 
+		{
+			camera = (ComponentCamera*)obj->Components[i];
 		}
 	}
 	if (transform != nullptr)
@@ -991,6 +1000,34 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 			
 			ImGui::TreePop();
 		}
+	}
+
+	if (camera != nullptr) 
+	{
+		if (ImGui::TreeNodeEx("Camera", node_flags))
+		{
+			ImGui::Separator();
+			ImGui::Text("Filed of View:"); 
+	
+			float p = camera->frustrum.farPlaneDistance;
+			ImGui::SetNextItemWidth(200);
+			ImGui::DragFloat("Far Plane", &p);
+			if (ImGui::IsItemActive())
+			{
+				camera->frustrum.farPlaneDistance = p;
+			}
+
+			float p1 = camera->frustrum.nearPlaneDistance;
+			ImGui::SetNextItemWidth(200);
+			ImGui::DragFloat("Near Plane", &p1);
+			if (ImGui::IsItemActive())
+			{
+				camera->frustrum.nearPlaneDistance = p1;
+			}
+
+			ImGui::TreePop();
+		}
+
 	}
 	
 }

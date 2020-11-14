@@ -14,6 +14,7 @@ enum class ComponentType
 	MESH,
 	MATERIAL,
 	TRANSFORM,
+	CAMERA,
 };
 
 
@@ -121,6 +122,22 @@ public:
 
 };
 
+class ComponentCamera : public Component {
+
+public:
+	ComponentCamera(GameObject* ObjectOwner);
+	~ComponentCamera();
+	bool Update(float dt);
+	void PrintFrustrum();
+	void CreateFrustrum(float3*corners);
+	void updateFrustrum();
+public:
+
+	Frustum frustrum;
+	Plane planes[6];
+
+};
+
 class GameObject 
 {
 public:
@@ -130,6 +147,9 @@ public:
 	bool Update(float dt);
 	Component* CreateComponent(ComponentType type); //Create a new component for this game object, needs a Component type
 	Component* GetComponent(ComponentType type); //Create a new component for this game object, needs a Component type
+	GameObject* CreateEmptyCamera(const char* name = NULL);
+	GameObject* CreateCamera(const char* name = NULL);
+	void AddGameObjtoScene(GameObject* GO);
 	void DisplayAABB();
 	void HideAABB();
 public:
@@ -148,4 +168,5 @@ public:
 private:
 	PrimAABB* currentAABB;
 };
+
 

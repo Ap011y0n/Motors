@@ -110,6 +110,7 @@ Component* GameObject::CreateComponent(ComponentType type)
 	case ComponentType::MESH: { ComponentMesh* mesh = new ComponentMesh(this); newComponent = mesh; break; }
 	case ComponentType::MATERIAL: { ComponentMaterial* material = new ComponentMaterial(this); newComponent = material; break; }
 	case ComponentType::TRANSFORM: { ComponentTransform* transform = new ComponentTransform(this); newComponent = transform; break; }
+	case ComponentType::CAMERA: {ComponentCamera* camera = new ComponentCamera(this); newComponent = camera; break; }
 
 	}
 	Components.push_back(newComponent);
@@ -597,4 +598,99 @@ void ComponentTransform::Scale(float x, float y, float z)
 
 
 }
+
+//*************************		ComponentCamera
+ComponentCamera::ComponentCamera(GameObject* ObjectOwner) :Component() {
+	type = ComponentType::CAMERA;
+	active = true;
+	owner = ObjectOwner;
+
+	float aspectRatio = 1.77777777f;
+	frustrum.nearPlaneDistance = 4;
+	frustrum.farPlaneDistance = 300;
+	frustrum.pos = float3(0.0f,0.0f,0.0f);
+	frustrum.type = FrustumType::PerspectiveFrustum;
+
+	frustrum.horizontalFov = (65* DEGTORAD);//This will stay as it is
+	frustrum.verticalFov = (65 * DEGTORAD) / aspectRatio; //This will be adaptable
+}
+
+ComponentCamera::~ComponentCamera()
+{
+
+}
+
+bool ComponentCamera::Update(float dt)
+{
+	bool ret = true;
+	PrintFrustrum();
+	return ret;
+}
+
+void ComponentCamera::PrintFrustrum() 
+{
+	updateFrustrum();
+	if (owner->isSelected) 
+	{
+		frustrum.pos = float3(0.0f, 0.0f, 0.0f);
+		float3 corners[8];
+		frustrum.GetCornerPoints(corners);
+		CreateFrustrum(corners);
+	}
+
+}
+
+void ComponentCamera::CreateFrustrum(float3* corners) 
+{
+	glBegin(GL_LINES);
+	glVertex3fv(corners[0].ptr()); glVertex3fv(corners[1].ptr());
+	glVertex3fv(corners[0].ptr()); glVertex3fv(corners[2].ptr());
+	glVertex3fv(corners[0].ptr()); glVertex3fv(corners[4].ptr());
+	glVertex3fv(corners[3].ptr()); glVertex3fv(corners[1].ptr());
+	glVertex3fv(corners[3].ptr()); glVertex3fv(corners[2].ptr());
+	glVertex3fv(corners[3].ptr()); glVertex3fv(corners[7].ptr());
+	glVertex3fv(corners[5].ptr()); glVertex3fv(corners[1].ptr());
+	glVertex3fv(corners[5].ptr()); glVertex3fv(corners[4].ptr());
+	glVertex3fv(corners[5].ptr()); glVertex3fv(corners[7].ptr());
+	glVertex3fv(corners[6].ptr()); glVertex3fv(corners[2].ptr());
+	glVertex3fv(corners[6].ptr()); glVertex3fv(corners[4].ptr());
+	glVertex3fv(corners[6].ptr()); glVertex3fv(corners[7].ptr());
+	glEnd();
+
+}
+
+void ComponentCamera::updateFrustrum() 
+{
+	float3 rotation = float3(0.0f, 0.0f, 0.0f);
+	rotation *= DEGTORAD;
+	float4x4 toSend = float4x4::FromEulerXYZ(rotation.x, rotation.y, rotation.z);
+	frustrum.SetWorldMatrix(toSend.Float3x4Part());
+	frustrum.pos = float3(0.0f, 0.0f, 0.0f);
+}
+
+GameObject* GameObject::CreateEmptyCamera(const char* name)
+{
+	GameObject* empty = new GameObject();
+	empty->Name = "Camera";
+	empty->CreateComponent(ComponentType::TRANSFORM);
+
+	AddGameObjtoScene(empty);
+
+	return empty;
+}
+
+GameObject* GameObject::CreateCamera(const char* name)
+{
+	GameObject* camera = CreateEmptyCamera(name);
+	camera->CreateComponent(ComponentType::CAMERA);
+	return camera;
+}
+
+void GameObject::AddGameObjtoScene(GameObject* GO)
+{
+	GO->parent = App->scene_intro->scene;
+	App->scene_intro->scene->childs.push_back(GO);
+}
+
+
 
