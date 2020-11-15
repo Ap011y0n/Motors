@@ -1027,14 +1027,17 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 				camera->frustrum.nearPlaneDistance = p1;
 			}
 
-			float p2 = camera->frustrum.verticalFov;
+			float p2 = camera->GetFOV();
 			ImGui::SetNextItemWidth(200);
 			ImGui::DragFloat("Field of view", &p2);
 			if (ImGui::IsItemActive())
 			{
+				camera->SetFOV(p2);
 				//camera->frustrum.verticalFov = p2;
 			}
-
+			ImGui::Text("Horizontal FOV: %f",camera->GetHorizontalFov());
+			ImGui::Text("Vertical FOV: %f", camera->GetFOV());
+			ImGui::Text("Aspect ratio: %f", camera->aspectRatio);
 			ImGui::TreePop();
 		}
 

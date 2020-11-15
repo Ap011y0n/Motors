@@ -131,8 +131,12 @@ public:
 	void PrintFrustrum();
 	void CreateFrustrum(float3*corners);
 	void updateFrustrum();
+	float GetFOV();
+	float GetHorizontalFov();
+	void SetFOV(float FOV);
+	void UpdatePos();
 public:
-
+	float aspectRatio;
 	Frustum frustrum;
 	Plane planes[6];
 
@@ -149,6 +153,7 @@ public:
 	Component* GetComponent(ComponentType type); //Create a new component for this game object, needs a Component type
 	void DisplayAABB();
 	void HideAABB();
+	void UpdateFrustrums();
 public:
 	bool to_delete = false;
 	bool active = false;

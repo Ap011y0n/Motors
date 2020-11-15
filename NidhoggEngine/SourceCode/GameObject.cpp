@@ -607,7 +607,7 @@ ComponentCamera::ComponentCamera(GameObject* ObjectOwner) :Component() {
 	owner = ObjectOwner;
 
 
-	float aspectRatio = 1.77777777f;
+	aspectRatio = 2.049; 
 	frustrum.front = float3(0.0f, 0.0f, 1.0f);
 	frustrum.up = float3(0.0f, 1.f, 0.0f);
 
@@ -635,14 +635,16 @@ bool ComponentCamera::Update(float dt)
 
 void ComponentCamera::PrintFrustrum() 
 {
-	updateFrustrum();
+	updateFrustrum(); 
+	UpdatePos();
 	//if (owner->isSelected) 
 	{
-		frustrum.pos = float3(0.0f, 1.0f, 0.0f);
+		//frustrum.pos = float3(0.0f, 1.0f, 0.0f);
 		float3 corners[8];
 		frustrum.GetCornerPoints(corners);
 		CreateFrustrum(corners);
 	}
+	
 
 }
 
@@ -671,7 +673,39 @@ void ComponentCamera::updateFrustrum()
 	rotation *= DEGTORAD;
 	float4x4 toSend = float4x4::FromEulerXYZ(rotation.x, rotation.y, rotation.z);
 	frustrum.SetWorldMatrix(toSend.Float3x4Part());
-	frustrum.pos = float3(0.0f, 0.0f, 0.0f);
+	//frustrum.pos = float3(0.0f, 0.0f, 0.0f);
 }
 
+float ComponentCamera::GetFOV() 
+{
+	//The fov is in radians so easier to understand for the user:
+	return frustrum.verticalFov * RADTODEG;
+}
+float ComponentCamera::GetHorizontalFov()
+{
+	//The fov is in radians so easier to understand for the user:
+	return frustrum.horizontalFov * RADTODEG;
+}
+
+void ComponentCamera::SetFOV(float FOV)
+{
+	//float aspecratio;
+	FOV = FOV * DEGTORAD; //now we pas to rad again
+	//aspecratio = frustrum.AspectRatio();
+	frustrum.verticalFov = FOV;
+	frustrum.horizontalFov = 2.f * Atan(Tan(FOV * 0.5f) * aspectRatio/*aspecratio*/);
+
+}
+
+void ComponentCamera::UpdatePos()
+{
+	ComponentTransform* CameraTransform = nullptr;
+	CameraTransform = (ComponentTransform*)owner->GetComponent(ComponentType::TRANSFORM);
+	if(CameraTransform!= nullptr)
+	{
+		frustrum.pos = CameraTransform->pos;
+		LOG("x= %f  y= %f  z= %f  ",frustrum.pos.x, frustrum.pos.y , frustrum.pos.z)
+	}
+	
+}
 
