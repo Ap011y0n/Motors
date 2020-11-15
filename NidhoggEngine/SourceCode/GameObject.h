@@ -147,9 +147,6 @@ public:
 	bool Update(float dt);
 	Component* CreateComponent(ComponentType type); //Create a new component for this game object, needs a Component type
 	Component* GetComponent(ComponentType type); //Create a new component for this game object, needs a Component type
-	GameObject* CreateEmptyCamera(const char* name = NULL);
-	GameObject* CreateCamera(const char* name = NULL);
-	void AddGameObjtoScene(GameObject* GO);
 	void DisplayAABB();
 	void HideAABB();
 public:

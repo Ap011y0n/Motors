@@ -669,29 +669,4 @@ void ComponentCamera::updateFrustrum()
 	frustrum.pos = float3(0.0f, 0.0f, 0.0f);
 }
 
-GameObject* GameObject::CreateEmptyCamera(const char* name)
-{
-	GameObject* empty = new GameObject();
-	empty->Name = "Camera";
-	empty->CreateComponent(ComponentType::TRANSFORM);
-
-	AddGameObjtoScene(empty);
-
-	return empty;
-}
-
-GameObject* GameObject::CreateCamera(const char* name)
-{
-	GameObject* camera = CreateEmptyCamera(name);
-	camera->CreateComponent(ComponentType::CAMERA);
-	return camera;
-}
-
-void GameObject::AddGameObjtoScene(GameObject* GO)
-{
-	GO->parent = App->scene_intro->scene;
-	App->scene_intro->scene->childs.push_back(GO);
-}
-
-
 

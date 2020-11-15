@@ -284,7 +284,9 @@ update_status ModuleUI::Update(float dt)
 		}
 		if (ImGui::MenuItem("Camera"))
 		{
-			App->scene_intro->scene->CreateCamera();
+			GameObject* camera = new GameObject("Camera", App->scene_intro->scene);
+			camera->CreateComponent(ComponentType::TRANSFORM);
+			camera->CreateComponent(ComponentType::CAMERA);
 		}
 
 		ImGui::EndMenu();
