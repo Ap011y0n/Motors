@@ -3,8 +3,15 @@
 #include "ModuleCamera3D.h"
 #include "ModuleSceneIntro.h"
 
+#include "Glew/include/glew.h"
+#include "SDL/include/SDL_opengl.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
+#include "GameObject.h"
+
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+
 	CalculateViewMatrix();
 
 	X = vec3(1.0f, 0.0f, 0.0f);
@@ -25,7 +32,10 @@ bool ModuleCamera3D::Start()
 {
 	LOG("Setting up the camera");
 	bool ret = true;
-	background.Set(0.f, 0.f, 0.f, 1.f);
+	cameraOBJ = new GameObject("mainCamera", nullptr);
+	cameraComp = (ComponentCamera*)cameraOBJ->CreateComponent(ComponentType::CAMERA);
+
+	background.Set(0.f, 0, 0.f, 1.f);
 	return ret;
 }
 
@@ -42,7 +52,7 @@ update_status ModuleCamera3D::Update(float dt)
 {
 	// Implement a debug camera with keys and mouse
 	// Now we can make this movememnt frame rate independant!
-
+	cameraOBJ->Update(dt);
 	vec3 newPos(0,0,0);
 	float speed = 4.0f * dt;
 	if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
@@ -172,6 +182,14 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 	Reference += Movement;
 
 	CalculateViewMatrix();
+}
+
+// -----------------------------------------------------------------
+float* ModuleCamera3D::GetFustrumMatrix()
+{
+	float4x4 mat = cameraComp->frustrum.ViewMatrix();
+	
+	return mat.Transposed().ptr();
 }
 
 // -----------------------------------------------------------------

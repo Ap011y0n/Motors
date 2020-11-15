@@ -59,7 +59,9 @@ bool ModuleSceneIntro::Start()
 
 	vec4 coords(0, 1, 0, 0);
 	App->PrimManager->CreatePlane(coords);
-
+//	vec3 size(1, 1, 1);
+//	vec3 pos(0, 0, -2);
+//	App->PrimManager->CreateCube(size, pos);
 
 	int i, j, c;
 

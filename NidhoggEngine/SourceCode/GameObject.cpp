@@ -606,7 +606,11 @@ ComponentCamera::ComponentCamera(GameObject* ObjectOwner) :Component() {
 	active = true;
 	owner = ObjectOwner;
 
+
 	float aspectRatio = 1.77777777f;
+	frustrum.front = float3(0.0f, 0.0f, 1.0f);
+	frustrum.up = float3(0.0f, 1.f, 0.0f);
+
 	frustrum.nearPlaneDistance = 4;
 	frustrum.farPlaneDistance = 300;
 	frustrum.pos = float3(0.0f,0.0f,0.0f);
@@ -614,6 +618,7 @@ ComponentCamera::ComponentCamera(GameObject* ObjectOwner) :Component() {
 
 	frustrum.horizontalFov = (65* DEGTORAD);//This will stay as it is
 	frustrum.verticalFov = (65 * DEGTORAD) / aspectRatio; //This will be adaptable
+	float4x4 mat = frustrum.ViewMatrix();
 }
 
 ComponentCamera::~ComponentCamera()
@@ -631,9 +636,9 @@ bool ComponentCamera::Update(float dt)
 void ComponentCamera::PrintFrustrum() 
 {
 	updateFrustrum();
-	if (owner->isSelected) 
+	//if (owner->isSelected) 
 	{
-		frustrum.pos = float3(0.0f, 0.0f, 0.0f);
+		frustrum.pos = float3(0.0f, 1.0f, 0.0f);
 		float3 corners[8];
 		frustrum.GetCornerPoints(corners);
 		CreateFrustrum(corners);

@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
+
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
 #include <gl/GL.h>
@@ -23,7 +25,7 @@ bool ModuleRenderer3D::Init()
 {
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
-	
+	activeCam = 0;
 	//Create context
 	
 	if(context == NULL)
@@ -116,8 +118,27 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		activeCam++;
+		if (activeCam == MAX_CAMS)
+		{
+			activeCam = 0;
+		}
+	}
+	switch (activeCam)
+	{
+		case 0:
+			glLoadMatrixf(App->camera->GetViewMatrix());
+		break;
+		case 1:
+			glLoadMatrixf(App->camera->GetFustrumMatrix());
+		break;
 
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	}
+	float* mat1 = App->camera->GetViewMatrix();
+	float* mat2 = App->camera->GetFustrumMatrix();
+
 
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);

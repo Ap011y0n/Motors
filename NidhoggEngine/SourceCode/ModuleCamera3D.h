@@ -4,6 +4,7 @@
 #include "glmath.h"
 
 class GameObject;
+class ComponentCamera;
 
 class ModuleCamera3D : public Module
 {
@@ -19,7 +20,7 @@ public:
 	void LookAt(const vec3 &Spot);
 	void Move(const vec3 &Movement);
 	float* GetViewMatrix();
-
+	float* GetFustrumMatrix();
 private:
 
 	void CalculateViewMatrix();
@@ -28,8 +29,11 @@ public:
 	
 	vec3 X, Y, Z, Position, Reference;
 	Color background;
+	GameObject* cameraOBJ;
+	ComponentCamera* cameraComp;
 
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
+
 };
