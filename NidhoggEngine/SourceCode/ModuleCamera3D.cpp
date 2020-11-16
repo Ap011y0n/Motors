@@ -9,10 +9,15 @@
 #include <gl/GLU.h>
 #include "GameObject.h"
 
+#include "MathGeoLib/include/MathGeoLib.h"
+
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	cameraOBJ = nullptr;
+	cameraTrans = nullptr;
+	cameraComp = nullptr;
+	frustrumFollow = true;
 
-	CalculateViewMatrix();
 
 	X = vec3(1.0f, 0.0f, 0.0f);
 	Y = vec3(0.0f, 1.0f, 0.0f);
@@ -21,6 +26,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	Position = vec3(0.0f, 0.0f, 5.0f);
 	Reference = vec3(0.0f, 0.0f, 0.0f);
 
+	CalculateViewMatrix();
 	
 }
 
@@ -32,7 +38,8 @@ bool ModuleCamera3D::Start()
 {
 	LOG("Setting up the camera");
 	bool ret = true;
-	cameraOBJ = new GameObject("mainCamera", nullptr);
+	cameraOBJ = new GameObject("Camera", App->scene_intro->scene);
+	cameraTrans = (ComponentTransform*)cameraOBJ->CreateComponent(ComponentType::TRANSFORM);
 	cameraComp = (ComponentCamera*)cameraOBJ->CreateComponent(ComponentType::CAMERA);
 
 	background.Set(0.f, 0, 0.f, 1.f);
@@ -55,6 +62,8 @@ update_status ModuleCamera3D::Update(float dt)
 	cameraOBJ->Update(dt);
 	vec3 newPos(0,0,0);
 	float speed = 4.0f * dt;
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)frustrumFollow = !frustrumFollow;
+
 	if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 8.0f * dt;
 
@@ -67,6 +76,8 @@ update_status ModuleCamera3D::Update(float dt)
 
 	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
 	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
+
+
 
 	if (App->input->mouse_z > 0) //
 	{
@@ -120,6 +131,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 	Position += newPos;
 	Reference += newPos;
+
 
 	// Mouse motion ----------------
 
@@ -201,6 +213,25 @@ float* ModuleCamera3D::GetViewMatrix()
 // -----------------------------------------------------------------
 void ModuleCamera3D::CalculateViewMatrix()
 {
+
+	if (cameraTrans != nullptr && frustrumFollow)
+	{
+		cameraMat = float4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
+		cameraMatInverse = cameraMat.Inverted();
+
+		float3 translation, scaling;
+		Quat rotation;
+
+		cameraTrans->transform = cameraMat;
+		cameraTrans->transform.Decompose(translation, rotation, scaling);
+		translation.x = Position.x;
+		translation.y = Position.y;
+		translation.z = Position.z;
+		cameraTrans->transform = cameraTrans->transform.FromTRS(translation, rotation, scaling);
+		cameraTrans->transform.Decompose(translation, rotation, scaling);
+	}
+
+
 	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
 	ViewMatrixInverse = inverse(ViewMatrix);
 }

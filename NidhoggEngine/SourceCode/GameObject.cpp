@@ -520,7 +520,7 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 
 	pos.Set(0, 0, 0);
 	scale.Set(1, 1, 1);
-	rot.Set(0, 0, 0, 0);
+	rot.Set(0, 0, 0, 1);
 	transform = transform.identity;
 	should_update = false;
 }
@@ -706,8 +706,8 @@ void ComponentCamera::UpdatePos()
 	if(CameraTransform!= nullptr)
 	{
 		float4x4 abc = CameraTransform->AcumulateparentTransform();
-		frustrum.Transform(abc);
-		//frustrum.SetWorldMatrix(abc.Float3x4Part());
+		//frustrum.Transform(abc);
+		frustrum.SetWorldMatrix(abc.Float3x4Part());
 		
 	}
 	

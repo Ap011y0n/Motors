@@ -118,26 +118,28 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-	{
-		activeCam++;
-		if (activeCam == MAX_CAMS)
-		{
-			activeCam = 0;
-		}
-	}
-	switch (activeCam)
-	{
-		case 0:
-			glLoadMatrixf(App->camera->GetViewMatrix());
-		break;
-		case 1:
-			glLoadMatrixf(App->camera->GetFustrumMatrix());
-		break;
+	//if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	//{
+	//	activeCam++;
+	//	if (activeCam == MAX_CAMS)
+	//	{
+	//		activeCam = 0;
+	//	}
+	//}
+	glLoadMatrixf(App->camera->GetViewMatrix());
 
-	}
-	float* mat1 = App->camera->GetViewMatrix();
-	float* mat2 = App->camera->GetFustrumMatrix();
+	//switch (activeCam)
+	//{
+	//	case 0:
+	//		glLoadMatrixf(App->camera->GetViewMatrix());
+	//	break;
+	//	case 1:
+	//		glLoadMatrixf(App->camera->GetFustrumMatrix());
+	//	break;
+
+	//}
+	//float* mat1 = App->camera->GetViewMatrix();
+	//float* mat2 = App->camera->GetFustrumMatrix();
 
 
 	// light 0 on cam pos

@@ -3,8 +3,11 @@
 #include "Globals.h"
 #include "glmath.h"
 
+#include "MathGeoLib/include/MathGeoLib.h"
+
 class GameObject;
 class ComponentCamera;
+class ComponentTransform;
 
 class ModuleCamera3D : public Module
 {
@@ -31,9 +34,11 @@ public:
 	Color background;
 	GameObject* cameraOBJ;
 	ComponentCamera* cameraComp;
+	ComponentTransform* cameraTrans;
 
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
-
+	float4x4 cameraMat, cameraMatInverse;
+	bool frustrumFollow;
 };
