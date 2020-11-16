@@ -519,7 +519,7 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 	owner = ObjectOwner;
 
 	pos.Set(0, 0, 0);
-	scale.Set(0, 0, 0);
+	scale.Set(1, 1, 1);
 	rot.Set(0, 0, 0, 0);
 	transform = transform.identity;
 	should_update = false;
@@ -605,8 +605,8 @@ ComponentCamera::ComponentCamera(GameObject* ObjectOwner) :Component() {
 	type = ComponentType::CAMERA;
 	active = true;
 	owner = ObjectOwner;
-
-
+	cullingActive = false;
+	
 	aspectRatio = 2.049; 
 	frustrum.front = float3(0.0f, 0.0f, 1.0f);
 	frustrum.up = float3(0.0f, 1.f, 0.0f);
@@ -635,8 +635,10 @@ bool ComponentCamera::Update(float dt)
 
 void ComponentCamera::PrintFrustrum() 
 {
-	updateFrustrum(); 
+	//updateFrustrum();
+	UpdateOrientation();
 	UpdatePos();
+	
 	//if (owner->isSelected) 
 	{
 		//frustrum.pos = float3(0.0f, 1.0f, 0.0f);
@@ -694,7 +696,7 @@ void ComponentCamera::SetFOV(float FOV)
 	//aspecratio = frustrum.AspectRatio();
 	frustrum.verticalFov = FOV;
 	frustrum.horizontalFov = 2.f * Atan(Tan(FOV * 0.5f) * aspectRatio/*aspecratio*/);
-
+	//frustrum.GetPlanes
 }
 
 void ComponentCamera::UpdatePos()
@@ -703,9 +705,30 @@ void ComponentCamera::UpdatePos()
 	CameraTransform = (ComponentTransform*)owner->GetComponent(ComponentType::TRANSFORM);
 	if(CameraTransform!= nullptr)
 	{
-		frustrum.pos = CameraTransform->pos;
-		LOG("x= %f  y= %f  z= %f  ",frustrum.pos.x, frustrum.pos.y , frustrum.pos.z)
+		float4x4 abc = CameraTransform->AcumulateparentTransform();
+		frustrum.Transform(abc);
+		//frustrum.SetWorldMatrix(abc.Float3x4Part());
+		
 	}
 	
+
+}
+
+void ComponentCamera::UpdateOrientation() 
+{
+	/*float3 rotation = {0,0,0};
+	ComponentTransform* CameraTransform = nullptr;
+	CameraTransform = (ComponentTransform*)owner->GetComponent(ComponentType::TRANSFORM);
+	
+	if (CameraTransform != nullptr)
+	{
+		frustrum.Tra
+	
+		//frustrum.front = CameraTransform->transform.Transposed().WorldZ().Normalized();
+
+		//frustrum.Transform(CameraTransform->rot);
+	}*/
+	
+
 }
 

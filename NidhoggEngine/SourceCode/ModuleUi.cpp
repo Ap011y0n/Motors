@@ -286,7 +286,7 @@ update_status ModuleUI::Update(float dt)
 		{
 			GameObject* camera = new GameObject("Camera", App->scene_intro->scene);
 			camera->CreateComponent(ComponentType::TRANSFORM);
-			camera->CreateComponent(ComponentType::CAMERA);
+			//camera->CreateComponent(ComponentType::CAMERA);
 		}
 
 		ImGui::EndMenu();
@@ -1010,7 +1010,16 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 		{
 			ImGui::Separator();
 			ImGui::Text("Camera configuration:"); 
-	
+
+			static bool Culling = false;
+			ImGui::Checkbox("Culling", &Culling);
+			if (Culling) {
+				camera->cullingActive = true;
+			}
+			else {
+				camera->cullingActive = false;
+			}
+
 			float p = camera->frustrum.farPlaneDistance;
 			ImGui::SetNextItemWidth(200);
 			ImGui::DragFloat("Far Plane", &p);

@@ -135,10 +135,12 @@ public:
 	float GetHorizontalFov();
 	void SetFOV(float FOV);
 	void UpdatePos();
+	void UpdateOrientation();
 public:
 	float aspectRatio;
 	Frustum frustrum;
 	Plane planes[6];
+	bool cullingActive;
 
 };
 
