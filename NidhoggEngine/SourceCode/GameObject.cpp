@@ -757,27 +757,29 @@ void ComponentCamera::UpdateOrientation()
 
 bool ComponentCamera::ContainsAABB(const AABB refBox) const
 {
-	bool ret = false;
+	bool ret = true;
 	float3 vCorner[8];
 	
 	refBox.GetCornerPoints(vCorner);
 
 	frustrum.GetPlanes(planes);
-	int iInCount = 0;
-
+	int PlanesCount = 0;
+	int insideCount = 0;
 	for (int p = 0; p < 6; ++p) {
-
+		PlanesCount = 0;
 		for (int i = 0; i < 8; ++i) {
 			// test this point against the planes
 			if (planes[p].IsOnPositiveSide(vCorner[i])) { //<-- “IsOnPositiveSide” from MathGeoLib
-				iInCount++;
+				PlanesCount++;
 			}
-
+		
 		}
+		if (PlanesCount < 8)
+			insideCount++;
 	}
 	//if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	//LOG("%d", iInCount);
-		if (iInCount <= 10)
-			ret = true;
+		if (insideCount < 6)
+			ret = false;
 	return ret;
 }
