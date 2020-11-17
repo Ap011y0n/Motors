@@ -607,7 +607,7 @@ ComponentCamera::ComponentCamera(GameObject* ObjectOwner) :Component() {
 	owner = ObjectOwner;
 	cullingActive = false;
 	
-	aspectRatio = 2.049; 
+	aspectRatio = 1.73; 
 	frustrum.front = float3(0.0f, 0.0f, 1.0f);
 	frustrum.up = float3(0.0f, 1.f, 0.0f);
 
@@ -618,7 +618,7 @@ ComponentCamera::ComponentCamera(GameObject* ObjectOwner) :Component() {
 
 	frustrum.horizontalFov = (65* DEGTORAD);//This will stay as it is
 	frustrum.verticalFov = (65 * DEGTORAD) / aspectRatio; //This will be adaptable
-	float4x4 mat = frustrum.ViewMatrix();
+	SetFOV(60);
 }
 
 ComponentCamera::~ComponentCamera()

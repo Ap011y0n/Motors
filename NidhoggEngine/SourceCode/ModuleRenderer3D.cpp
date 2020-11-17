@@ -25,7 +25,7 @@ bool ModuleRenderer3D::Init()
 {
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
-	activeCam = 0;
+	activeCam = 1;
 	//Create context
 	
 	if(context == NULL)
@@ -118,26 +118,25 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	//if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-	//{
-	//	activeCam++;
-	//	if (activeCam == MAX_CAMS)
-	//	{
-	//		activeCam = 0;
-	//	}
-	//}
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		activeCam++;
+		if (activeCam == MAX_CAMS)
+		{
+			activeCam = 0;
+		}
+	}
 
-	//switch (activeCam)
-	//{
-	//	case 0:
-	//		glLoadMatrixf(App->camera->GetViewMatrix());
-	//	break;
-	//	case 1:
-	//		glLoadMatrixf(App->camera->GetFustrumMatrix());
-	//	break;
+	switch (activeCam)
+	{
+		case 0:
+			glLoadMatrixf(App->camera->GetViewMatrix());
+		break;
+		case 1:
+			glLoadMatrixf(App->camera->GetFustrumMatrix());
+		break;
 
-	//}
+	}
 	//float* mat1 = App->camera->GetViewMatrix();
 	//float* mat2 = App->camera->GetFustrumMatrix();
 
