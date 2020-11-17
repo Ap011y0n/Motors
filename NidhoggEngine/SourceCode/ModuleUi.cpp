@@ -141,14 +141,25 @@ update_status ModuleUI::Update(float dt)
 	
 
 	ImGui::Begin("Game");
-	ImVec2 winSize = ImGui::GetWindowSize();   //this will pick the current window size
+	winSize = ImGui::GetWindowSize();   //this will pick the current window size
+	winPos = ImGui::GetWindowPos();
+
+
 	if (winSize.x != windowSize.x || winSize.y != windowSize.y)
 	{
 		Change_Window_size(Vec2(winSize.x, winSize.y));
 	}
 	ImGui::SetCursorPos(ImVec2(image_offset.x, image_offset.y));
+
+	img_corner = Vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y);
+	//img_corner.y = App->window->windowSize.y - img_corner.y; //ImGui 0y is on top so we need to convert 0y on botton
+	int x = 0;
+	int y = 0;
+	SDL_GetWindowPosition(App->window->window, &x, &y);
+	img_corner -= Vec2(x, y);
+
 	ImGui::Image((ImTextureID)App->renderer3D->texColorBuffer, ImVec2(image_size.x, image_size.y), ImVec2(0, 1), ImVec2(1, 0));
-	
+
 	ImGui::End();
 
 	ImGui::BeginMainMenuBar(); //this creates the top bar

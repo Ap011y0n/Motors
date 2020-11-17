@@ -82,6 +82,8 @@ public:
 	ImGuiWindowClass* windowClass = nullptr;
 	vec3 direction_camera;
 	GameObject* selectedObj;
+	ImVec2 winSize;
+	ImVec2 winPos;
 private:
 	int c1;
 	vector<string> consoleOutput;
