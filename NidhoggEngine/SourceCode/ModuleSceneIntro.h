@@ -4,6 +4,8 @@
 
 
 class GameObject;
+class ComponentCamera;
+
 typedef unsigned char GLubyte;
 typedef unsigned int GLuint;
 
@@ -43,7 +45,8 @@ public:
 
 	//vector<GameObject*> gameObjects;
 	GameObject* scene;
-	 GLubyte checkImage[checkImageHeight][checkImageWidth][4];
-	 uint texName;
+	ComponentCamera* culling;
+	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
+	uint texName;
 
 };

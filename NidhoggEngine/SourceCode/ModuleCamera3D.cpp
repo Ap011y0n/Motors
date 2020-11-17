@@ -38,7 +38,7 @@ bool ModuleCamera3D::Start()
 {
 	LOG("Setting up the camera");
 	bool ret = true;
-	cameraOBJ = new GameObject("Camera", App->scene_intro->scene);
+	cameraOBJ = new GameObject("Camera", nullptr);
 	cameraTrans = (ComponentTransform*)cameraOBJ->CreateComponent(ComponentType::TRANSFORM);
 	cameraComp = (ComponentCamera*)cameraOBJ->CreateComponent(ComponentType::CAMERA);
 

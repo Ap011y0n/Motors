@@ -72,6 +72,7 @@ public:
 
 	bool triggerNormals;
 
+	float culled;
 	AABB bbox;
 };
 
@@ -136,10 +137,12 @@ public:
 	void SetFOV(float FOV);
 	void UpdatePos();
 	void UpdateOrientation();
+	bool ContainsAABB(const AABB refBox) const;
+
 public:
 	float aspectRatio;
 	Frustum frustrum;
-	Plane planes[6];
+	Plane* planes;
 	bool cullingActive;
 
 };

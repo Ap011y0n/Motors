@@ -71,11 +71,13 @@ bool GameObject::Update(float dt)
 	{
 		ComponentMesh* myMesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 		ComponentTransform* myTrans = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+		
 		if (myMesh != nullptr)
 		{
 			obb = myMesh->GetAABB();
 			if (myTrans != nullptr)
 			{
+				
 				obb.Transform(myTrans->AcumulateparentTransform());
 				aabb.SetNegativeInfinity();
 				aabb.Enclose(obb);
@@ -83,6 +85,11 @@ bool GameObject::Update(float dt)
 				{
 					HideAABB();
 					DisplayAABB();
+				}
+				if (App->scene_intro->culling != nullptr)
+				{
+					if (!App->scene_intro->culling->ContainsAABB(aabb))
+						myMesh->culled = true;
 				}
 			}
 
@@ -201,6 +208,7 @@ ComponentMesh::ComponentMesh(GameObject* ObjectOwner) : Component()
 
 	triggerNormals = false;
 	GraphicNormals = nullptr;
+	culled = false;
 }
 
 ComponentMesh::~ComponentMesh()
@@ -243,24 +251,26 @@ ComponentMesh::~ComponentMesh()
 bool ComponentMesh::Update(float dt)
 {
 	bool ret = true;
-	ComponentMaterial* material = nullptr; 
-	ComponentTransform* transform = nullptr;
-	material = (ComponentMaterial*)owner->GetComponent(ComponentType::MATERIAL);
-	transform = (ComponentTransform*)owner->GetComponent(ComponentType::TRANSFORM);
-
-	/*for (int i = 0; i < owner->Components.size(); i++)
+	if (!culled)
 	{
-		if (owner->Components[i]->type == ComponentType::MATERIAL)
-		{
-			material = (ComponentMaterial*)owner->Components[i];
-		}
-		if (owner->Components[i]->type == ComponentType::TRANSFORM)
-		{
-			transform = (ComponentTransform*)owner->Components[i];
-		}
-	}*/
+		ComponentMaterial* material = nullptr;
+		ComponentTransform* transform = nullptr;
+		material = (ComponentMaterial*)owner->GetComponent(ComponentType::MATERIAL);
+		transform = (ComponentTransform*)owner->GetComponent(ComponentType::TRANSFORM);
 
-	
+		/*for (int i = 0; i < owner->Components.size(); i++)
+		{
+			if (owner->Components[i]->type == ComponentType::MATERIAL)
+			{
+				material = (ComponentMaterial*)owner->Components[i];
+			}
+			if (owner->Components[i]->type == ComponentType::TRANSFORM)
+			{
+				transform = (ComponentTransform*)owner->Components[i];
+			}
+		}*/
+
+
 		glPushMatrix();
 		if (transform != nullptr)
 		{
@@ -271,7 +281,7 @@ bool ComponentMesh::Update(float dt)
 		{
 			glLoadIdentity();
 		}
-	
+
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -292,39 +302,39 @@ bool ComponentMesh::Update(float dt)
 			glBindBuffer(GL_ARRAY_BUFFER, id_tex);
 			glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 		}
-		
 
-	
-				if (material != nullptr && material->hastexture)
-				{
-					glEnable(GL_TEXTURE_2D);
-					glEnable(GL_CULL_FACE);
 
-					glActiveTexture(GL_TEXTURE0);
-					if(material->checkers)
-					glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
-					else
-					glBindTexture(GL_TEXTURE_2D, material->texbuffer);
-				}
-				else
-				{
-					if (material != nullptr && material->checkers)
 
-					glEnable(GL_TEXTURE_2D);
-					glEnable(GL_CULL_FACE);
+		if (material != nullptr && material->hastexture)
+		{
+			glEnable(GL_TEXTURE_2D);
+			glEnable(GL_CULL_FACE);
 
-					glActiveTexture(GL_TEXTURE0);
-					glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
-					
-				}
+			glActiveTexture(GL_TEXTURE0);
+			if (material->checkers)
+				glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
+			else
+				glBindTexture(GL_TEXTURE_2D, material->texbuffer);
+		}
+		else
+		{
+			if (material != nullptr && material->checkers)
 
-		
-			if (id_index != 0)
-			{
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-				glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
-			}
-	
+				glEnable(GL_TEXTURE_2D);
+			glEnable(GL_CULL_FACE);
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
+
+		}
+
+
+		if (id_index != 0)
+		{
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+			glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
+		}
+
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
@@ -334,8 +344,10 @@ bool ComponentMesh::Update(float dt)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glDisable(GL_TEXTURE_2D);
 
-	glPopMatrix();
+		glPopMatrix();
 
+	}
+	culled = false;
 
 	return ret;
 }
@@ -618,11 +630,23 @@ ComponentCamera::ComponentCamera(GameObject* ObjectOwner) :Component() {
 
 	frustrum.horizontalFov = (65* DEGTORAD);//This will stay as it is
 	frustrum.verticalFov = (65 * DEGTORAD) / aspectRatio; //This will be adaptable
+	planes = new Plane[6];
+	frustrum.GetPlanes(planes);
+
 	SetFOV(60);
 }
 
 ComponentCamera::~ComponentCamera()
 {
+	if (this == App->scene_intro->culling)
+	{
+		App->scene_intro->culling = nullptr;
+	}
+	if (planes != nullptr)
+	{
+		delete[] planes;
+		planes = nullptr;
+	}
 
 }
 
@@ -646,7 +670,6 @@ void ComponentCamera::PrintFrustrum()
 		frustrum.GetCornerPoints(corners);
 		CreateFrustrum(corners);
 	}
-	
 
 }
 
@@ -732,3 +755,29 @@ void ComponentCamera::UpdateOrientation()
 
 }
 
+bool ComponentCamera::ContainsAABB(const AABB refBox) const
+{
+	bool ret = false;
+	float3 vCorner[8];
+	
+	refBox.GetCornerPoints(vCorner);
+
+	frustrum.GetPlanes(planes);
+	int iInCount = 0;
+
+	for (int p = 0; p < 6; ++p) {
+
+		for (int i = 0; i < 8; ++i) {
+			// test this point against the planes
+			if (planes[p].IsOnPositiveSide(vCorner[i])) { //<-- “IsOnPositiveSide” from MathGeoLib
+				iInCount++;
+			}
+
+		}
+	}
+	//if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	//LOG("%d", iInCount);
+		if (iInCount <= 10)
+			ret = true;
+	return ret;
+}
