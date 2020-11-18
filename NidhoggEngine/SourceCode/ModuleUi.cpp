@@ -13,7 +13,7 @@
 
 
 #include "glew/include/glew.h"        
-
+#define DROP_ID_HIERARCHY_NODES "hierarchy_node"
 
 ModuleUI::ModuleUI(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -735,9 +735,56 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 		ImGui::TreePop();
 
 	}
+	if (ImGui::BeginDragDropTarget()) {
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
+
+		if (payload != nullptr) 
+		{
+			if (payload->IsDataType(DROP_ID_HIERARCHY_NODES)) 
+			{
+				GameObject* obj = *(GameObject**)payload->Data;
+
+				if (obj != nullptr && node->Name != "GameObject") //The part of gameobject is bug that needs to be fixed
+				{
+					ChangeParent(obj, node);
+				}
+			}
+			//ImGui::ClearDragDrop;
+		}
+		ImGui::EndDragDropTarget();
+	}
+
+	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
+		ImGui::SetDragDropPayload(DROP_ID_HIERARCHY_NODES, &node, sizeof(GameObject), ImGuiCond_Once);
+		ImGui::Text(GameObjname);
+		ImGui::EndDragDropSource();
+	}
 
 }
+void ModuleUI::ChangeParent(GameObject* obj, GameObject* nextOwner)
+{
+	if (obj != nullptr && nextOwner != nullptr) {
 
+		//obj->parent->to_delete = true;
+
+		for (int i = 0; i < obj->parent->childs.size(); i++)
+		{
+			if (obj->parent->childs[i] == obj)
+			{
+				obj->parent->childs.erase(obj->parent->childs.begin() + i);
+				i--;
+				
+			}
+		}
+		obj->parent = nextOwner;
+		nextOwner->childs.push_back(obj);
+		/*if (obj->parent != nextOwner) {
+			
+			nextOwner->childs.push_back(obj);
+	
+		}*/
+	}
+}
 void ModuleUI::DeactivateGameObjects(GameObject* father)
 {
 	father->isSelected = false;

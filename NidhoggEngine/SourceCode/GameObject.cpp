@@ -149,7 +149,6 @@ void GameObject::DisplayAABB()
 	currentAABB = App->PrimManager->CreateAABB(&aabb);
 }
 
-
 //*************************		Component
 Component::Component()
 {

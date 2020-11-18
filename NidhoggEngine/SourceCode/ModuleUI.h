@@ -49,6 +49,7 @@ public:
 	void GameObjectHierarchyTree(GameObject* node, int id);
 	void DeactivateGameObjects(GameObject* father);
 	void GameObjectInspector(GameObject* obj);
+	void ChangeParent(GameObject* obj, GameObject* nextOwner);
 
 	vec3 ReturnLookAtCamera(vec3 direction);
 public:
@@ -85,5 +86,6 @@ public:
 private:
 	int c1;
 	vector<string> consoleOutput;
+
 };
 

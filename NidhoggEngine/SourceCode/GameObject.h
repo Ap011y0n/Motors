@@ -158,7 +158,6 @@ public:
 	Component* GetComponent(ComponentType type); //Create a new component for this game object, needs a Component type
 	void DisplayAABB();
 	void HideAABB();
-	void UpdateFrustrums();
 public:
 	bool to_delete = false;
 	bool active = false;
