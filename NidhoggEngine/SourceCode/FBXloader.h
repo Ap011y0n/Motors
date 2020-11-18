@@ -73,7 +73,7 @@ public:
 private:
 
 public:
-
+	int numberGO;
 	vector<mesh*> meshes;
 	int texture_w;
 	int texture_h;

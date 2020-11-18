@@ -110,6 +110,7 @@ bool ModuleUI::Init()
 	Console_open = true;
 	selectedObj = nullptr;
 	direction_camera = { 0,0,0 };
+	cameras = 0;
 	i = 0;
 	e = 1;
 	int max_fps = 61;
@@ -250,7 +251,13 @@ update_status ModuleUI::Update(float dt)
 		}
 		if (ImGui::MenuItem("Camera"))
 		{
-			GameObject* camera = new GameObject("Camera", App->scene_intro->scene);
+			cameras++;
+			std::string obj = std::to_string(cameras);
+
+			std::string name = "Camera";
+			name.append(obj);
+
+			GameObject* camera = new GameObject(name.c_str(), App->scene_intro->scene);
 			camera->CreateComponent(ComponentType::TRANSFORM);
 			camera->CreateComponent(ComponentType::CAMERA);
 		}
@@ -702,39 +709,39 @@ void ModuleUI::HierarchyWin()
 
 void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 {
-	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-	
+	ImGuiTreeNodeFlags node_flags = /*ImGuiTreeNodeFlags_DefaultOpen | */ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+	int node_clicked = -1;
 
 	const char* GameObjname = node->Name.c_str();
-	/*static int selection_mask = (1 << 2);
-	const bool is_selected = (selection_mask & (1 << 0)) != 0;*/
 
-	if (node->isSelected)
+	if (selectedObj==node)
 	{
-		node_flags |= ImGuiTreeNodeFlags_Selected;
+		node_flags += ImGuiTreeNodeFlags_Selected;
 	}
+	if (node->childs.empty())
+	{
+		node_flags += ImGuiTreeNodeFlags_Leaf;
+	}
+	
+	if (ImGui::TreeNodeEx(GameObjname, node_flags))
+	{
+		if (ImGui::IsItemClicked())
+		{
+			DeactivateGameObjects(App->scene_intro->scene);
 
-	bool node_open = ImGui::TreeNodeEx(GameObjname, node_flags);
-	if (ImGui::IsItemClicked())
-	{
+			node->isSelected = true;
+			selectedObj = node;
+			
+		}
 		
-		DeactivateGameObjects(App->scene_intro->scene);
-		
-		node->isSelected = true;
-		selectedObj = node;
-		
-	}
-	if (node_open)
-	{
 		for (int i = 0; i < node->childs.size(); i++)
 		{
 			GameObjectHierarchyTree(node->childs[i], i);
-			
 		}
-
+		
 		ImGui::TreePop();
-
 	}
+
 	if (ImGui::BeginDragDropTarget()) {
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
 
@@ -761,6 +768,7 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 	}
 
 }
+
 void ModuleUI::ChangeParent(GameObject* obj, GameObject* nextOwner)
 {
 	if (obj != nullptr && nextOwner != nullptr) {
@@ -778,13 +786,9 @@ void ModuleUI::ChangeParent(GameObject* obj, GameObject* nextOwner)
 		}
 		obj->parent = nextOwner;
 		nextOwner->childs.push_back(obj);
-		/*if (obj->parent != nextOwner) {
-			
-			nextOwner->childs.push_back(obj);
-	
-		}*/
 	}
 }
+
 void ModuleUI::DeactivateGameObjects(GameObject* father)
 {
 	father->isSelected = false;

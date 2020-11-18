@@ -50,6 +50,7 @@ public:
 	void DeactivateGameObjects(GameObject* father);
 	void GameObjectInspector(GameObject* obj);
 	void ChangeParent(GameObject* obj, GameObject* nextOwner);
+	void SelectGameObject(GameObject* node);
 
 	vec3 ReturnLookAtCamera(vec3 direction);
 public:
@@ -85,6 +86,7 @@ public:
 	GameObject* selectedObj;
 private:
 	int c1;
+	int cameras;
 	vector<string> consoleOutput;
 
 };

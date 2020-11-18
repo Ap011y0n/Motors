@@ -175,6 +175,7 @@ namespace MeshImporter
 
 FBXloader::FBXloader(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	numberGO = 0;
 }
 
 FBXloader::~FBXloader()
@@ -321,10 +322,15 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father,
 	std::string name = node->mName.C_Str();
 
 	LOG("loading %s", node->mName.C_Str());
-	
+
 	if (name == "RootNode")
 	{
+		numberGO++;
+		std::string obj = std::to_string(numberGO);
+		
 		name = "GameObject";
+		name.append(obj);
+
 	}
 	GameObject* object = App->scene_intro->CreateGameObject(name.c_str(), father);
 	JSON_Object* JsonObj = App->serializer->AddObjectToArray(App->serializer->leaves);
