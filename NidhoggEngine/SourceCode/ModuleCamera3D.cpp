@@ -149,12 +149,46 @@ update_status ModuleCamera3D::Update(float dt)
 		LookAt(Forward + Position);
 	}
 
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+
+	/*	float mouseNormX = App->input->GetMouseX();
+		mouseNormX /= App->window->windowSize.x;
+
+		float mouseNormY = App->window->windowSize.y - App->input->GetMouseY();
+		mouseNormY /= App->window->windowSize.y;
+
+		mouseNormX = (mouseNormX - 0.5) / 0.5;
+		mouseNormY = (mouseNormY - 0.5) / 0.5;*/
+		float mouseNormX = (App->input->GetMouseX() - App->UI->img_corner.x )/ App->UI->image_size.x;
+		float mouseNormY = (App->input->GetMouseY() - App->UI->img_corner.y) / App->UI->image_size.y;
+
+		mouseNormX = (mouseNormX - 0.5) / 0.5;
+		mouseNormY = -(mouseNormY - 0.5) / 0.5;
+
+		//LOG("x = %f, y = %f", App->UI->img_corner.x, App->UI->img_corner.y);
+		LOG("x = %f, y = %f", mouseNormX, mouseNormY);
+
+		Ray ray = cameraComp->frustrum.UnProjectLineSegment(mouseNormX, mouseNormY).ToRay();
+		ray.pos;
+		vec3 origin(ray.pos.x, ray.pos.y, ray.pos.z);
+		LineSegment segment = ray.ToLineSegment(20);
+		vec3 dest(segment.GetPoint(20).x, segment.GetPoint(20).y, segment.GetPoint(20).z);
+
+		App->PrimManager->CreateLine(origin, dest);
+	}
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
 
 	return UPDATE_CONTINUE;
 }
 
+float2 ModuleCamera3D::ScreenToWorld(float2 pos)
+{
+	float2 ret(0, 0);
+
+	return ret;
+}
 // -----------------------------------------------------------------
 void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference)
 {
