@@ -152,7 +152,7 @@ update_status ModuleUI::Update(float dt)
 	ImGui::SetCursorPos(ImVec2(image_offset.x, image_offset.y));
 
 	img_corner = Vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y);
-	//img_corner.y = App->window->windowSize.y - img_corner.y; //ImGui 0y is on top so we need to convert 0y on botton
+
 	int x = 0;
 	int y = 0;
 	SDL_GetWindowPosition(App->window->window, &x, &y);
