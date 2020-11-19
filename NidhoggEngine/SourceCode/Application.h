@@ -16,6 +16,7 @@
 #include "FBXloader.h"
 #include "FileSystem.h"
 #include "serializer.h"
+#include "ResourceManager.h"
 
 #include <vector>
 
@@ -38,6 +39,7 @@ public:
 	FBXloader* FBX;
 	FileSystem* file_system;
 	Serializer* serializer;
+	ResourceManager* ResManager;
 
 private:
 

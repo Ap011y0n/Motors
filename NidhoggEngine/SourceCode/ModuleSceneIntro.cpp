@@ -7,7 +7,7 @@
 #include "ModuleUI.h"
 #include "GameObject.h"   
 #include "serializer.h"
-
+#include "ResourceManager.h"
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
 #include <gl/GL.h>
@@ -45,19 +45,35 @@ bool ModuleSceneIntro::Start()
 	//GameObject* object = CreateGameObject("test");
 	//object->CreateComponent(ComponentType::MESH);
 
-	std::string file_path = "Assets/BakerHouse.fbx";
+	std::string file_path = "Assets/Street environment_V01.FBX";
+	uint UID = App->ResManager->ImportFile(file_path.c_str());
+	if (UID != 0)
+	{
+		Resource* NewResource = App->ResManager->RequestResource(UID);
+		if (NewResource != nullptr)
+		{
+			LOG("Resource Found");
+			App->serializer->LoadModel(NewResource->GetLibraryFile());
+		}
+	}
 	char* buffer = nullptr;
-	uint fileSize = 0;
-	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	App->FBX->LoadFBX(buffer, fileSize);
+
+
+	//uint fileSize = 0;
+	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	//App->FBX->LoadFBX(buffer, fileSize);
 
 	file_path = "Assets/p1character.FBX";
-	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	App->FBX->LoadFBX(buffer, fileSize);
+	//App->ResManager->ImportFile(file_path.c_str());
+
+	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	//App->FBX->LoadFBX(buffer, fileSize);
 
 	file_path = "Assets/P1_PoldelaTorre.FBX";
-	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	App->FBX->LoadFBX(buffer, fileSize);
+	//App->ResManager->ImportFile(file_path.c_str());
+
+	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	//App->FBX->LoadFBX(buffer, fileSize);
 
 	vec4 coords(0, 1, 0, 0);
 	App->PrimManager->CreatePlane(coords);

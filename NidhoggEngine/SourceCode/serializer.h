@@ -24,13 +24,17 @@ public:
 	void CreateNewScene();
 	JSON_Object* AddObjectToArray(JSON_Array* obj);
 	void SaveScene();
+	void SaveModel(JSON_Value* root, const char* name);
 	void LoadScene(const char* path);
+	void LoadModel(const char* path);
 	void sortScene();
-	void AddFloat(JSON_Object* obj, const char* name, float value);
+	void AddFloat(JSON_Object* obj, const char* name, double value);
 	void AddString(JSON_Object* obj, const char* name, const char* string);
 	void AddVec3(JSON_Array* obj, float x, float y, float z);
 	void AddVec4(JSON_Array* obj, float x, float y, float z, float w);
 	void AddComponent(JSON_Array* obj, ComponentType type, const char* path);
+	void AddResourceComponent(JSON_Array* obj, ComponentType type, uint UID);
+
 	JSON_Array* AddArray(JSON_Object* obj, const char* name);
 
 	double get_Number(const char* file, const char* name);
