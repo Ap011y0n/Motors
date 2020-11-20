@@ -7,6 +7,7 @@
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
+#include "imgui_internal.h"
 #include "ModuleWindow.h"
 #include "glew/include/glew.h"
 #include "GameObject.h"
@@ -733,25 +734,7 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 	{
 		node_flags += ImGuiTreeNodeFlags_Leaf;
 	}
-	
-	if (ImGui::TreeNodeEx(GameObjname, node_flags))
-	{
-		if (ImGui::IsItemClicked())
-		{
-			DeactivateGameObjects(App->scene_intro->scene);
-
-			node->isSelected = true;
-			selectedObj = node;
-			
-		}
-		
-		for (int i = 0; i < node->childs.size(); i++)
-		{
-			GameObjectHierarchyTree(node->childs[i], i);
-		}
-		
-		ImGui::TreePop();
-	}
+	bool open = ImGui::TreeNodeEx(GameObjname, node_flags);
 
 	if (ImGui::BeginDragDropTarget()) {
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
@@ -762,12 +745,12 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 			{
 				GameObject* obj = *(GameObject**)payload->Data;
 
-				if (obj != nullptr && node->Name != "GameObject") //The part of gameobject is bug that needs to be fixed
+				if (obj != nullptr) //The second part of this is bug that needs to be fixed
 				{
 					ChangeParent(obj, node);
 				}
 			}
-			//ImGui::ClearDragDrop;
+			//ImGui::ClearDragDrop();
 		}
 		ImGui::EndDragDropTarget();
 	}
@@ -778,6 +761,24 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 		ImGui::EndDragDropSource();
 	}
 
+	if (open)
+	{
+		if (ImGui::IsItemClicked())
+		{
+			DeactivateGameObjects(App->scene_intro->scene);
+
+			node->isSelected = true;
+			selectedObj = node;
+
+		}
+
+		for (int i = 0; i < node->childs.size(); i++)
+		{
+			GameObjectHierarchyTree(node->childs[i], i);
+		}
+
+		ImGui::TreePop();
+	}
 }
 
 void ModuleUI::ChangeParent(GameObject* obj, GameObject* nextOwner)
