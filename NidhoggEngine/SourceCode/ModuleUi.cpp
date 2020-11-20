@@ -112,6 +112,8 @@ bool ModuleUI::Init()
 	selectedObj = nullptr;
 	direction_camera = { 0,0,0 };
 	cameras = 0;
+	width = 960;
+	height = 540;
 	i = 0;
 	e = 1;
 	int max_fps = 61;
@@ -134,6 +136,7 @@ bool ModuleUI::CleanUp()
 // Update: draw background
 update_status ModuleUI::Update(float dt)
 {
+	
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
@@ -141,7 +144,7 @@ update_status ModuleUI::Update(float dt)
 	
 	ShowAppinDockSpace(open_docking);
 	
-
+	
 	ImGui::Begin("Game");
 	winSize = ImGui::GetWindowSize();   //this will pick the current window size
 	winPos = ImGui::GetWindowPos();
@@ -161,7 +164,7 @@ update_status ModuleUI::Update(float dt)
 	img_corner -= Vec2(x, y);
 
 	ImGui::Image((ImTextureID)App->renderer3D->texColorBuffer, ImVec2(image_size.x, image_size.y), ImVec2(0, 1), ImVec2(1, 0));
-
+	GuizmoUI();
 	ImGui::End();
 
 	ImGui::BeginMainMenuBar(); //this creates the top bar
@@ -1151,4 +1154,31 @@ void ModuleUI::Change_Window_size(Vec2 newSize)
 	{image_size /= (image_size.y / (win_size.y - offset));}
 	image_offset = Vec2(win_size.x - (offset/2) - image_size.x, win_size.y - (offset / 2) - image_size.y);
 	image_offset = image_offset / 2;
+}
+
+
+void ModuleUI::GuizmoUI() 
+{
+	guizmo_mode = ImGuizmo::MODE::WORLD;
+	if (selectedObj != nullptr) 
+	{
+		ComponentTransform* transform = (ComponentTransform*)selectedObj->GetComponent(ComponentType::TRANSFORM);
+
+		float4x4 view = App->camera->cameraComp->frustrum.ViewMatrix();
+		view.Transpose();
+		
+		float4x4 projection = App->camera->cameraComp->frustrum.ProjectionMatrix();
+		projection.Transpose();
+
+		float4x4 matrix = transform->transform;
+		matrix.Transpose();
+
+		float4x4 delta_Matrix;
+		ImGuizmo::SetDrawlist();
+		ImGuizmo::SetRect((ImGui::GetWindowWidth() - width) * 0.5f, (ImGui::GetWindowHeight() - height) * 0.5f, width, height);
+		ImGuizmo::MODE mode = ImGuizmo::MODE::WORLD;
+		ImGuizmo::Manipulate(view.ptr(), projection.ptr(),guizmo_type, guizmo_mode, matrix.ptr(), delta_Matrix.ptr());
+	}
+
+
 }
