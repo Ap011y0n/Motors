@@ -42,7 +42,7 @@ bool ModuleCamera3D::Start()
 	cameraTrans = (ComponentTransform*)cameraOBJ->CreateComponent(ComponentType::TRANSFORM);
 	cameraComp = (ComponentCamera*)cameraOBJ->CreateComponent(ComponentType::CAMERA);
 
-	cameraComp->frustrum.nearPlaneDistance = 4;
+	cameraComp->frustrum.nearPlaneDistance = 1;
 
 	background.Set(0.f, 0, 0.f, 1.f);
 	return ret;

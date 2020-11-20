@@ -1117,9 +1117,15 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 					}
 					ImGui::EndTabItem();
 				}
-				if (ImGui::BeginTabItem("Project"))
+				if (ImGui::BeginTabItem("Assets"))
 				{
 					ImGui::Text("Folders...");
+					
+					
+					
+					
+					
+					
 					ImGui::EndTabItem();
 				}
 				ImGui::EndTabBar();
