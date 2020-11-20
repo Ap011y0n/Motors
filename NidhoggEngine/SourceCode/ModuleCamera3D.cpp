@@ -79,7 +79,20 @@ update_status ModuleCamera3D::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
 	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 
+	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	{
+		App->UI->guizmo_type = ImGuizmo::OPERATION::TRANSLATE;
+	}
 
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT)
+	{
+		App->UI->guizmo_type = ImGuizmo::OPERATION::ROTATE;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT)
+	{
+		App->UI->guizmo_type = ImGuizmo::OPERATION::SCALE;
+	}
 
 	if (App->input->mouse_z > 0) //
 	{

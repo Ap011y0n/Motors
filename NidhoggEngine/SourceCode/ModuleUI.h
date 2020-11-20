@@ -5,6 +5,7 @@
 #include<iostream> 
 #include<string>
 #include "Vec2.h"
+#include "ImGuizmo.h"
 
 using namespace std;
 class GameObject;
@@ -86,6 +87,8 @@ public:
 	GameObject* selectedObj;
 	ImVec2 winSize;
 	ImVec2 winPos;
+
+	ImGuizmo::OPERATION guizmo_type = ImGuizmo::OPERATION::TRANSLATE;
 private:
 	int c1;
 	int cameras;
