@@ -38,9 +38,11 @@ bool ModuleCamera3D::Start()
 {
 	LOG("Setting up the camera");
 	bool ret = true;
-	cameraOBJ = new GameObject("Camera", nullptr);
+	cameraOBJ = new GameObject("Camera", App->scene_intro->scene);
 	cameraTrans = (ComponentTransform*)cameraOBJ->CreateComponent(ComponentType::TRANSFORM);
 	cameraComp = (ComponentCamera*)cameraOBJ->CreateComponent(ComponentType::CAMERA);
+
+	cameraComp->frustrum.nearPlaneDistance = 4;
 
 	background.Set(0.f, 0, 0.f, 1.f);
 	return ret;
@@ -228,6 +230,14 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 	Reference += Movement;
 
 	CalculateViewMatrix();
+}
+
+// -----------------------------------------------------------------
+float* ModuleCamera3D::GetFustrumProjMatrix()
+{
+	float4x4 mat = cameraComp->frustrum.ProjectionMatrix();
+
+	return mat.Transposed().ptr();
 }
 
 // -----------------------------------------------------------------

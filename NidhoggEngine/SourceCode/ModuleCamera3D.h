@@ -25,6 +25,7 @@ public:
 	float2 ScreenToWorld(float2 pos);
 	float* GetViewMatrix();
 	float* GetFustrumMatrix();
+	float* GetFustrumProjMatrix();
 private:
 
 	void CalculateViewMatrix();
