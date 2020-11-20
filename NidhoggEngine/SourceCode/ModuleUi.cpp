@@ -734,7 +734,17 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 	{
 		node_flags += ImGuiTreeNodeFlags_Leaf;
 	}
+	
 	bool open = ImGui::TreeNodeEx(GameObjname, node_flags);
+
+	if (ImGui::IsItemClicked())
+	{
+		DeactivateGameObjects(App->scene_intro->scene);
+
+		node->isSelected = true;
+		selectedObj = node;
+
+	}
 
 	if (ImGui::BeginDragDropTarget()) {
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
@@ -763,15 +773,6 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 
 	if (open)
 	{
-		if (ImGui::IsItemClicked())
-		{
-			DeactivateGameObjects(App->scene_intro->scene);
-
-			node->isSelected = true;
-			selectedObj = node;
-
-		}
-
 		for (int i = 0; i < node->childs.size(); i++)
 		{
 			GameObjectHierarchyTree(node->childs[i], i);
