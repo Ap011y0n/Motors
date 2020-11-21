@@ -218,7 +218,7 @@ ComponentMesh::~ComponentMesh()
 		GraphicNormals->to_delete = true;
 	}
 
-	glDeleteBuffers(1, &id_index);
+	/*glDeleteBuffers(1, &id_index);
 	glDeleteBuffers(1, &id_normals);
 	glDeleteBuffers(1, &id_vertex);
 	glDeleteBuffers(1, &id_tex);
@@ -243,7 +243,7 @@ ComponentMesh::~ComponentMesh()
 	{
 		delete[] texCoords;
 		texCoords = nullptr;
-	}
+	}*/
 
 }
 
@@ -510,7 +510,7 @@ ComponentMaterial::~ComponentMaterial()
 {
 	LOG("Deleting Component Material");
 
-	glDeleteTextures(1, &(GLuint)texbuffer);
+	//glDeleteTextures(1, &(GLuint)texbuffer);
 }
 
 bool ComponentMaterial::Update(float dt)

@@ -112,11 +112,22 @@ uint ResourceManager::ImportFile(const char* new_file_in_assets)
 	case ResourceType::UNKNOWN:
 		break;
 	case ResourceType::MODEL:
+	{
 		LOG("importing model from %s", new_file_in_assets);
 		App->FBX->LoadFBX(buffer, fileSize, (ResourceModel*)resource);
 		break;
+	}
+
 	case ResourceType::TEXTURE:
+	{
+		MaterialImporter::Import(buffer, fileSize);
+		std::string path;
+		std::string file, extension;
+		App->file_system->SplitFilePath(new_file_in_assets, &file, &extension);
+		MaterialImporter::Save(&buffer, file.c_str(), &path);
 		LOG("importing texture from %s", new_file_in_assets);
+	}
+
 		break;
 	case ResourceType::MESH:
 		break;
@@ -142,10 +153,12 @@ ResourceType ResourceManager::ReturnType(const char* assetsFile)
 	{
 		ret = ResourceType::MODEL;
 	}
-	if (extension == "png" || extension == "dds" || extension == ".tga")
+	else if (extension == "png" || extension == "dds" || extension == "tga")
 	{
 		ret = ResourceType::TEXTURE;
 	}
+
+
 	return ret;
 }
 uint ResourceManager::GenerateNewUID()

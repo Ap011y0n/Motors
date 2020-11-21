@@ -410,7 +410,7 @@ bool Serializer::LoadMeta(const char* path, uint* uid, ResourceType* type, std::
 	if (json_object_has_value_of_type(object, "Library path", JSONString))
 		*library = json_object_get_string(object, "Library path");
 
-	json_value_free(root_value);
+	//json_value_free(root_value);
 	return ret;
 }
 void Serializer::AddFloat(JSON_Object* obj, const char* name, double value)

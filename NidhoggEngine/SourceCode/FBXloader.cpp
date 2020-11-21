@@ -714,29 +714,27 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 		{
 			std::string file, extension;
 			App->file_system->SplitFilePath(str.C_Str(), &file, &extension);
+			file = "Assets/" + file + extension;
 			ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
 
-			//****TEMP
-			uint texUID = App->ResManager->GenerateNewUID();
-			ResourceTexture* TexResource = new ResourceTexture(texUID);
-			App->ResManager->resources[texUID] = TexResource;
-			//****TEMP
+			
+			uint UID = App->ResManager->Find(file.c_str());
+			if (UID == 0)
+			{
+				UID = App->ResManager->ImportFile(file.c_str());
+			}
+			else
+			{
+				LOG("image already loaded");
+			}
+			if (UID != 0)
+			{
+				Resource* NewResource = App->ResManager->RequestResource(UID);
+				App->serializer->AddResourceComponent(JsonComp, ComponentType::MATERIAL, NewResource->GetUID());
 
-			uint fileSize = 0;
-			char* buffer = nullptr;
+			}
+	
 
-			file += extension;
-			fileSize = App->file_system->Load(file.c_str(), &buffer);
-
-			MaterialImporter::Import(buffer, fileSize);
-			std::string path;
-			MaterialImporter::Save(&buffer, file.c_str(), &path);
-			NewTex->texture_path = path.c_str();
-
-			TexResource->SetAssetPath(str.C_Str());
-			TexResource->SetLibraryPath(NewTex->texture_path.c_str());
-
-			App->serializer->AddResourceComponent(JsonComp, ComponentType::MATERIAL, TexResource->GetUID());
 
 			if (NewTex->texbuffer != 0)
 				NewTex->hastexture = true;
