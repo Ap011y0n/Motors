@@ -53,9 +53,9 @@ namespace MaterialImporter
 				size_t pos_dot = doc.find_last_of(".");
 				doc = doc.substr(0, pos_dot);
 				doc.append(".dds");
-	
+				doc = "library/" + doc;
 				App->file_system->Save(doc.c_str(), *fileBuffer, size, false);
-				newpath->append("Assets/library/");
+				newpath->append("Assets/");
 				newpath->append(doc.c_str());
 				if (data != nullptr)
 				{
@@ -224,9 +224,9 @@ namespace MeshImporter
 
 		doc.append(name);
 		doc.append(".mesh");
-
+		doc = "library/" + doc;
 		App->file_system->Save(doc.c_str(), fileBuffer, size, false);
-		path->append("Assets/library/");
+		path->append("Assets/");
 		path->append(doc.c_str());
 	}
 
@@ -263,8 +263,9 @@ namespace MeshImporter
 		doc.append(name);
 		doc.append(".mesh");
 		std::string path;
+		doc = "library/" + doc;
 		App->file_system->Save(doc.c_str(), fileBuffer, size, false);
-		path.append("Assets/library/");
+		path.append("Assets/");
 		path.append(doc.c_str());
 		resource->SetLibraryPath(path.c_str());
 	}

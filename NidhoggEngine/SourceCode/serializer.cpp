@@ -134,7 +134,7 @@ void Serializer::SaveScene()
 	serialized_string = json_serialize_to_string_pretty(root_value);
 	size_t size = sprintf(serialized_string, "%s", serialized_string);
 
-	App->file_system->Save("TEST.json", serialized_string, size, false);
+	App->file_system->Save("library/TEST.json", serialized_string, size, false);
 	json_free_serialized_string(serialized_string);
 }
 
@@ -143,8 +143,9 @@ void Serializer::SaveModel(JSON_Value* root, const char* name)
 	char* serialized_string = NULL;
 	serialized_string = json_serialize_to_string_pretty(root);
 	size_t size = sprintf(serialized_string, "%s", serialized_string);
-	
-	App->file_system->Save(name, serialized_string, size, false);
+	std::string path = "library/";
+	path = path + name;
+	App->file_system->Save(path.c_str(), serialized_string, size, false);
 	json_free_serialized_string(serialized_string);
 }
 
@@ -516,7 +517,7 @@ void Serializer::arrayExample()
 	char* serialized_string = NULL;
 	serialized_string = json_serialize_to_string_pretty(root_value);
 	size_t size = sprintf(serialized_string, "%s", serialized_string);
-	App->file_system->Save("TEST.json", serialized_string, size, false);
+	App->file_system->Save("library/TEST.json", serialized_string, size, false);
 	json_free_serialized_string(serialized_string);
 
 
@@ -544,7 +545,7 @@ void Serializer::serialization_example()
 	buffer = new char[size];
 	json_serialize_to_buffer(root_value, buffer, size);*/
 
-	App->file_system->Save("TEST.json", serialized_string, size, false);
+	App->file_system->Save("library/TEST.json", serialized_string, size, false);
 	json_free_serialized_string(serialized_string);
 	json_value_free(root_value);
 }

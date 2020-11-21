@@ -52,7 +52,7 @@ bool FileSystem::Init()
 		LOG("File System error while adding a path or zip: %s\n", PHYSFS_getLastError());
 	}
 	PHYSFS_setWriteDir("Assets/");
-	PHYSFS_setWriteDir("Assets/library");
+//	PHYSFS_setWriteDir("Assets/library");
 	return true;
 }
 
