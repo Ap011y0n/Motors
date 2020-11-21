@@ -59,7 +59,21 @@ double Serializer::get_Number(const char* file, const char* name)
 	json_value_free(root_value);
 	return number;
 }
+const char* Serializer::get_String(const char* file, const char* name)
+{
+	JSON_Value* root_value;
+	JSON_Object* object;
+	root_value = json_parse_file(file);
+	object = json_value_get_object(root_value);
 
+	std::string newstring;
+
+	if (json_object_has_value_of_type(object, name, JSONString))
+		newstring = json_object_get_string(object, name);
+
+	json_value_free(root_value);
+	return newstring.c_str();
+}
 void Serializer::get_Array(const char* file)
 {
 	JSON_Value* root_value;
@@ -138,14 +152,13 @@ void Serializer::SaveScene()
 	json_free_serialized_string(serialized_string);
 }
 
-void Serializer::SaveModel(JSON_Value* root, const char* name)
+void Serializer::SaveValueAsFile(JSON_Value* root, const char* name, std::string directory)
 {
 	char* serialized_string = NULL;
 	serialized_string = json_serialize_to_string_pretty(root);
 	size_t size = sprintf(serialized_string, "%s", serialized_string);
-	std::string path = "library/";
-	path = path + name;
-	App->file_system->Save(path.c_str(), serialized_string, size, false);
+	directory = directory + name;
+	App->file_system->Save(directory.c_str(), serialized_string, size, false);
 	json_free_serialized_string(serialized_string);
 }
 
@@ -365,6 +378,41 @@ void Serializer::LoadModel(Resource* model)
 	tempvector.clear();
 }
 
+bool Serializer::LoadMeta(const char* path, uint* uid, ResourceType* type, std::string* Assets, std::string* library)
+{
+	bool ret = false;
+	JSON_Value* value;
+	JSON_Object* object;
+
+	value = json_parse_file(path);
+	if (value == NULL)
+	{
+		return ret;
+	}
+	ret = true;
+	object = json_value_get_object(value);
+
+
+	if (json_object_has_value_of_type(object, "UID", JSONNumber))
+		*uid = json_object_get_number(object, "UID");
+
+	std::string Type;
+	if (json_object_has_value_of_type(object, "Type", JSONString))
+		Type = json_object_get_string(object, "Type");
+
+	if (Type == "3D Model")
+		*type = ResourceType::MODEL;
+	else if (Type == "Texture")
+		*type = ResourceType::TEXTURE;
+
+	if (json_object_has_value_of_type(object, "Asset Path", JSONString))
+		*Assets = json_object_get_string(object, "Asset Path");
+	if (json_object_has_value_of_type(object, "Library path", JSONString))
+		*library = json_object_get_string(object, "Library path");
+
+	json_value_free(root_value);
+	return ret;
+}
 void Serializer::AddFloat(JSON_Object* obj, const char* name, double value)
 {
 	json_object_set_number(obj, name, value);

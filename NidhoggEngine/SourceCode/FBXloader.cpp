@@ -653,7 +653,11 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 	JSON_Object* JsonObj = App->serializer->AddObjectToArray(model->leaves);
 
 	App->serializer->AddFloat(JsonObj, "UID", object->UID);
+	if(object->parent != nullptr)
 	App->serializer->AddFloat(JsonObj, "ParentUID", object->parent->UID);
+	else
+		App->serializer->AddFloat(JsonObj, "ParentUID", 0);
+
 	App->serializer->AddString(JsonObj, "Name", name.c_str());
 
 	JSON_Array* JsonTrans = App->serializer->AddArray(JsonObj, "Translation");
@@ -798,7 +802,8 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 		std::string extension;
 		App->file_system->SplitFilePath(model->GetLibraryFile(), &file, &extension);
 		file.append("model");
-		App->serializer->SaveModel(model->root_value, file.c_str());
+		std::string directory = "library/";
+		App->serializer->SaveValueAsFile(model->root_value, file.c_str(), directory);
 	}
 
 	
@@ -825,7 +830,7 @@ bool FBXloader::LoadFBX(const char* buffer, uint size, ResourceModel* model)
 
 		if (node != nullptr)
 		{
-			LoadNode(scene, node, model, App->scene_intro->scene);
+			LoadNode(scene, node, model, nullptr);
 			aiReleaseImport(scene);
 
 		}

@@ -31,9 +31,64 @@ bool ResourceManager::CleanUp()
 
 uint ResourceManager::Find(const char* file_in_assets)
 {
-	uint ret = 0;
+	uint id = 0;
+	std::string MetaPath = file_in_assets;
+	MetaPath.append(+".meta");
+	
+	ResourceType type;
+	std::string Assets;
+	std::string Library;
+	if (App->serializer->LoadMeta(MetaPath.c_str(), &id, &type, &Assets, &Library))
+	{
+		LOG("Meta found");
+		if (App->file_system->CheckFile(Library.c_str()))
+		{
+			LOG("Library file found");
+			if (SearchForResource(id))
+			{
+				LOG("Resource found in resources map");
+				return id;
+			}
+			else
+			{
+				LOG("Resource not found in resoruces, you should add this resource");
 
-	return ret;
+				//Resource* NewResource = nullptr;
+
+				//switch (type) {
+				//case ResourceType::MODEL: NewResource = (Resource*) new ResourceModel(id); break;
+				//case ResourceType::TEXTURE: NewResource = (Resource*) new ResourceTexture(id); break;
+				//	//	case ResourceType::MESH: ret = (Resource*) new ResourceMesh(uid); break;
+
+				//}
+
+				//if (NewResource != nullptr)
+				//{
+				//	resources[id] = NewResource;
+				//	NewResource->SetAssetPath(Assets.c_str());
+				//	NewResource->SetLibraryPath(Library.c_str());
+
+				//}
+				return 0;
+
+			}
+		}
+		else
+		{
+			LOG("Library file not found");
+			return 0;
+		}
+
+	}
+	else
+	{
+		LOG("Meta not found");
+		return 0;
+
+	}
+
+	return 0;
+
 }
 
 uint ResourceManager::ImportFile(const char* new_file_in_assets)
@@ -106,7 +161,7 @@ Resource* ResourceManager::CreateNewResource(const char* assetsFile, ResourceTyp
 	
 
 	uint uid = GenerateNewUID();
-
+	
 	switch (type) {
 	case ResourceType::MODEL: ret = (Resource*) new ResourceModel(uid); break;
 	case ResourceType::TEXTURE: ret = (Resource*) new ResourceTexture(uid); break;
@@ -119,6 +174,24 @@ Resource* ResourceManager::CreateNewResource(const char* assetsFile, ResourceTyp
 		resources[uid] = ret;
 		ret->SetAssetPath(assetsFile);
 		ret->GenLibraryPath(ret);
+
+		JSON_Value* root_value = json_value_init_object();
+		JSON_Object* root_object;
+		root_object = json_value_get_object(root_value);
+		App->serializer->AddFloat(root_object, "UID", ret->GetUID());
+		switch (type) {
+		case ResourceType::MODEL: App->serializer->AddString(root_object, "Type", "3D Model"); break;
+		case ResourceType::TEXTURE: App->serializer->AddString(root_object, "Type", "Texture"); break;
+		}
+		App->serializer->AddString(root_object, "Asset Path", ret->GetAssetFile());
+		App->serializer->AddString(root_object, "Library path", ret->GetLibraryFile());
+		std::string name;
+		std::string extension;
+
+		App->file_system->SplitFilePath(assetsFile, &name, &extension);
+		name = name + extension + ".meta";
+		App->serializer->SaveValueAsFile(root_value, name.c_str());
+
 	}
 	return ret;
 }
@@ -143,6 +216,20 @@ Resource* ResourceManager::RequestResource(uint UID)
 		return nullptr;
 
 }
+bool ResourceManager::SearchForResource(uint UID)
+{
+	std::map<uint, Resource*>::iterator it = resources.find(UID);
+	if (it != resources.end())
+	{
+
+
+		return true;
+	}
+	else
+		return false;
+
+}
+
 
 //-------------------------------------------------------------------------------
 
