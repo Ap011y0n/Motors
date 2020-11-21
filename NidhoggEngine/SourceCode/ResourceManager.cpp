@@ -129,6 +129,14 @@ Resource* ResourceManager::RequestResource(uint UID)
 	if (it != resources.end())
 	{
 		//it->second->referenceCount++;
+		if (!it->second->isLoaded)
+		{
+			it->second->loadResource();
+			it->second->isLoaded = true;
+		}
+		/*fileSize = App->file_system->Load(NewMeshResource->GetLibraryFile(), &buffer);
+		MeshImporter::Load(buffer, fileSize, NewMesh);*/
+
 		return it->second;
 	}
 	else
@@ -144,6 +152,7 @@ Resource::Resource(uint id)
 	type = ResourceType::UNKNOWN;
 	assetsFile = "";
 	LibraryFile = "";
+	isLoaded = false;
 }
 
 Resource::~Resource()
@@ -201,6 +210,10 @@ void Resource::GenLibraryPath(Resource* resource)
 	}
 }
 
+void Resource::loadResource()
+{
+	LOG("Unespecified resource type");
+}
 //-------------------------------------------------------------------------------
 
 ResourceModel::ResourceModel(uint id) : Resource(id)
@@ -231,6 +244,14 @@ ResourceMesh::~ResourceMesh()
 
 }
 
+void ResourceMesh::loadResource()
+{
+	char* buffer = nullptr;
+	uint fileSize = 0;
+
+	fileSize = App->file_system->Load(GetLibraryFile(), &buffer);
+	MeshImporter::Load(buffer, fileSize, this);
+}
 //-------------------------------------------------------------------------------
 
 ResourceTexture::ResourceTexture(uint id) : Resource(id)
@@ -241,4 +262,13 @@ ResourceTexture::ResourceTexture(uint id) : Resource(id)
 ResourceTexture::~ResourceTexture()
 {
 
+}
+
+void ResourceTexture::loadResource()
+{
+	char* buffer = nullptr;
+	uint fileSize = 0;
+
+	fileSize = App->file_system->Load(GetLibraryFile(), &buffer);
+	MaterialImporter::Load(buffer, fileSize, this);
 }

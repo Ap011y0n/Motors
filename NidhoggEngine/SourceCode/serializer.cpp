@@ -258,13 +258,13 @@ void Serializer::sortScene() {
 
 }
 
-void Serializer::LoadModel(const char* path)
+void Serializer::LoadModel(Resource* model)
 {
 	JSON_Value* root_value;
 	JSON_Object* main_object;
 	JSON_Array* main_array;
 
-	root_value = json_parse_file(path);
+	root_value = json_parse_file(model->GetLibraryFile());
 
 	main_object = json_value_get_object(root_value);
 	main_array = json_object_get_array(main_object, "Game Objects");
@@ -309,26 +309,28 @@ void Serializer::LoadModel(const char* path)
 			JSON_Object* obj_in_array_in_obj = json_array_get_object(component_array, j);
 			std::string type = json_object_get_string(obj_in_array_in_obj, "Type");
 			uint componentUID = json_object_get_number(obj_in_array_in_obj, "Resource UID");
-			char* buffer = nullptr;
-			uint fileSize = 0;
+			
 
 			if (type == "Mesh")
 			{
-				Resource* NewMeshResource = App->ResManager->RequestResource(componentUID);
+				ResourceMesh* NewMeshResource = (ResourceMesh*)App->ResManager->RequestResource(componentUID);
 				if (NewMeshResource != nullptr)
 				{
 					ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
-
-					fileSize = App->file_system->Load(NewMeshResource->GetLibraryFile(), &buffer);
-					MeshImporter::Load(buffer, fileSize, NewMesh);
-
-					NewMesh->id_vertex = App->FBX->FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
-
-					NewMesh->id_tex = App->FBX->FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
-
-					NewMesh->id_normals = App->FBX->FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
-
-					NewMesh->id_index = App->FBX->FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
+					
+					NewMesh->num_vertex = NewMeshResource->num_vertex;
+					NewMesh->num_tex = NewMeshResource->num_tex;
+					NewMesh->num_normals = NewMeshResource->num_normals;
+					NewMesh->num_index = NewMeshResource->num_index;
+					NewMesh->vertex = NewMeshResource->vertex;
+					NewMesh->texCoords = NewMeshResource->texCoords;
+					NewMesh->normals = NewMeshResource->normals;
+					NewMesh->index = NewMeshResource->index;
+					NewMesh->id_vertex = NewMeshResource->id_vertex;
+					NewMesh->id_tex = NewMeshResource->id_tex;
+					NewMesh->id_normals = NewMeshResource->id_normals;
+					NewMesh->id_index = NewMeshResource->id_index;
+					
 
 					NewMesh->SetAABB();
 				}
@@ -338,12 +340,13 @@ void Serializer::LoadModel(const char* path)
 			}
 			else if (type == "texture")
 			{
-				Resource* NewMeshResource = App->ResManager->RequestResource(componentUID);
+				ResourceTexture* NewMeshResource = (ResourceTexture*)App->ResManager->RequestResource(componentUID);
 				if (NewMeshResource != nullptr)
 				{
 					ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
-					fileSize = App->file_system->Load(NewMeshResource->GetLibraryFile(), &buffer);
-					MaterialImporter::Load(buffer, fileSize, NewTex);
+					NewTex->texbuffer = NewMeshResource->texbuffer;
+					NewTex->texture_h = NewMeshResource->texture_h;
+					NewTex->texture_w = NewMeshResource->texture_w;
 
 					if (NewTex->texbuffer != 0)
 						NewTex->hastexture = true;

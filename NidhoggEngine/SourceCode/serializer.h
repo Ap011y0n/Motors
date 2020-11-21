@@ -26,7 +26,7 @@ public:
 	void SaveScene();
 	void SaveModel(JSON_Value* root, const char* name);
 	void LoadScene(const char* path);
-	void LoadModel(const char* path);
+	void LoadModel(Resource* model);
 	void sortScene();
 	void AddFloat(JSON_Object* obj, const char* name, double value);
 	void AddString(JSON_Object* obj, const char* name, const char* string);

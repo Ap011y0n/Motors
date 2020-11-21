@@ -53,7 +53,7 @@ bool ModuleSceneIntro::Start()
 		if (NewResource != nullptr)
 		{
 			LOG("Resource Found");
-			App->serializer->LoadModel(NewResource->GetLibraryFile());
+			App->serializer->LoadModel(NewResource);
 		}
 	}
 	char* buffer = nullptr;

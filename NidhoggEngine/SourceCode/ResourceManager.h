@@ -21,14 +21,16 @@ public:
 	const char* GetLibraryFile() const;
 	void SetAssetPath(const char* AssetsPath);
 	void SetLibraryPath(const char* LibraryPath);
-
 	void GenLibraryPath(Resource* resource);
 	ResourceType GetType() const;
+	virtual void loadResource();
 protected:
 	uint UID;
 	std::string assetsFile;
 	std::string LibraryFile;
 	ResourceType type = ResourceType::UNKNOWN;
+public:
+	bool isLoaded;
 };
 class ResourceModel : public Resource
 {
@@ -52,10 +54,24 @@ class ResourceMesh : public Resource
 public:
 	ResourceMesh(uint uid);
 	virtual ~ResourceMesh();
+	void loadResource();
 
+public:
+	uint id_index = 0; // index in VRAM
+	uint num_index = 0;
+	uint* index = nullptr;
 
-protected:
+	uint id_normals = 0; // normals in VRAM
+	uint num_normals = 0;
+	float* normals = nullptr;
 
+	uint id_vertex = 0; // unique vertex in VRAM
+	uint num_vertex = 0;
+	float* vertex = nullptr;
+
+	uint id_tex; //textures coords in VRAM
+	uint num_tex;
+	float* texCoords;
 };
 
 class ResourceTexture : public Resource
@@ -63,9 +79,13 @@ class ResourceTexture : public Resource
 public:
 	ResourceTexture(uint uid);
 	virtual ~ResourceTexture();
+	void loadResource();
 
 
-protected:
+	public:
+		uint texbuffer;				//texture loaded in VRAM
+		int texture_w;
+		int texture_h;
 	
 };
 

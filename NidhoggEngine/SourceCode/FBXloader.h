@@ -25,12 +25,15 @@ namespace MaterialImporter
 	void Import(char* buffer, uint fileSize);
 	void Save(char** fileBuffer, const char* path, std::string* newpath);
 	void Load(const char* fileBuffer, uint size, ComponentMaterial* ourMaterial);
+	void Load(const char* fileBuffer, uint size, ResourceTexture* resourceTexture);
+
 }
 
 namespace MeshImporter
 {
 	void Save(ComponentMesh* mesh, std::string* path, const char* name);
 	void Load(char* fileBuffer, uint size, ComponentMesh* mesh);
+	void Load(char* fileBuffer, uint size, ResourceMesh* ResourceMesh);
 }
 struct mesh
 {

@@ -87,6 +87,28 @@ namespace MaterialImporter
 		ourMaterial->texbuffer = texbuffer;
 		ilDeleteImages(1, &ImageName);
 	}
+
+	void Load(const char* fileBuffer, uint size, ResourceTexture* resourceTexture)
+	{
+		uint texbuffer = 0;
+		glGenTextures(1, &texbuffer);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+		ILuint ImageName;
+		ilGenImages(1, &ImageName);
+		ilBindImage(ImageName);
+
+		ilLoadL(IL_TYPE_UNKNOWN, (const void*)fileBuffer, size);
+		texbuffer = ilutGLBindTexImage();
+
+		resourceTexture->texture_h = ilGetInteger(IL_IMAGE_HEIGHT);
+		resourceTexture->texture_w = ilGetInteger(IL_IMAGE_WIDTH);
+		resourceTexture->texbuffer = texbuffer;
+		ilDeleteImages(1, &ImageName);
+	}
 };
 
 namespace MeshImporter
@@ -127,6 +149,49 @@ namespace MeshImporter
 		memcpy(mesh->texCoords, cursor, bytes);
 	
 	}
+	void Load(char* fileBuffer, uint size, ResourceMesh* ResourceMesh)
+	{
+		char* cursor = fileBuffer;
+
+		// amount of indices / vertices / colors / normals / texture_coords
+		uint ranges[4];
+		uint bytes = sizeof(ranges);
+		memcpy(ranges, cursor, bytes);
+		cursor += bytes;
+		ResourceMesh->num_index = ranges[0];
+		ResourceMesh->num_vertex = ranges[1];
+		ResourceMesh->num_normals = ranges[2];
+		ResourceMesh->num_tex = ranges[3];
+
+		// Load indices
+		bytes = sizeof(uint) * ResourceMesh->num_index;
+		ResourceMesh->index = new uint[ResourceMesh->num_index];
+		memcpy(ResourceMesh->index, cursor, bytes);
+		cursor += bytes;
+		// Load vertex
+		bytes = sizeof(float) * ResourceMesh->num_vertex * 3;
+		ResourceMesh->vertex = new float[ResourceMesh->num_vertex * 3];
+		memcpy(ResourceMesh->vertex, cursor, bytes);
+		cursor += bytes;
+		// Load vertex
+		bytes = sizeof(float) * ResourceMesh->num_normals * 3;
+		ResourceMesh->normals = new float[ResourceMesh->num_normals * 3];
+		memcpy(ResourceMesh->normals, cursor, bytes);
+		cursor += bytes;
+		// Load vertex
+		bytes = sizeof(float) * ResourceMesh->num_tex;
+		ResourceMesh->texCoords = new float[ResourceMesh->num_tex];
+		memcpy(ResourceMesh->texCoords, cursor, bytes);
+
+		ResourceMesh->id_vertex = App->FBX->FillArrayBuffer(ResourceMesh->num_vertex * 3, ResourceMesh->vertex);
+
+		ResourceMesh->id_tex = App->FBX->FillArrayBuffer(ResourceMesh->num_tex, ResourceMesh->texCoords);
+
+		ResourceMesh->id_normals = App->FBX->FillArrayBuffer(ResourceMesh->num_normals * 3, ResourceMesh->normals);
+
+		ResourceMesh->id_index = App->FBX->FillElementArrayBuffer(ResourceMesh->num_index, ResourceMesh->index);
+
+	}
 	void Save(ComponentMesh* mesh, std::string* path, const char* name)
 	{
 		std::string doc;
@@ -158,7 +223,7 @@ namespace MeshImporter
 
 
 		doc.append(name);
-		doc.append(".uwu");
+		doc.append(".mesh");
 
 		App->file_system->Save(doc.c_str(), fileBuffer, size, false);
 		path->append("Assets/library/");
@@ -196,7 +261,7 @@ namespace MeshImporter
 
 
 		doc.append(name);
-		doc.append(".uwu");
+		doc.append(".mesh");
 		std::string path;
 		App->file_system->Save(doc.c_str(), fileBuffer, size, false);
 		path.append("Assets/library/");
