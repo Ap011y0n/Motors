@@ -611,12 +611,12 @@ void ComponentTransform::Scale(float x, float y, float z)
 }
 void ComponentTransform::UpdateFromGuizmo(float4x4 newAll) 
 {
-	float x = 0, y = 0, z = 0;
-	x = newAll.At(0, 3);
-	y = newAll.At(1, 3);
-	z = newAll.At(2, 3);
-	pos.Set(x, y, z);
-
+	float3 translation, scaling;
+	Quat rotation;
+	newAll.Decompose(translation, rotation, scaling);
+	pos.Set(translation.x, translation.y, translation.z);
+	rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
+	scale.Set(scaling.x, scaling.y, scaling.y);
 }
 
 //*************************		ComponentCamera

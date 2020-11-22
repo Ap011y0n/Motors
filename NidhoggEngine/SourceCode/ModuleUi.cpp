@@ -1212,7 +1212,6 @@ void ModuleUI::GuizmoUI()
 			MovementMatrix.Set(modelProjection);
 			transform->transform = MovementMatrix.Transposed();
 			transform->UpdateFromGuizmo(transform->transform);
-			//transform->should_update = true;
 		}
 	}
 }
