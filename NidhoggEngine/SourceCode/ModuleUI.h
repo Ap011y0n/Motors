@@ -53,7 +53,7 @@ public:
 	void ChangeParent(GameObject* obj, GameObject* nextOwner);
 	void SelectGameObject(GameObject* node);
 	void GuizmoUI();
-
+	void ControlsGuizmo();
 	vec3 ReturnLookAtCamera(vec3 direction);
 public:
 	ImGuiIO* io;
@@ -88,14 +88,17 @@ public:
 	GameObject* selectedObj;
 	ImVec2 winSize;
 	ImVec2 winPos;
-
+	Vec2 cornerPos;
+	Vec2 imgcorner;
 	ImGuizmo::OPERATION guizmo_type = ImGuizmo::OPERATION::TRANSLATE;
 	ImGuizmo::MODE guizmo_mode = ImGuizmo::MODE::LOCAL;
+	bool LocalGuizmo;
+	bool WorldGuizmo;
 private:
 	int c1;
 	int cameras;
 	vector<string> consoleOutput;
-	float width = 960;
-	float height = 540;
+	float width = 1324;
+	float height = 768;
 };
 

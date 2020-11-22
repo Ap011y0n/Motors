@@ -109,7 +109,7 @@ public:
 	void			Scale(float x, float y, float z);	//Call this method to change scale of transform component
 	void			UpdateRotation(Quat quat);
 	float4x4			AcumulateparentTransform();
-
+	void		UpdateFromGuizmo(float4x4 newAll);
 private:
 //	void			UpdatePos(float x, float y, float z);
 //	void			UpdateScale(float x, float y, float z);

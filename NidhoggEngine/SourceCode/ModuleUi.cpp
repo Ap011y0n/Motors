@@ -114,6 +114,9 @@ bool ModuleUI::Init()
 	cameras = 0;
 	width = 960;
 	height = 540;
+	LocalGuizmo = false;
+	WorldGuizmo = true;
+	guizmo_mode = ImGuizmo::MODE::WORLD;
 	i = 0;
 	e = 1;
 	int max_fps = 61;
@@ -162,8 +165,12 @@ update_status ModuleUI::Update(float dt)
 	int y = 0;
 	SDL_GetWindowPosition(App->window->window, &x, &y);
 	img_corner -= Vec2(x, y);
+	
+	imgcorner = Vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y) + Vec2(0, image_size.y);
+	imgcorner.y =App->window->windowSize.y - imgcorner.y; //ImGui 0y is on top so we need to convert 0y on botton
 
 	ImGui::Image((ImTextureID)App->renderer3D->texColorBuffer, ImVec2(image_size.x, image_size.y), ImVec2(0, 1), ImVec2(1, 0));
+	ControlsGuizmo();
 	GuizmoUI();
 	ImGui::End();
 
@@ -280,8 +287,25 @@ update_status ModuleUI::Update(float dt)
 		ImGui::EndMenu();
 	}
 
-	ImGui::EndMainMenuBar();
+	{
+		ImGui::SetNextItemWidth(130);
+		static int selectedMode = 0;
+		static const char* Mode[]{ "WORLD","LOCAL" };
+		ImGui::Combo("Mode", &selectedMode, Mode, IM_ARRAYSIZE(Mode));
+		if (selectedMode == 1)
+		{
+		guizmo_mode = ImGuizmo::MODE::LOCAL;
+		}
+		if (selectedMode == 0)
+		{
+		guizmo_mode = ImGuizmo::MODE::WORLD;
+		}
+		
+	}
 
+	
+	ImGui::EndMainMenuBar();
+	
 	if (show_demo_window == true)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
@@ -880,6 +904,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 
 			// Position
 			float t = transform->pos.x;
+			LOG("%f",t);
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat(" ", &t);
 			if (ImGui::IsItemActive())
@@ -1159,7 +1184,9 @@ void ModuleUI::Change_Window_size(Vec2 newSize)
 
 void ModuleUI::GuizmoUI() 
 {
-	guizmo_mode = ImGuizmo::MODE::WORLD;
+	
+	GameObject* gameObject = selectedObj;
+
 	if (selectedObj != nullptr) 
 	{
 		ComponentTransform* transform = (ComponentTransform*)selectedObj->GetComponent(ComponentType::TRANSFORM);
@@ -1170,15 +1197,34 @@ void ModuleUI::GuizmoUI()
 		float4x4 projection = App->camera->cameraComp->frustrum.ProjectionMatrix();
 		projection.Transpose();
 
-		float4x4 matrix = transform->transform;
-		matrix.Transpose();
+		float4x4 modelProjection = transform->transform;
+		modelProjection.Transpose();
 
-		float4x4 delta_Matrix;
 		ImGuizmo::SetDrawlist();
-		ImGuizmo::SetRect((ImGui::GetWindowWidth() - width) * 0.5f, (ImGui::GetWindowHeight() - height) * 0.5f, width, height);
-		ImGuizmo::MODE mode = ImGuizmo::MODE::WORLD;
-		ImGuizmo::Manipulate(view.ptr(), projection.ptr(),guizmo_type, guizmo_mode, matrix.ptr(), delta_Matrix.ptr());
+		cornerPos = Vec2(imgcorner.x, App->window->windowSize.y - imgcorner.y - image_size.y);
+		ImGuizmo::SetRect(imgcorner.x, cornerPos.y, image_size.x, image_size.y);
+
+		ImGuizmo::Manipulate(view.ptr(), projection.ptr(),guizmo_type, guizmo_mode, modelProjection.ptr());
+
+		if (ImGuizmo::IsUsing())
+		{
+			float4x4 MovementMatrix;
+			MovementMatrix.Set(modelProjection);
+			transform->transform = MovementMatrix.Transposed();
+			transform->UpdateFromGuizmo(transform->transform);
+			//transform->should_update = true;
+		}
 	}
+}
 
-
+void ModuleUI::ControlsGuizmo()
+{
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) 
+	{
+		guizmo_mode = ImGuizmo::MODE::LOCAL;
+	} 
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN) 
+	{
+		guizmo_mode = ImGuizmo::MODE::WORLD;
+	} 
 }
