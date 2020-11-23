@@ -1,249 +1,225 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Sources">
-      <UniqueIdentifier>{8b7ed093-66ce-4096-96d2-fbb9faa4bf52}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Modules">
-      <UniqueIdentifier>{7b418be2-1631-4a31-9ef2-8a8b234a7339}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Containers">
-      <UniqueIdentifier>{afc36133-f401-499a-aa33-0da1e500fb52}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Tools">
-      <UniqueIdentifier>{7e4dfaf7-022c-4f7d-92aa-f3b3fa9d6248}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Helpers">
-      <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Modules\Game">
-      <UniqueIdentifier>{83f46af7-e02f-40c0-9e56-41d76082527b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\imgui">
-      <UniqueIdentifier>{3bfcc9b7-f13c-437a-94fd-b93dea7351fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\sources">
-      <UniqueIdentifier>{3617d6a0-1e1d-40ba-872d-c2e300003b29}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Math">
-      <UniqueIdentifier>{c1ece6c9-94dd-4056-bbfe-4aae8e6818da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Modules\GameObjects">
-      <UniqueIdentifier>{53dc4b5f-416b-445c-be9a-ba8c4d9d5b64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\parson">
-      <UniqueIdentifier>{2d2e6ea2-ba8f-4905-a646-70e8a2da8cab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Tools\Guizmos">
-      <UniqueIdentifier>{f4653857-7eea-4d67-b66b-2c58ae3e827e}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="SourceCode\Color.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\glmath.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Light.h">
-      <Filter>Sources\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\imconfig.h">
-      <Filter>Sources\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\imgui.h">
-      <Filter>Sources\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\imgui_internal.h">
-      <Filter>Sources\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\imstb_rectpack.h">
-      <Filter>Sources\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\imstb_textedit.h">
-      <Filter>Sources\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\imstb_truetype.h">
-      <Filter>Sources\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Vec2.h">
-      <Filter>Sources\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ModuleSceneIntro.h">
-      <Filter>Sources\Modules\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\FileSystem.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Module.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ModuleCamera3D.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ModuleInput.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ModuleRenderer3D.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ModuleUI.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ModuleWindow.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\imgui_impl_opengl3.h">
-      <Filter>Sources\sources</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\imgui_impl_sdl.h">
-      <Filter>Sources\sources</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Timer.h">
-      <Filter>Sources\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Application.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Globals.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\FBXloader.h">
-      <Filter>Sources\Modules\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\GameObject.h">
-      <Filter>Sources\Modules\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\PrimitiveManager.h">
-      <Filter>Sources\Modules\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Primitive.h">
-      <Filter>Sources\Modules\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\parson\parson.h">
-      <Filter>Sources\parson</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\serializer.h">
-      <Filter>Sources\parson</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ImGuizmo.h">
-      <Filter>Sources\Tools\Guizmos</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ImCurveEdit.h">
-      <Filter>Sources\Tools\Guizmos</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ImGradient.h">
-      <Filter>Sources\Tools\Guizmos</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ImSequencer.h">
-      <Filter>Sources\Tools\Guizmos</Filter>
-    <ClInclude Include="SourceCode\ResourceManager.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="SourceCode\Color.cpp">
-      <Filter>Sources\Containers</Filter>
-    </ClCompile>
+    <ClCompile Include="SourceCode\Application.cpp" />
+    <ClCompile Include="SourceCode\Main.cpp" />
     <ClCompile Include="SourceCode\glmath.cpp">
-      <Filter>Sources\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Light.cpp">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Mathlibs</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\imgui.cpp">
-      <Filter>Sources\imgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\imgui_demo.cpp">
-      <Filter>Sources\imgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\imgui_draw.cpp">
-      <Filter>Sources\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\imgui_widgets.cpp">
-      <Filter>Sources\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Vec2.cpp">
-      <Filter>Sources\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ModuleSceneIntro.cpp">
-      <Filter>Sources\Modules\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\FileSystem.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ModuleCamera3D.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ModuleInput.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ModuleRenderer3D.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ModuleUi.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ModuleWindow.cpp">
-      <Filter>Sources\Modules</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\imgui_impl_opengl3.cpp">
-      <Filter>Sources\sources</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\imgui_impl_sdl.cpp">
-      <Filter>Sources\sources</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\log.cpp">
-      <Filter>Sources\Tools</Filter>
+    <ClCompile Include="SourceCode\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Timer.cpp">
-      <Filter>Sources\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Application.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Main.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\FBXloader.cpp">
-      <Filter>Sources\Modules\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\GameObject.cpp">
-      <Filter>Sources\Modules\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\PrimitiveManager.cpp">
-      <Filter>Sources\Modules\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Primitive.cpp">
-      <Filter>Sources\Modules\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\parson\parson.c">
-      <Filter>Sources\parson</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\serializer.cpp">
-      <Filter>Sources\parson</Filter>
-    </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="SourceCode\ImGuizmo.cpp">
-      <Filter>Sources\Tools\Guizmos</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ImCurveEdit.cpp">
-      <Filter>Sources\Tools\Guizmos</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ImGradient.cpp">
-      <Filter>Sources\Tools\Guizmos</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\ImSequencer.cpp">
-      <Filter>Sources\Tools\Guizmos</Filter>
-=======
-    <ClCompile Include="SourceCode\ResourceManager.cpp">
-      <Filter>Sources\Modules</Filter>
->>>>>>> Resource-Manager
+      <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\ImGradient.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ImCurveEdit.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\parson\parson.c">
+      <Filter>parson</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Color.cpp">
+      <Filter>helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Light.cpp">
+      <Filter>helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\log.cpp">
+      <Filter>helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Vec2.cpp">
+      <Filter>helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Timer.cpp">
+      <Filter>helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\GameObject.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\PrimitiveManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Primitive.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ResourceManager.cpp">
+      <Filter>DataManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\serializer.cpp">
+      <Filter>DataManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\FileSystem.cpp">
+      <Filter>DataManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\FBXloader.cpp">
+      <Filter>DataManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ModuleSceneIntro.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ModuleCamera3D.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ModuleInput.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ModuleRenderer3D.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ModuleUi.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ModuleWindow.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SourceCode\Application.h" />
+    <ClInclude Include="SourceCode\Globals.h" />
+    <ClInclude Include="SourceCode\glmath.h">
+      <Filter>Mathlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\imstb_truetype.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\imgui_impl_opengl3.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\imgui_impl_sdl.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ImGuizmo.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ImSequencer.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\imstb_rectpack.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\imstb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ImGradient.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ImCurveEdit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\parson\parson.h">
+      <Filter>parson</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Color.h">
+      <Filter>helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Light.h">
+      <Filter>helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Vec2.h">
+      <Filter>helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Timer.h">
+      <Filter>helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\GameObject.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\PrimitiveManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Primitive.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ResourceManager.h">
+      <Filter>DataManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\serializer.h">
+      <Filter>DataManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\FileSystem.h">
+      <Filter>DataManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\FBXloader.h">
+      <Filter>DataManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ModuleSceneIntro.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Module.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ModuleCamera3D.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ModuleInput.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ModuleRenderer3D.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ModuleUI.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ModuleWindow.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Mathlibs">
+      <UniqueIdentifier>{9d17cc87-76be-4e28-a475-25fc74f39bed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{9325c38f-b713-49ae-879a-714913f49ec3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="helpers">
+      <UniqueIdentifier>{9528d63d-39f2-417c-9b32-029c9b475e4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{e799b5d1-43ca-45b5-a38b-2ab60035f269}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataManagement">
+      <UniqueIdentifier>{9694c390-7816-41ce-9635-347c71e88e1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{c1969441-1d45-4532-81b8-c22653547623}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="parson">
+      <UniqueIdentifier>{0fbbcdd3-9488-4d82-8b9c-4bbde7bee39e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="SourceCode\imgui.natvis">
-      <Filter>Sources\sources</Filter>
+      <Filter>imgui</Filter>
     </Natvis>
   </ItemGroup>
 </Project>

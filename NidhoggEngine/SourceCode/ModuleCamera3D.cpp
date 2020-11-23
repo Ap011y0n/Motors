@@ -184,12 +184,12 @@ update_status ModuleCamera3D::Update(float dt)
 		LOG("x = %f, y = %f", mouseNormX, mouseNormY);
 
 		Ray ray = cameraComp->frustrum.UnProjectLineSegment(mouseNormX, mouseNormY).ToRay();
-		ray.pos;
-		vec3 origin(ray.pos.x, ray.pos.y, ray.pos.z);
-		LineSegment segment = ray.ToLineSegment(20);
-		vec3 dest(segment.GetPoint(20).x, segment.GetPoint(20).y, segment.GetPoint(20).z);
+	//	ray.pos;
+	//	vec3 origin(ray.pos.x, ray.pos.y, ray.pos.z);
+	//	LineSegment segment = ray.ToLineSegment(20);
+		//vec3 dest(segment.GetPoint(20).x, segment.GetPoint(20).y, segment.GetPoint(20).z);
 
-		App->PrimManager->CreateLine(origin, dest);
+	//	App->PrimManager->CreateLine(origin, dest);
 	}
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
