@@ -25,7 +25,7 @@ public:
 	Pyramid* CreatePyramid(vec3 size, vec3 pos = (0.f, 0.f, 0.f));
 	PrimSphere* CreateSphere(float radius, unsigned int rings, unsigned int sectors, vec3 pos = (0.f, 0.f, 0.f));
 	PrimCylinder* CreateCylinder(float radius, float height, int sides = 30, vec3 pos = (0.f, 0.f, 0.f));
-	PrimLine* CreateLine(vec3 origin, vec3 dest);
+	PrimLine* CreateLine(float3 origin, float3 dest);
 	PrimNormals* CreateNormalVects(float* normal_array, int size);
 	PrimAABB* CreateAABB(AABB* bbox);
 

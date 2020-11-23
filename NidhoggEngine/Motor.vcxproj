@@ -100,6 +100,7 @@
     <ClInclude Include="SourceCode\ModuleSceneIntro.h" />
     <ClInclude Include="SourceCode\ModuleUI.h" />
     <ClInclude Include="SourceCode\ModuleWindow.h" />
+    <ClInclude Include="SourceCode\MousePicking.h" />
     <ClInclude Include="SourceCode\parson\parson.h" />
     <ClInclude Include="SourceCode\Primitive.h" />
     <ClInclude Include="SourceCode\PrimitiveManager.h" />
@@ -134,6 +135,7 @@
     <ClCompile Include="SourceCode\ModuleSceneIntro.cpp" />
     <ClCompile Include="SourceCode\ModuleUi.cpp" />
     <ClCompile Include="SourceCode\ModuleWindow.cpp" />
+    <ClCompile Include="SourceCode\MousePicking.cpp" />
     <ClCompile Include="SourceCode\parson\parson.c" />
     <ClCompile Include="SourceCode\Primitive.cpp" />
     <ClCompile Include="SourceCode\PrimitiveManager.cpp" />

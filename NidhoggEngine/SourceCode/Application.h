@@ -16,6 +16,7 @@
 #include "FBXloader.h"
 #include "FileSystem.h"
 #include "serializer.h"
+#include "MousePicking.h"
 #include "ResourceManager.h"
 
 #include <vector>
@@ -40,7 +41,7 @@ public:
 	FileSystem* file_system;
 	Serializer* serializer;
 	ResourceManager* ResManager;
-
+	MousePicking* MousePick;
 private:
 
 	Timer	ms_timer;

@@ -93,6 +93,7 @@
     <ClCompile Include="SourceCode\ModuleWindow.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\MousePicking.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Application.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="SourceCode\ModuleWindow.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\MousePicking.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Mathlibs">

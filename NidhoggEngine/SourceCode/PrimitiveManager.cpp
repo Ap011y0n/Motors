@@ -144,7 +144,7 @@ PrimCylinder* PrimitiveManager::CreateCylinder(float radius, float height, int s
 	return cylinder;
 }
 
-PrimLine* PrimitiveManager::CreateLine(vec3 origin, vec3 dest)
+PrimLine* PrimitiveManager::CreateLine(float3 origin, float3 dest)
 {
 	PrimLine* line = new PrimLine(origin.x, origin.y, origin.z, dest.x, dest.y, dest.z);
 	prim_list.push_back((Primitive*)line);

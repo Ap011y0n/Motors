@@ -25,6 +25,7 @@ Application::Application()
 	file_system = new FileSystem(this);
 	serializer = new Serializer(this);
 	ResManager = new ResourceManager(this);
+	MousePick = new MousePicking(this);
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
@@ -41,6 +42,7 @@ Application::Application()
 	AddModule(FBX);
 	AddModule(scene_intro);
 	AddModule(UI);
+	AddModule(MousePick);
 
 	// Renderer last!
 	AddModule(renderer3D);

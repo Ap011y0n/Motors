@@ -301,13 +301,13 @@ void FBXloader::ChangeTexture(const char* path)
 {
 	LOG("changing all textures to %s", path);
 	ComponentMaterial* mat = nullptr;
-	if (App->UI->selectedObj != nullptr)
+	if (App->scene_intro->selectedObj != nullptr)
 	{
-		for (int i = 0; i < App->UI->selectedObj->Components.size(); i++)
+		for (int i = 0; i < App->scene_intro->selectedObj->Components.size(); i++)
 		{
-			if (App->UI->selectedObj->Components[i]->type == ComponentType::MATERIAL)
+			if (App->scene_intro->selectedObj->Components[i]->type == ComponentType::MATERIAL)
 			{
-				mat = (ComponentMaterial*)App->UI->selectedObj->Components[i];
+				mat = (ComponentMaterial*)App->scene_intro->selectedObj->Components[i];
 			}
 		}
 

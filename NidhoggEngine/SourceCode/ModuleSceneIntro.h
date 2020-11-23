@@ -45,6 +45,8 @@ public:
 
 	//vector<GameObject*> gameObjects;
 	GameObject* scene;
+	GameObject* selectedObj;
+
 	ComponentCamera* culling;
 	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 	uint texName;

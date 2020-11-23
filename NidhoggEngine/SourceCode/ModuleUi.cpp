@@ -109,7 +109,6 @@ bool ModuleUI::Init()
 	Hierarchy_open = true;
 	Inspector_open = true;
 	Console_open = true;
-	selectedObj = nullptr;
 	direction_camera = { 0,0,0 };
 	cameras = 0;
 	width = 960;
@@ -753,7 +752,7 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 
 	const char* GameObjname = node->Name.c_str();
 
-	if (selectedObj==node)
+	if (App->scene_intro->selectedObj==node)
 	{
 		node_flags += ImGuiTreeNodeFlags_Selected;
 	}
@@ -769,7 +768,7 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 		DeactivateGameObjects(App->scene_intro->scene);
 
 		node->isSelected = true;
-		selectedObj = node;
+		App->scene_intro->selectedObj = node;
 
 	}
 
@@ -904,7 +903,6 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 
 			// Position
 			float t = transform->pos.x;
-			LOG("%f",t);
 			ImGui::SetNextItemWidth(50);
 			ImGui::DragFloat(" ", &t);
 			if (ImGui::IsItemActive())
@@ -1120,8 +1118,8 @@ void ModuleUI::InspectorWin()
 	if (Inspector_open == true)
 	{
 		ImGui::Begin("Inspector",&Inspector_open);
-		if(selectedObj != nullptr)
-		GameObjectInspector(selectedObj);
+		if(App->scene_intro->selectedObj != nullptr)
+		GameObjectInspector(App->scene_intro->selectedObj);
 			
 		ImGui::End();
 	}
@@ -1185,11 +1183,12 @@ void ModuleUI::Change_Window_size(Vec2 newSize)
 void ModuleUI::GuizmoUI() 
 {
 	
-	GameObject* gameObject = selectedObj;
+	GameObject* gameObject = App->scene_intro->selectedObj;
+	using_gizmo = false;
 
-	if (selectedObj != nullptr) 
+	if (gameObject != nullptr)
 	{
-		ComponentTransform* transform = (ComponentTransform*)selectedObj->GetComponent(ComponentType::TRANSFORM);
+		ComponentTransform* transform = (ComponentTransform*)gameObject->GetComponent(ComponentType::TRANSFORM);
 
 		float4x4 view = App->camera->cameraComp->frustrum.ViewMatrix();
 		view.Transpose();
@@ -1205,9 +1204,9 @@ void ModuleUI::GuizmoUI()
 		ImGuizmo::SetRect(imgcorner.x, cornerPos.y, image_size.x, image_size.y);
 
 		ImGuizmo::Manipulate(view.ptr(), projection.ptr(),guizmo_type, guizmo_mode, modelProjection.ptr());
-
 		if (ImGuizmo::IsUsing())
 		{
+			using_gizmo = true;
 			float4x4 MovementMatrix;
 			MovementMatrix.Set(modelProjection);
 			transform->transform = MovementMatrix.Transposed();

@@ -26,6 +26,7 @@
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	scene = CreateGameObject("scene");
+	selectedObj = nullptr;
 
 }
 
@@ -115,7 +116,10 @@ update_status ModuleSceneIntro::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
 		//App->serializer->LoadScene("Assets/library/TEST.json");
-		std::string file_path = "Assets/Street environment_V01.FBX";
+		
+		std::string file_path = "Assets/BakerHouse.fbx";
+		//	std::string file_path = "Assets/Street environment_V01.FBX";
+
 		uint UID = App->ResManager->FindInAssets(file_path.c_str());
 		if (UID == 0)
 		{
@@ -325,9 +329,9 @@ bool ModuleSceneIntro::DeleteGameObject(GameObject* parent)
 		}
 		if (parent != NULL)
 		{
-			if (App->UI->selectedObj = parent)
+			if (selectedObj = parent)
 			{
-				App->UI->selectedObj = nullptr;
+				selectedObj = nullptr;
 			}
 
 			delete parent;

@@ -85,7 +85,6 @@ public:
 	Vec2 image_size;
 	ImGuiWindowClass* windowClass = nullptr;
 	vec3 direction_camera;
-	GameObject* selectedObj;
 	ImVec2 winSize;
 	ImVec2 winPos;
 	Vec2 cornerPos;
@@ -94,6 +93,7 @@ public:
 	ImGuizmo::MODE guizmo_mode = ImGuizmo::MODE::LOCAL;
 	bool LocalGuizmo;
 	bool WorldGuizmo;
+	bool using_gizmo;
 private:
 	int c1;
 	int cameras;

@@ -8,6 +8,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "GameObject.h"
+#include "MousePicking.h"
 
 #include "MathGeoLib/include/MathGeoLib.h"
 
@@ -181,15 +182,19 @@ update_status ModuleCamera3D::Update(float dt)
 		mouseNormY = -(mouseNormY - 0.5) / 0.5;
 
 		//LOG("x = %f, y = %f", App->UI->img_corner.x, App->UI->img_corner.y);
-		LOG("x = %f, y = %f", mouseNormX, mouseNormY);
+		if (mouseNormX >= -1 && mouseNormX <= 1 && mouseNormY >= -1 && mouseNormY <= 1)
+		{
+			LOG("New ray with x = %f, y = %f", mouseNormX, mouseNormY);
 
-		Ray ray = cameraComp->frustrum.UnProjectLineSegment(mouseNormX, mouseNormY).ToRay();
-	//	ray.pos;
-	//	vec3 origin(ray.pos.x, ray.pos.y, ray.pos.z);
-	//	LineSegment segment = ray.ToLineSegment(20);
-		//vec3 dest(segment.GetPoint(20).x, segment.GetPoint(20).y, segment.GetPoint(20).z);
+			LineSegment ray = cameraComp->frustrum.UnProjectLineSegment(mouseNormX, mouseNormY);
+			App->MousePick->CastRay(ray);
+	/*		vec3 origin(ray.pos.x, ray.pos.y, ray.pos.z);
+			LineSegment segment = ray.ToLineSegment(20);
+			vec3 dest(segment.GetPoint(20).x, segment.GetPoint(20).y, segment.GetPoint(20).z);
 
-	//	App->PrimManager->CreateLine(origin, dest);
+			App->PrimManager->CreateLine(origin, dest);*/
+		}
+	
 	}
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
