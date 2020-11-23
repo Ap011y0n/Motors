@@ -29,7 +29,7 @@ bool ResourceManager::CleanUp()
 	return false;
 }
 
-uint ResourceManager::Find(const char* file_in_assets)
+uint ResourceManager::FindInAssets(const char* file_in_assets)
 {
 	uint id = 0;
 	std::string MetaPath = file_in_assets;
@@ -53,23 +53,23 @@ uint ResourceManager::Find(const char* file_in_assets)
 			{
 				LOG("Resource not found in resoruces, you should add this resource");
 
-				//Resource* NewResource = nullptr;
+				Resource* NewResource = nullptr;
 
-				//switch (type) {
-				//case ResourceType::MODEL: NewResource = (Resource*) new ResourceModel(id); break;
-				//case ResourceType::TEXTURE: NewResource = (Resource*) new ResourceTexture(id); break;
-				//	//	case ResourceType::MESH: ret = (Resource*) new ResourceMesh(uid); break;
+				switch (type) {
+				case ResourceType::MODEL: NewResource = (Resource*) new ResourceModel(id); break;
+				case ResourceType::TEXTURE: NewResource = (Resource*) new ResourceTexture(id); break;
+					//	case ResourceType::MESH: ret = (Resource*) new ResourceMesh(uid); break;
 
-				//}
+				}
 
-				//if (NewResource != nullptr)
-				//{
-				//	resources[id] = NewResource;
-				//	NewResource->SetAssetPath(Assets.c_str());
-				//	NewResource->SetLibraryPath(Library.c_str());
+				if (NewResource != nullptr)
+				{
+					resources[id] = NewResource;
+					NewResource->SetAssetPath(Assets.c_str());
+					NewResource->SetLibraryPath(Library.c_str());
 
-				//}
-				return 0;
+				}
+				return id;
 
 			}
 		}
@@ -86,6 +86,57 @@ uint ResourceManager::Find(const char* file_in_assets)
 		return 0;
 
 	}
+
+	return 0;
+
+}
+
+uint ResourceManager::FindInLibrary(const char* file_in_library, uint id)
+{
+
+	std::string MetaPath = file_in_library;
+
+
+	ResourceType type = ReturnType(file_in_library);
+
+	
+		if (App->file_system->CheckFile(file_in_library))
+		{
+			LOG("Library file found");
+			if (SearchForResource(id))
+			{
+				LOG("Resource found in resources map");
+				return id;
+			}
+			else
+			{
+				LOG("Resource not found in resoruces, you should add this resource");
+
+				Resource* NewResource = nullptr;
+
+				switch (type) {
+				case ResourceType::MODEL: NewResource = (Resource*) new ResourceModel(id); break;
+				case ResourceType::TEXTURE: NewResource = (Resource*) new ResourceTexture(id); break;
+				case ResourceType::MESH: NewResource = (Resource*) new ResourceMesh(id); break;
+
+				}
+
+				if (NewResource != nullptr)
+				{
+					resources[id] = NewResource;
+
+					NewResource->SetLibraryPath(file_in_library);
+
+				}
+				return id;
+
+			}
+		}
+		else
+		{
+			LOG("Library file not found");
+			return 0;
+		}
 
 	return 0;
 
@@ -149,13 +200,17 @@ ResourceType ResourceManager::ReturnType(const char* assetsFile)
 
 	std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 
-	if (extension == "fbx")
+	if (extension == "fbx" || extension == "model")
 	{
 		ret = ResourceType::MODEL;
 	}
 	else if (extension == "png" || extension == "dds" || extension == "tga")
 	{
 		ret = ResourceType::TEXTURE;
+	}
+	else if (extension == "mesh")
+	{
+		ret = ResourceType::MESH;
 	}
 
 

@@ -323,11 +323,14 @@ void Serializer::LoadModel(Resource* model)
 			JSON_Object* obj_in_array_in_obj = json_array_get_object(component_array, j);
 			std::string type = json_object_get_string(obj_in_array_in_obj, "Type");
 			uint componentUID = json_object_get_number(obj_in_array_in_obj, "Resource UID");
-			
+			const char* componentpath = json_object_get_string(obj_in_array_in_obj, "Path");
+
 
 			if (type == "Mesh")
 			{
-				ResourceMesh* NewMeshResource = (ResourceMesh*)App->ResManager->RequestResource(componentUID);
+				App->ResManager->FindInLibrary(componentpath, componentUID);
+				ResourceMesh* NewMeshResource;
+				NewMeshResource = (ResourceMesh*)App->ResManager->RequestResource(componentUID);
 				if (NewMeshResource != nullptr)
 				{
 					ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
@@ -354,6 +357,7 @@ void Serializer::LoadModel(Resource* model)
 			}
 			else if (type == "texture")
 			{
+				App->ResManager->FindInLibrary(componentpath, componentUID);
 				ResourceTexture* NewMeshResource = (ResourceTexture*)App->ResManager->RequestResource(componentUID);
 				if (NewMeshResource != nullptr)
 				{
@@ -463,7 +467,7 @@ void Serializer::AddComponent(JSON_Array* componentsArray, ComponentType type, c
 	
 }
 
-void Serializer::AddResourceComponent(JSON_Array* componentsArray, ComponentType type, uint UID)
+void Serializer::AddResourceComponent(JSON_Array* componentsArray, ComponentType type, uint UID, const char* path)
 {
 
 	JSON_Value* leaf_value = json_value_init_object();
@@ -476,11 +480,13 @@ void Serializer::AddResourceComponent(JSON_Array* componentsArray, ComponentType
 	{
 		AddString(leaf_object, "Type", "Mesh");
 		AddFloat(leaf_object, "Resource UID", UID);
+		AddString(leaf_object, "Path", path);
 		break;
 	}
 	case ComponentType::MATERIAL: {
 		AddString(leaf_object, "Type", "texture");
 		AddFloat(leaf_object, "Resource UID", UID);
+		AddString(leaf_object, "Path", path);
 		break;
 	}
 	case ComponentType::TRANSFORM: {

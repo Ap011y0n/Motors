@@ -718,7 +718,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 			ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
 
 			
-			uint UID = App->ResManager->Find(file.c_str());
+			uint UID = App->ResManager->FindInAssets(file.c_str());
 			if (UID == 0)
 			{
 				UID = App->ResManager->ImportFile(file.c_str());
@@ -730,7 +730,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 			if (UID != 0)
 			{
 				Resource* NewResource = App->ResManager->RequestResource(UID);
-				App->serializer->AddResourceComponent(JsonComp, ComponentType::MATERIAL, NewResource->GetUID());
+				App->serializer->AddResourceComponent(JsonComp, ComponentType::MATERIAL, NewResource->GetUID(), NewResource->GetLibraryFile());
 
 			}
 	
@@ -794,7 +794,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 
 		MeshImporter::Save(NewMesh, meshResource, name.c_str());
 
-		App->serializer->AddResourceComponent(JsonComp, ComponentType::MESH, meshResource->GetUID());
+		App->serializer->AddResourceComponent(JsonComp, ComponentType::MESH, meshResource->GetUID(), meshResource->GetLibraryFile());
 
 		std::string file;
 		std::string extension;

@@ -116,7 +116,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	{
 		//App->serializer->LoadScene("Assets/library/TEST.json");
 		std::string file_path = "Assets/Street environment_V01.FBX";
-		uint UID = App->ResManager->Find(file_path.c_str());
+		uint UID = App->ResManager->FindInAssets(file_path.c_str());
 		if (UID == 0)
 		{
 			UID = App->ResManager->ImportFile(file_path.c_str());
