@@ -137,6 +137,8 @@
     </ClInclude>
     <ClInclude Include="SourceCode\ImSequencer.h">
       <Filter>Sources\Tools\Guizmos</Filter>
+    <ClInclude Include="SourceCode\ResourceManager.h">
+      <Filter>Sources\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +223,7 @@
     <ClCompile Include="SourceCode\serializer.cpp">
       <Filter>Sources\parson</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="SourceCode\ImGuizmo.cpp">
       <Filter>Sources\Tools\Guizmos</Filter>
     </ClCompile>
@@ -232,6 +235,10 @@
     </ClCompile>
     <ClCompile Include="SourceCode\ImSequencer.cpp">
       <Filter>Sources\Tools\Guizmos</Filter>
+=======
+    <ClCompile Include="SourceCode\ResourceManager.cpp">
+      <Filter>Sources\Modules</Filter>
+>>>>>>> Resource-Manager
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

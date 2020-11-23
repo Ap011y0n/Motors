@@ -59,7 +59,21 @@ double Serializer::get_Number(const char* file, const char* name)
 	json_value_free(root_value);
 	return number;
 }
+const char* Serializer::get_String(const char* file, const char* name)
+{
+	JSON_Value* root_value;
+	JSON_Object* object;
+	root_value = json_parse_file(file);
+	object = json_value_get_object(root_value);
 
+	std::string newstring;
+
+	if (json_object_has_value_of_type(object, name, JSONString))
+		newstring = json_object_get_string(object, name);
+
+	json_value_free(root_value);
+	return newstring.c_str();
+}
 void Serializer::get_Array(const char* file)
 {
 	JSON_Value* root_value;
@@ -134,7 +148,17 @@ void Serializer::SaveScene()
 	serialized_string = json_serialize_to_string_pretty(root_value);
 	size_t size = sprintf(serialized_string, "%s", serialized_string);
 
-	App->file_system->Save("TEST.json", serialized_string, size, false);
+	App->file_system->Save("library/TEST.json", serialized_string, size, false);
+	json_free_serialized_string(serialized_string);
+}
+
+void Serializer::SaveValueAsFile(JSON_Value* root, const char* name, std::string directory)
+{
+	char* serialized_string = NULL;
+	serialized_string = json_serialize_to_string_pretty(root);
+	size_t size = sprintf(serialized_string, "%s", serialized_string);
+	directory = directory + name;
+	App->file_system->Save(directory.c_str(), serialized_string, size, false);
 	json_free_serialized_string(serialized_string);
 }
 
@@ -248,7 +272,152 @@ void Serializer::sortScene() {
 
 }
 
-void Serializer::AddFloat(JSON_Object* obj, const char* name, float value)
+void Serializer::LoadModel(Resource* model)
+{
+	JSON_Value* root_value;
+	JSON_Object* main_object;
+	JSON_Array* main_array;
+
+	root_value = json_parse_file(model->GetLibraryFile());
+
+	main_object = json_value_get_object(root_value);
+	main_array = json_object_get_array(main_object, "Game Objects");
+
+
+	for (int i = 0; i < json_array_get_count(main_array); i++) {
+		JSON_Object* obj_in_array = json_array_get_object(main_array, i);
+		JSON_Array* component_array = json_object_get_array(obj_in_array, "Components");
+		JSON_Array* JsonTrans = json_object_get_array(obj_in_array, "Translation");
+		JSON_Array* JsonScale = json_object_get_array(obj_in_array, "Scale");
+		JSON_Array* JsonRot = json_object_get_array(obj_in_array, "Rotation");
+
+		int UID = json_object_get_number(obj_in_array, "UID");
+		int parentUID = json_object_get_number(obj_in_array, "ParentUID");
+		const char* name = json_object_get_string(obj_in_array, "Name");
+
+		GameObject* object = App->scene_intro->CreateGameObject(name, nullptr);
+		tempvector.push_back(object);
+		object->UID = UID;
+		object->parentUID = parentUID;
+
+
+		ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
+		NewTrans->pos.x = json_array_get_number(JsonTrans, 0);
+		NewTrans->pos.y = json_array_get_number(JsonTrans, 1);
+		NewTrans->pos.z = json_array_get_number(JsonTrans, 2);
+
+		NewTrans->scale.x = json_array_get_number(JsonScale, 0);
+		NewTrans->scale.y = json_array_get_number(JsonScale, 1);
+		NewTrans->scale.z = json_array_get_number(JsonScale, 2);
+
+		NewTrans->rot.x = json_array_get_number(JsonRot, 0);
+		NewTrans->rot.y = json_array_get_number(JsonRot, 1);
+		NewTrans->rot.z = json_array_get_number(JsonRot, 2);
+		NewTrans->rot.w = json_array_get_number(JsonRot, 3);
+
+		NewTrans->transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
+		NewTrans->transform;
+
+		for (int j = 0; j < json_array_get_count(component_array); j++)
+		{
+			JSON_Object* obj_in_array_in_obj = json_array_get_object(component_array, j);
+			std::string type = json_object_get_string(obj_in_array_in_obj, "Type");
+			uint componentUID = json_object_get_number(obj_in_array_in_obj, "Resource UID");
+			const char* componentpath = json_object_get_string(obj_in_array_in_obj, "Path");
+
+
+			if (type == "Mesh")
+			{
+				App->ResManager->FindInLibrary(componentpath, componentUID);
+				ResourceMesh* NewMeshResource;
+				NewMeshResource = (ResourceMesh*)App->ResManager->RequestResource(componentUID);
+				if (NewMeshResource != nullptr)
+				{
+					ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
+					
+					NewMesh->num_vertex = NewMeshResource->num_vertex;
+					NewMesh->num_tex = NewMeshResource->num_tex;
+					NewMesh->num_normals = NewMeshResource->num_normals;
+					NewMesh->num_index = NewMeshResource->num_index;
+					NewMesh->vertex = NewMeshResource->vertex;
+					NewMesh->texCoords = NewMeshResource->texCoords;
+					NewMesh->normals = NewMeshResource->normals;
+					NewMesh->index = NewMeshResource->index;
+					NewMesh->id_vertex = NewMeshResource->id_vertex;
+					NewMesh->id_tex = NewMeshResource->id_tex;
+					NewMesh->id_normals = NewMeshResource->id_normals;
+					NewMesh->id_index = NewMeshResource->id_index;
+					
+
+					NewMesh->SetAABB();
+				}
+				else
+					LOG("Error loading model resource meshes");
+		
+			}
+			else if (type == "texture")
+			{
+				App->ResManager->FindInLibrary(componentpath, componentUID);
+				ResourceTexture* NewMeshResource = (ResourceTexture*)App->ResManager->RequestResource(componentUID);
+				if (NewMeshResource != nullptr)
+				{
+					ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
+					NewTex->texbuffer = NewMeshResource->texbuffer;
+					NewTex->texture_h = NewMeshResource->texture_h;
+					NewTex->texture_w = NewMeshResource->texture_w;
+
+					if (NewTex->texbuffer != 0)
+						NewTex->hastexture = true;
+				}
+				else
+				LOG("Error loading model resource texture");
+				
+			}
+
+
+		}
+	}
+	sortScene();
+
+	tempvector.clear();
+}
+
+bool Serializer::LoadMeta(const char* path, uint* uid, ResourceType* type, std::string* Assets, std::string* library)
+{
+	bool ret = false;
+	JSON_Value* value;
+	JSON_Object* object;
+
+	value = json_parse_file(path);
+	if (value == NULL)
+	{
+		return ret;
+	}
+	ret = true;
+	object = json_value_get_object(value);
+
+
+	if (json_object_has_value_of_type(object, "UID", JSONNumber))
+		*uid = json_object_get_number(object, "UID");
+
+	std::string Type;
+	if (json_object_has_value_of_type(object, "Type", JSONString))
+		Type = json_object_get_string(object, "Type");
+
+	if (Type == "3D Model")
+		*type = ResourceType::MODEL;
+	else if (Type == "Texture")
+		*type = ResourceType::TEXTURE;
+
+	if (json_object_has_value_of_type(object, "Asset Path", JSONString))
+		*Assets = json_object_get_string(object, "Asset Path");
+	if (json_object_has_value_of_type(object, "Library path", JSONString))
+		*library = json_object_get_string(object, "Library path");
+
+	//json_value_free(root_value);
+	return ret;
+}
+void Serializer::AddFloat(JSON_Object* obj, const char* name, double value)
 {
 	json_object_set_number(obj, name, value);
 }
@@ -296,6 +465,39 @@ void Serializer::AddComponent(JSON_Array* componentsArray, ComponentType type, c
 
 	json_array_append_value(componentsArray, leaf_value);
 	
+}
+
+void Serializer::AddResourceComponent(JSON_Array* componentsArray, ComponentType type, uint UID, const char* path)
+{
+
+	JSON_Value* leaf_value = json_value_init_object();
+	JSON_Object* leaf_object = json_value_get_object(leaf_value);
+	switch (type)
+	{
+	case ComponentType::NONE:
+		break;
+	case ComponentType::MESH:
+	{
+		AddString(leaf_object, "Type", "Mesh");
+		AddFloat(leaf_object, "Resource UID", UID);
+		AddString(leaf_object, "Path", path);
+		break;
+	}
+	case ComponentType::MATERIAL: {
+		AddString(leaf_object, "Type", "texture");
+		AddFloat(leaf_object, "Resource UID", UID);
+		AddString(leaf_object, "Path", path);
+		break;
+	}
+	case ComponentType::TRANSFORM: {
+
+		break;
+	}
+
+	}
+
+	json_array_append_value(componentsArray, leaf_value);
+
 }
 
 
@@ -369,7 +571,7 @@ void Serializer::arrayExample()
 	char* serialized_string = NULL;
 	serialized_string = json_serialize_to_string_pretty(root_value);
 	size_t size = sprintf(serialized_string, "%s", serialized_string);
-	App->file_system->Save("TEST.json", serialized_string, size, false);
+	App->file_system->Save("library/TEST.json", serialized_string, size, false);
 	json_free_serialized_string(serialized_string);
 
 
@@ -397,7 +599,7 @@ void Serializer::serialization_example()
 	buffer = new char[size];
 	json_serialize_to_buffer(root_value, buffer, size);*/
 
-	App->file_system->Save("TEST.json", serialized_string, size, false);
+	App->file_system->Save("library/TEST.json", serialized_string, size, false);
 	json_free_serialized_string(serialized_string);
 	json_value_free(root_value);
 }

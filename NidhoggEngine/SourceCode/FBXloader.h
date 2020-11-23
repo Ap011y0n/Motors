@@ -13,6 +13,10 @@ class GameObject;
 class ComponentMaterial;
 class ComponentMesh;
 class ComponentTransform;
+class Resource;
+class ResourceModel;
+class ResourceMesh;
+class ResourceTexture;
 struct aiScene;
 struct aiNode;
 
@@ -21,12 +25,15 @@ namespace MaterialImporter
 	void Import(char* buffer, uint fileSize);
 	void Save(char** fileBuffer, const char* path, std::string* newpath);
 	void Load(const char* fileBuffer, uint size, ComponentMaterial* ourMaterial);
+	void Load(const char* fileBuffer, uint size, ResourceTexture* resourceTexture);
+
 }
 
 namespace MeshImporter
 {
 	void Save(ComponentMesh* mesh, std::string* path, const char* name);
 	void Load(char* fileBuffer, uint size, ComponentMesh* mesh);
+	void Load(char* fileBuffer, uint size, ResourceMesh* ResourceMesh);
 }
 struct mesh
 {
@@ -65,7 +72,11 @@ public:
 	uint FillElementArrayBuffer(uint size, uint* array);
 	uint LoadTexBuffer(const char* path);
 	bool LoadFBX(const char* buffer, uint size);
-	void LoadNode(const aiScene* scene, aiNode* node, GameObject* father = nullptr, ComponentTransform* fathertrans = nullptr);
+	bool LoadFBX(const char* buffer, uint size, ResourceModel* resource);
+
+	void LoadNode(const aiScene* scene, aiNode* node, GameObject* father = nullptr);
+	void LoadNode(const aiScene* scene, aiNode* node, ResourceModel* model, GameObject* father = nullptr);
+
 	void PrintMeshes();
 	void ChangeTexture(const char* path);
 	void CreateAABB(ComponentMesh* NewMesh);

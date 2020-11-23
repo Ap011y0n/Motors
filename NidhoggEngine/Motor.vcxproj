@@ -103,6 +103,7 @@
     <ClInclude Include="SourceCode\parson\parson.h" />
     <ClInclude Include="SourceCode\Primitive.h" />
     <ClInclude Include="SourceCode\PrimitiveManager.h" />
+    <ClInclude Include="SourceCode\ResourceManager.h" />
     <ClInclude Include="SourceCode\serializer.h" />
     <ClInclude Include="SourceCode\Timer.h" />
     <ClInclude Include="SourceCode\Vec2.h" />
@@ -136,6 +137,7 @@
     <ClCompile Include="SourceCode\parson\parson.c" />
     <ClCompile Include="SourceCode\Primitive.cpp" />
     <ClCompile Include="SourceCode\PrimitiveManager.cpp" />
+    <ClCompile Include="SourceCode\ResourceManager.cpp" />
     <ClCompile Include="SourceCode\serializer.cpp" />
     <ClCompile Include="SourceCode\Timer.cpp" />
     <ClCompile Include="SourceCode\Vec2.cpp" />

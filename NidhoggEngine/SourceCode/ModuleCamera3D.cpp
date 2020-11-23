@@ -40,6 +40,7 @@ bool ModuleCamera3D::Start()
 	cameraOBJ = new GameObject("Camera", App->scene_intro->scene);
 	cameraTrans = (ComponentTransform*)cameraOBJ->CreateComponent(ComponentType::TRANSFORM);
 	cameraComp = (ComponentCamera*)cameraOBJ->CreateComponent(ComponentType::CAMERA);
+	cameraComp->frustrum.nearPlaneDistance = 0.1;
 
 	cameraComp->frustrum.nearPlaneDistance = 1;
 

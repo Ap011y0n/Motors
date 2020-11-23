@@ -7,7 +7,7 @@
 #include "ModuleUI.h"
 #include "GameObject.h"   
 #include "serializer.h"
-
+#include "ResourceManager.h"
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
 #include <gl/GL.h>
@@ -45,19 +45,25 @@ bool ModuleSceneIntro::Start()
 	//GameObject* object = CreateGameObject("test");
 	//object->CreateComponent(ComponentType::MESH);
 
-	std::string file_path = "Assets/BakerHouse.fbx";
+	
 	char* buffer = nullptr;
-	uint fileSize = 0;
-	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	App->FBX->LoadFBX(buffer, fileSize);
 
-	file_path = "Assets/p1character.FBX";
-	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	App->FBX->LoadFBX(buffer, fileSize);
+
+	//uint fileSize = 0;
+	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	//App->FBX->LoadFBX(buffer, fileSize);
+
+	std::string file_path = "Assets/p1character.FBX";
+	//App->ResManager->ImportFile(file_path.c_str());
+
+	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	//App->FBX->LoadFBX(buffer, fileSize);
 
 	file_path = "Assets/P1_PoldelaTorre.FBX";
-	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	App->FBX->LoadFBX(buffer, fileSize);
+	//App->ResManager->ImportFile(file_path.c_str());
+
+	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	//App->FBX->LoadFBX(buffer, fileSize);
 
 	vec4 coords(0, 1, 0, 0);
 	App->PrimManager->CreatePlane(coords);
@@ -108,7 +114,22 @@ update_status ModuleSceneIntro::Update(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
-		App->serializer->LoadScene("Assets/library/TEST.json");
+		//App->serializer->LoadScene("Assets/library/TEST.json");
+		std::string file_path = "Assets/Street environment_V01.FBX";
+		uint UID = App->ResManager->FindInAssets(file_path.c_str());
+		if (UID == 0)
+		{
+			UID = App->ResManager->ImportFile(file_path.c_str());
+		}
+		if (UID != 0)
+		{
+			Resource* NewResource = App->ResManager->RequestResource(UID);
+			if (NewResource != nullptr)
+			{
+				LOG("Resource Found");
+				App->serializer->LoadModel(NewResource);
+			}
+		}
 	}
 
 	UpdateGameObject(scene, dt);

@@ -52,7 +52,7 @@ bool FileSystem::Init()
 		LOG("File System error while adding a path or zip: %s\n", PHYSFS_getLastError());
 	}
 	PHYSFS_setWriteDir("Assets/");
-	PHYSFS_setWriteDir("Assets/library");
+//	PHYSFS_setWriteDir("Assets/library");
 	return true;
 }
 
@@ -113,7 +113,14 @@ FileType FileSystem::SetFileType(std::string extension)
 	return ret;
 }
 
-
+bool FileSystem::CheckFile(const char* path) const
+{
+	PHYSFS_file* file = PHYSFS_openRead(path);
+	if (file == NULL)
+		return false;
+	PHYSFS_close(file);
+	return true;
+}
 uint FileSystem::Load(const char* path, char** buffer) const
 {
 	uint ret = 0;
