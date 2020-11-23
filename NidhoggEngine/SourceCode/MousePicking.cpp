@@ -50,6 +50,10 @@ void MousePicking::CastRay(LineSegment ray)
 
 void MousePicking::NewRay(LineSegment ray)
 {
+	if (App->scene_intro->selectedObj != nullptr)
+		App->scene_intro->selectedObj->isSelected = false;
+	App->scene_intro->selectedObj = nullptr;
+
 	closestPoint = inf;
 	checkAABB(ray, App->scene_intro->scene);
 }
@@ -65,7 +69,8 @@ void MousePicking::checkAABB(LineSegment ray, GameObject* parent)
 		if (close < closestPoint && hit_tri)
 		{
 			closestPoint = close;
-			App->scene_intro->selectedObj = false;
+			if (App->scene_intro->selectedObj != nullptr)
+			App->scene_intro->selectedObj->isSelected = false;
 			App->scene_intro->selectedObj = parent;
 			parent->isSelected = true;
 		}
@@ -75,6 +80,7 @@ void MousePicking::checkAABB(LineSegment ray, GameObject* parent)
 	{
 		checkAABB(ray, parent->childs[i]);
 	}
+
 }
 
 bool MousePicking::checkTri(LineSegment ray, GameObject* parent)
@@ -85,6 +91,10 @@ bool MousePicking::checkTri(LineSegment ray, GameObject* parent)
 	Triangle tri;
 	
 	ComponentMesh* myMesh = (ComponentMesh*)parent->GetComponent(ComponentType::MESH);
+	ComponentTransform* transform = (ComponentTransform*)parent->GetComponent(ComponentType::TRANSFORM);
+	LineSegment ray_local_space = ray;
+	ray_local_space.Transform(transform->global_transform.Inverted());
+
 	if (myMesh != nullptr)
 	{
 		for (int i = 0; i < myMesh->num_index && hit == false; i++)
@@ -103,7 +113,8 @@ bool MousePicking::checkTri(LineSegment ray, GameObject* parent)
 			/*App->PrimManager->CreateLine(tri.a, tri.b);
 			App->PrimManager->CreateLine(tri.b, tri.c);
 			App->PrimManager->CreateLine(tri.c, tri.a);*/
-			hit = ray.Intersects(tri, &distance, &intersecPoint); // ray vs. triangle
+
+			hit = ray_local_space.Intersects(tri, &distance, &intersecPoint); // ray vs. triangle
 			if (hit)
 			{
 				LOG("intersection with a tri");

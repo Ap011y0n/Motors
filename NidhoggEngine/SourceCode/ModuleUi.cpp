@@ -1196,7 +1196,7 @@ void ModuleUI::GuizmoUI()
 		float4x4 projection = App->camera->cameraComp->frustrum.ProjectionMatrix();
 		projection.Transpose();
 
-		float4x4 modelProjection = transform->transform;
+		float4x4 modelProjection = transform->local_transform;
 		modelProjection.Transpose();
 
 		ImGuizmo::SetDrawlist();
@@ -1209,8 +1209,8 @@ void ModuleUI::GuizmoUI()
 			using_gizmo = true;
 			float4x4 MovementMatrix;
 			MovementMatrix.Set(modelProjection);
-			transform->transform = MovementMatrix.Transposed();
-			transform->UpdateFromGuizmo(transform->transform);
+			transform->local_transform = MovementMatrix.Transposed();
+			transform->UpdateFromGuizmo(transform->local_transform);
 		}
 	}
 }

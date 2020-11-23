@@ -273,8 +273,7 @@ bool ComponentMesh::Update(float dt)
 		glPushMatrix();
 		if (transform != nullptr)
 		{
-			float4x4 acum = transform->AcumulateparentTransform();
-			glMultMatrixf(acum.Transposed().ptr());
+			glMultMatrixf(transform->global_transform.Transposed().ptr());
 		}
 		else
 		{
@@ -532,7 +531,7 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 	pos.Set(0, 0, 0);
 	scale.Set(1, 1, 1);
 	rot.Set(0, 0, 0, 1);
-	transform = transform.identity;
+	local_transform = local_transform.identity;
 	should_update = false;
 }
 
@@ -548,10 +547,10 @@ bool ComponentTransform::Update(float dt)
 	//vec3 axis(1, 0, 0);
 	if (should_update)
 	{
-		transform = float4x4::FromTRS(pos, rot, scale);
+		local_transform = float4x4::FromTRS(pos, rot, scale);
 		should_update = false;
 	}
-
+	global_transform = AcumulateparentTransform();
 	//UpdateScale(scale.x, scale.y, scale.z);
 	return ret;
 }
@@ -576,12 +575,12 @@ float4x4 ComponentTransform::AcumulateparentTransform()
 		parentmat = parentransform->AcumulateparentTransform();
 	}
 
-	return parentmat * transform;
+	return parentmat * local_transform;
 }
 
 void ComponentTransform::UpdateRotation(Quat quat)
 {
-	transform = transform * quat;
+	local_transform = local_transform * quat;
 }
 
 

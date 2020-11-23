@@ -118,7 +118,9 @@ public:
 	float3 pos;
 	float3 scale;
 	Quat rot;
-	float4x4 transform;
+	float4x4 local_transform;
+	float4x4 global_transform;
+
 	bool should_update;
 
 };

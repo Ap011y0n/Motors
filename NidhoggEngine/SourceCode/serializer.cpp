@@ -205,8 +205,8 @@ void Serializer::LoadScene(const char* path)
 		NewTrans->rot.z = json_array_get_number(JsonRot, 2);
 		NewTrans->rot.w = json_array_get_number(JsonRot, 3);
 
-		NewTrans->transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
-		NewTrans->transform;
+		NewTrans->local_transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
+		NewTrans->local_transform;
 
 		for (int j = 0; j < json_array_get_count(component_array); j++)
 		{
@@ -315,8 +315,8 @@ void Serializer::LoadModel(Resource* model)
 		NewTrans->rot.z = json_array_get_number(JsonRot, 2);
 		NewTrans->rot.w = json_array_get_number(JsonRot, 3);
 
-		NewTrans->transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
-		NewTrans->transform;
+		NewTrans->local_transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
+		NewTrans->local_transform;
 
 		for (int j = 0; j < json_array_get_count(component_array); j++)
 		{

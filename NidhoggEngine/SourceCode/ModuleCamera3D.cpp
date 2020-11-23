@@ -184,6 +184,7 @@ update_status ModuleCamera3D::Update(float dt)
 		//LOG("x = %f, y = %f", App->UI->img_corner.x, App->UI->img_corner.y);
 		if (mouseNormX >= -1 && mouseNormX <= 1 && mouseNormY >= -1 && mouseNormY <= 1)
 		{
+
 			LOG("New ray with x = %f, y = %f", mouseNormX, mouseNormY);
 
 			LineSegment ray = cameraComp->frustrum.UnProjectLineSegment(mouseNormX, mouseNormY);
@@ -283,13 +284,13 @@ void ModuleCamera3D::CalculateViewMatrix()
 		float3 translation, scaling;
 		Quat rotation;
 
-		cameraTrans->transform = cameraMat;
-		cameraTrans->transform.Decompose(translation, rotation, scaling);
+		cameraTrans->local_transform = cameraMat;
+		cameraTrans->local_transform.Decompose(translation, rotation, scaling);
 		translation.x = Position.x;
 		translation.y = Position.y;
 		translation.z = Position.z;
-		cameraTrans->transform = cameraTrans->transform.FromTRS(translation, rotation, scaling);
-		cameraTrans->transform.Decompose(translation, rotation, scaling);
+		cameraTrans->local_transform = cameraTrans->local_transform.FromTRS(translation, rotation, scaling);
+		cameraTrans->local_transform.Decompose(translation, rotation, scaling);
 	}
 
 	else

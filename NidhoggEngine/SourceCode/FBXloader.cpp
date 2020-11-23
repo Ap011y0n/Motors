@@ -471,7 +471,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 	App->serializer->AddVec3(JsonScale, NewTrans->scale.x, NewTrans->scale.y, NewTrans->scale.z);
 	App->serializer->AddVec4(JsonRot, NewTrans->rot.x, NewTrans->rot.y, NewTrans->rot.z, NewTrans->rot.w);
 
-	NewTrans->transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
+	NewTrans->local_transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
 
 
 	for (int i = 0; i < node->mNumMeshes; i++)
@@ -685,7 +685,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 	App->serializer->AddVec3(JsonScale, NewTrans->scale.x, NewTrans->scale.y, NewTrans->scale.z);
 	App->serializer->AddVec4(JsonRot, NewTrans->rot.x, NewTrans->rot.y, NewTrans->rot.z, NewTrans->rot.w);
 
-	NewTrans->transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
+	NewTrans->local_transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
 
 
 	for (int i = 0; i < node->mNumMeshes; i++)
