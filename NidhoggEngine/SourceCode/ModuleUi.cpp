@@ -11,6 +11,7 @@
 #include "ModuleWindow.h"
 #include "glew/include/glew.h"
 #include "GameObject.h"
+#include "Time.h"
 
 
 #include "glew/include/glew.h"        
@@ -285,23 +286,6 @@ update_status ModuleUI::Update(float dt)
 
 		ImGui::EndMenu();
 	}
-
-	{
-		ImGui::SetNextItemWidth(130);
-		static int selectedMode = 0;
-		static const char* Mode[]{ "WORLD","LOCAL" };
-		ImGui::Combo("Mode", &selectedMode, Mode, IM_ARRAYSIZE(Mode));
-		if (selectedMode == 1)
-		{
-		guizmo_mode = ImGuizmo::MODE::LOCAL;
-		}
-		if (selectedMode == 0)
-		{
-		guizmo_mode = ImGuizmo::MODE::WORLD;
-		}
-		
-	}
-
 	
 	ImGui::EndMainMenuBar();
 	
@@ -312,6 +296,7 @@ update_status ModuleUI::Update(float dt)
 	Configuration(show_Configuration);
 	HierarchyWin(); 
 	InspectorWin();
+	TimeMangmentWin();
 	return UPDATE_CONTINUE;
 }
 
@@ -1225,4 +1210,71 @@ void ModuleUI::ControlsGuizmo()
 	{
 		guizmo_mode = ImGuizmo::MODE::WORLD;
 	} 
+}
+
+void ModuleUI::TimeMangmentWin()
+{
+	if (Inspector_open == true)
+	{
+		ImGui::Begin("Time", (bool*)false, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse);
+		ImGui::Text("|"); ImGui::SameLine();
+		
+
+		if (Time::Engine_Active == false) {
+
+			if (ImGui::Button("PLAY")) 
+			{
+				Time::Start();
+				//TODO: We also need to save the actual scene here!!
+			} ImGui::SameLine();
+		}
+		else {
+
+			if (Time::Game_Paused == false) 
+			{
+				if (ImGui::Button("PAUSE"))
+				{
+					Time::Pause();
+
+				} ImGui::SameLine();
+			}
+
+			if (Time::Game_Paused == true)
+			{
+				if (ImGui::Button("CONTINUE"))
+				{
+					Time::Resume();
+
+				}ImGui::SameLine();
+			}
+
+			if (ImGui::Button("STOP"))
+			{
+				//TODO: We also need to Load the previous scene here!!
+				Time::Stop();
+			}ImGui::SameLine();
+			
+		}
+		//LOG("time: %f", Time::Game_Timer.ReadSec());
+		ImGui::Text("|"); ImGui::SameLine();
+		{
+			ImGui::SetNextItemWidth(130);
+			static int selectedMode = 0;
+			static const char* Mode[]{ "WORLD","LOCAL" };
+			ImGui::Combo("Mode", &selectedMode, Mode, IM_ARRAYSIZE(Mode)); ImGui::SameLine();
+			if (selectedMode == 1)
+			{
+				guizmo_mode = ImGuizmo::MODE::LOCAL;
+			}
+			if (selectedMode == 0)
+			{
+				guizmo_mode = ImGuizmo::MODE::WORLD;
+			}
+
+		}
+		ImGui::Text("|"); ImGui::SameLine();
+
+		ImGui::End();
+	}
+
 }

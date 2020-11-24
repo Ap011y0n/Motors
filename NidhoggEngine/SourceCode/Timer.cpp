@@ -42,4 +42,14 @@ float Timer::ReadSec() const
 	return float(SDL_GetTicks() - started_at) / 1000.0f;
 }
 
+void Timer::Continue()
+{
+	if(running == false)
+	{
+		running = true;
+		started_at = SDL_GetTicks() - (stopped_at - started_at);
+	}
+	
+}
+
 

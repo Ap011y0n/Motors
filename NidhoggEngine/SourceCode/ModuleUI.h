@@ -44,6 +44,7 @@ public:
 	void PlotGraph();
 	void HierarchyWin(); //hierarchy window
 	void InspectorWin(); //gameobjects list
+	void TimeMangmentWin();
 	void ShowExampleAppLayout(/*bool* p_open*/);
 	void Change_Window_size(Vec2 newSize);
 

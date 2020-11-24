@@ -94,6 +94,9 @@
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\MousePicking.cpp" />
+    <ClCompile Include="SourceCode\Time.cpp">
+      <Filter>helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Application.h" />
@@ -195,6 +198,9 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\MousePicking.h" />
+    <ClInclude Include="SourceCode\Time.h">
+      <Filter>helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Mathlibs">

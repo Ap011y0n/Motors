@@ -106,6 +106,7 @@
     <ClInclude Include="SourceCode\PrimitiveManager.h" />
     <ClInclude Include="SourceCode\ResourceManager.h" />
     <ClInclude Include="SourceCode\serializer.h" />
+    <ClInclude Include="SourceCode\Time.h" />
     <ClInclude Include="SourceCode\Timer.h" />
     <ClInclude Include="SourceCode\Vec2.h" />
   </ItemGroup>
@@ -141,6 +142,7 @@
     <ClCompile Include="SourceCode\PrimitiveManager.cpp" />
     <ClCompile Include="SourceCode\ResourceManager.cpp" />
     <ClCompile Include="SourceCode\serializer.cpp" />
+    <ClCompile Include="SourceCode\Time.cpp" />
     <ClCompile Include="SourceCode\Timer.cpp" />
     <ClCompile Include="SourceCode\Vec2.cpp" />
   </ItemGroup>

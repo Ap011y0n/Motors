@@ -10,6 +10,7 @@
 #include "ModuleUI.h"
 #include "PrimitiveManager.h"
 #include "FBXloader.h"
+#include "Time.h"
 
 #include "FileSystem.h"
 Application::Application()
@@ -93,11 +94,13 @@ void Application::PrepareUpdate()
 	frame_count++;
 	dt = (float)ms_timer.Read() / 1000.0f;
 	ms_timer.Start();
+	Time::PreUpdate(dt);
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	Time::Update(dt);
 	if (last_sec_frame_time.Read() > 1000)
 	{
 		last_sec_frame_time.Start();
