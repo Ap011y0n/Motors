@@ -67,7 +67,7 @@ bool GameObject::Update(float dt)
 {
 	bool ret = true;
 	this;
-	if (!to_delete)
+	if (!to_delete && active)
 	{
 		ComponentMesh* myMesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 		ComponentTransform* myTrans = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
@@ -100,7 +100,7 @@ bool GameObject::Update(float dt)
 		for (int i = 0; i < Components.size(); i++)
 		{
 
-			Components[i]->Update(dt);
+			if(Components[i]->active)Components[i]->Update(dt);
 		}
 	}
 
@@ -309,7 +309,7 @@ bool ComponentMesh::Update(float dt)
 			glEnable(GL_CULL_FACE);
 
 			glActiveTexture(GL_TEXTURE0);
-			if (material->checkers)
+			if (material->checkers || material->texbuffer == 0)
 				glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
 			else
 				glBindTexture(GL_TEXTURE_2D, material->texbuffer);

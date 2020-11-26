@@ -3,6 +3,11 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "parson/parson.h"
 
+#include "Glew/include/glew.h"
+#include "SDL/include/SDL_opengl.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
 #include <algorithm>    
 
 ResourceManager::ResourceManager(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -277,7 +282,7 @@ Resource* ResourceManager::RequestResource(uint UID)
 		}
 		/*fileSize = App->file_system->Load(NewMeshResource->GetLibraryFile(), &buffer);
 		MeshImporter::Load(buffer, fileSize, NewMesh);*/
-
+		it->second->references++;
 		return it->second;
 	}
 	else
@@ -304,6 +309,7 @@ bool ResourceManager::SearchForResource(uint UID)
 Resource::Resource(uint id)
 {
 	UID = id;
+	references = 0;
 	type = ResourceType::UNKNOWN;
 	assetsFile = "";
 	LibraryFile = "";
@@ -367,7 +373,12 @@ void Resource::GenLibraryPath(Resource* resource)
 
 void Resource::loadResource()
 {
-	LOG("Unespecified resource type");
+	LOG("Unespecified resource type for loading");
+}
+
+void Resource::unloadResource()
+{
+	LOG("Unespecified resource type for unloading");
 }
 //-------------------------------------------------------------------------------
 
@@ -396,6 +407,7 @@ ResourceMesh::ResourceMesh(uint id) : Resource(id)
 
 ResourceMesh::~ResourceMesh()
 {
+	unloadResource();
 
 }
 
@@ -406,6 +418,41 @@ void ResourceMesh::loadResource()
 
 	fileSize = App->file_system->Load(GetLibraryFile(), &buffer);
 	MeshImporter::Load(buffer, fileSize, this);
+}
+
+void ResourceMesh::unloadResource()
+{
+	glDeleteBuffers(1, &id_index);
+	glDeleteBuffers(1, &id_normals);
+	glDeleteBuffers(1, &id_vertex);
+	glDeleteBuffers(1, &id_tex);
+
+	if (vertex != nullptr)
+	{
+		delete[] vertex;
+		vertex = nullptr;
+		id_vertex = 0;
+	}
+	if (index != nullptr)
+	{
+		delete[] index;
+		index = nullptr;
+		id_index = 0;
+	}
+	if (normals != nullptr)
+	{
+		delete[] normals;
+		normals = nullptr;
+		id_normals = 0;
+	}
+
+	if (texCoords != nullptr)
+	{
+		delete[] texCoords;
+		texCoords = nullptr;
+		id_tex = 0;
+	}
+	isLoaded = false;
 }
 //-------------------------------------------------------------------------------
 
@@ -426,4 +473,11 @@ void ResourceTexture::loadResource()
 
 	fileSize = App->file_system->Load(GetLibraryFile(), &buffer);
 	MaterialImporter::Load(buffer, fileSize, this);
+}
+
+void ResourceTexture::unloadResource()
+{
+	glDeleteTextures(1, &(GLuint)texbuffer);
+	isLoaded = false;
+	texbuffer = 0;
 }

@@ -350,6 +350,7 @@ void Serializer::LoadModel(Resource* model)
 					
 
 					NewMesh->SetAABB();
+				//	NewMeshResource->unloadResource();
 				}
 				else
 					LOG("Error loading model resource meshes");
@@ -368,6 +369,7 @@ void Serializer::LoadModel(Resource* model)
 
 					if (NewTex->texbuffer != 0)
 						NewTex->hastexture = true;
+					NewMeshResource->unloadResource();
 				}
 				else
 				LOG("Error loading model resource texture");
