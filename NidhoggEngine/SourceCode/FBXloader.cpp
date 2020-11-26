@@ -303,26 +303,36 @@ void FBXloader::ChangeTexture(const char* path)
 	ComponentMaterial* mat = nullptr;
 	if (App->scene_intro->selectedObj != nullptr)
 	{
-		for (int i = 0; i < App->scene_intro->selectedObj->Components.size(); i++)
-		{
-			if (App->scene_intro->selectedObj->Components[i]->type == ComponentType::MATERIAL)
-			{
-				mat = (ComponentMaterial*)App->scene_intro->selectedObj->Components[i];
-			}
-		}
-
+		mat = (ComponentMaterial*)App->scene_intro->selectedObj->GetComponent(ComponentType::MATERIAL);
 
 		if (mat != nullptr)
 		{
-			glDeleteTextures(1, &(GLuint)mat->texbuffer);
-			mat->texbuffer = LoadTexBuffer(path);
-			mat->texture_path = path;
-			mat->texture_h = texture_h;
-			mat->texture_w = texture_w;
-			if (mat->texbuffer != 0)
-				mat->hastexture = true;
+			uint UID = App->ResManager->FindInAssets(path);
+			if (UID == 0)
+			{
+				UID = App->ResManager->ImportFile(path);
+			}
 			else
-				mat->hastexture = false;
+			{
+				LOG("image already loaded");
+			}
+			if (UID != 0)
+			{
+				ResourceTexture* NewResource = (ResourceTexture*)App->ResManager->RequestResource(UID);
+
+				mat->texbuffer = NewResource->texbuffer;
+				mat->texture_h = NewResource->texture_h;
+				mat->texture_w = NewResource->texture_w;
+
+				if (mat->texbuffer != 0)
+					mat->hastexture = true;
+			}
+
+		}
+		else
+		{
+			mat->texbuffer = 0;
+			mat->hastexture = false;
 		}
 
 	}
