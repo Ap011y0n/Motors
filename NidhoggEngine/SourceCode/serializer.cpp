@@ -369,7 +369,7 @@ void Serializer::LoadModel(Resource* model)
 
 					if (NewTex->texbuffer != 0)
 						NewTex->hastexture = true;
-					NewMeshResource->unloadResource();
+				//	NewMeshResource->unloadResource();
 				}
 				else
 				LOG("Error loading model resource texture");

@@ -128,12 +128,21 @@ Component* GameObject::CreateComponent(ComponentType type)
 Component* GameObject::GetComponent(ComponentType type)
 {
 	Component* newComponent = nullptr;
+	int counter = 0;
 	for (int i = 0; i < Components.size(); i++)
 	{
-		if(type == Components[i]->type)
-			return Components[i];
+		if (type == Components[i]->type)
+		{
+			newComponent = Components[i];
+			counter++;
+		}
 	}
-	
+	if (counter > 1)
+	{
+		counter = 0;
+		this;
+	}
+	return newComponent;
 
 	return nullptr;
 }
