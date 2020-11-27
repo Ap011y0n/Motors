@@ -1,0 +1,1569 @@
+{
+    "Game Objects": [
+        {
+            "UID": 2117269998,
+            "ParentUID": 504895812,
+            "Name": "GameObject1",
+            "Translation": [
+                -3.813327,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 2117409240,
+            "ParentUID": 2117269998,
+            "Name": "Chimney",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Baker_house.dds",
+                    "UID": 2129668698
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Chimney.mesh",
+                    "UID": 2024680230
+                }
+            ]
+        },
+        {
+            "UID": 2117478861,
+            "ParentUID": 2117269998,
+            "Name": "Baker_house",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Baker_house.dds",
+                    "UID": 2129668698
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Baker_house.mesh",
+                    "UID": 565030095
+                }
+            ]
+        },
+        {
+            "UID": 83104987,
+            "ParentUID": 504895812,
+            "Name": "GameObject1",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 83244229,
+            "ParentUID": 83104987,
+            "Name": "Object001_$AssimpFbx$_RotationPivot",
+            "Translation": [
+                3.427504,
+                2.657754,
+                0.270888
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 83313850,
+            "ParentUID": 83244229,
+            "Name": "Object001_$AssimpFbx$_RotationPivotInverse",
+            "Translation": [
+                -3.427504,
+                -2.657754,
+                -0.270888
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 83383471,
+            "ParentUID": 83313850,
+            "Name": "Object001_$AssimpFbx$_ScalingPivot",
+            "Translation": [
+                3.427504,
+                2.657754,
+                0.270888
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 83453092,
+            "ParentUID": 83383471,
+            "Name": "Object001_$AssimpFbx$_ScalingPivotInverse",
+            "Translation": [
+                -3.427504,
+                -2.657754,
+                -0.270888
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 83522713,
+            "ParentUID": 83453092,
+            "Name": "Object001",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Albert Garcia Belerda_TexP1.dds",
+                    "UID": 2101928874
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Object001.mesh",
+                    "UID": 675711937
+                }
+            ]
+        },
+        {
+            "UID": 231102977,
+            "ParentUID": 504895812,
+            "Name": "GameObject1",
+            "Translation": [
+                3.060797,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 231242219,
+            "ParentUID": 231102977,
+            "Name": "Head_$AssimpFbx$_RotationPivot",
+            "Translation": [
+                -3.047620,
+                3.048193,
+                0.190201
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 231311840,
+            "ParentUID": 231242219,
+            "Name": "Head_$AssimpFbx$_RotationPivotInverse",
+            "Translation": [
+                3.047620,
+                -3.048193,
+                -0.190201
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 231381461,
+            "ParentUID": 231311840,
+            "Name": "Head_$AssimpFbx$_ScalingPivot",
+            "Translation": [
+                -3.047620,
+                3.048193,
+                0.190201
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 231451082,
+            "ParentUID": 231381461,
+            "Name": "Head_$AssimpFbx$_ScalingPivotInverse",
+            "Translation": [
+                3.047620,
+                -3.048193,
+                -0.190201
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 231520703,
+            "ParentUID": 231451082,
+            "Name": "Head",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/PoldelaTorreSoléTexP1.dds",
+                    "UID": 1407760427
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Head.mesh",
+                    "UID": 1300056740
+                },
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/PoldelaTorreSoléTexP1.dds",
+                    "UID": 1407760427
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Head.mesh",
+                    "UID": 1300056740
+                }
+            ]
+        },
+        {
+            "UID": 432520887,
+            "ParentUID": 504895812,
+            "Name": "GameObject1",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 432660129,
+            "ParentUID": 432520887,
+            "Name": "Sky001_$AssimpFbx$_Translation",
+            "Translation": [
+                18.153732,
+                0,
+                58.960911
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 432729750,
+            "ParentUID": 432660129,
+            "Name": "Sky001_$AssimpFbx$_PreRotation",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                -0.707107,
+                0,
+                0,
+                0.707107
+            ],
+            "Components": []
+        },
+        {
+            "UID": 432799371,
+            "ParentUID": 432729750,
+            "Name": "Sky001_$AssimpFbx$_PostRotation",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                -0.707107,
+                0,
+                0,
+                0.707107
+            ],
+            "Components": []
+        },
+        {
+            "UID": 1124108857,
+            "ParentUID": 432799371,
+            "Name": "Sky001",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 432868992,
+            "ParentUID": 432520887,
+            "Name": "Dummy001_$AssimpFbx$_PreRotation",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                -0.707107,
+                0,
+                0,
+                0.707107
+            ],
+            "Components": []
+        },
+        {
+            "UID": 1132672240,
+            "ParentUID": 432868992,
+            "Name": "Dummy001_$AssimpFbx$_Rotation",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 432938613,
+            "ParentUID": 1132672240,
+            "Name": "Dummy001",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 433008234,
+            "ParentUID": 432938613,
+            "Name": "City_building_004",
+            "Translation": [
+                -41.475891,
+                21.014099,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building03_c.dds",
+                    "UID": 1093279264
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_004.mesh",
+                    "UID": 973948870
+                }
+            ]
+        },
+        {
+            "UID": 433008234,
+            "ParentUID": 432938613,
+            "Name": "City_building_001",
+            "Translation": [
+                17.707165,
+                20.053276,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Building_V02_C.dds",
+                    "UID": 1508176639
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_001.mesh",
+                    "UID": 1409314819
+                }
+            ]
+        },
+        {
+            "UID": 433077855,
+            "ParentUID": 432938613,
+            "Name": "City_building_007",
+            "Translation": [
+                16.010492,
+                37.493286,
+                -0.000002
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building_016_c.dds",
+                    "UID": 1490221643
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_007.mesh",
+                    "UID": 1383144545
+                }
+            ]
+        },
+        {
+            "UID": 433077855,
+            "ParentUID": 432938613,
+            "Name": "City_building_008",
+            "Translation": [
+                40.979996,
+                18.270824,
+                -0.000002
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0.707107,
+                0.707107
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building_025_c.dds",
+                    "UID": 1988331826
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_008.mesh",
+                    "UID": 1892672572
+                }
+            ]
+        },
+        {
+            "UID": 433147476,
+            "ParentUID": 432938613,
+            "Name": "Line002",
+            "Translation": [
+                -2.159772,
+                1.853838,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                -0.707107,
+                0.707107
+            ],
+            "Components": [
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Line002.mesh",
+                    "UID": 646961666
+                }
+            ]
+        },
+        {
+            "UID": 433147476,
+            "ParentUID": 432938613,
+            "Name": "Plane001",
+            "Translation": [
+                -0.028603,
+                0.026032,
+                0
+            ],
+            "Scale": [
+                0.996635,
+                0.970616,
+                0.996635
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Plane001.mesh",
+                    "UID": 1880482642
+                }
+            ]
+        },
+        {
+            "UID": 433217097,
+            "ParentUID": 432938613,
+            "Name": "City_building_010",
+            "Translation": [
+                25.154011,
+                -39.153721,
+                0.000001
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0.707107,
+                0.707107
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building 01_c.dds",
+                    "UID": 1151224484
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_010.mesh",
+                    "UID": 2060035050
+                },
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building 01_c.dds",
+                    "UID": 1151224484
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_010.mesh",
+                    "UID": 2060035050
+                }
+            ]
+        },
+        {
+            "UID": 433217097,
+            "ParentUID": 432938613,
+            "Name": "City_building_011",
+            "Translation": [
+                30.134541,
+                37.493286,
+                -0.000002
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building_016_c.dds",
+                    "UID": 1490221643
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_011.mesh",
+                    "UID": 221203113
+                }
+            ]
+        },
+        {
+            "UID": 433286718,
+            "ParentUID": 432938613,
+            "Name": "City_building_013",
+            "Translation": [
+                -42.288055,
+                33.201576,
+                0.000001
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0.707107,
+                0.707107
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building 06_ c.dds",
+                    "UID": 154319149
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_013.mesh",
+                    "UID": 28305139
+                }
+            ]
+        },
+        {
+            "UID": 433356339,
+            "ParentUID": 432938613,
+            "Name": "City_building_014",
+            "Translation": [
+                -19.439707,
+                32.061729,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                1,
+                0
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building03_c.dds",
+                    "UID": 1093279264
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_014.mesh",
+                    "UID": 2072940771
+                }
+            ]
+        },
+        {
+            "UID": 433356339,
+            "ParentUID": 432938613,
+            "Name": "City_building_016",
+            "Translation": [
+                34.270424,
+                -41.972748,
+                0.000001
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                1,
+                0
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building 01_c.dds",
+                    "UID": 1151224484
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_016.mesh",
+                    "UID": 1298078773
+                },
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building 01_c.dds",
+                    "UID": 1151224484
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_016.mesh",
+                    "UID": 1298078773
+                }
+            ]
+        },
+        {
+            "UID": 433425960,
+            "ParentUID": 432938613,
+            "Name": "City_building_017",
+            "Translation": [
+                44.260082,
+                -39.153721,
+                0.000001
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0.707107,
+                0.707107
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building 01_c.dds",
+                    "UID": 1151224484
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_017.mesh",
+                    "UID": 828156755
+                },
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building 01_c.dds",
+                    "UID": 1151224484
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_017.mesh",
+                    "UID": 828156755
+                }
+            ]
+        },
+        {
+            "UID": 433425960,
+            "ParentUID": 432938613,
+            "Name": "City_building_022",
+            "Translation": [
+                -20.831324,
+                -27.426489,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                1,
+                0
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building05 _c.dds",
+                    "UID": 1478717196
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_022.mesh",
+                    "UID": 1383336426
+                }
+            ]
+        },
+        {
+            "UID": 433495581,
+            "ParentUID": 432938613,
+            "Name": "City_building_023",
+            "Translation": [
+                42.130642,
+                37.493286,
+                -0.000002
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building_016_c.dds",
+                    "UID": 1490221643
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_023.mesh",
+                    "UID": 965497020
+                }
+            ]
+        },
+        {
+            "UID": 433495581,
+            "ParentUID": 432938613,
+            "Name": "City_building_024",
+            "Translation": [
+                -20.572771,
+                43.060829,
+                -0.069194
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                1,
+                0
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building_025_c.dds",
+                    "UID": 1988331826
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_024.mesh",
+                    "UID": 1469087530
+                }
+            ]
+        },
+        {
+            "UID": 433565202,
+            "ParentUID": 432938613,
+            "Name": "City_building_026",
+            "Translation": [
+                31.511889,
+                -16.446016,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                1,
+                0
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building05 _c.dds",
+                    "UID": 1478717196
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_026.mesh",
+                    "UID": 554683231
+                }
+            ]
+        },
+        {
+            "UID": 433634823,
+            "ParentUID": 432938613,
+            "Name": "City_building_028",
+            "Translation": [
+                13.387990,
+                -33.755039,
+                -0.000001
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Building_V01_C.dds",
+                    "UID": 1124272364
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_028.mesh",
+                    "UID": 1002017888
+                }
+            ]
+        },
+        {
+            "UID": 433634823,
+            "ParentUID": 432938613,
+            "Name": "Object010",
+            "Translation": [
+                -2.503353,
+                15.800846,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Object010.mesh",
+                    "UID": 1843160045
+                }
+            ]
+        },
+        {
+            "UID": 433704444,
+            "ParentUID": 432938613,
+            "Name": "City_building_030",
+            "Translation": [
+                -42.807240,
+                -41.835564,
+                -0.000001
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                -0.707107,
+                0.707107
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Building_V01_C.dds",
+                    "UID": 1124272364
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_030.mesh",
+                    "UID": 1762467221
+                }
+            ]
+        },
+        {
+            "UID": 433704444,
+            "ParentUID": 432938613,
+            "Name": "City_building_031",
+            "Translation": [
+                -34.679482,
+                -41.835564,
+                -0.000001
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                -0.707107,
+                0.707107
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Building_V01_C.dds",
+                    "UID": 1124272364
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_031.mesh",
+                    "UID": 821304556
+                }
+            ]
+        },
+        {
+            "UID": 433774065,
+            "ParentUID": 432938613,
+            "Name": "City_building_032",
+            "Translation": [
+                -29.478403,
+                21.014099,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building03_c.dds",
+                    "UID": 1093279264
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_032.mesh",
+                    "UID": 2095575634
+                }
+            ]
+        },
+        {
+            "UID": 433774065,
+            "ParentUID": 432938613,
+            "Name": "City_building_033",
+            "Translation": [
+                -32.361496,
+                42.370422,
+                0.000001
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building 06_ c.dds",
+                    "UID": 154319149
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_033.mesh",
+                    "UID": 1642108074
+                }
+            ]
+        },
+        {
+            "UID": 433843686,
+            "ParentUID": 432938613,
+            "Name": "City_building_034",
+            "Translation": [
+                16.049517,
+                -16.696884,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                -0.707107,
+                0.707107
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building05 _c.dds",
+                    "UID": 1478717196
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_034.mesh",
+                    "UID": 46020662
+                }
+            ]
+        },
+        {
+            "UID": 433843686,
+            "ParentUID": 432938613,
+            "Name": "City_building_035",
+            "Translation": [
+                13.387990,
+                -40.802517,
+                -0.000001
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Building_V01_C.dds",
+                    "UID": 1124272364
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_035.mesh",
+                    "UID": 1951406105
+                }
+            ]
+        },
+        {
+            "UID": 433913307,
+            "ParentUID": 432938613,
+            "Name": "City_building_036",
+            "Translation": [
+                -31.216331,
+                33.201576,
+                0.000001
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                -0.707107,
+                0.707107
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building 06_ c.dds",
+                    "UID": 154319149
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_036.mesh",
+                    "UID": 196095466
+                }
+            ]
+        },
+        {
+            "UID": 433913307,
+            "ParentUID": 432938613,
+            "Name": "City_building_037",
+            "Translation": [
+                -20.317694,
+                -16.163609,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                1,
+                0
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building05 _c.dds",
+                    "UID": 1478717196
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_037.mesh",
+                    "UID": 806042962
+                }
+            ]
+        },
+        {
+            "UID": 433982928,
+            "ParentUID": 432938613,
+            "Name": "City_building_038",
+            "Translation": [
+                -41.649002,
+                -16.495394,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                -0.707107,
+                0.707107
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/building05 _c.dds",
+                    "UID": 1478717196
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_038.mesh",
+                    "UID": 1393085149
+                }
+            ]
+        },
+        {
+            "UID": 434052549,
+            "ParentUID": 432938613,
+            "Name": "City_building_039",
+            "Translation": [
+                -42.807240,
+                -30.643888,
+                -0.000001
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                -0.707107,
+                0.707107
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Building_V01_C.dds",
+                    "UID": 1124272364
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_039.mesh",
+                    "UID": 383972388
+                }
+            ]
+        },
+        {
+            "UID": 434052549,
+            "ParentUID": 432938613,
+            "Name": "City_building_040",
+            "Translation": [
+                -34.679482,
+                -30.643888,
+                -0.000001
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                -0.707107,
+                0.707107
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Building_V01_C.dds",
+                    "UID": 1124272364
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_040.mesh",
+                    "UID": 851729900
+                }
+            ]
+        },
+        {
+            "UID": 434122170,
+            "ParentUID": 432938613,
+            "Name": "City_building_041",
+            "Translation": [
+                30.695278,
+                21.612646,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0.707107,
+                0.707107
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Building_V02_C.dds",
+                    "UID": 1508176639
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/City_building_041.mesh",
+                    "UID": 86917228
+                }
+            ]
+        }
+    ]
+}

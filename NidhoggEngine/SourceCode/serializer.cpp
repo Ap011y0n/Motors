@@ -148,9 +148,10 @@ void Serializer::SaveScene()
 	serialized_string = json_serialize_to_string_pretty(root_value);
 	size_t size = sprintf(serialized_string, "%s", serialized_string);
 
-	App->file_system->Save("library/TEST.json", serialized_string, size, false);
+	App->file_system->Save("Scene.json", serialized_string, size, false);
 	json_free_serialized_string(serialized_string);
 }
+
 
 void Serializer::SaveValueAsFile(JSON_Value* root, const char* name, std::string directory)
 {
@@ -172,7 +173,7 @@ void Serializer::LoadScene(const char* path)
 
 	main_object = json_value_get_object(root_value);
 	main_array = json_object_get_array(main_object, "Game Objects");
-	
+
 
 	for (int i = 0; i < json_array_get_count(main_array); i++) {
 		JSON_Object* obj_in_array = json_array_get_object(main_array, i);
@@ -180,7 +181,7 @@ void Serializer::LoadScene(const char* path)
 		JSON_Array* JsonTrans = json_object_get_array(obj_in_array, "Translation");
 		JSON_Array* JsonScale = json_object_get_array(obj_in_array, "Scale");
 		JSON_Array* JsonRot = json_object_get_array(obj_in_array, "Rotation");
-	
+
 		int UID = json_object_get_number(obj_in_array, "UID");
 		int parentUID = json_object_get_number(obj_in_array, "ParentUID");
 		const char* name = json_object_get_string(obj_in_array, "Name");
@@ -212,42 +213,69 @@ void Serializer::LoadScene(const char* path)
 		{
 			JSON_Object* obj_in_array_in_obj = json_array_get_object(component_array, j);
 			std::string type = json_object_get_string(obj_in_array_in_obj, "Type");
+			uint componentUID = json_object_get_number(obj_in_array_in_obj, "UID");
 			const char* componentpath = json_object_get_string(obj_in_array_in_obj, "Path");
-			char* buffer = nullptr;
-			uint fileSize = 0;
+
 
 			if (type == "Mesh")
 			{
-				ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
-				fileSize = App->file_system->Load(componentpath, &buffer);
-				MeshImporter::Load(buffer, fileSize, NewMesh);
+				App->ResManager->FindInLibrary(componentpath, componentUID);
+				ResourceMesh* NewMeshResource;
+				NewMeshResource = (ResourceMesh*)App->ResManager->RequestResource(componentUID);
+				if (NewMeshResource != nullptr)
+				{
+					ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
+					NewMesh->reference = NewMeshResource;
+					NewMesh->num_vertex = NewMeshResource->num_vertex;
+					NewMesh->num_tex = NewMeshResource->num_tex;
+					NewMesh->num_normals = NewMeshResource->num_normals;
+					NewMesh->num_index = NewMeshResource->num_index;
+					NewMesh->vertex = NewMeshResource->vertex;
+					NewMesh->texCoords = NewMeshResource->texCoords;
+					NewMesh->normals = NewMeshResource->normals;
+					NewMesh->index = NewMeshResource->index;
+					NewMesh->id_vertex = NewMeshResource->id_vertex;
+					NewMesh->id_tex = NewMeshResource->id_tex;
+					NewMesh->id_normals = NewMeshResource->id_normals;
+					NewMesh->id_index = NewMeshResource->id_index;
 
-				NewMesh->id_vertex = App->FBX->FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
 
-				NewMesh->id_tex = App->FBX->FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
+					NewMesh->SetAABB();
+					//	NewMeshResource->unloadResource();
+				}
+				else
+					LOG("Error loading model resource meshes");
 
-				NewMesh->id_normals = App->FBX->FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
-
-				NewMesh->id_index = App->FBX->FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
-
-				NewMesh->SetAABB();
 			}
 			else if (type == "texture")
 			{
-				ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
-				fileSize = App->file_system->Load(componentpath, &buffer);
-				MaterialImporter::Load(buffer, fileSize, NewTex);
+				App->ResManager->FindInLibrary(componentpath, componentUID);
+				ResourceTexture* NewTexResource = (ResourceTexture*)App->ResManager->RequestResource(componentUID);
+				if (NewTexResource != nullptr)
+				{
+					ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
+					NewTex->reference = NewTexResource;
 
-				if (NewTex->texbuffer != 0)
-					NewTex->hastexture = true;
+					NewTex->texbuffer = NewTexResource->texbuffer;
+					NewTex->texture_h = NewTexResource->texture_h;
+					NewTex->texture_w = NewTexResource->texture_w;
+
+					if (NewTex->texbuffer != 0)
+						NewTex->hastexture = true;
+					//	NewMeshResource->unloadResource();
+				}
+				else
+					LOG("Error loading model resource texture");
+
 			}
-			
+
 
 		}
 	}
 	sortScene();
 
 	tempvector.clear();
+
 }
 
 void Serializer::sortScene() {
@@ -269,6 +297,7 @@ void Serializer::sortScene() {
 			App->scene_intro->scene->childs.push_back(tempvector[i]);
 		}
 	}
+
 
 }
 
@@ -334,7 +363,7 @@ void Serializer::LoadModel(Resource* model)
 				if (NewMeshResource != nullptr)
 				{
 					ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
-					
+					NewMesh->reference = NewMeshResource;
 					NewMesh->num_vertex = NewMeshResource->num_vertex;
 					NewMesh->num_tex = NewMeshResource->num_tex;
 					NewMesh->num_normals = NewMeshResource->num_normals;
@@ -359,13 +388,15 @@ void Serializer::LoadModel(Resource* model)
 			else if (type == "texture")
 			{
 				App->ResManager->FindInLibrary(componentpath, componentUID);
-				ResourceTexture* NewMeshResource = (ResourceTexture*)App->ResManager->RequestResource(componentUID);
-				if (NewMeshResource != nullptr)
+				ResourceTexture* NewTexResource = (ResourceTexture*)App->ResManager->RequestResource(componentUID);
+				if (NewTexResource != nullptr)
 				{
 					ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
-					NewTex->texbuffer = NewMeshResource->texbuffer;
-					NewTex->texture_h = NewMeshResource->texture_h;
-					NewTex->texture_w = NewMeshResource->texture_w;
+					NewTex->reference = NewTexResource;
+
+					NewTex->texbuffer = NewTexResource->texbuffer;
+					NewTex->texture_h = NewTexResource->texture_h;
+					NewTex->texture_w = NewTexResource->texture_w;
 
 					if (NewTex->texbuffer != 0)
 						NewTex->hastexture = true;
@@ -380,7 +411,12 @@ void Serializer::LoadModel(Resource* model)
 		}
 	}
 	sortScene();
+	for (int i = 0; i < tempvector.size(); i++)
+	{
+		LCG rand;
+		tempvector[i]->UID = rand.Int();
 
+	}
 	tempvector.clear();
 }
 
@@ -437,7 +473,7 @@ JSON_Array* Serializer::AddArray(JSON_Object* obj, const char* name)
 	return componentsArray;
 }
 
-void Serializer::AddComponent(JSON_Array* componentsArray, ComponentType type, const char* path)
+void Serializer::AddComponent(JSON_Array* componentsArray, ComponentType type, const char* path, uint UID)
 {
 	
 	JSON_Value* leaf_value = json_value_init_object();
@@ -450,12 +486,13 @@ void Serializer::AddComponent(JSON_Array* componentsArray, ComponentType type, c
 		{ 
 			AddString(leaf_object, "Type", "Mesh");
 			AddString(leaf_object, "Path", path);
+			AddFloat(leaf_object, "UID", UID);
 			break;
 		}
 		case ComponentType::MATERIAL: { 
 			AddString(leaf_object, "Type", "texture");
 			AddString(leaf_object, "Path", path);
-
+			AddFloat(leaf_object, "UID", UID);
 			break; 
 		}
 		case ComponentType::TRANSFORM: { 

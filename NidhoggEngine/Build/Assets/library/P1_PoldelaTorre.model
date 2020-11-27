@@ -1,0 +1,157 @@
+{
+    "Game Objects": [
+        {
+            "UID": 592672237,
+            "ParentUID": 0,
+            "Name": "GameObject1",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 664033762,
+            "ParentUID": 592672237,
+            "Name": "Head_$AssimpFbx$_RotationPivot",
+            "Translation": [
+                -3.047620,
+                3.048193,
+                0.190201
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 728015461,
+            "ParentUID": 664033762,
+            "Name": "Head_$AssimpFbx$_RotationPivotInverse",
+            "Translation": [
+                3.047620,
+                -3.048193,
+                -0.190201
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 835858390,
+            "ParentUID": 728015461,
+            "Name": "Head_$AssimpFbx$_ScalingPivot",
+            "Translation": [
+                -3.047620,
+                3.048193,
+                0.190201
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 940220269,
+            "ParentUID": 835858390,
+            "Name": "Head_$AssimpFbx$_ScalingPivotInverse",
+            "Translation": [
+                3.047620,
+                -3.048193,
+                -0.190201
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 1010676721,
+            "ParentUID": 940220269,
+            "Name": "Head",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Resource UID": 1192666015,
+                    "Path": "Assets\/library\/PoldelaTorreSoléTexP1.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Resource UID": 1025366752,
+                    "Path": "Assets\/library\/Head.mesh"
+                },
+                {
+                    "Type": "texture",
+                    "Resource UID": 1407760427,
+                    "Path": "Assets\/library\/PoldelaTorreSoléTexP1.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Resource UID": 1300056740,
+                    "Path": "Assets\/library\/Head.mesh"
+                }
+            ]
+        }
+    ]
+}

@@ -571,7 +571,7 @@ float4x4 ComponentTransform::AcumulateparentTransform()
 	ComponentTransform* parentransform = nullptr;
 	if (owner->parent != nullptr)
 	{
-		 
+	//	LOG("%s, %s", owner->Name.c_str(), owner->parent->Name.c_str());
 			for (int i = 0; i < owner->parent->Components.size(); i++)
 			{
 				
@@ -580,6 +580,9 @@ float4x4 ComponentTransform::AcumulateparentTransform()
 					parentransform = (ComponentTransform*)owner->parent->Components[i];
 				}
 			}
+			if (owner == owner->parent)
+				LOG("Stack Overflow")
+
 			if(parentransform != nullptr)
 		parentmat = parentransform->AcumulateparentTransform();
 	}
