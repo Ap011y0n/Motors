@@ -190,7 +190,12 @@ void Serializer::LoadScene(const char* path)
 		tempvector.push_back(object);
 		object->UID = UID;
 		object->parentUID = parentUID;
-
+		if (object->parentUID == object->UID)
+		{
+			LCG();
+			LCG rand;
+			object->UID = rand.Int();
+		}
 
 		ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
 		NewTrans->pos.x = json_array_get_number(JsonTrans, 0);
@@ -333,7 +338,12 @@ void Serializer::LoadModel(Resource* model)
 		tempvector.push_back(object);
 		object->UID = UID;
 		object->parentUID = parentUID;
-
+		if (object->parentUID == object->UID)
+		{
+			LCG();
+			LCG rand;
+			object->UID = rand.Int();
+		}
 
 		ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
 		NewTrans->pos.x = json_array_get_number(JsonTrans, 0);
@@ -418,6 +428,7 @@ void Serializer::LoadModel(Resource* model)
 	sortScene();
 	for (int i = 0; i < tempvector.size(); i++)
 	{
+		LCG();
 		LCG rand;
 		tempvector[i]->UID = rand.Int();
 

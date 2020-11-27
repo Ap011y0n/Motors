@@ -21,6 +21,7 @@ GameObject::GameObject()
 	Name = "NewGameObject";
 	parent = nullptr;
 	isSelected = false;
+	LCG();
 	LCG rand;
 	UID = rand.Int();
 	parentUID = 0;
@@ -35,6 +36,7 @@ GameObject::GameObject(const char* name, GameObject* node)
 	Name = name;
 	parent = node;
 	isSelected = false;
+	LCG();
 	LCG rand;
 	UID = rand.Int();
 	displayAABB = true;

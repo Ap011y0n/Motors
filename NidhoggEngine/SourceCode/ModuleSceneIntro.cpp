@@ -163,6 +163,7 @@ void ModuleSceneIntro::SaveScene(GameObject * parent)
 		JSON_Object* JsonObj = App->serializer->AddObjectToArray(App->serializer->leaves);
 		if (parent->UID == parent->parent->UID)
 		{
+			LCG();
 			LCG rand;
 			parent->UID = rand.Int();
 		}

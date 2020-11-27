@@ -223,6 +223,7 @@ ResourceType ResourceManager::ReturnType(const char* assetsFile)
 }
 uint ResourceManager::GenerateNewUID()
 {
+	LCG();
 	LCG rand;
 	uint UID = rand.Int();
 	return UID;
