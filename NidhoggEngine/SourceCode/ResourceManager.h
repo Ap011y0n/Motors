@@ -24,6 +24,7 @@ public:
 	void GenLibraryPath(Resource* resource);
 	ResourceType GetType() const;
 	virtual void loadResource();
+	virtual void unloadResource();
 protected:
 	uint UID;
 	std::string assetsFile;
@@ -31,6 +32,7 @@ protected:
 	ResourceType type = ResourceType::UNKNOWN;
 public:
 	bool isLoaded;
+	uint references;
 };
 class ResourceModel : public Resource
 {
@@ -55,6 +57,7 @@ public:
 	ResourceMesh(uint uid);
 	virtual ~ResourceMesh();
 	void loadResource();
+	void unloadResource();
 
 public:
 	uint id_index = 0; // index in VRAM
@@ -80,7 +83,7 @@ public:
 	ResourceTexture(uint uid);
 	virtual ~ResourceTexture();
 	void loadResource();
-
+	void unloadResource();
 
 	public:
 		uint texbuffer;				//texture loaded in VRAM

@@ -105,7 +105,7 @@ FileType FileSystem::SetFileType(std::string extension)
 		ret = FileType::FBX;
 	}
 
-	if (extension == "png" || extension == "dds" || extension == ".tga")
+	if (extension == "png" || extension == "dds" || extension == "tga")
 	{
 		ret = FileType::IMAGE;
 	}

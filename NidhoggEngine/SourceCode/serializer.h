@@ -25,6 +25,7 @@ public:
 	void CreateNewScene();
 	JSON_Object* AddObjectToArray(JSON_Array* obj);
 	void SaveScene();
+
 	void SaveValueAsFile(JSON_Value* root, const char* name, std::string directory = "");
 	void LoadScene(const char* path);
 	void LoadModel(Resource* model);
@@ -35,7 +36,7 @@ public:
 	void AddString(JSON_Object* obj, const char* name, const char* string);
 	void AddVec3(JSON_Array* obj, float x, float y, float z);
 	void AddVec4(JSON_Array* obj, float x, float y, float z, float w);
-	void AddComponent(JSON_Array* obj, ComponentType type, const char* path);
+	void AddComponent(JSON_Array* obj, ComponentType type, const char* path, uint UID = 0);
 	void AddResourceComponent(JSON_Array* obj, ComponentType type, uint UID, const char* path);
 
 	JSON_Array* AddArray(JSON_Object* obj, const char* name);

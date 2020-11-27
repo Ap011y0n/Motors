@@ -21,6 +21,7 @@ GameObject::GameObject()
 	Name = "NewGameObject";
 	parent = nullptr;
 	isSelected = false;
+	LCG();
 	LCG rand;
 	UID = rand.Int();
 	parentUID = 0;
@@ -35,6 +36,7 @@ GameObject::GameObject(const char* name, GameObject* node)
 	Name = name;
 	parent = node;
 	isSelected = false;
+	LCG();
 	LCG rand;
 	UID = rand.Int();
 	displayAABB = true;
@@ -67,7 +69,7 @@ bool GameObject::Update(float dt)
 {
 	bool ret = true;
 	this;
-	if (!to_delete)
+	if (!to_delete && active)
 	{
 		ComponentMesh* myMesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 		ComponentTransform* myTrans = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
@@ -100,7 +102,7 @@ bool GameObject::Update(float dt)
 		for (int i = 0; i < Components.size(); i++)
 		{
 
-			Components[i]->Update(dt);
+			if(Components[i]->active)Components[i]->Update(dt);
 		}
 	}
 
@@ -128,12 +130,21 @@ Component* GameObject::CreateComponent(ComponentType type)
 Component* GameObject::GetComponent(ComponentType type)
 {
 	Component* newComponent = nullptr;
+	int counter = 0;
 	for (int i = 0; i < Components.size(); i++)
 	{
-		if(type == Components[i]->type)
-			return Components[i];
+		if (type == Components[i]->type)
+		{
+			newComponent = Components[i];
+			counter++;
+		}
 	}
-	
+	if (counter > 1)
+	{
+		counter = 0;
+		this;
+	}
+	return newComponent;
 
 	return nullptr;
 }
@@ -309,7 +320,7 @@ bool ComponentMesh::Update(float dt)
 			glEnable(GL_CULL_FACE);
 
 			glActiveTexture(GL_TEXTURE0);
-			if (material->checkers)
+			if (material->checkers || material->texbuffer == 0)
 				glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
 			else
 				glBindTexture(GL_TEXTURE_2D, material->texbuffer);
@@ -562,7 +573,7 @@ float4x4 ComponentTransform::AcumulateparentTransform()
 	ComponentTransform* parentransform = nullptr;
 	if (owner->parent != nullptr)
 	{
-		 
+	//	LOG("%s, %s", owner->Name.c_str(), owner->parent->Name.c_str());
 			for (int i = 0; i < owner->parent->Components.size(); i++)
 			{
 				
@@ -571,6 +582,9 @@ float4x4 ComponentTransform::AcumulateparentTransform()
 					parentransform = (ComponentTransform*)owner->parent->Components[i];
 				}
 			}
+			if (owner == owner->parent)
+				LOG("Stack Overflow")
+
 			if(parentransform != nullptr)
 		parentmat = parentransform->AcumulateparentTransform();
 	}

@@ -3,10 +3,10 @@
 #include "glmath.h"
 #include "Primitive.h"
 
+
 #include "MathGeoLib/include/MathGeoLib.h"
 #include <iostream>
 #include <vector>
-
 
 enum class ComponentType
 {
@@ -19,7 +19,7 @@ enum class ComponentType
 
 
 class GameObject;
-
+class Resource;
 //Base component class, need to use childs to actually do something
 class Component
 {
@@ -34,7 +34,7 @@ public:
 
 	bool active = false;
 	GameObject* owner; 	//Gameobject which is parent to this component
-
+	Resource* reference;
 
 };
 

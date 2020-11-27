@@ -21,13 +21,14 @@ public:
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp();
-	GameObject* CreateGameObject(const char* name, GameObject* father = nullptr);
+	GameObject* CreateGameObject(const char* name, GameObject* parent = nullptr);
 	void firstCube();
 	void secondCube();
-	void UpdateGameObject(GameObject* father, float dt);
-	void SetDelete(GameObject* father);
-	bool DeleteGameObject(GameObject* father);
-
+	void UpdateGameObject(GameObject* parent, float dt);
+	void SetDelete(GameObject* parent);
+	void DeleteSceneObjects(GameObject* parent);
+	bool DeleteGameObject(GameObject* parent);
+	void SaveScene(GameObject* parent);
 public:
 
 	uint my_indices = 0;

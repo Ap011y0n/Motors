@@ -117,8 +117,8 @@ update_status ModuleSceneIntro::Update(float dt)
 	{
 		//App->serializer->LoadScene("Assets/library/TEST.json");
 		
-		//std::string file_path = "Assets/BakerHouse.fbx";
-		std::string file_path = "Assets/Street environment_V01.FBX";
+		std::string file_path = "Assets/BakerHouse.fbx";
+		//std::string file_path = "Assets/Street environment_V01.FBX";
 
 		uint UID = App->ResManager->FindInAssets(file_path.c_str());
 		if (UID == 0)
@@ -135,12 +135,78 @@ update_status ModuleSceneIntro::Update(float dt)
 			}
 		}
 	}
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		App->serializer->CreateNewScene();
+		SaveScene(scene);
+		App->serializer->SaveScene();
+	}
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	{
+		DeleteSceneObjects(scene);
+		App->serializer->LoadScene("Assets/Scene.json");
+	}
 
 	UpdateGameObject(scene, dt);
 	SetDelete(scene);
 	DeleteGameObject(scene);
 	
 	return UPDATE_CONTINUE;
+}
+
+
+
+void ModuleSceneIntro::SaveScene(GameObject * parent)
+{
+	if (parent != scene)
+	{
+		JSON_Object* JsonObj = App->serializer->AddObjectToArray(App->serializer->leaves);
+		if (parent->UID == parent->parent->UID)
+		{
+			LCG();
+			LCG rand;
+			parent->UID = rand.Int();
+		}
+		App->serializer->AddFloat(JsonObj, "UID", parent->UID);
+		App->serializer->AddFloat(JsonObj, "ParentUID", parent->parent->UID);
+		App->serializer->AddString(JsonObj, "Name", parent->Name.c_str());
+		JSON_Array* JsonTrans = App->serializer->AddArray(JsonObj, "Translation");
+		JSON_Array* JsonScale = App->serializer->AddArray(JsonObj, "Scale");
+		JSON_Array* JsonRot = App->serializer->AddArray(JsonObj, "Rotation");
+		JSON_Array* JsonComp = App->serializer->AddArray(JsonObj, "Components");
+		ComponentMesh* newMesh = nullptr;
+		ComponentMaterial* NewTex = nullptr;
+		ComponentTransform* NewTrans = nullptr;
+
+		for (int i = 0; i < parent->Components.size(); i++)
+		{
+			switch (parent->Components[i]->type)
+			{
+			case ComponentType::MESH:
+				newMesh = (ComponentMesh * )parent->GetComponent(ComponentType::MESH);
+				App->serializer->AddComponent(JsonComp, ComponentType::MESH, newMesh->reference->GetLibraryFile(), newMesh->reference->GetUID());
+
+				break;
+			case ComponentType::MATERIAL:
+				NewTex = (ComponentMaterial*)parent->GetComponent(ComponentType::MATERIAL);
+				App->serializer->AddComponent(JsonComp, ComponentType::MATERIAL, NewTex->reference->GetLibraryFile(), NewTex->reference->GetUID());
+
+				break;
+			case ComponentType::TRANSFORM:
+				NewTrans = (ComponentTransform*)parent->GetComponent(ComponentType::TRANSFORM);
+				App->serializer->AddVec3(JsonTrans, NewTrans->pos.x, NewTrans->pos.y, NewTrans->pos.z);
+				App->serializer->AddVec3(JsonScale, NewTrans->scale.x, NewTrans->scale.y, NewTrans->scale.z);
+				App->serializer->AddVec4(JsonRot, NewTrans->rot.x, NewTrans->rot.y, NewTrans->rot.z, NewTrans->rot.w);
+				break;
+
+			}
+		}
+	}
+
+	for (int i = 0; i < parent->childs.size(); i++)
+	{
+		SaveScene(parent->childs[i]);
+	}
 }
 
 void ModuleSceneIntro::firstCube()
@@ -271,36 +337,50 @@ void ModuleSceneIntro::secondCube()
 	
 }
 
-GameObject* ModuleSceneIntro::CreateGameObject(const char* name, GameObject* father)
+GameObject* ModuleSceneIntro::CreateGameObject(const char* name, GameObject* parent)
 {
-	GameObject* newGameObject = new GameObject(name, father);
+	GameObject* newGameObject = new GameObject(name, parent);
 	//gameObjects.push_back(newGameObject);
 	
 	return newGameObject;
 }
 
-void ModuleSceneIntro::UpdateGameObject(GameObject* father, float dt)
+void ModuleSceneIntro::UpdateGameObject(GameObject* parent, float dt)
 {
-	father->Update(dt);
-	for (int i = 0; i < father->childs.size(); i++)
+	parent->Update(dt);
+	for (int i = 0; i < parent->childs.size(); i++)
 	{
-		UpdateGameObject(father->childs[i], dt);
+		UpdateGameObject(parent->childs[i], dt);
 	}
 
 }
 
-void ModuleSceneIntro::SetDelete(GameObject* father)
+void ModuleSceneIntro::DeleteSceneObjects(GameObject* parent)
 {
-	if (father->parent != nullptr)
+	if (parent->parent != nullptr && parent != scene)
 	{
-		if (father->parent->to_delete)
+		parent->to_delete = true;
+	}
+	for (int i = 0; i < parent->childs.size(); i++)
+	{
+		DeleteSceneObjects(parent->childs[i]);
+	}
+
+
+}
+
+void ModuleSceneIntro::SetDelete(GameObject* parent)
+{
+	if (parent->parent != nullptr && parent != scene)
+	{
+		if (parent->parent->to_delete)
 		{
-			father->to_delete = true;
+			parent->to_delete = true;
 		}
 	}
-	for (int i = 0; i < father->childs.size(); i++)
+	for (int i = 0; i < parent->childs.size(); i++)
 	{
-		SetDelete(father->childs[i]);
+		SetDelete(parent->childs[i]);
 	}
 	
 
@@ -314,7 +394,7 @@ bool ModuleSceneIntro::DeleteGameObject(GameObject* parent)
 		if (DeleteGameObject(parent->childs[i]))
 			i--;
 	}
-	if (parent->to_delete)
+	if (parent != nullptr && parent->to_delete)
 	{
 		if (parent->parent != nullptr)
 		{

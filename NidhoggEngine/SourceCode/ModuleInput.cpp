@@ -144,13 +144,27 @@ update_status ModuleInput::PreUpdate(float dt)
 				std::string relativePath = "";
 				relativePath.append("Assets").append("/").append(fileStr).append(extensionStr);
 				FileType type = App->file_system->SetFileType(extensionStr);
+				uint UID;
 				switch (type)
 				{
 				case FileType::UNKNOWN:
 					break;
 				case FileType::FBX:
-					fileSize = App->file_system->Load(relativePath.c_str(), &buffer);
-					App->FBX->LoadFBX(buffer, fileSize);
+				
+					UID = App->ResManager->FindInAssets(relativePath.c_str());
+					if (UID == 0)
+					{
+						UID = App->ResManager->ImportFile(relativePath.c_str());
+					}
+					if (UID != 0)
+					{
+						Resource* NewResource = App->ResManager->RequestResource(UID);
+						if (NewResource != nullptr)
+						{
+							LOG("Resource Found");
+							App->serializer->LoadModel(NewResource);
+						}
+					}
 					break;
 				case  FileType::IMAGE:
 					App->FBX->ChangeTexture(relativePath.c_str());
