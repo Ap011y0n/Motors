@@ -281,6 +281,11 @@ void Serializer::LoadScene(const char* path)
 void Serializer::sortScene() {
 	for (int i = 0; i < tempvector.size(); i++)
 	{
+		/*if (tempvector[i]->UID == tempvector[i]->parentUID)
+		{
+			LOG("Error loading object in scene")
+			continue;
+		}*/
 		for (int j = 0; j < tempvector.size(); j++)
 		{
 			if (tempvector[i]->parentUID == tempvector[j]->UID)

@@ -1,96 +1,8 @@
 {
     "Game Objects": [
         {
-            "UID": 2117269998,
-            "ParentUID": 504895812,
-            "Name": "GameObject1",
-            "Translation": [
-                -3.813327,
-                0,
-                0
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": []
-        },
-        {
-            "UID": 2117409240,
-            "ParentUID": 2117269998,
-            "Name": "Chimney",
-            "Translation": [
-                0,
-                0,
-                0
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": [
-                {
-                    "Type": "texture",
-                    "Path": "Assets\/library\/Baker_house.dds",
-                    "UID": 2129668698
-                },
-                {
-                    "Type": "Mesh",
-                    "Path": "Assets\/library\/Chimney.mesh",
-                    "UID": 2024680230
-                }
-            ]
-        },
-        {
-            "UID": 2117478861,
-            "ParentUID": 2117269998,
-            "Name": "Baker_house",
-            "Translation": [
-                0,
-                0,
-                0
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": [
-                {
-                    "Type": "texture",
-                    "Path": "Assets\/library\/Baker_house.dds",
-                    "UID": 2129668698
-                },
-                {
-                    "Type": "Mesh",
-                    "Path": "Assets\/library\/Baker_house.mesh",
-                    "UID": 565030095
-                }
-            ]
-        },
-        {
-            "UID": 83104987,
-            "ParentUID": 504895812,
+            "UID": 20003667,
+            "ParentUID": 1178487739,
             "Name": "GameObject1",
             "Translation": [
                 0,
@@ -111,304 +23,8 @@
             "Components": []
         },
         {
-            "UID": 83244229,
-            "ParentUID": 83104987,
-            "Name": "Object001_$AssimpFbx$_RotationPivot",
-            "Translation": [
-                3.427504,
-                2.657754,
-                0.270888
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": []
-        },
-        {
-            "UID": 83313850,
-            "ParentUID": 83244229,
-            "Name": "Object001_$AssimpFbx$_RotationPivotInverse",
-            "Translation": [
-                -3.427504,
-                -2.657754,
-                -0.270888
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": []
-        },
-        {
-            "UID": 83383471,
-            "ParentUID": 83313850,
-            "Name": "Object001_$AssimpFbx$_ScalingPivot",
-            "Translation": [
-                3.427504,
-                2.657754,
-                0.270888
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": []
-        },
-        {
-            "UID": 83453092,
-            "ParentUID": 83383471,
-            "Name": "Object001_$AssimpFbx$_ScalingPivotInverse",
-            "Translation": [
-                -3.427504,
-                -2.657754,
-                -0.270888
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": []
-        },
-        {
-            "UID": 83522713,
-            "ParentUID": 83453092,
-            "Name": "Object001",
-            "Translation": [
-                0,
-                0,
-                0
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": [
-                {
-                    "Type": "texture",
-                    "Path": "Assets\/library\/Albert Garcia Belerda_TexP1.dds",
-                    "UID": 2101928874
-                },
-                {
-                    "Type": "Mesh",
-                    "Path": "Assets\/library\/Object001.mesh",
-                    "UID": 675711937
-                }
-            ]
-        },
-        {
-            "UID": 231102977,
-            "ParentUID": 504895812,
-            "Name": "GameObject1",
-            "Translation": [
-                3.060797,
-                0,
-                0
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": []
-        },
-        {
-            "UID": 231242219,
-            "ParentUID": 231102977,
-            "Name": "Head_$AssimpFbx$_RotationPivot",
-            "Translation": [
-                -3.047620,
-                3.048193,
-                0.190201
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": []
-        },
-        {
-            "UID": 231311840,
-            "ParentUID": 231242219,
-            "Name": "Head_$AssimpFbx$_RotationPivotInverse",
-            "Translation": [
-                3.047620,
-                -3.048193,
-                -0.190201
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": []
-        },
-        {
-            "UID": 231381461,
-            "ParentUID": 231311840,
-            "Name": "Head_$AssimpFbx$_ScalingPivot",
-            "Translation": [
-                -3.047620,
-                3.048193,
-                0.190201
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": []
-        },
-        {
-            "UID": 231451082,
-            "ParentUID": 231381461,
-            "Name": "Head_$AssimpFbx$_ScalingPivotInverse",
-            "Translation": [
-                3.047620,
-                -3.048193,
-                -0.190201
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": []
-        },
-        {
-            "UID": 231520703,
-            "ParentUID": 231451082,
-            "Name": "Head",
-            "Translation": [
-                0,
-                0,
-                0
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": [
-                {
-                    "Type": "texture",
-                    "Path": "Assets\/library\/PoldelaTorreSoléTexP1.dds",
-                    "UID": 1407760427
-                },
-                {
-                    "Type": "Mesh",
-                    "Path": "Assets\/library\/Head.mesh",
-                    "UID": 1300056740
-                },
-                {
-                    "Type": "texture",
-                    "Path": "Assets\/library\/PoldelaTorreSoléTexP1.dds",
-                    "UID": 1407760427
-                },
-                {
-                    "Type": "Mesh",
-                    "Path": "Assets\/library\/Head.mesh",
-                    "UID": 1300056740
-                }
-            ]
-        },
-        {
-            "UID": 432520887,
-            "ParentUID": 504895812,
-            "Name": "GameObject1",
-            "Translation": [
-                0,
-                0,
-                0
-            ],
-            "Scale": [
-                1,
-                1,
-                1
-            ],
-            "Rotation": [
-                0,
-                0,
-                0,
-                1
-            ],
-            "Components": []
-        },
-        {
-            "UID": 432660129,
-            "ParentUID": 432520887,
+            "UID": 20142909,
+            "ParentUID": 20003667,
             "Name": "Sky001_$AssimpFbx$_Translation",
             "Translation": [
                 18.153732,
@@ -429,8 +45,8 @@
             "Components": []
         },
         {
-            "UID": 432729750,
-            "ParentUID": 432660129,
+            "UID": 20212530,
+            "ParentUID": 20142909,
             "Name": "Sky001_$AssimpFbx$_PreRotation",
             "Translation": [
                 0,
@@ -451,8 +67,8 @@
             "Components": []
         },
         {
-            "UID": 432799371,
-            "ParentUID": 432729750,
+            "UID": 20282151,
+            "ParentUID": 20212530,
             "Name": "Sky001_$AssimpFbx$_PostRotation",
             "Translation": [
                 0,
@@ -473,8 +89,8 @@
             "Components": []
         },
         {
-            "UID": 1124108857,
-            "ParentUID": 432799371,
+            "UID": 607142339,
+            "ParentUID": 20282151,
             "Name": "Sky001",
             "Translation": [
                 0,
@@ -495,8 +111,8 @@
             "Components": []
         },
         {
-            "UID": 432868992,
-            "ParentUID": 432520887,
+            "UID": 20351772,
+            "ParentUID": 20003667,
             "Name": "Dummy001_$AssimpFbx$_PreRotation",
             "Translation": [
                 0,
@@ -517,8 +133,8 @@
             "Components": []
         },
         {
-            "UID": 1132672240,
-            "ParentUID": 432868992,
+            "UID": 615009512,
+            "ParentUID": 20351772,
             "Name": "Dummy001_$AssimpFbx$_Rotation",
             "Translation": [
                 0,
@@ -539,8 +155,8 @@
             "Components": []
         },
         {
-            "UID": 432938613,
-            "ParentUID": 1132672240,
+            "UID": 20421393,
+            "ParentUID": 615009512,
             "Name": "Dummy001",
             "Translation": [
                 0,
@@ -561,8 +177,8 @@
             "Components": []
         },
         {
-            "UID": 433008234,
-            "ParentUID": 432938613,
+            "UID": 20491014,
+            "ParentUID": 20421393,
             "Name": "City_building_004",
             "Translation": [
                 -41.475891,
@@ -594,8 +210,8 @@
             ]
         },
         {
-            "UID": 433008234,
-            "ParentUID": 432938613,
+            "UID": 20491014,
+            "ParentUID": 20421393,
             "Name": "City_building_001",
             "Translation": [
                 17.707165,
@@ -627,8 +243,8 @@
             ]
         },
         {
-            "UID": 433077855,
-            "ParentUID": 432938613,
+            "UID": 20560635,
+            "ParentUID": 20421393,
             "Name": "City_building_007",
             "Translation": [
                 16.010492,
@@ -660,8 +276,8 @@
             ]
         },
         {
-            "UID": 433077855,
-            "ParentUID": 432938613,
+            "UID": 20560635,
+            "ParentUID": 20421393,
             "Name": "City_building_008",
             "Translation": [
                 40.979996,
@@ -693,8 +309,8 @@
             ]
         },
         {
-            "UID": 433147476,
-            "ParentUID": 432938613,
+            "UID": 20630256,
+            "ParentUID": 20421393,
             "Name": "Line002",
             "Translation": [
                 -2.159772,
@@ -721,8 +337,8 @@
             ]
         },
         {
-            "UID": 433147476,
-            "ParentUID": 432938613,
+            "UID": 20630256,
+            "ParentUID": 20421393,
             "Name": "Plane001",
             "Translation": [
                 -0.028603,
@@ -749,8 +365,8 @@
             ]
         },
         {
-            "UID": 433217097,
-            "ParentUID": 432938613,
+            "UID": 20699877,
+            "ParentUID": 20421393,
             "Name": "City_building_010",
             "Translation": [
                 25.154011,
@@ -792,8 +408,8 @@
             ]
         },
         {
-            "UID": 433217097,
-            "ParentUID": 432938613,
+            "UID": 20699877,
+            "ParentUID": 20421393,
             "Name": "City_building_011",
             "Translation": [
                 30.134541,
@@ -825,8 +441,8 @@
             ]
         },
         {
-            "UID": 433286718,
-            "ParentUID": 432938613,
+            "UID": 20769498,
+            "ParentUID": 20421393,
             "Name": "City_building_013",
             "Translation": [
                 -42.288055,
@@ -858,8 +474,8 @@
             ]
         },
         {
-            "UID": 433356339,
-            "ParentUID": 432938613,
+            "UID": 20839119,
+            "ParentUID": 20421393,
             "Name": "City_building_014",
             "Translation": [
                 -19.439707,
@@ -891,8 +507,8 @@
             ]
         },
         {
-            "UID": 433356339,
-            "ParentUID": 432938613,
+            "UID": 20839119,
+            "ParentUID": 20421393,
             "Name": "City_building_016",
             "Translation": [
                 34.270424,
@@ -934,8 +550,8 @@
             ]
         },
         {
-            "UID": 433425960,
-            "ParentUID": 432938613,
+            "UID": 20908740,
+            "ParentUID": 20421393,
             "Name": "City_building_017",
             "Translation": [
                 44.260082,
@@ -977,8 +593,8 @@
             ]
         },
         {
-            "UID": 433425960,
-            "ParentUID": 432938613,
+            "UID": 20908740,
+            "ParentUID": 20421393,
             "Name": "City_building_022",
             "Translation": [
                 -20.831324,
@@ -1010,8 +626,8 @@
             ]
         },
         {
-            "UID": 433495581,
-            "ParentUID": 432938613,
+            "UID": 20978361,
+            "ParentUID": 20421393,
             "Name": "City_building_023",
             "Translation": [
                 42.130642,
@@ -1043,8 +659,8 @@
             ]
         },
         {
-            "UID": 433495581,
-            "ParentUID": 432938613,
+            "UID": 20978361,
+            "ParentUID": 20421393,
             "Name": "City_building_024",
             "Translation": [
                 -20.572771,
@@ -1076,8 +692,8 @@
             ]
         },
         {
-            "UID": 433565202,
-            "ParentUID": 432938613,
+            "UID": 21047982,
+            "ParentUID": 20421393,
             "Name": "City_building_026",
             "Translation": [
                 31.511889,
@@ -1109,8 +725,8 @@
             ]
         },
         {
-            "UID": 433634823,
-            "ParentUID": 432938613,
+            "UID": 21047982,
+            "ParentUID": 20421393,
             "Name": "City_building_028",
             "Translation": [
                 13.387990,
@@ -1142,8 +758,8 @@
             ]
         },
         {
-            "UID": 433634823,
-            "ParentUID": 432938613,
+            "UID": 21117603,
+            "ParentUID": 20421393,
             "Name": "Object010",
             "Translation": [
                 -2.503353,
@@ -1170,8 +786,8 @@
             ]
         },
         {
-            "UID": 433704444,
-            "ParentUID": 432938613,
+            "UID": 21117603,
+            "ParentUID": 20421393,
             "Name": "City_building_030",
             "Translation": [
                 -42.807240,
@@ -1203,8 +819,8 @@
             ]
         },
         {
-            "UID": 433704444,
-            "ParentUID": 432938613,
+            "UID": 21187224,
+            "ParentUID": 20421393,
             "Name": "City_building_031",
             "Translation": [
                 -34.679482,
@@ -1236,8 +852,8 @@
             ]
         },
         {
-            "UID": 433774065,
-            "ParentUID": 432938613,
+            "UID": 21256845,
+            "ParentUID": 20421393,
             "Name": "City_building_032",
             "Translation": [
                 -29.478403,
@@ -1269,8 +885,8 @@
             ]
         },
         {
-            "UID": 433774065,
-            "ParentUID": 432938613,
+            "UID": 21256845,
+            "ParentUID": 20421393,
             "Name": "City_building_033",
             "Translation": [
                 -32.361496,
@@ -1302,8 +918,8 @@
             ]
         },
         {
-            "UID": 433843686,
-            "ParentUID": 432938613,
+            "UID": 21326466,
+            "ParentUID": 20421393,
             "Name": "City_building_034",
             "Translation": [
                 16.049517,
@@ -1335,8 +951,8 @@
             ]
         },
         {
-            "UID": 433843686,
-            "ParentUID": 432938613,
+            "UID": 21326466,
+            "ParentUID": 20421393,
             "Name": "City_building_035",
             "Translation": [
                 13.387990,
@@ -1368,8 +984,8 @@
             ]
         },
         {
-            "UID": 433913307,
-            "ParentUID": 432938613,
+            "UID": 21396087,
+            "ParentUID": 20421393,
             "Name": "City_building_036",
             "Translation": [
                 -31.216331,
@@ -1401,8 +1017,8 @@
             ]
         },
         {
-            "UID": 433913307,
-            "ParentUID": 432938613,
+            "UID": 21465708,
+            "ParentUID": 20421393,
             "Name": "City_building_037",
             "Translation": [
                 -20.317694,
@@ -1434,8 +1050,8 @@
             ]
         },
         {
-            "UID": 433982928,
-            "ParentUID": 432938613,
+            "UID": 21465708,
+            "ParentUID": 20421393,
             "Name": "City_building_038",
             "Translation": [
                 -41.649002,
@@ -1467,8 +1083,8 @@
             ]
         },
         {
-            "UID": 434052549,
-            "ParentUID": 432938613,
+            "UID": 21535329,
+            "ParentUID": 20421393,
             "Name": "City_building_039",
             "Translation": [
                 -42.807240,
@@ -1500,8 +1116,8 @@
             ]
         },
         {
-            "UID": 434052549,
-            "ParentUID": 432938613,
+            "UID": 21535329,
+            "ParentUID": 20421393,
             "Name": "City_building_040",
             "Translation": [
                 -34.679482,
@@ -1533,8 +1149,8 @@
             ]
         },
         {
-            "UID": 434122170,
-            "ParentUID": 432938613,
+            "UID": 21604950,
+            "ParentUID": 20421393,
             "Name": "City_building_041",
             "Translation": [
                 30.695278,
@@ -1562,6 +1178,270 @@
                     "Type": "Mesh",
                     "Path": "Assets\/library\/City_building_041.mesh",
                     "UID": 86917228
+                }
+            ]
+        },
+        {
+            "UID": 2144955801,
+            "ParentUID": 1178487739,
+            "Name": "GameObject1",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 2145025422,
+            "ParentUID": 2144955801,
+            "Name": "Chimney",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Baker_house.dds",
+                    "UID": 2129668698
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Chimney.mesh",
+                    "UID": 2024680230
+                }
+            ]
+        },
+        {
+            "UID": 2145095043,
+            "ParentUID": 2144955801,
+            "Name": "Baker_house",
+            "Translation": [
+                -6.217275,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Baker_house.dds",
+                    "UID": 2129668698
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Baker_house.mesh",
+                    "UID": 565030095
+                }
+            ]
+        },
+        {
+            "UID": 2077385207,
+            "ParentUID": 1178487739,
+            "Name": "GameObject1",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1.000000,
+                1.000000
+            ],
+            "Rotation": [
+                -0.128293,
+                -0.128293,
+                -0.320733,
+                0.929630
+            ],
+            "Components": []
+        },
+        {
+            "UID": 2077524449,
+            "ParentUID": 2077385207,
+            "Name": "Chimney",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Baker_house.dds",
+                    "UID": 2129668698
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Chimney.mesh",
+                    "UID": 2024680230
+                }
+            ]
+        },
+        {
+            "UID": 2077594070,
+            "ParentUID": 2077385207,
+            "Name": "Baker_house",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Baker_house.dds",
+                    "UID": 2129668698
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Baker_house.mesh",
+                    "UID": 565030095
+                }
+            ]
+        },
+        {
+            "UID": 1304413613,
+            "ParentUID": 1178487739,
+            "Name": "GameObject1",
+            "Translation": [
+                0,
+                3.750394,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 1304552855,
+            "ParentUID": 1304413613,
+            "Name": "Chimney",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Baker_house.dds",
+                    "UID": 2129668698
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Chimney.mesh",
+                    "UID": 2024680230
+                }
+            ]
+        },
+        {
+            "UID": 1304552855,
+            "ParentUID": 1304413613,
+            "Name": "Baker_house",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Path": "Assets\/library\/Baker_house.dds",
+                    "UID": 2129668698
+                },
+                {
+                    "Type": "Mesh",
+                    "Path": "Assets\/library\/Baker_house.mesh",
+                    "UID": 565030095
                 }
             ]
         }
