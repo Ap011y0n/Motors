@@ -1225,7 +1225,9 @@ void ModuleUI::TimeMangmentWin()
 			if (ImGui::Button("PLAY")) 
 			{
 				Time::Start();
-				//TODO: We also need to save the actual scene here!!
+				App->serializer->CreateNewScene();
+				App->scene_intro->SaveScene(App->scene_intro->scene);
+				App->serializer->SaveScene();
 			} ImGui::SameLine();
 		}
 		else {
@@ -1250,7 +1252,8 @@ void ModuleUI::TimeMangmentWin()
 
 			if (ImGui::Button("STOP"))
 			{
-				//TODO: We also need to Load the previous scene here!!
+				App->scene_intro->DeleteSceneObjects(App->scene_intro->scene);
+				App->serializer->LoadScene("Assets/Scene.json");
 				Time::Stop();
 			}ImGui::SameLine();
 			
