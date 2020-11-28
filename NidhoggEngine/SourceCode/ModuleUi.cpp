@@ -1377,10 +1377,10 @@ void ModuleUI::TimeMangmentWin()
 		static bool BoundingBox = false;
 		if (ImGui::Checkbox("BoundingBox",&BoundingBox))
 		{
-			/*for (int i = 0; i < App->scene_intro->scene->childs.size(); i++) 
+			for (int i = 0; i < App->scene_intro->scene->childs.size(); i++) 
 			{
 				Change_Visibility_BoundingBoxes(App->scene_intro->scene->childs[i],BoundingBox);
-			}*/
+			}
 		}
 
 		ImGui::End();

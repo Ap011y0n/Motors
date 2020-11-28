@@ -41,7 +41,7 @@ GameObject::GameObject(const char* name, GameObject* node)
 	LCG();
 	LCG rand;
 	UID = rand.Int();
-	displayAABB = true;
+	displayAABB = false;
 	if (parent != nullptr)
 	{
 		parent->childs.push_back(this);
@@ -87,11 +87,13 @@ bool GameObject::Update(float dt)
 				obb.Transform(myTrans->AcumulateparentTransform());
 				aabb.SetNegativeInfinity();
 				aabb.Enclose(obb);
+
 				HideAABB();
 				if (displayAABB)
 				{
 					DisplayAABB();
 				}
+			
 				
 				if (App->scene_intro->culling != nullptr)
 				{
@@ -156,12 +158,17 @@ Component* GameObject::GetComponent(ComponentType type)
 
 void GameObject::HideAABB()
 {
-	if(currentAABB != nullptr)
-	currentAABB->to_delete = true;
+	if (currentAABB != nullptr)
+	{
+		currentAABB->to_delete = true;
+		currentAABB = nullptr;
+	}
 }
 
 void GameObject::DisplayAABB()
 {
+	HideAABB();
+
 	currentAABB = App->PrimManager->CreateAABB(&aabb);
 }
 
