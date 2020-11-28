@@ -54,7 +54,7 @@ GameObject::GameObject(const char* name, GameObject* node)
 
 GameObject::~GameObject()
 {
-	this;
+
 	HideAABB();
 
 	for (int i = 0; i < Components.size(); i++)
@@ -176,12 +176,15 @@ Component::Component()
 
 	owner = nullptr;
 	active = false;
+	reference = nullptr;
 	type = ComponentType::NONE;
 }
 
 Component::~Component()
 {
 	LOG("deleting component");
+	if(reference != nullptr)
+	reference->references--;
 }
 
 void Component::Enable()

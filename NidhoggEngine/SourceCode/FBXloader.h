@@ -79,7 +79,9 @@ public:
 
 	void PrintMeshes();
 	void ChangeTexture(const char* path);
+	void ChangeTexture(Resource* resource);
 	void ChangeMesh(const char* path);
+	void ChangeMesh(Resource* resource);
 
 	void CreateAABB(ComponentMesh* NewMesh);
 

@@ -124,7 +124,7 @@ bool ModuleUI::Init()
 	int max_fps = 61;
 	App->Maxfps(max_fps);
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
+	selectedAsset = nullptr;
 	return ret;
 }
 
@@ -796,8 +796,26 @@ void ModuleUI::ResourceInfo()
 	if (ResourceInfo_open == true) {
 
 		ImGui::Begin("Resource Info", &ResourceInfo_open);
+		if (selectedAsset != nullptr)
+		{
+			if (ImGui::Button("Add to scene"))
+			{
+				switch (selectedAsset->owner->GetType())
+				{
+				case ResourceType::MODEL:
+					App->serializer->LoadModel(selectedAsset->owner);
+					break;
+				case ResourceType::TEXTURE:
+					App->FBX->ChangeTexture(selectedAsset->owner);
+					break;
+				case ResourceType::MESH:
+					App->FBX->ChangeMesh(selectedAsset->owner);
+					break;
+				}
+			}
+			ImGui::Text("References: %d", selectedAsset->owner->references);
 
-		
+		}
 
 		ImGui::End();
 	}
@@ -890,6 +908,7 @@ void ModuleUI::AssetsHierarchyTree(AssetNode* node)
 	{
 		DeactivateAssets();
 		node->is_selected = true;
+		selectedAsset = node;
 	}
 
 	if (open)
@@ -929,6 +948,7 @@ void ModuleUI::DeactivateGameObjects(GameObject* father)
 
 void ModuleUI::DeactivateAssets()
 {
+	selectedAsset = nullptr;
 	for (int i = 0; i < assets.size(); i++)
 	{
 		assets[i]->is_selected = false;
@@ -1150,7 +1170,7 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 				material->checkers = false;
 			}
 			ImGui::Text("File:"); ImGui::SameLine();
-			ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s",material->texture_path.c_str());
+			ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s", material->texture_path.c_str());
 			ImGui::Text("Texture h: %d", material->texture_h ); ImGui::SameLine(); ImGui::Text(" w:%d", material->texture_w);
 			ImGui::Image((ImTextureID)material->texbuffer, ImVec2(256, 256));
 			

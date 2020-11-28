@@ -134,5 +134,6 @@ private:
 	vector<string> consoleOutput;
 	float width = 1324;
 	float height = 768;
+	AssetNode* selectedAsset;
 };
 

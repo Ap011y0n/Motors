@@ -174,7 +174,6 @@ public:
 	AABB aabb;
 	bool displayAABB;
 	float culled;
-
 private:
 	PrimAABB* currentAABB;
 };

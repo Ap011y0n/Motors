@@ -158,11 +158,11 @@ update_status ModuleInput::PreUpdate(float dt)
 					if (UID != 0)
 					{
 						Resource* NewResource = App->ResManager->RequestResource(UID);
-						if (NewResource != nullptr)
+						/*if (NewResource != nullptr)
 						{
 							LOG("Resource Found");
 							App->serializer->LoadModel(NewResource);
-						}
+						}*/
 					}
 					break;
 				case  FileType::IMAGE:

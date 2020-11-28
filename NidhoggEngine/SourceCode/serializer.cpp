@@ -264,7 +264,7 @@ void Serializer::LoadScene(const char* path)
 					NewTex->texbuffer = NewTexResource->texbuffer;
 					NewTex->texture_h = NewTexResource->texture_h;
 					NewTex->texture_w = NewTexResource->texture_w;
-
+					NewTex->texture_path = NewTexResource->GetLibraryFile();
 					if (NewTex->texbuffer != 0)
 						NewTex->hastexture = true;
 					//	NewMeshResource->unloadResource();
@@ -412,6 +412,7 @@ void Serializer::LoadModel(Resource* model)
 					NewTex->texbuffer = NewTexResource->texbuffer;
 					NewTex->texture_h = NewTexResource->texture_h;
 					NewTex->texture_w = NewTexResource->texture_w;
+					NewTex->texture_path = NewTexResource->GetLibraryFile();
 
 					if (NewTex->texbuffer != 0)
 						NewTex->hastexture = true;
