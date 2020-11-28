@@ -167,8 +167,6 @@ void GameObject::HideAABB()
 
 void GameObject::DisplayAABB()
 {
-	HideAABB();
-
 	currentAABB = App->PrimManager->CreateAABB(&aabb);
 }
 
