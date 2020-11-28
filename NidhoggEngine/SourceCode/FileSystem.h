@@ -33,7 +33,7 @@ public:
 	// Return the bytes of a PhysFS filehandle
 	uint Load(const char* path, char** buffer) const;
 	bool CheckFile(const char* path) const;
-
+	bool RemoveFile(const char* path);
 	unsigned int Save(const char* file, const char* buffer, unsigned int size, bool append) const;
 };
 

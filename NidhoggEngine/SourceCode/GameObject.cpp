@@ -27,6 +27,8 @@ GameObject::GameObject()
 	parentUID = 0;
 	displayAABB = true;
 	currentAABB = nullptr;
+	culled = false;
+
 }
 
 GameObject::GameObject(const char* name, GameObject* node)
@@ -46,6 +48,8 @@ GameObject::GameObject(const char* name, GameObject* node)
 		parentUID = parent->UID;
 	}
 	currentAABB = nullptr;
+	culled = false;
+
 }
 
 GameObject::~GameObject()
@@ -91,7 +95,7 @@ bool GameObject::Update(float dt)
 				if (App->scene_intro->culling != nullptr)
 				{
 					if (!App->scene_intro->culling->ContainsAABB(aabb))
-						myMesh->culled = true;
+						culled = true;
 				}
 			}
 
@@ -218,7 +222,6 @@ ComponentMesh::ComponentMesh(GameObject* ObjectOwner) : Component()
 
 	triggerNormals = false;
 	GraphicNormals = nullptr;
-	culled = false;
 }
 
 ComponentMesh::~ComponentMesh()
@@ -261,7 +264,7 @@ ComponentMesh::~ComponentMesh()
 bool ComponentMesh::Update(float dt)
 {
 	bool ret = true;
-	if (!culled)
+	if (!owner->culled)
 	{
 		ComponentMaterial* material = nullptr;
 		ComponentTransform* transform = nullptr;
@@ -356,7 +359,7 @@ bool ComponentMesh::Update(float dt)
 		glPopMatrix();
 
 	}
-	culled = false;
+	owner->culled = false;
 
 	return ret;
 }
@@ -659,7 +662,7 @@ ComponentCamera::ComponentCamera(GameObject* ObjectOwner) :Component() {
 	frustrum.verticalFov = (65 * DEGTORAD) / aspectRatio; //This will be adaptable
 	planes = new Plane[6];
 	frustrum.GetPlanes(planes);
-
+	print = true;
 	SetFOV(60);
 }
 
@@ -680,6 +683,7 @@ ComponentCamera::~ComponentCamera()
 bool ComponentCamera::Update(float dt)
 {
 	bool ret = true;
+	
 	PrintFrustrum();
 	return ret;
 }
@@ -690,7 +694,7 @@ void ComponentCamera::PrintFrustrum()
 	UpdateOrientation();
 	UpdatePos();
 	
-	//if (owner->isSelected) 
+	if (print)
 	{
 		//frustrum.pos = float3(0.0f, 1.0f, 0.0f);
 		float3 corners[8];

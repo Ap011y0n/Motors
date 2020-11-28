@@ -323,7 +323,7 @@ void FBXloader::ChangeTexture(const char* path)
 				mat->texbuffer = NewResource->texbuffer;
 				mat->texture_h = NewResource->texture_h;
 				mat->texture_w = NewResource->texture_w;
-
+				mat->reference = NewResource;
 				if (mat->texbuffer != 0)
 					mat->hastexture = true;
 			}

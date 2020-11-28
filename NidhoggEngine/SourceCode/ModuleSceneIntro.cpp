@@ -49,12 +49,28 @@ bool ModuleSceneIntro::Start()
 	
 	char* buffer = nullptr;
 
+	std::string file_path = "Assets/Street environment_V01.FBX";
+	//std::string file_path = "Assets/Street environment_V01.FBX";
 
+	uint UID = App->ResManager->FindInAssets(file_path.c_str());
+	if (UID == 0)
+	{
+		UID = App->ResManager->ImportFile(file_path.c_str());
+	}
+	if (UID != 0)
+	{
+		Resource* NewResource = App->ResManager->RequestResource(UID);
+		if (NewResource != nullptr)
+		{
+			LOG("Resource Found");
+			App->serializer->LoadModel(NewResource);
+		}
+	}
 	//uint fileSize = 0;
 	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
 	//App->FBX->LoadFBX(buffer, fileSize);
 
-	std::string file_path = "Assets/p1character.FBX";
+	file_path = "Assets/p1character.FBX";
 	//App->ResManager->ImportFile(file_path.c_str());
 
 	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
@@ -134,6 +150,10 @@ update_status ModuleSceneIntro::Update(float dt)
 				App->serializer->LoadModel(NewResource);
 			}
 		}
+	}
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		App->file_system->RemoveFile("C:/Users/Albert/Documents/GitHub/Motors/NidhoggEngine/Build/Assets/a.FBX");
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{

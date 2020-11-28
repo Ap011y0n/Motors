@@ -125,6 +125,21 @@ bool FileSystem::CheckFile(const char* path) const
 	PHYSFS_close(file);
 	return true;
 }
+
+bool FileSystem::RemoveFile(const char* path)
+{
+	bool ret = false;
+	if (PHYSFS_delete(path) != 0)
+	{
+		LOG("Deleting [%s]", path);
+		ret = true;
+	}
+	else
+	{
+		LOG("error while trying to delete [%s]: %s", path, PHYSFS_getLastError());
+	}
+	return ret;
+}
 uint FileSystem::Load(const char* path, char** buffer) const
 {
 	uint ret = 0;

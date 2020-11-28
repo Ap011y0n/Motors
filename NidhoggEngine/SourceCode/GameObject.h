@@ -72,7 +72,6 @@ public:
 
 	bool triggerNormals;
 
-	float culled;
 	AABB bbox;
 };
 
@@ -146,6 +145,7 @@ public:
 	Frustum frustrum;
 	Plane* planes;
 	bool cullingActive;
+	bool print;
 
 };
 
@@ -173,6 +173,8 @@ public:
 	OBB obb;
 	AABB aabb;
 	bool displayAABB;
+	float culled;
+
 private:
 	PrimAABB* currentAABB;
 };

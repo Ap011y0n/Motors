@@ -44,7 +44,7 @@ bool ModuleCamera3D::Start()
 	cameraComp->frustrum.nearPlaneDistance = 0.1;
 
 	cameraComp->frustrum.nearPlaneDistance = 1;
-
+	cameraComp->print = false;
 	background.Set(0.f, 0, 0.f, 1.f);
 	return ret;
 }
@@ -65,7 +65,7 @@ update_status ModuleCamera3D::Update(float dt)
 	cameraOBJ->Update(dt);
 	vec3 newPos(0,0,0);
 	float speed = 4.0f * dt;
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)frustrumFollow = !frustrumFollow;
+	
 
 	if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 8.0f * dt;
