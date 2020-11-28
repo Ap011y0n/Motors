@@ -43,7 +43,7 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	culling = nullptr;
-	//GameObject* object = CreateGameObject("test");
+	//GameObject* object = CreateGameObject("test", App->scene_intro->scene);
 	//object->CreateComponent(ComponentType::MESH);
 
 	

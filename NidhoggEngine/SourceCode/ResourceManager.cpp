@@ -72,7 +72,10 @@ uint ResourceManager::FindInAssets(const char* file_in_assets)
 					resources[id] = NewResource;
 					NewResource->SetAssetPath(Assets.c_str());
 					NewResource->SetLibraryPath(Library.c_str());
-
+					std::string file, extension;
+					App->file_system->SplitFilePath(Assets.c_str(), &file, &extension);
+					file.append(extension);
+					NewResource->name = file.c_str();
 				}
 				return id;
 
@@ -315,11 +318,13 @@ Resource::Resource(uint id)
 	assetsFile = "";
 	LibraryFile = "";
 	isLoaded = false;
+	node = App->UI->createAssetNode(this);
+	name = "none";
 }
 
 Resource::~Resource()
 {
-
+	node->to_delete = true;
 }
 
 uint Resource::GetUID() const
@@ -464,7 +469,7 @@ ResourceTexture::ResourceTexture(uint id) : Resource(id)
 
 ResourceTexture::~ResourceTexture()
 {
-
+	unloadResource();
 }
 
 void ResourceTexture::loadResource()

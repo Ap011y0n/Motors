@@ -4,6 +4,7 @@
 #include "Module.h"
 #include <map>
 
+class AssetNode;
 enum class ResourceType
 {
 	UNKNOWN,
@@ -33,6 +34,8 @@ protected:
 public:
 	bool isLoaded;
 	uint references;
+	AssetNode* node;
+	const char* name;
 };
 class ResourceModel : public Resource
 {

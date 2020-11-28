@@ -9,7 +9,25 @@
 
 using namespace std;
 class GameObject;
+class Resource;
+class AssetNode
+{
+public:
+	AssetNode(Resource* res)
+	{
+		owner = res;
+		is_selected = false;
+		to_delete = false;
+	}
+	~AssetNode(){
+	
+	}
 
+public: 
+	Resource* owner;
+	bool is_selected = false;
+	bool to_delete;
+};
 class TreeNode
 {
 public:
@@ -43,19 +61,25 @@ public:
 	void Configuration(bool config);
 	void PlotGraph();
 	void HierarchyWin(); //hierarchy window
+	void AssetsTree(); //hierarchy window
 	void InspectorWin(); //gameobjects list
 	void TimeMangmentWin();
 	void ShowExampleAppLayout(/*bool* p_open*/);
 	void Change_Window_size(Vec2 newSize);
 
 	void GameObjectHierarchyTree(GameObject* node, int id);
+	void AssetsHierarchyTree(AssetNode* node);
+
 	void DeactivateGameObjects(GameObject* father);
+	void DeactivateAssets();
+
 	void GameObjectInspector(GameObject* obj);
 	void ChangeParent(GameObject* obj, GameObject* nextOwner);
 	void SelectGameObject(GameObject* node);
 	void GuizmoUI();
 	void ControlsGuizmo();
 	vec3 ReturnLookAtCamera(vec3 direction);
+	AssetNode* createAssetNode(Resource* resource);
 public:
 	ImGuiIO* io;
 	bool show_demo_window;
@@ -69,6 +93,8 @@ public:
 	bool Wireframe_bool;
 
 	 bool Hierarchy_open;
+	 bool Assetstree_open;
+
 	 bool Inspector_open;
 	 bool Console_open;
 
@@ -95,6 +121,8 @@ public:
 	bool LocalGuizmo;
 	bool WorldGuizmo;
 	bool using_gizmo;
+	vector<AssetNode*> assets;
+
 private:
 	int c1;
 	int cameras;

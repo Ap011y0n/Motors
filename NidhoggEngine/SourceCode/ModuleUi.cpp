@@ -92,7 +92,6 @@ bool ModuleUI::Init()
 
 // Load assets
 
-	LOG("Loading Intro assets");
 	bool ret = true;
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
@@ -108,6 +107,7 @@ bool ModuleUI::Init()
 	border_bool = false;
 	Wireframe_bool = false;
 	Hierarchy_open = true;
+	Assetstree_open = true;
 	Inspector_open = true;
 	Console_open = true;
 	direction_camera = { 0,0,0 };
@@ -295,6 +295,7 @@ update_status ModuleUI::Update(float dt)
 	AboutMenu(show_About);
 	Configuration(show_Configuration);
 	HierarchyWin(); 
+	AssetsTree();
 	InspectorWin();
 	TimeMangmentWin();
 	return UPDATE_CONTINUE;
@@ -720,12 +721,41 @@ void ModuleUI::HierarchyWin()
 	if (Hierarchy_open == true) {
 
 		ImGui::Begin("Hierarchy", &Hierarchy_open);
-
+		std::map<uint, Resource*>::iterator it = App->ResManager->resources.begin();
 		for (int i = 0; i < App->scene_intro->scene->childs.size(); i++)
 		{
 			GameObjectHierarchyTree(App->scene_intro->scene->childs[i], i);
 		}
 		
+		ImGui::End();
+	}
+}
+
+AssetNode* ModuleUI::createAssetNode(Resource* resource)
+{
+	AssetNode* node = new AssetNode(resource);
+	assets.push_back(node);
+	return node;
+}
+
+void ModuleUI::AssetsTree()
+{
+	if (Assetstree_open == true) {
+
+		ImGui::Begin("Assets Tree", &Assetstree_open);
+
+		for (int i = 0; i < assets.size(); i++)
+		{
+
+			if (assets[i]->to_delete)
+			{
+				assets.erase(App->UI->assets.begin() + i);
+				i--;
+			}
+			else
+			AssetsHierarchyTree(assets[i]);
+		}
+
 		ImGui::End();
 	}
 }
@@ -793,6 +823,39 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 	}
 }
 
+void ModuleUI::AssetsHierarchyTree(AssetNode* node)
+{
+	ImGuiTreeNodeFlags node_flags = /*ImGuiTreeNodeFlags_DefaultOpen | */ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+	int node_clicked = -1;
+
+	std::string file, extension;
+	App->file_system->SplitFilePath(node->owner->GetLibraryFile(), &file, &extension);
+	file.append(extension);
+	node->owner->name = file.c_str();
+
+	const char* GameObjname = node->owner->name;
+
+	if (node->is_selected == true)
+	{
+		node_flags += ImGuiTreeNodeFlags_Selected;
+	}
+
+
+
+	bool open = ImGui::TreeNodeEx(GameObjname, node_flags);
+
+	if (ImGui::IsItemClicked())
+	{
+		DeactivateAssets();
+		node->is_selected = true;
+	}
+
+	if (open)
+	{
+		ImGui::TreePop();
+	}
+
+}
 void ModuleUI::ChangeParent(GameObject* obj, GameObject* nextOwner)
 {
 	if (obj != nullptr && nextOwner != nullptr) {
@@ -819,6 +882,14 @@ void ModuleUI::DeactivateGameObjects(GameObject* father)
 	for (int i = 0; i < father->childs.size(); i++)
 	{
 		DeactivateGameObjects(father->childs[i]);
+	}
+}
+
+void ModuleUI::DeactivateAssets()
+{
+	for (int i = 0; i < assets.size(); i++)
+	{
+		assets[i]->is_selected = false;
 	}
 }
 
@@ -1131,11 +1202,7 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 				if (ImGui::BeginTabItem("Assets"))
 				{
 					ImGui::Text("Folders...");
-					
-					
-					
-					
-					
+
 					
 					ImGui::EndTabItem();
 				}
