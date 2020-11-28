@@ -624,12 +624,18 @@ void ComponentTransform::Scale(float x, float y, float z)
 }
 void ComponentTransform::UpdateFromGuizmo(float4x4 newAll) 
 {
-	float3 translation, scaling;
-	Quat rotation;
-	newAll.Decompose(translation, rotation, scaling);
-	pos.Set(translation.x, translation.y, translation.z);
-	rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
-	scale.Set(scaling.x, scaling.y, scaling.y);
+	float4x4 initmat = global_transform.Transposed();
+
+	float3 trans, init_trans, init_scale, scale;
+	Quat rot, init_rot;
+	newAll.Decompose(trans, rot, scale);
+	initmat.Decompose(init_trans, init_rot, init_scale);
+
+	//pos.Set(trans.x - init_trans.x, trans.y - init_trans.y, trans.z - init_trans.z);
+
+	pos.Set(trans.x, trans.y, trans.z);
+	//rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
+	//scale.Set(scaling.x, scaling.y, scaling.y);
 }
 
 //*************************		ComponentCamera

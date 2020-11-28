@@ -11,7 +11,8 @@ enum class FileType
 {
 	UNKNOWN,
 	FBX,
-	IMAGE
+	IMAGE,
+	MESH
 };
 class FileSystem : public Module
 {

@@ -109,6 +109,10 @@ FileType FileSystem::SetFileType(std::string extension)
 	{
 		ret = FileType::IMAGE;
 	}
+	if (extension == "mesh")
+	{
+		ret = FileType::MESH;
+	}
 
 	return ret;
 }

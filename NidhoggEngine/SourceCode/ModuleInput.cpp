@@ -142,7 +142,6 @@ update_status ModuleInput::PreUpdate(float dt)
 				std::string fileStr, extensionStr;
 				App->file_system->SplitFilePath(file_path.c_str(), &fileStr, &extensionStr);
 				std::string relativePath = "";
-				relativePath.append("Assets").append("/").append(fileStr).append(extensionStr);
 				FileType type = App->file_system->SetFileType(extensionStr);
 				uint UID;
 				switch (type)
@@ -150,7 +149,7 @@ update_status ModuleInput::PreUpdate(float dt)
 				case FileType::UNKNOWN:
 					break;
 				case FileType::FBX:
-				
+					relativePath.append("Assets").append("/").append(fileStr).append(extensionStr);
 					UID = App->ResManager->FindInAssets(relativePath.c_str());
 					if (UID == 0)
 					{
@@ -167,7 +166,13 @@ update_status ModuleInput::PreUpdate(float dt)
 					}
 					break;
 				case  FileType::IMAGE:
+					relativePath.append("Assets").append("/").append(fileStr).append(extensionStr);
 					App->FBX->ChangeTexture(relativePath.c_str());
+					break;
+				case  FileType::MESH:
+					relativePath.append("Assets/library/").append(fileStr).append(extensionStr);
+
+					App->FBX->ChangeMesh(relativePath.c_str());
 					break;
 				}
 				

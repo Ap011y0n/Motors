@@ -339,6 +339,38 @@ void FBXloader::ChangeTexture(const char* path)
 
 
 }
+
+void FBXloader::ChangeMesh(const char* path)
+{
+	ComponentMesh* mesh = nullptr;
+	if (App->scene_intro->selectedObj != nullptr)
+	{
+		mesh = (ComponentMesh*)App->scene_intro->selectedObj->GetComponent(ComponentType::MESH);
+
+		if (mesh != nullptr)
+		{
+			char* buffer;
+			uint size;
+			size = App->file_system->Load(path, &buffer);
+			MeshImporter::Load(buffer, size, mesh);
+
+
+			mesh->id_vertex = FillArrayBuffer(mesh->num_vertex * 3, mesh->vertex);
+
+			mesh->id_tex = FillArrayBuffer(mesh->num_tex, mesh->texCoords);
+
+			mesh->id_normals = FillArrayBuffer(mesh->num_normals * 3, mesh->normals);
+
+			mesh->id_index = FillElementArrayBuffer(mesh->num_index, mesh->index);
+
+			CreateAABB(mesh);
+
+		}
+
+	}
+
+
+}
 // Load assets
 bool FBXloader::CleanUp()
 {
