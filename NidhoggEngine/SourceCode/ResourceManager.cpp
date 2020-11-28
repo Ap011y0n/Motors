@@ -45,19 +45,14 @@ uint ResourceManager::FindInAssets(const char* file_in_assets)
 	std::string Library;
 	if (App->serializer->LoadMeta(MetaPath.c_str(), &id, &type, &Assets, &Library))
 	{
-		LOG("Meta found");
 		if (App->file_system->CheckFile(Library.c_str()))
 		{
-			LOG("Library file found");
 			if (SearchForResource(id))
 			{
-				LOG("Resource found in resources map");
 				return id;
 			}
 			else
 			{
-				LOG("Resource not found in resoruces, you should add this resource");
-
 				Resource* NewResource = nullptr;
 
 				switch (type) {
@@ -110,15 +105,12 @@ uint ResourceManager::FindInLibrary(const char* file_in_library, uint id)
 	
 		if (App->file_system->CheckFile(file_in_library))
 		{
-			LOG("Library file found");
 			if (SearchForResource(id))
 			{
-				LOG("Resource found in resources map");
 				return id;
 			}
 			else
 			{
-				LOG("Resource not found in resoruces, you should add this resource");
 
 				Resource* NewResource = nullptr;
 

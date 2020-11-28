@@ -62,6 +62,8 @@ public:
 	void PlotGraph();
 	void HierarchyWin(); //hierarchy window
 	void AssetsTree(); //hierarchy window
+	void ResourceInfo(); //hierarchy window
+
 	void InspectorWin(); //gameobjects list
 	void TimeMangmentWin();
 	void ShowExampleAppLayout(/*bool* p_open*/);
@@ -94,7 +96,7 @@ public:
 
 	 bool Hierarchy_open;
 	 bool Assetstree_open;
-
+	 bool ResourceInfo_open;
 	 bool Inspector_open;
 	 bool Console_open;
 

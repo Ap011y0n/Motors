@@ -636,7 +636,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 		//	CreateAABB(NewMesh);
 
 	}
-	App->serializer->SaveScene();
+	//App->serializer->SaveScene();
 
 	
 

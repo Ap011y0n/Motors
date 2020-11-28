@@ -142,13 +142,13 @@ void Serializer::AddVec4(JSON_Array* obj, float x, float y, float z, float w)
 
 }
 
-void Serializer::SaveScene()
+void Serializer::SaveScene(const char* name)
 {
 	char* serialized_string = NULL;
 	serialized_string = json_serialize_to_string_pretty(root_value);
 	size_t size = sprintf(serialized_string, "%s", serialized_string);
 
-	App->file_system->Save("Scene.json", serialized_string, size, false);
+	App->file_system->Save(name, serialized_string, size, false);
 	json_free_serialized_string(serialized_string);
 }
 

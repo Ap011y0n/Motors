@@ -156,7 +156,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	{
 		App->serializer->CreateNewScene();
 		SaveScene(scene);
-		App->serializer->SaveScene();
+		App->serializer->SaveScene("Scene.json");
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
 	{

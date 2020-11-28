@@ -24,7 +24,7 @@ public:
 
 	void CreateNewScene();
 	JSON_Object* AddObjectToArray(JSON_Array* obj);
-	void SaveScene();
+	void SaveScene(const char* name);
 
 	void SaveValueAsFile(JSON_Value* root, const char* name, std::string directory = "");
 	void LoadScene(const char* path);

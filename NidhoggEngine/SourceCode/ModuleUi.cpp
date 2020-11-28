@@ -108,6 +108,7 @@ bool ModuleUI::Init()
 	Wireframe_bool = false;
 	Hierarchy_open = true;
 	Assetstree_open = true;
+	ResourceInfo_open = true;
 	Inspector_open = true;
 	Console_open = true;
 	direction_camera = { 0,0,0 };
@@ -296,6 +297,7 @@ update_status ModuleUI::Update(float dt)
 	Configuration(show_Configuration);
 	HierarchyWin(); 
 	AssetsTree();
+	ResourceInfo();
 	InspectorWin();
 	TimeMangmentWin();
 	return UPDATE_CONTINUE;
@@ -760,6 +762,17 @@ void ModuleUI::AssetsTree()
 	}
 }
 
+void ModuleUI::ResourceInfo()
+{
+	if (ResourceInfo_open == true) {
+
+		ImGui::Begin("Resource Info", &ResourceInfo_open);
+
+		
+
+		ImGui::End();
+	}
+}
 void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 {
 	ImGuiTreeNodeFlags node_flags = /*ImGuiTreeNodeFlags_DefaultOpen | */ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
@@ -1294,7 +1307,7 @@ void ModuleUI::TimeMangmentWin()
 				Time::Start();
 				App->serializer->CreateNewScene();
 				App->scene_intro->SaveScene(App->scene_intro->scene);
-				App->serializer->SaveScene();
+				App->serializer->SaveScene("PlayScene.json");
 			} ImGui::SameLine();
 		}
 		else {
@@ -1320,7 +1333,7 @@ void ModuleUI::TimeMangmentWin()
 			if (ImGui::Button("STOP"))
 			{
 				App->scene_intro->DeleteSceneObjects(App->scene_intro->scene);
-				App->serializer->LoadScene("Assets/Scene.json");
+				App->serializer->LoadScene("Assets/PlayScene.json");
 				Time::Stop();
 			}ImGui::SameLine();
 			
