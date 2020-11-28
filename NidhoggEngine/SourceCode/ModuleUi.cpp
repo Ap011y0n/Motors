@@ -181,6 +181,18 @@ update_status ModuleUI::Update(float dt)
 
 	if (ImGui::BeginMenu("File"))
 	{
+		if (ImGui::MenuItem("Save Scene")) 
+		{
+			App->serializer->CreateNewScene();
+			App->scene_intro->SaveScene(App->scene_intro->scene);
+			App->serializer->SaveScene("Scene.json");
+		}
+		if (ImGui::MenuItem("Load Scene"))
+		{
+			App->scene_intro->DeleteSceneObjects(App->scene_intro->scene);
+			App->serializer->LoadScene("Assets/Scene.json");
+		}
+		ImGui::Separator();
 		if (ImGui::Button("Quit"))
 		{
 			return UPDATE_STOP;
@@ -409,13 +421,7 @@ void ModuleUI::Configuration(bool show_config)
 		ImGui::Begin("Configuration", &show_config);
 
 		ImGui::MenuItem("Wellcome to the Configuration menu", NULL, false, false);
-		if (ImGui::BeginMenu("Options"))
-		{
-			ImGui::MenuItem("Save");
-			ImGui::MenuItem("Load");
-			ImGui::MenuItem("Reset to Default");
-			ImGui::EndMenu();
-		}	
+
 		if (ImGui::CollapsingHeader("Application"))
 		{
 			static char buf[32] = "";
@@ -426,6 +432,7 @@ void ModuleUI::Configuration(bool show_config)
 			ImGui::InputText("Organitzation", buf2, IM_ARRAYSIZE(buf));
 			PlotGraph();
 		}
+
 		if (ImGui::CollapsingHeader("Window"))
 		{
 			static bool Wireframe_visible = false;
@@ -565,10 +572,12 @@ void ModuleUI::Configuration(bool show_config)
 				e++;
 			}
 		}
+
 		if (ImGui::CollapsingHeader("File System"))
 		{
 
 		}
+
 		if (ImGui::CollapsingHeader("Input"))
 		{
 			int mousex=0; int mousey=0;
@@ -597,6 +606,7 @@ void ModuleUI::Configuration(bool show_config)
 					ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%d (0x%X) (%.02f secs)", i, i, io.KeysDownDuration[i]);
 				}
 		}
+
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
 			SDL_version compiled;
@@ -632,6 +642,7 @@ void ModuleUI::Configuration(bool show_config)
 			ImGui::Text("Brand: ");  ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s", glGetString(GL_VENDOR));// Returns the vendor
 			ImGui::Text("Graphic Card: ");  ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s", glGetString(GL_RENDERER));// Returns a hint to the model
 		}
+
 		ImGui::End();
 	}
 
