@@ -68,6 +68,7 @@ public:
 	void Change_Window_size(Vec2 newSize);
 
 	void GameObjectHierarchyTree(GameObject* node, int id);
+	void Change_Visibility_BoundingBoxes(GameObject* node,bool visibility);
 	void AssetsHierarchyTree(AssetNode* node);
 
 	void DeactivateGameObjects(GameObject* father);
@@ -78,6 +79,7 @@ public:
 	void SelectGameObject(GameObject* node);
 	void GuizmoUI();
 	void ControlsGuizmo();
+	void RightClick_Inspector_Menu();
 	vec3 ReturnLookAtCamera(vec3 direction);
 	AssetNode* createAssetNode(Resource* resource);
 public:
@@ -122,10 +124,11 @@ public:
 	bool WorldGuizmo;
 	bool using_gizmo;
 	vector<AssetNode*> assets;
+	int cameras;
+	int empty_GameObjects;
 
 private:
 	int c1;
-	int cameras;
 	vector<string> consoleOutput;
 	float width = 1324;
 	float height = 768;

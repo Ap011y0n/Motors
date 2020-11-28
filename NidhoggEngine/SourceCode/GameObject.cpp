@@ -87,11 +87,12 @@ bool GameObject::Update(float dt)
 				obb.Transform(myTrans->AcumulateparentTransform());
 				aabb.SetNegativeInfinity();
 				aabb.Enclose(obb);
+				HideAABB();
 				if (displayAABB)
 				{
-					HideAABB();
 					DisplayAABB();
 				}
+				
 				if (App->scene_intro->culling != nullptr)
 				{
 					if (!App->scene_intro->culling->ContainsAABB(aabb))
