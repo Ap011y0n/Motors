@@ -799,11 +799,12 @@ bool ComponentCamera::ContainsAABB(const AABB refBox) const
 	for (int p = 0; p < 6; ++p) {
 		PlanesCount = 0;
 		for (int i = 0; i < 8; ++i) {
-			// test this point against the planes
-			if (planes[p].IsOnPositiveSide(vCorner[i])) { //<-- “IsOnPositiveSide” from MathGeoLib
+		//	 test this point against the planes
+			//if (planes[p].IsOnPositiveSide(vCorner[i]))  //<-- “IsOnPositiveSide” from MathGeoLib
+	
+			if (planes[p].normal.Dot(vCorner[i]) - planes[p].d >= 0.f)
 				PlanesCount++;
-			}
-		
+	
 		}
 		if (PlanesCount < 8)
 			insideCount++;
