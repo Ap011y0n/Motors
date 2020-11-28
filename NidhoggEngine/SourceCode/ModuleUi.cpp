@@ -113,6 +113,7 @@ bool ModuleUI::Init()
 	Console_open = true;
 	direction_camera = { 0,0,0 };
 	cameras = 0;
+	empty_GameObjects = 0;
 	width = 960;
 	height = 540;
 	LocalGuizmo = false;
@@ -285,6 +286,17 @@ update_status ModuleUI::Update(float dt)
 			camera->CreateComponent(ComponentType::CAMERA);
 		}
 
+		if (ImGui::MenuItem("Empty GameObject"))
+		{
+			empty_GameObjects++;
+			std::string obj = std::to_string(empty_GameObjects);
+
+			std::string name = "Empty_GameObject";
+			name.append(obj);
+
+			GameObject* empty_GameObject = new GameObject(name.c_str(), App->scene_intro->scene);
+			empty_GameObject->CreateComponent(ComponentType::TRANSFORM);
+		}
 		ImGui::EndMenu();
 	}
 	
@@ -728,7 +740,13 @@ void ModuleUI::HierarchyWin()
 		{
 			GameObjectHierarchyTree(App->scene_intro->scene->childs[i], i);
 		}
-		
+
+		if (ImGui::BeginPopupContextWindow())
+		{
+			RightClick_Inspector_Menu();
+
+			ImGui::EndPopup();
+		}
 		ImGui::End();
 	}
 }
@@ -780,7 +798,7 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 
 	const char* GameObjname = node->Name.c_str();
 
-	if (App->scene_intro->selectedObj==node)
+	if (App->scene_intro->selectedObj == node)
 	{
 		node_flags += ImGuiTreeNodeFlags_Selected;
 	}
@@ -1356,8 +1374,58 @@ void ModuleUI::TimeMangmentWin()
 
 		}
 		ImGui::Text("|"); ImGui::SameLine();
+		static bool BoundingBox = false;
+		if (ImGui::Checkbox("BoundingBox",&BoundingBox))
+		{
+			/*for (int i = 0; i < App->scene_intro->scene->childs.size(); i++) 
+			{
+				Change_Visibility_BoundingBoxes(App->scene_intro->scene->childs[i],BoundingBox);
+			}*/
+		}
 
 		ImGui::End();
 	}
 
+}
+
+void ModuleUI::RightClick_Inspector_Menu()
+{
+	if (ImGui::MenuItem("Delete"))
+	{
+		App->scene_intro->selectedObj->to_delete = true;
+	}
+
+	if (ImGui::MenuItem("Create empty Child"))
+	{
+		empty_GameObjects++;
+		std::string obj = std::to_string(empty_GameObjects);
+
+		std::string name = "Empty_Child";
+		name.append(obj);
+
+		GameObject* empty_GameObject = new GameObject(name.c_str(), App->scene_intro->selectedObj);
+		empty_GameObject->CreateComponent(ComponentType::TRANSFORM);
+	}
+
+	if (ImGui::MenuItem("Create empty GameObject"))
+	{
+		empty_GameObjects++;
+		std::string obj = std::to_string(empty_GameObjects);
+
+		std::string name = "Empty_GameObject";
+		name.append(obj);
+
+		GameObject* empty_GameObject = new GameObject(name.c_str(), App->scene_intro->scene);
+		empty_GameObject->CreateComponent(ComponentType::TRANSFORM);
+	}
+
+}
+
+void ModuleUI::Change_Visibility_BoundingBoxes(GameObject* node,bool visibility)
+{
+	node->displayAABB = visibility;
+	for (int i = 0; i < node->childs.size(); i++)
+	{
+		Change_Visibility_BoundingBoxes(node->childs[i], visibility);
+	}
 }
