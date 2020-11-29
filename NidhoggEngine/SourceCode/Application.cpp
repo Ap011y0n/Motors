@@ -10,6 +10,7 @@
 #include "ModuleUI.h"
 #include "PrimitiveManager.h"
 #include "FBXloader.h"
+#include "Time.h"
 
 #include "FileSystem.h"
 Application::Application()
@@ -23,6 +24,9 @@ Application::Application()
 	PrimManager = new PrimitiveManager(this);
 	FBX = new FBXloader(this);
 	file_system = new FileSystem(this);
+	serializer = new Serializer(this);
+	ResManager = new ResourceManager(this);
+	MousePick = new MousePicking(this);
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
@@ -32,12 +36,14 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 	AddModule(file_system);
-	
+	AddModule(serializer);
 	// Scenes
 	AddModule(PrimManager);
+	AddModule(ResManager);
 	AddModule(FBX);
 	AddModule(scene_intro);
 	AddModule(UI);
+	AddModule(MousePick);
 
 	// Renderer last!
 	AddModule(renderer3D);
@@ -88,11 +94,13 @@ void Application::PrepareUpdate()
 	frame_count++;
 	dt = (float)ms_timer.Read() / 1000.0f;
 	ms_timer.Start();
+	Time::PreUpdate(dt);
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	Time::Update(dt);
 	if (last_sec_frame_time.Read() > 1000)
 	{
 		last_sec_frame_time.Start();

@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include "MathGeoLib/include/MathGeoLib.h"
+
 using namespace std;
 
 typedef float GLfloat;
@@ -21,6 +23,7 @@ enum PrimitiveTypes
 	Primitive_Cylinder,
 	Primitive_Pyramid,
 	Primitive_Normals,
+	Primitive_AABB,
 };
 
 class Primitive
@@ -153,6 +156,8 @@ public:
 	uint* index;
 };
 
+// ============================================
+
 class PrimNormals : public Primitive
 {
 public:
@@ -171,6 +176,25 @@ public:
 	uint* index;
 };
 
+// ============================================
+
+class PrimAABB : public Primitive
+{
+public:
+	PrimAABB();
+	~PrimAABB();
+
+	PrimAABB(AABB* );
+	void InnerRender() const;
+public:
+
+	int num_vertices;
+	int num_indices;
+	uint my_indices = 0;
+	uint my_vertex = 0;
+	float* vert;
+	uint* index;
+};
 // ============================================
 class PrimPlane : public Primitive
 {

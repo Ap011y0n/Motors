@@ -5,10 +5,29 @@
 #include<iostream> 
 #include<string>
 #include "Vec2.h"
+#include "ImGuizmo.h"
 
 using namespace std;
 class GameObject;
+class Resource;
+class AssetNode
+{
+public:
+	AssetNode(Resource* res)
+	{
+		owner = res;
+		is_selected = false;
+		to_delete = false;
+	}
+	~AssetNode(){
+	
+	}
 
+public: 
+	Resource* owner;
+	bool is_selected = false;
+	bool to_delete;
+};
 class TreeNode
 {
 public:
@@ -42,15 +61,29 @@ public:
 	void Configuration(bool config);
 	void PlotGraph();
 	void HierarchyWin(); //hierarchy window
+	void AssetsTree(); //hierarchy window
+	void ResourceInfo(); //hierarchy window
+
 	void InspectorWin(); //gameobjects list
+	void TimeMangmentWin();
 	void ShowExampleAppLayout(/*bool* p_open*/);
 	void Change_Window_size(Vec2 newSize);
 
 	void GameObjectHierarchyTree(GameObject* node, int id);
-	void DeactivateGameObjects(GameObject* father);
-	void GameObjectInspector(GameObject* obj);
+	void Change_Visibility_BoundingBoxes(GameObject* node,bool visibility);
+	void AssetsHierarchyTree(AssetNode* node);
 
+	void DeactivateGameObjects(GameObject* father);
+	void DeactivateAssets();
+
+	void GameObjectInspector(GameObject* obj);
+	void ChangeParent(GameObject* obj, GameObject* nextOwner);
+	void SelectGameObject(GameObject* node);
+	void GuizmoUI();
+	void ControlsGuizmo();
+	void RightClick_Inspector_Menu();
 	vec3 ReturnLookAtCamera(vec3 direction);
+	AssetNode* createAssetNode(Resource* resource);
 public:
 	ImGuiIO* io;
 	bool show_demo_window;
@@ -64,6 +97,8 @@ public:
 	bool Wireframe_bool;
 
 	 bool Hierarchy_open;
+	 bool Assetstree_open;
+	 bool ResourceInfo_open;
 	 bool Inspector_open;
 	 bool Console_open;
 
@@ -80,11 +115,25 @@ public:
 	Vec2 img_corner;
 	Vec2 image_size;
 	ImGuiWindowClass* windowClass = nullptr;
-	vector<TreeNode*> tree_nodes;
 	vec3 direction_camera;
-	GameObject* selectedObj;
+	ImVec2 winSize;
+	ImVec2 winPos;
+	Vec2 cornerPos;
+	Vec2 imgcorner;
+	ImGuizmo::OPERATION guizmo_type = ImGuizmo::OPERATION::TRANSLATE;
+	ImGuizmo::MODE guizmo_mode = ImGuizmo::MODE::LOCAL;
+	bool LocalGuizmo;
+	bool WorldGuizmo;
+	bool using_gizmo;
+	vector<AssetNode*> assets;
+	int cameras;
+	int empty_GameObjects;
+
 private:
 	int c1;
 	vector<string> consoleOutput;
+	float width = 1324;
+	float height = 768;
+	AssetNode* selectedAsset;
 };
 

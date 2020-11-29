@@ -5,6 +5,8 @@
 #include "ModuleWindow.h"
 #include "glew/include/glew.h"
 
+#include "MathGeoLib/include/MathGeoLib.h"
+
 
 
 PrimitiveManager::PrimitiveManager(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -142,7 +144,7 @@ PrimCylinder* PrimitiveManager::CreateCylinder(float radius, float height, int s
 	return cylinder;
 }
 
-PrimLine* PrimitiveManager::CreateLine(vec3 origin, vec3 dest)
+PrimLine* PrimitiveManager::CreateLine(float3 origin, float3 dest)
 {
 	PrimLine* line = new PrimLine(origin.x, origin.y, origin.z, dest.x, dest.y, dest.z);
 	prim_list.push_back((Primitive*)line);
@@ -160,6 +162,13 @@ PrimNormals* PrimitiveManager::CreateNormalVects(float* normal_array, int size)
 	PrimNormals* normals = new PrimNormals(normal_array, size);
 	prim_list.push_back((PrimNormals*)normals);
 	return normals;
+}
+
+PrimAABB* PrimitiveManager::CreateAABB(AABB* bbox)
+{
+	PrimAABB* primAABB = new PrimAABB(bbox);
+	prim_list.push_back((PrimAABB*)primAABB);
+	return primAABB;
 }
 
 void PrimitiveManager::MenuOptions() 

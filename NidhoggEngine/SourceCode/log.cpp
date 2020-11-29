@@ -18,7 +18,7 @@ void log(const char file[], int line, const char* format, ...)
 	if (App)
 		if (App->UI)
 		{
-			App->UI->StoreLog(tmp_string2);
+			App->UI->StoreLog(tmp_string);
 		}
 
 }

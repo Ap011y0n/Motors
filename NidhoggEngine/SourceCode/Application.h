@@ -5,7 +5,6 @@
 
 #include "Globals.h"
 #include "Timer.h"
-#include "Module.h"
 
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
@@ -16,6 +15,9 @@
 #include "PrimitiveManager.h"
 #include "FBXloader.h"
 #include "FileSystem.h"
+#include "serializer.h"
+#include "MousePicking.h"
+#include "ResourceManager.h"
 
 #include <vector>
 
@@ -37,6 +39,9 @@ public:
 	PrimitiveManager* PrimManager;
 	FBXloader* FBX;
 	FileSystem* file_system;
+	Serializer* serializer;
+	ResourceManager* ResManager;
+	MousePicking* MousePick;
 private:
 
 	Timer	ms_timer;

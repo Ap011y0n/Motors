@@ -51,11 +51,15 @@ bool FileSystem::Init()
 	{
 		LOG("File System error while adding a path or zip: %s\n", PHYSFS_getLastError());
 	}
-
-	//PHYSFS_setWriteDir("data");
+	PHYSFS_setWriteDir("Assets/");
+//	PHYSFS_setWriteDir("Assets/library");
 	return true;
 }
 
+const char* FileSystem::GetWriteDir()
+{
+	return	PHYSFS_getWriteDir();
+}
 
 bool FileSystem::CleanUp()
 {
@@ -67,7 +71,8 @@ void FileSystem::SplitFilePath(const char* full_path, std::string* file, std::st
 {
 	if (full_path != nullptr)
 	{
-		std::string full(full_path);
+		std::string full("/");
+		full += full_path;
 		size_t pos_separator = full.find_last_of("\\/");
 		size_t pos_dot = full.find_last_of(".");
 
@@ -100,31 +105,45 @@ FileType FileSystem::SetFileType(std::string extension)
 		ret = FileType::FBX;
 	}
 
-	if (extension == "png" || extension == "dds")
+	if (extension == "png" || extension == "dds" || extension == "tga")
 	{
 		ret = FileType::IMAGE;
+	}
+	if (extension == "mesh")
+	{
+		ret = FileType::MESH;
 	}
 
 	return ret;
 }
 
-SDL_RWops* FileSystem::Load(const char* path) const
+bool FileSystem::CheckFile(const char* path) const
 {
-	char* buffer;
-	uint bytes = Load(path, &buffer);
-
-
-	// Read-only memory buffer for use with RWops, retruns a pointer to a new SDL_RWops structure
-	SDL_RWops* ret = SDL_RWFromConstMem(buffer, bytes);
-
-	return ret;
+	PHYSFS_file* file = PHYSFS_openRead(path);
+	if (file == NULL)
+		return false;
+	PHYSFS_close(file);
+	return true;
 }
 
-
+bool FileSystem::RemoveFile(const char* path)
+{
+	bool ret = false;
+	if (PHYSFS_delete(path) != 0)
+	{
+		LOG("Deleting [%s]", path);
+		ret = true;
+	}
+	else
+	{
+		LOG("error while trying to delete [%s]: %s", path, PHYSFS_getLastError());
+	}
+	return ret;
+}
 uint FileSystem::Load(const char* path, char** buffer) const
 {
 	uint ret = 0;
-
+	LOG("Loading file from %s", path);
 	// TODO 3 (Solved): You want to return the number of bytes it has read from the file that we passed to this function. 
 	// Maybe you want to search readBytes in the documentation, and investigate from there how to build the function.
 
@@ -168,13 +187,15 @@ uint FileSystem::Load(const char* path, char** buffer) const
 }
 
 // Save a whole buffer to disk
-unsigned int FileSystem::Save(const char* file, const char* buffer, unsigned int size) const
+unsigned int FileSystem::Save(const char* file, const char* buffer, unsigned int size, bool append) const
 {
 	unsigned int ret = 0;
 
-	PHYSFS_file* fs_file = PHYSFS_openWrite(file);
 
-	if (fs_file != NULL)
+	bool overwrite = PHYSFS_exists(file) != 0;
+	PHYSFS_file* fs_file = (append) ? PHYSFS_openAppend(file) : PHYSFS_openWrite(file);
+
+	if (fs_file != nullptr)
 	{
 		PHYSFS_sint64 written = PHYSFS_write(fs_file, (const void*)buffer, 1, size);
 		if (written != size)
@@ -183,7 +204,23 @@ unsigned int FileSystem::Save(const char* file, const char* buffer, unsigned int
 
 		}
 		else
+		{
+			if (append == true)
+			{
+				LOG("Added %u data to [%s/%s]", size, PHYSFS_getWriteDir(), file);
+			}
+			else if (overwrite == true)
+			{
+				LOG("File [%s/%s] overwritten with %u bytes", PHYSFS_getWriteDir(), file, size);
+			}
+			else
+			{
+				LOG("New file created [%s/%s] of %u bytes", PHYSFS_getWriteDir(), file, size);
+			}
+
 			ret = (uint)written;
+
+		}
 
 		if (PHYSFS_close(fs_file) == 0)
 			LOG("File System error while closing file %s: %s", file, PHYSFS_getLastError());

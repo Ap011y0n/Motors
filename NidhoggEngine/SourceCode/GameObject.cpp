@@ -19,8 +19,16 @@ GameObject::GameObject()
 	to_delete = false;
 	active = true;
 	Name = "NewGameObject";
-	father = nullptr;
+	parent = nullptr;
 	isSelected = false;
+	LCG();
+	LCG rand;
+	UID = rand.Int();
+	parentUID = 0;
+	displayAABB = true;
+	currentAABB = nullptr;
+	culled = false;
+
 }
 
 GameObject::GameObject(const char* name, GameObject* node)
@@ -28,21 +36,35 @@ GameObject::GameObject(const char* name, GameObject* node)
 	to_delete = false;
 	active = true;
 	Name = name;
-	father = node;
+	parent = node;
 	isSelected = false;
-	if (father != nullptr)
+	LCG();
+	LCG rand;
+	UID = rand.Int();
+	displayAABB = false;
+	if (parent != nullptr)
 	{
-		father->childs.push_back(this);
+		parent->childs.push_back(this);
+		parentUID = parent->UID;
 	}
+	currentAABB = nullptr;
+	culled = false;
+
 }
 
 GameObject::~GameObject()
 {
 
+	HideAABB();
+
 	for (int i = 0; i < Components.size(); i++)
 	{
-		if(Components[i] != nullptr)
-		delete Components[i];
+		if (Components[i] != nullptr)
+		{
+			Components[i]->type;
+			delete Components[i];
+
+		}
 	}
 	Components.clear();
 }
@@ -50,11 +72,47 @@ GameObject::~GameObject()
 bool GameObject::Update(float dt)
 {
 	bool ret = true;
-
-	for (int i = 0; i < Components.size(); i++)
+	this;
+	if (!to_delete && active)
 	{
-		Components[i]->Update(dt);
+		ComponentMesh* myMesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+		ComponentTransform* myTrans = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+		
+		if (myMesh != nullptr)
+		{
+			obb = myMesh->GetAABB();
+			if (myTrans != nullptr)
+			{
+				
+				obb.Transform(myTrans->AcumulateparentTransform());
+				aabb.SetNegativeInfinity();
+				aabb.Enclose(obb);
+
+				HideAABB();
+				if (displayAABB)
+				{
+					DisplayAABB();
+				}
+			
+				
+				if (App->scene_intro->culling != nullptr)
+				{
+					if (!App->scene_intro->culling->ContainsAABB(aabb))
+						culled = true;
+				}
+			}
+
+		}
+	
+		
+
+		for (int i = 0; i < Components.size(); i++)
+		{
+
+			if(Components[i]->active)Components[i]->Update(dt);
+		}
 	}
+
 
 	return ret;
 }
@@ -68,11 +126,48 @@ Component* GameObject::CreateComponent(ComponentType type)
 	case ComponentType::MESH: { ComponentMesh* mesh = new ComponentMesh(this); newComponent = mesh; break; }
 	case ComponentType::MATERIAL: { ComponentMaterial* material = new ComponentMaterial(this); newComponent = material; break; }
 	case ComponentType::TRANSFORM: { ComponentTransform* transform = new ComponentTransform(this); newComponent = transform; break; }
+	case ComponentType::CAMERA: {ComponentCamera* camera = new ComponentCamera(this); newComponent = camera; break; }
 
 	}
 	Components.push_back(newComponent);
 
 	return newComponent;
+}
+
+Component* GameObject::GetComponent(ComponentType type)
+{
+	Component* newComponent = nullptr;
+	int counter = 0;
+	for (int i = 0; i < Components.size(); i++)
+	{
+		if (type == Components[i]->type)
+		{
+			newComponent = Components[i];
+			counter++;
+		}
+	}
+	if (counter > 1)
+	{
+		counter = 0;
+		this;
+	}
+	return newComponent;
+
+	return nullptr;
+}
+
+void GameObject::HideAABB()
+{
+	if (currentAABB != nullptr)
+	{
+		currentAABB->to_delete = true;
+		currentAABB = nullptr;
+	}
+}
+
+void GameObject::DisplayAABB()
+{
+	currentAABB = App->PrimManager->CreateAABB(&aabb);
 }
 
 //*************************		Component
@@ -81,12 +176,15 @@ Component::Component()
 
 	owner = nullptr;
 	active = false;
+	reference = nullptr;
 	type = ComponentType::NONE;
 }
 
 Component::~Component()
 {
 	LOG("deleting component");
+	if(reference != nullptr)
+	reference->references--;
 }
 
 void Component::Enable()
@@ -143,7 +241,7 @@ ComponentMesh::~ComponentMesh()
 		GraphicNormals->to_delete = true;
 	}
 
-	glDeleteBuffers(1, &id_index);
+	/*glDeleteBuffers(1, &id_index);
 	glDeleteBuffers(1, &id_normals);
 	glDeleteBuffers(1, &id_vertex);
 	glDeleteBuffers(1, &id_tex);
@@ -168,84 +266,96 @@ ComponentMesh::~ComponentMesh()
 	{
 		delete[] texCoords;
 		texCoords = nullptr;
-	}
+	}*/
 
 }
 
 bool ComponentMesh::Update(float dt)
 {
 	bool ret = true;
-	ComponentMaterial* material = nullptr; 
-	ComponentTransform* transform = nullptr;
-
-	for (int i = 0; i < owner->Components.size(); i++)
+	if (!owner->culled)
 	{
-		if (owner->Components[i]->type == ComponentType::MATERIAL)
+		ComponentMaterial* material = nullptr;
+		ComponentTransform* transform = nullptr;
+		material = (ComponentMaterial*)owner->GetComponent(ComponentType::MATERIAL);
+		transform = (ComponentTransform*)owner->GetComponent(ComponentType::TRANSFORM);
+
+		/*for (int i = 0; i < owner->Components.size(); i++)
 		{
-			material = (ComponentMaterial*)owner->Components[i];
-		}
-		if (owner->Components[i]->type == ComponentType::TRANSFORM)
-		{
-			transform = (ComponentTransform*)owner->Components[i];
-		}
-	}
+			if (owner->Components[i]->type == ComponentType::MATERIAL)
+			{
+				material = (ComponentMaterial*)owner->Components[i];
+			}
+			if (owner->Components[i]->type == ComponentType::TRANSFORM)
+			{
+				transform = (ComponentTransform*)owner->Components[i];
+			}
+		}*/
 
 
 		glPushMatrix();
 		if (transform != nullptr)
 		{
-			glMultMatrixf(transform->transform.ptr());
+			glMultMatrixf(transform->global_transform.Transposed().ptr());
 		}
 		else
 		{
-			mat4x4 mat;
-			glMultMatrixf(mat.M);
+			glLoadIdentity();
 		}
-	
+
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		if (id_vertex != 0)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+			glVertexPointer(3, GL_FLOAT, 0, NULL);
+		}
 
-		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
-		glNormalPointer(GL_FLOAT, 0, NULL);
+		if (id_normals != 0)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+			glNormalPointer(GL_FLOAT, 0, NULL);
+		}
+		if (id_tex != 0)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, id_tex);
+			glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+		}
 
 
-		glBindBuffer(GL_ARRAY_BUFFER, id_tex);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
-	
-				if (material != nullptr && material->hastexture)
-				{
-					glEnable(GL_TEXTURE_2D);
-					glEnable(GL_CULL_FACE);
+		if (material != nullptr && material->hastexture)
+		{
+			glEnable(GL_TEXTURE_2D);
+			glEnable(GL_CULL_FACE);
 
-					glActiveTexture(GL_TEXTURE0);
-					if(material->checkers)
-					glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
-					else
-					glBindTexture(GL_TEXTURE_2D, material->texbuffer);
-				}
-				else
-				{
-					if (material != nullptr && material->checkers)
+			glActiveTexture(GL_TEXTURE0);
+			if (material->checkers || material->texbuffer == 0)
+				glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
+			else
+				glBindTexture(GL_TEXTURE_2D, material->texbuffer);
+		}
+		else
+		{
+			if (material != nullptr && material->checkers)
 
-					glEnable(GL_TEXTURE_2D);
-					glEnable(GL_CULL_FACE);
+				glEnable(GL_TEXTURE_2D);
+			glEnable(GL_CULL_FACE);
 
-					glActiveTexture(GL_TEXTURE0);
-					glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
-					
-				}
-			
-		
-		
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, App->scene_intro->texName);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+		}
 
-		glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
+
+		if (id_index != 0)
+		{
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+			glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
+		}
+
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
@@ -257,6 +367,8 @@ bool ComponentMesh::Update(float dt)
 
 		glPopMatrix();
 
+	}
+	owner->culled = false;
 
 	return ret;
 }
@@ -305,6 +417,92 @@ void ComponentMesh::DisplayNormals()
 		}
 
 }
+
+void ComponentMesh::SetAABB()
+{
+	bbox.SetNegativeInfinity();
+	float3* vertexvert = (float3*)vertex;
+	bbox.Enclose(vertexvert, num_vertex);
+
+	//float3 array[8];
+	//bbox.GetCornerPoints(array);
+
+	////0 = back left bot
+	////2 = back left top
+	////4 = back right bot
+	////6 = back right top
+
+	////3 = front left top
+	////7 = front right top
+	////1 = front left bot
+	////5 = front right bot
+	//vec3 origin, destination;
+
+	//origin.Set(array[0].x, array[0].y, array[0].z);
+	//destination.Set(array[1].x, array[1].y, array[1].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[1].x, array[1].y, array[1].z);
+	//destination.Set(array[3].x, array[3].y, array[3].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[3].x, array[3].y, array[3].z);
+	//destination.Set(array[7].x, array[7].y, array[7].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[3].x, array[3].y, array[3].z);
+	//destination.Set(array[2].x, array[2].y, array[2].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[0].x, array[0].y, array[0].z);
+	//destination.Set(array[2].x, array[2].y, array[2].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[1].x, array[1].y, array[1].z);
+	//destination.Set(array[5].x, array[5].y, array[5].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[7].x, array[7].y, array[7].z);
+	//destination.Set(array[6].x, array[6].y, array[6].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+
+	//origin.Set(array[2].x, array[2].y, array[2].z);
+	//destination.Set(array[6].x, array[6].y, array[6].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[6].x, array[6].y, array[6].z);
+	//destination.Set(array[4].x, array[4].y, array[4].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[4].x, array[4].y, array[4].z);
+	//destination.Set(array[0].x, array[0].y, array[0].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[7].x, array[7].y, array[7].z);
+	//destination.Set(array[5].x, array[5].y, array[5].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[4].x, array[4].y, array[4].z);
+	//destination.Set(array[5].x, array[5].y, array[5].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+}
+AABB ComponentMesh::GetAABB()
+{
+	return bbox;
+}
 void ComponentMesh::HideNormals()
 {
 	if (GraphicNormals != nullptr)
@@ -332,7 +530,9 @@ ComponentMaterial::ComponentMaterial(GameObject* ObjectOwner) : Component()
 
 ComponentMaterial::~ComponentMaterial()
 {
-	glDeleteTextures(1, &(GLuint)texbuffer);
+	LOG("Deleting Component Material");
+
+	//glDeleteTextures(1, &(GLuint)texbuffer);
 }
 
 bool ComponentMaterial::Update(float dt)
@@ -352,14 +552,15 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 	owner = ObjectOwner;
 
 	pos.Set(0, 0, 0);
-	scale.Set(0, 0, 0);
-	rot.Set(0, 0, 0, 0);
-	transform = transform.identity;
-	should_update = true;
+	scale.Set(1, 1, 1);
+	rot.Set(0, 0, 0, 1);
+	local_transform = local_transform.identity;
+	should_update = false;
 }
 
 ComponentTransform::~ComponentTransform()
 {
+	LOG("Deleting Component Transform");
 }
 
 bool ComponentTransform::Update(float dt)
@@ -369,19 +570,43 @@ bool ComponentTransform::Update(float dt)
 	//vec3 axis(1, 0, 0);
 	if (should_update)
 	{
-		transform = float4x4::FromTRS(pos, rot, scale);
-		transform.Transpose();
+		local_transform = float4x4::FromTRS(pos, rot, scale);
 		should_update = false;
 	}
-
+	global_transform = AcumulateparentTransform();
 	//UpdateScale(scale.x, scale.y, scale.z);
 	return ret;
 }
 
+float4x4 ComponentTransform::AcumulateparentTransform()
+{
+	float4x4 parentmat;
+	parentmat = parentmat.identity;
+	ComponentTransform* parentransform = nullptr;
+	if (owner->parent != nullptr)
+	{
+	//	LOG("%s, %s", owner->Name.c_str(), owner->parent->Name.c_str());
+			for (int i = 0; i < owner->parent->Components.size(); i++)
+			{
+				
+				if (owner->parent->Components[i]->type == ComponentType::TRANSFORM)
+				{
+					parentransform = (ComponentTransform*)owner->parent->Components[i];
+				}
+			}
+			if (owner == owner->parent)
+				LOG("Stack Overflow")
+
+			if(parentransform != nullptr)
+		parentmat = parentransform->AcumulateparentTransform();
+	}
+
+	return parentmat * local_transform;
+}
 
 void ComponentTransform::UpdateRotation(Quat quat)
 {
-	transform = transform * quat;
+	local_transform = local_transform * quat;
 }
 
 
@@ -391,17 +616,7 @@ void ComponentTransform::SetPos(float x, float y, float z)
 	pos.Set(pos.x + x, pos.y + y, pos.z + z);
 	should_update = true;
 
-	for (int i = 0; i < owner->childs.size(); i++)
-	{
-		for (int j = 0; j < owner->childs[i]->Components.size(); j++)
-		{
-			if (owner->childs[i]->Components[j]->type == ComponentType::TRANSFORM)
-			{
-				ComponentTransform* transform = (ComponentTransform*)owner->childs[i]->Components[j];
-				transform->SetPos(x, y, z);
-			}
-		}
-	}
+	
 }
 
 void ComponentTransform::SetRotation(Quat quat)
@@ -409,17 +624,7 @@ void ComponentTransform::SetRotation(Quat quat)
 	rot = rot * quat;
 	should_update = true;
 
-	for (int i = 0; i < owner->childs.size(); i++)
-	{
-		for (int j = 0; j < owner->childs[i]->Components.size(); j++)
-		{
-			if (owner->childs[i]->Components[j]->type == ComponentType::TRANSFORM)
-			{
-				ComponentTransform* transform = (ComponentTransform*)owner->childs[i]->Components[j];
-				transform->SetRotation(quat);
-			}
-		}
-	}
+
 }
 
 void ComponentTransform::Scale(float x, float y, float z)
@@ -427,16 +632,195 @@ void ComponentTransform::Scale(float x, float y, float z)
 	scale.Set(scale.x + x, scale.y + y, scale.z + z);
 	should_update = true;
 
-	for (int i = 0; i < owner->childs.size(); i++)
-	{
-		for (int j = 0; j < owner->childs[i]->Components.size(); j++)
-		{
-			if (owner->childs[i]->Components[j]->type == ComponentType::TRANSFORM)
-			{
-				ComponentTransform* transform = (ComponentTransform*)owner->childs[i]->Components[j];
-				transform->Scale(x, y, z);
-			}
-		}
-	}
+
+}
+void ComponentTransform::UpdateFromGuizmo(float4x4 newAll) 
+{
+	float4x4 initmat = global_transform.Transposed();
+
+	float3 trans, init_trans, init_scale, scale;
+	Quat rot, init_rot;
+	newAll.Decompose(trans, rot, scale);
+	initmat.Decompose(init_trans, init_rot, init_scale);
+
+	//pos.Set(trans.x - init_trans.x, trans.y - init_trans.y, trans.z - init_trans.z);
+
+	pos.Set(trans.x, trans.y, trans.z);
+	//rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
+	//scale.Set(scaling.x, scaling.y, scaling.y);
 }
 
+//*************************		ComponentCamera
+
+ComponentCamera::ComponentCamera(GameObject* ObjectOwner) :Component() {
+	type = ComponentType::CAMERA;
+	active = true;
+	owner = ObjectOwner;
+	cullingActive = false;
+	
+	aspectRatio = 1.73; 
+	frustrum.front = float3(0.0f, 0.0f, 1.0f);
+	frustrum.up = float3(0.0f, 1.f, 0.0f);
+
+	frustrum.nearPlaneDistance = 4;
+	frustrum.farPlaneDistance = 300;
+	frustrum.pos = float3(0.0f,0.0f,0.0f);
+	frustrum.type = FrustumType::PerspectiveFrustum;
+
+	frustrum.horizontalFov = (65* DEGTORAD);//This will stay as it is
+	frustrum.verticalFov = (65 * DEGTORAD) / aspectRatio; //This will be adaptable
+	planes = new Plane[6];
+	frustrum.GetPlanes(planes);
+	print = true;
+	SetFOV(60);
+}
+
+ComponentCamera::~ComponentCamera()
+{
+	if (this == App->scene_intro->culling)
+	{
+		App->scene_intro->culling = nullptr;
+	}
+	if (planes != nullptr)
+	{
+		delete[] planes;
+		planes = nullptr;
+	}
+
+}
+
+bool ComponentCamera::Update(float dt)
+{
+	bool ret = true;
+	
+	PrintFrustrum();
+	return ret;
+}
+
+void ComponentCamera::PrintFrustrum() 
+{
+	//updateFrustrum();
+	UpdateOrientation();
+	UpdatePos();
+	
+	if (print)
+	{
+		//frustrum.pos = float3(0.0f, 1.0f, 0.0f);
+		float3 corners[8];
+		frustrum.GetCornerPoints(corners);
+		CreateFrustrum(corners);
+	}
+
+}
+
+void ComponentCamera::CreateFrustrum(float3* corners) 
+{
+	glBegin(GL_LINES);
+	glVertex3fv(corners[0].ptr()); glVertex3fv(corners[1].ptr());
+	glVertex3fv(corners[0].ptr()); glVertex3fv(corners[2].ptr());
+	glVertex3fv(corners[0].ptr()); glVertex3fv(corners[4].ptr());
+	glVertex3fv(corners[3].ptr()); glVertex3fv(corners[1].ptr());
+	glVertex3fv(corners[3].ptr()); glVertex3fv(corners[2].ptr());
+	glVertex3fv(corners[3].ptr()); glVertex3fv(corners[7].ptr());
+	glVertex3fv(corners[5].ptr()); glVertex3fv(corners[1].ptr());
+	glVertex3fv(corners[5].ptr()); glVertex3fv(corners[4].ptr());
+	glVertex3fv(corners[5].ptr()); glVertex3fv(corners[7].ptr());
+	glVertex3fv(corners[6].ptr()); glVertex3fv(corners[2].ptr());
+	glVertex3fv(corners[6].ptr()); glVertex3fv(corners[4].ptr());
+	glVertex3fv(corners[6].ptr()); glVertex3fv(corners[7].ptr());
+	glEnd();
+
+}
+
+void ComponentCamera::updateFrustrum() 
+{
+	float3 rotation = float3(0.0f, 0.0f, 0.0f);
+	rotation *= DEGTORAD;
+	float4x4 toSend = float4x4::FromEulerXYZ(rotation.x, rotation.y, rotation.z);
+	frustrum.SetWorldMatrix(toSend.Float3x4Part());
+	//frustrum.pos = float3(0.0f, 0.0f, 0.0f);
+}
+
+float ComponentCamera::GetFOV() 
+{
+	//The fov is in radians so easier to understand for the user:
+	return frustrum.verticalFov * RADTODEG;
+}
+float ComponentCamera::GetHorizontalFov()
+{
+	//The fov is in radians so easier to understand for the user:
+	return frustrum.horizontalFov * RADTODEG;
+}
+
+void ComponentCamera::SetFOV(float FOV)
+{
+	//float aspecratio;
+	FOV = FOV * DEGTORAD; //now we pas to rad again
+	//aspecratio = frustrum.AspectRatio();
+	frustrum.verticalFov = FOV;
+	frustrum.horizontalFov = 2.f * Atan(Tan(FOV * 0.5f) * aspectRatio/*aspecratio*/);
+	//frustrum.GetPlanes
+}
+
+void ComponentCamera::UpdatePos()
+{
+	ComponentTransform* CameraTransform = nullptr;
+	CameraTransform = (ComponentTransform*)owner->GetComponent(ComponentType::TRANSFORM);
+	if(CameraTransform!= nullptr)
+	{
+		float4x4 abc = CameraTransform->AcumulateparentTransform();
+		//frustrum.Transform(abc);
+		frustrum.SetWorldMatrix(abc.Float3x4Part());
+		
+	}
+	
+
+}
+
+void ComponentCamera::UpdateOrientation() 
+{
+	/*float3 rotation = {0,0,0};
+	ComponentTransform* CameraTransform = nullptr;
+	CameraTransform = (ComponentTransform*)owner->GetComponent(ComponentType::TRANSFORM);
+	
+	if (CameraTransform != nullptr)
+	{
+		frustrum.Tra
+	
+		//frustrum.front = CameraTransform->transform.Transposed().WorldZ().Normalized();
+
+		//frustrum.Transform(CameraTransform->rot);
+	}*/
+	
+
+}
+
+bool ComponentCamera::ContainsAABB(const AABB refBox) const
+{
+	bool ret = true;
+	float3 vCorner[8];
+	
+	refBox.GetCornerPoints(vCorner);
+
+	frustrum.GetPlanes(planes);
+	int PlanesCount = 0;
+	int insideCount = 0;
+	for (int p = 0; p < 6; ++p) {
+		PlanesCount = 0;
+		for (int i = 0; i < 8; ++i) {
+		//	 test this point against the planes
+			//if (planes[p].IsOnPositiveSide(vCorner[i]))  //<-- “IsOnPositiveSide” from MathGeoLib
+	
+			if (planes[p].normal.Dot(vCorner[i]) - planes[p].d >= 0.f)
+				PlanesCount++;
+	
+		}
+		if (PlanesCount < 8)
+			insideCount++;
+	}
+	//if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	//LOG("%d", iInCount);
+		if (insideCount < 6)
+			ret = false;
+	return ret;
+}

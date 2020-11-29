@@ -3,10 +3,10 @@
 #include "glmath.h"
 #include "Primitive.h"
 
+
 #include "MathGeoLib/include/MathGeoLib.h"
 #include <iostream>
 #include <vector>
-
 
 enum class ComponentType
 {
@@ -14,11 +14,12 @@ enum class ComponentType
 	MESH,
 	MATERIAL,
 	TRANSFORM,
+	CAMERA,
 };
 
 
 class GameObject;
-
+class Resource;
 //Base component class, need to use childs to actually do something
 class Component
 {
@@ -33,7 +34,7 @@ public:
 
 	bool active = false;
 	GameObject* owner; 	//Gameobject which is parent to this component
-
+	Resource* reference;
 
 };
 
@@ -47,6 +48,8 @@ public:
 	bool Update(float dt);
 	void DisplayNormals();
 	void HideNormals();
+	void SetAABB();
+	AABB GetAABB();
 	//void Disable();
 private:
 	PrimNormals* GraphicNormals;
@@ -69,6 +72,7 @@ public:
 
 	bool triggerNormals;
 
+	AABB bbox;
 };
 
 //Material, child to component
@@ -103,7 +107,8 @@ public:
 	void			SetRotation(Quat quat);	//Call this method to change rotation of transform component
 	void			Scale(float x, float y, float z);	//Call this method to change scale of transform component
 	void			UpdateRotation(Quat quat);
-
+	float4x4			AcumulateparentTransform();
+	void		UpdateFromGuizmo(float4x4 newAll);
 private:
 //	void			UpdatePos(float x, float y, float z);
 //	void			UpdateScale(float x, float y, float z);
@@ -112,8 +117,35 @@ public:
 	float3 pos;
 	float3 scale;
 	Quat rot;
-	float4x4 transform;
+	float4x4 local_transform;
+	float4x4 global_transform;
+
 	bool should_update;
+
+};
+
+class ComponentCamera : public Component {
+
+public:
+	ComponentCamera(GameObject* ObjectOwner);
+	~ComponentCamera();
+	bool Update(float dt);
+	void PrintFrustrum();
+	void CreateFrustrum(float3*corners);
+	void updateFrustrum();
+	float GetFOV();
+	float GetHorizontalFov();
+	void SetFOV(float FOV);
+	void UpdatePos();
+	void UpdateOrientation();
+	bool ContainsAABB(const AABB refBox) const;
+
+public:
+	float aspectRatio;
+	Frustum frustrum;
+	Plane* planes;
+	bool cullingActive;
+	bool print;
 
 };
 
@@ -125,14 +157,25 @@ public:
 	~GameObject();
 	bool Update(float dt);
 	Component* CreateComponent(ComponentType type); //Create a new component for this game object, needs a Component type
+	Component* GetComponent(ComponentType type); //Create a new component for this game object, needs a Component type
+	void DisplayAABB();
+	void HideAABB();
 public:
 	bool to_delete = false;
 	bool active = false;
 	std::string Name;
 	std::vector<Component*> Components;
 	std::vector<GameObject*> childs;
-	GameObject* father;
+	GameObject* parent;
 	bool isSelected = false;
-
+	int UID;
+	int parentUID;
+	OBB obb;
+	AABB aabb;
+	bool displayAABB;
+	float culled;
+private:
+	PrimAABB* currentAABB;
 };
+
 

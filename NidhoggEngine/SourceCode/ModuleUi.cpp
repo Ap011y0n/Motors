@@ -7,32 +7,15 @@
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
+#include "imgui_internal.h"
 #include "ModuleWindow.h"
 #include "glew/include/glew.h"
 #include "GameObject.h"
+#include "Time.h"
 
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-#include "GL/gl3w.h"           // Initialize with gl3wInit()
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-#include "glew/include/glew.h"          // Initialize with glewInit()
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-#include <glad/glad.h>          // Initialize with gladLoadGL()
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD2)
-#include <glad/gl.h>            // Initialize with gladLoadGL(...) or gladLoaderLoadGL()
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING2)
-#define GLFW_INCLUDE_NONE       // GLFW including OpenGL headers causes ambiguity or multiple definition errors.
-#include <glbinding/Binding.h>  // Initialize with glbinding::Binding::initialize()
-#include <glbinding/gl/gl.h>
-using namespace gl;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING3)
-#define GLFW_INCLUDE_NONE       // GLFW including OpenGL headers causes ambiguity or multiple definition errors.
-#include <glbinding/glbinding.h>// Initialize with glbinding::initialize()
-#include <glbinding/gl/gl.h>
-using namespace gl;
-#else
-#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
-#endif
 
+#include "glew/include/glew.h"        
+#define DROP_ID_HIERARCHY_NODES "hierarchy_node"
 
 ModuleUI::ModuleUI(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -49,24 +32,9 @@ bool ModuleUI::Init()
 	App->renderer3D->context = SDL_GL_CreateContext(App->window->window);
 	SDL_GL_MakeCurrent(App->window->window, App->renderer3D->context);
 
-	// Initialize OpenGL loader
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-	bool err = gl3wInit() != 0;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
 	bool err = glewInit();
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-	bool err = gladLoadGL() == 0;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD2)
-	bool err = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress) == 0; // glad2 recommend using the windowing library loader instead of the (optionally) bundled one.
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING2)
-	bool err = false;
-	glbinding::Binding::initialize();
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING3)
-	bool err = false;
-	glbinding::initialize([](const char* name) { return (glbinding::ProcAddress)SDL_GL_GetProcAddress(name); });
-#else
-	bool err = false; // If you use IMGUI_IMPL_OPENGL_LOADER_CUSTOM, your loader is likely to requires some form of initialization.
-#endif
+
+
 	if (err)
 	{
 		LOG("Failed to initialize OpenGL loader!\n");
@@ -124,7 +92,6 @@ bool ModuleUI::Init()
 
 // Load assets
 
-	LOG("Loading Intro assets");
 	bool ret = true;
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
@@ -140,16 +107,24 @@ bool ModuleUI::Init()
 	border_bool = false;
 	Wireframe_bool = false;
 	Hierarchy_open = true;
+	Assetstree_open = true;
+	ResourceInfo_open = true;
 	Inspector_open = true;
 	Console_open = true;
-	selectedObj = nullptr;
 	direction_camera = { 0,0,0 };
+	cameras = 0;
+	empty_GameObjects = 0;
+	width = 960;
+	height = 540;
+	LocalGuizmo = false;
+	WorldGuizmo = true;
+	guizmo_mode = ImGuizmo::MODE::WORLD;
 	i = 0;
 	e = 1;
 	int max_fps = 61;
 	App->Maxfps(max_fps);
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
+	selectedAsset = nullptr;
 	return ret;
 }
 
@@ -166,6 +141,7 @@ bool ModuleUI::CleanUp()
 // Update: draw background
 update_status ModuleUI::Update(float dt)
 {
+	
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
@@ -173,16 +149,31 @@ update_status ModuleUI::Update(float dt)
 	
 	ShowAppinDockSpace(open_docking);
 	
-
+	
 	ImGui::Begin("Game");
-	ImVec2 winSize = ImGui::GetWindowSize();   //this will pick the current window size
+	winSize = ImGui::GetWindowSize();   //this will pick the current window size
+	winPos = ImGui::GetWindowPos();
+
+
 	if (winSize.x != windowSize.x || winSize.y != windowSize.y)
 	{
 		Change_Window_size(Vec2(winSize.x, winSize.y));
 	}
 	ImGui::SetCursorPos(ImVec2(image_offset.x, image_offset.y));
-	ImGui::Image((ImTextureID)App->renderer3D->texColorBuffer, ImVec2(image_size.x, image_size.y), ImVec2(0, 1), ImVec2(1, 0));
+
+	img_corner = Vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y);
+
+	int x = 0;
+	int y = 0;
+	SDL_GetWindowPosition(App->window->window, &x, &y);
+	img_corner -= Vec2(x, y);
 	
+	imgcorner = Vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y) + Vec2(0, image_size.y);
+	imgcorner.y =App->window->windowSize.y - imgcorner.y; //ImGui 0y is on top so we need to convert 0y on botton
+
+	ImGui::Image((ImTextureID)App->renderer3D->texColorBuffer, ImVec2(image_size.x, image_size.y), ImVec2(0, 1), ImVec2(1, 0));
+	ControlsGuizmo();
+	GuizmoUI();
 	ImGui::End();
 
 	ImGui::BeginMainMenuBar(); //this creates the top bar
@@ -190,6 +181,18 @@ update_status ModuleUI::Update(float dt)
 
 	if (ImGui::BeginMenu("File"))
 	{
+		if (ImGui::MenuItem("Save Scene")) 
+		{
+			App->serializer->CreateNewScene();
+			App->scene_intro->SaveScene(App->scene_intro->scene);
+			App->serializer->SaveScene("Scene.json");
+		}
+		if (ImGui::MenuItem("Load Scene"))
+		{
+			App->scene_intro->DeleteSceneObjects(App->scene_intro->scene);
+			App->serializer->LoadScene("Assets/Scene.json");
+		}
+		ImGui::Separator();
 		if (ImGui::Button("Quit"))
 		{
 			return UPDATE_STOP;
@@ -282,19 +285,45 @@ update_status ModuleUI::Update(float dt)
 			
 			ImGui::EndMenu();
 		}
+		if (ImGui::MenuItem("Camera"))
+		{
+			cameras++;
+			std::string obj = std::to_string(cameras);
 
+			std::string name = "Camera";
+			name.append(obj);
+
+			GameObject* camera = new GameObject(name.c_str(), App->scene_intro->scene);
+			camera->CreateComponent(ComponentType::TRANSFORM);
+			camera->CreateComponent(ComponentType::CAMERA);
+		}
+
+		if (ImGui::MenuItem("Empty GameObject"))
+		{
+			empty_GameObjects++;
+			std::string obj = std::to_string(empty_GameObjects);
+
+			std::string name = "Empty_GameObject";
+			name.append(obj);
+
+			GameObject* empty_GameObject = new GameObject(name.c_str(), App->scene_intro->scene);
+			empty_GameObject->CreateComponent(ComponentType::TRANSFORM);
+		}
 		ImGui::EndMenu();
 	}
-
+	
 	ImGui::EndMainMenuBar();
-
+	
 	if (show_demo_window == true)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
 	AboutMenu(show_About);
 	Configuration(show_Configuration);
 	HierarchyWin(); 
+	AssetsTree();
+	ResourceInfo();
 	InspectorWin();
+	TimeMangmentWin();
 	return UPDATE_CONTINUE;
 }
 
@@ -392,13 +421,7 @@ void ModuleUI::Configuration(bool show_config)
 		ImGui::Begin("Configuration", &show_config);
 
 		ImGui::MenuItem("Wellcome to the Configuration menu", NULL, false, false);
-		if (ImGui::BeginMenu("Options"))
-		{
-			ImGui::MenuItem("Save");
-			ImGui::MenuItem("Load");
-			ImGui::MenuItem("Reset to Default");
-			ImGui::EndMenu();
-		}	
+
 		if (ImGui::CollapsingHeader("Application"))
 		{
 			static char buf[32] = "";
@@ -409,6 +432,7 @@ void ModuleUI::Configuration(bool show_config)
 			ImGui::InputText("Organitzation", buf2, IM_ARRAYSIZE(buf));
 			PlotGraph();
 		}
+
 		if (ImGui::CollapsingHeader("Window"))
 		{
 			static bool Wireframe_visible = false;
@@ -548,10 +572,12 @@ void ModuleUI::Configuration(bool show_config)
 				e++;
 			}
 		}
+
 		if (ImGui::CollapsingHeader("File System"))
 		{
 
 		}
+
 		if (ImGui::CollapsingHeader("Input"))
 		{
 			int mousex=0; int mousey=0;
@@ -580,6 +606,7 @@ void ModuleUI::Configuration(bool show_config)
 					ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%d (0x%X) (%.02f secs)", i, i, io.KeysDownDuration[i]);
 				}
 		}
+
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
 			SDL_version compiled;
@@ -615,6 +642,7 @@ void ModuleUI::Configuration(bool show_config)
 			ImGui::Text("Brand: ");  ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s", glGetString(GL_VENDOR));// Returns the vendor
 			ImGui::Text("Graphic Card: ");  ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s", glGetString(GL_RENDERER));// Returns a hint to the model
 		}
+
 		ImGui::End();
 	}
 
@@ -718,52 +746,195 @@ void ModuleUI::HierarchyWin()
 	if (Hierarchy_open == true) {
 
 		ImGui::Begin("Hierarchy", &Hierarchy_open);
-
+		std::map<uint, Resource*>::iterator it = App->ResManager->resources.begin();
 		for (int i = 0; i < App->scene_intro->scene->childs.size(); i++)
 		{
 			GameObjectHierarchyTree(App->scene_intro->scene->childs[i], i);
 		}
-		
+
+		if (ImGui::BeginPopupContextWindow())
+		{
+			RightClick_Inspector_Menu();
+
+			ImGui::EndPopup();
+		}
 		ImGui::End();
 	}
 }
 
+AssetNode* ModuleUI::createAssetNode(Resource* resource)
+{
+	AssetNode* node = new AssetNode(resource);
+	assets.push_back(node);
+	return node;
+}
+
+void ModuleUI::AssetsTree()
+{
+	if (Assetstree_open == true) {
+
+		ImGui::Begin("Assets Tree", &Assetstree_open);
+
+		for (int i = 0; i < assets.size(); i++)
+		{
+
+			if (assets[i]->to_delete)
+			{
+				assets.erase(App->UI->assets.begin() + i);
+				i--;
+			}
+			else
+			AssetsHierarchyTree(assets[i]);
+		}
+
+		ImGui::End();
+	}
+}
+
+void ModuleUI::ResourceInfo()
+{
+	if (ResourceInfo_open == true) {
+
+		ImGui::Begin("Resource Info", &ResourceInfo_open);
+		if (selectedAsset != nullptr)
+		{
+			if (ImGui::Button("Add to scene"))
+			{
+				switch (selectedAsset->owner->GetType())
+				{
+				case ResourceType::MODEL:
+					App->serializer->LoadModel(selectedAsset->owner);
+					break;
+				case ResourceType::TEXTURE:
+					App->FBX->ChangeTexture(selectedAsset->owner);
+					break;
+				case ResourceType::MESH:
+					App->FBX->ChangeMesh(selectedAsset->owner);
+					break;
+				}
+			}
+			ImGui::Text("References: %d", selectedAsset->owner->references);
+
+		}
+
+		ImGui::End();
+	}
+}
 void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 {
-	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-	
+	ImGuiTreeNodeFlags node_flags = /*ImGuiTreeNodeFlags_DefaultOpen | */ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+	int node_clicked = -1;
 
 	const char* GameObjname = node->Name.c_str();
-	/*static int selection_mask = (1 << 2);
-	const bool is_selected = (selection_mask & (1 << 0)) != 0;*/
 
-	if (node->isSelected)
+	if (App->scene_intro->selectedObj == node)
 	{
-		node_flags |= ImGuiTreeNodeFlags_Selected;
+		node_flags += ImGuiTreeNodeFlags_Selected;
 	}
+	if (node->childs.empty())
+	{
+		node_flags += ImGuiTreeNodeFlags_Leaf;
+	}
+	
+	bool open = ImGui::TreeNodeEx(GameObjname, node_flags);
 
-	bool node_open = ImGui::TreeNodeEx(GameObjname, node_flags);
 	if (ImGui::IsItemClicked())
 	{
-		
 		DeactivateGameObjects(App->scene_intro->scene);
-		
+
 		node->isSelected = true;
-		selectedObj = node;
-		
+		App->scene_intro->selectedObj = node;
+
 	}
-	if (node_open)
+
+	if (ImGui::BeginDragDropTarget()) {
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
+
+		if (payload != nullptr) 
+		{
+			if (payload->IsDataType(DROP_ID_HIERARCHY_NODES)) 
+			{
+				GameObject* obj = *(GameObject**)payload->Data;
+
+				if (obj != nullptr) //The second part of this is bug that needs to be fixed
+				{
+					ChangeParent(obj, node);
+				}
+			}
+			//ImGui::ClearDragDrop();
+		}
+		ImGui::EndDragDropTarget();
+	}
+
+	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
+		ImGui::SetDragDropPayload(DROP_ID_HIERARCHY_NODES, &node, sizeof(GameObject), ImGuiCond_Once);
+		ImGui::Text(GameObjname);
+		ImGui::EndDragDropSource();
+	}
+
+	if (open)
 	{
 		for (int i = 0; i < node->childs.size(); i++)
 		{
 			GameObjectHierarchyTree(node->childs[i], i);
-			
 		}
 
 		ImGui::TreePop();
+	}
+}
 
+void ModuleUI::AssetsHierarchyTree(AssetNode* node)
+{
+	ImGuiTreeNodeFlags node_flags = /*ImGuiTreeNodeFlags_DefaultOpen | */ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+	int node_clicked = -1;
+
+	std::string file, extension;
+	App->file_system->SplitFilePath(node->owner->GetLibraryFile(), &file, &extension);
+	file.append(extension);
+	node->owner->name = file.c_str();
+
+	const char* GameObjname = node->owner->name;
+
+	if (node->is_selected == true)
+	{
+		node_flags += ImGuiTreeNodeFlags_Selected;
 	}
 
+
+
+	bool open = ImGui::TreeNodeEx(GameObjname, node_flags);
+
+	if (ImGui::IsItemClicked())
+	{
+		DeactivateAssets();
+		node->is_selected = true;
+		selectedAsset = node;
+	}
+
+	if (open)
+	{
+		ImGui::TreePop();
+	}
+
+}
+void ModuleUI::ChangeParent(GameObject* obj, GameObject* nextOwner)
+{
+	if (obj != nullptr && nextOwner != nullptr) {
+
+		//obj->parent->to_delete = true;
+
+		for (int i = 0; i < obj->parent->childs.size(); i++)
+		{
+			if (obj->parent->childs[i] == obj)
+			{
+				obj->parent->childs.erase(obj->parent->childs.begin() + i);
+				i--;
+				
+			}
+		}
+		obj->parent = nextOwner;
+		nextOwner->childs.push_back(obj);
+	}
 }
 
 void ModuleUI::DeactivateGameObjects(GameObject* father)
@@ -775,11 +946,21 @@ void ModuleUI::DeactivateGameObjects(GameObject* father)
 	}
 }
 
+void ModuleUI::DeactivateAssets()
+{
+	selectedAsset = nullptr;
+	for (int i = 0; i < assets.size(); i++)
+	{
+		assets[i]->is_selected = false;
+	}
+}
+
 void ModuleUI::GameObjectInspector(GameObject* obj)
 {
 	ComponentTransform* transform = nullptr;
 	ComponentMaterial* material = nullptr;
 	ComponentMesh* mesh = nullptr;
+	ComponentCamera* camera = nullptr;
 	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 
 	for (int i = 0; i < obj->Components.size(); i++)
@@ -795,6 +976,10 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 		if (obj->Components[i]->type == ComponentType::MATERIAL)
 		{
 			material = (ComponentMaterial*)obj->Components[i];
+		}
+		if (obj->Components[i]->type == ComponentType::CAMERA) 
+		{
+			camera = (ComponentCamera*)obj->Components[i];
 		}
 	}
 	if (transform != nullptr)
@@ -985,12 +1170,63 @@ void ModuleUI::GameObjectInspector(GameObject* obj)
 				material->checkers = false;
 			}
 			ImGui::Text("File:"); ImGui::SameLine();
-			ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s",material->texture_path.c_str());
+			ImGui::TextColored(ImVec4(1, 1, 0, 1.f), "%s", material->texture_path.c_str());
 			ImGui::Text("Texture h: %d", material->texture_h ); ImGui::SameLine(); ImGui::Text(" w:%d", material->texture_w);
 			ImGui::Image((ImTextureID)material->texbuffer, ImVec2(256, 256));
 			
 			ImGui::TreePop();
 		}
+	}
+
+	if (camera != nullptr) 
+	{
+		if (ImGui::TreeNodeEx("Camera", node_flags))
+		{
+			ImGui::Separator();
+			ImGui::Text("Camera configuration:"); 
+
+			static bool Culling = false;
+			ImGui::Checkbox("Culling", &Culling);
+			if (Culling) {
+				camera->cullingActive = true;
+				App->scene_intro->culling = camera;
+			}
+			else {
+				camera->cullingActive = false;
+				App->scene_intro->culling = nullptr;
+
+			}
+
+			float p = camera->frustrum.farPlaneDistance;
+			ImGui::SetNextItemWidth(200);
+			ImGui::DragFloat("Far Plane", &p);
+			if (ImGui::IsItemActive())
+			{
+				camera->frustrum.farPlaneDistance = p;
+			}
+
+			float p1 = camera->frustrum.nearPlaneDistance;
+			ImGui::SetNextItemWidth(200);
+			ImGui::DragFloat("Near Plane", &p1);
+			if (ImGui::IsItemActive())
+			{
+				camera->frustrum.nearPlaneDistance = p1;
+			}
+
+			float p2 = camera->GetFOV();
+			ImGui::SetNextItemWidth(200);
+			ImGui::DragFloat("Field of view", &p2);
+			if (ImGui::IsItemActive())
+			{
+				camera->SetFOV(p2);
+				//camera->frustrum.verticalFov = p2;
+			}
+			ImGui::Text("Horizontal FOV: %f",camera->GetHorizontalFov());
+			ImGui::Text("Vertical FOV: %f", camera->GetFOV());
+			ImGui::Text("Aspect ratio: %f", camera->aspectRatio);
+			ImGui::TreePop();
+		}
+
 	}
 	
 }
@@ -1000,8 +1236,8 @@ void ModuleUI::InspectorWin()
 	if (Inspector_open == true)
 	{
 		ImGui::Begin("Inspector",&Inspector_open);
-		if(selectedObj != nullptr)
-		GameObjectInspector(selectedObj);
+		if(App->scene_intro->selectedObj != nullptr)
+		GameObjectInspector(App->scene_intro->selectedObj);
 			
 		ImGui::End();
 	}
@@ -1025,9 +1261,11 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 					}
 					ImGui::EndTabItem();
 				}
-				if (ImGui::BeginTabItem("Project"))
+				if (ImGui::BeginTabItem("Assets"))
 				{
 					ImGui::Text("Folders...");
+
+					
 					ImGui::EndTabItem();
 				}
 				ImGui::EndTabBar();
@@ -1053,4 +1291,172 @@ void ModuleUI::Change_Window_size(Vec2 newSize)
 	{image_size /= (image_size.y / (win_size.y - offset));}
 	image_offset = Vec2(win_size.x - (offset/2) - image_size.x, win_size.y - (offset / 2) - image_size.y);
 	image_offset = image_offset / 2;
+}
+
+
+void ModuleUI::GuizmoUI() 
+{
+	
+	GameObject* gameObject = App->scene_intro->selectedObj;
+	using_gizmo = false;
+
+	if (gameObject != nullptr)
+	{
+		ComponentTransform* transform = (ComponentTransform*)gameObject->GetComponent(ComponentType::TRANSFORM);
+
+		float4x4 view = App->camera->cameraComp->frustrum.ViewMatrix();
+		view.Transpose();
+		
+		float4x4 projection = App->camera->cameraComp->frustrum.ProjectionMatrix();
+		projection.Transpose();
+
+		float4x4 modelProjection = transform->local_transform;
+		modelProjection.Transpose();
+
+		ImGuizmo::SetDrawlist();
+		cornerPos = Vec2(imgcorner.x, App->window->windowSize.y - imgcorner.y - image_size.y);
+		ImGuizmo::SetRect(imgcorner.x, cornerPos.y, image_size.x, image_size.y);
+
+		ImGuizmo::Manipulate(view.ptr(), projection.ptr(),guizmo_type, guizmo_mode, modelProjection.ptr());
+		if (ImGuizmo::IsUsing())
+		{
+			using_gizmo = true;
+			float4x4 MovementMatrix;
+			MovementMatrix.Set(modelProjection);
+			transform->local_transform = MovementMatrix.Transposed();
+			transform->UpdateFromGuizmo(transform->local_transform);
+		}
+	}
+}
+
+void ModuleUI::ControlsGuizmo()
+{
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) 
+	{
+		guizmo_mode = ImGuizmo::MODE::LOCAL;
+	} 
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN) 
+	{
+		guizmo_mode = ImGuizmo::MODE::WORLD;
+	} 
+}
+
+void ModuleUI::TimeMangmentWin()
+{
+	if (Inspector_open == true)
+	{
+		ImGui::Begin("Time", (bool*)false, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse);
+		ImGui::Text("|"); ImGui::SameLine();
+		
+
+		if (Time::Engine_Active == false) {
+
+			if (ImGui::Button("PLAY")) 
+			{
+				Time::Start();
+				App->serializer->CreateNewScene();
+				App->scene_intro->SaveScene(App->scene_intro->scene);
+				App->serializer->SaveScene("PlayScene.json");
+			} ImGui::SameLine();
+		}
+		else {
+
+			if (Time::Game_Paused == false) 
+			{
+				if (ImGui::Button("PAUSE"))
+				{
+					Time::Pause();
+
+				} ImGui::SameLine();
+			}
+
+			if (Time::Game_Paused == true)
+			{
+				if (ImGui::Button("CONTINUE"))
+				{
+					Time::Resume();
+
+				}ImGui::SameLine();
+			}
+
+			if (ImGui::Button("STOP"))
+			{
+				App->scene_intro->DeleteSceneObjects(App->scene_intro->scene);
+				App->serializer->LoadScene("Assets/PlayScene.json");
+				Time::Stop();
+			}ImGui::SameLine();
+			
+		}
+		//LOG("time: %f", Time::Game_Timer.ReadSec());
+		ImGui::Text("|"); ImGui::SameLine();
+		{
+			ImGui::SetNextItemWidth(130);
+			static int selectedMode = 0;
+			static const char* Mode[]{ "WORLD","LOCAL" };
+			ImGui::Combo("Mode", &selectedMode, Mode, IM_ARRAYSIZE(Mode)); ImGui::SameLine();
+			if (selectedMode == 1)
+			{
+				guizmo_mode = ImGuizmo::MODE::LOCAL;
+			}
+			if (selectedMode == 0)
+			{
+				guizmo_mode = ImGuizmo::MODE::WORLD;
+			}
+
+		}
+		ImGui::Text("|"); ImGui::SameLine();
+		static bool BoundingBox = false;
+		if (ImGui::Checkbox("BoundingBox",&BoundingBox))
+		{
+			for (int i = 0; i < App->scene_intro->scene->childs.size(); i++) 
+			{
+				Change_Visibility_BoundingBoxes(App->scene_intro->scene->childs[i],BoundingBox);
+			}
+		}
+
+		ImGui::End();
+	}
+
+}
+
+void ModuleUI::RightClick_Inspector_Menu()
+{
+	if (ImGui::MenuItem("Delete"))
+	{
+		App->scene_intro->selectedObj->to_delete = true;
+	}
+
+	if (ImGui::MenuItem("Create empty Child"))
+	{
+		empty_GameObjects++;
+		std::string obj = std::to_string(empty_GameObjects);
+
+		std::string name = "Empty_Child";
+		name.append(obj);
+
+		GameObject* empty_GameObject = new GameObject(name.c_str(), App->scene_intro->selectedObj);
+		empty_GameObject->CreateComponent(ComponentType::TRANSFORM);
+	}
+
+	if (ImGui::MenuItem("Create empty GameObject"))
+	{
+		empty_GameObjects++;
+		std::string obj = std::to_string(empty_GameObjects);
+
+		std::string name = "Empty_GameObject";
+		name.append(obj);
+
+		GameObject* empty_GameObject = new GameObject(name.c_str(), App->scene_intro->scene);
+		empty_GameObject->CreateComponent(ComponentType::TRANSFORM);
+	}
+
+}
+
+void ModuleUI::Change_Visibility_BoundingBoxes(GameObject* node,bool visibility)
+{
+	node->displayAABB = visibility;
+	for (int i = 0; i < node->childs.size(); i++)
+	{
+		Change_Visibility_BoundingBoxes(node->childs[i], visibility);
+	}
 }

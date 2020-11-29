@@ -81,10 +81,14 @@
     <ClInclude Include="SourceCode\glmath.h" />
     <ClInclude Include="SourceCode\Globals.h" />
     <ClInclude Include="SourceCode\imconfig.h" />
+    <ClInclude Include="SourceCode\ImCurveEdit.h" />
+    <ClInclude Include="SourceCode\ImGradient.h" />
     <ClInclude Include="SourceCode\imgui.h" />
+    <ClInclude Include="SourceCode\ImGuizmo.h" />
     <ClInclude Include="SourceCode\imgui_impl_opengl3.h" />
     <ClInclude Include="SourceCode\imgui_impl_sdl.h" />
     <ClInclude Include="SourceCode\imgui_internal.h" />
+    <ClInclude Include="SourceCode\ImSequencer.h" />
     <ClInclude Include="SourceCode\imstb_rectpack.h" />
     <ClInclude Include="SourceCode\imstb_textedit.h" />
     <ClInclude Include="SourceCode\imstb_truetype.h" />
@@ -96,8 +100,13 @@
     <ClInclude Include="SourceCode\ModuleSceneIntro.h" />
     <ClInclude Include="SourceCode\ModuleUI.h" />
     <ClInclude Include="SourceCode\ModuleWindow.h" />
+    <ClInclude Include="SourceCode\MousePicking.h" />
+    <ClInclude Include="SourceCode\parson\parson.h" />
     <ClInclude Include="SourceCode\Primitive.h" />
     <ClInclude Include="SourceCode\PrimitiveManager.h" />
+    <ClInclude Include="SourceCode\ResourceManager.h" />
+    <ClInclude Include="SourceCode\serializer.h" />
+    <ClInclude Include="SourceCode\Time.h" />
     <ClInclude Include="SourceCode\Timer.h" />
     <ClInclude Include="SourceCode\Vec2.h" />
   </ItemGroup>
@@ -108,12 +117,16 @@
     <ClCompile Include="SourceCode\FileSystem.cpp" />
     <ClCompile Include="SourceCode\GameObject.cpp" />
     <ClCompile Include="SourceCode\glmath.cpp" />
+    <ClCompile Include="SourceCode\ImCurveEdit.cpp" />
+    <ClCompile Include="SourceCode\ImGradient.cpp" />
     <ClCompile Include="SourceCode\imgui.cpp" />
+    <ClCompile Include="SourceCode\ImGuizmo.cpp" />
     <ClCompile Include="SourceCode\imgui_demo.cpp" />
     <ClCompile Include="SourceCode\imgui_draw.cpp" />
     <ClCompile Include="SourceCode\imgui_impl_opengl3.cpp" />
     <ClCompile Include="SourceCode\imgui_impl_sdl.cpp" />
     <ClCompile Include="SourceCode\imgui_widgets.cpp" />
+    <ClCompile Include="SourceCode\ImSequencer.cpp" />
     <ClCompile Include="SourceCode\Light.cpp" />
     <ClCompile Include="SourceCode\log.cpp" />
     <ClCompile Include="SourceCode\Main.cpp" />
@@ -123,8 +136,13 @@
     <ClCompile Include="SourceCode\ModuleSceneIntro.cpp" />
     <ClCompile Include="SourceCode\ModuleUi.cpp" />
     <ClCompile Include="SourceCode\ModuleWindow.cpp" />
+    <ClCompile Include="SourceCode\MousePicking.cpp" />
+    <ClCompile Include="SourceCode\parson\parson.c" />
     <ClCompile Include="SourceCode\Primitive.cpp" />
     <ClCompile Include="SourceCode\PrimitiveManager.cpp" />
+    <ClCompile Include="SourceCode\ResourceManager.cpp" />
+    <ClCompile Include="SourceCode\serializer.cpp" />
+    <ClCompile Include="SourceCode\Time.cpp" />
     <ClCompile Include="SourceCode\Timer.cpp" />
     <ClCompile Include="SourceCode\Vec2.cpp" />
   </ItemGroup>

@@ -5,6 +5,7 @@
 #include "Light.h"
 
 #define MAX_LIGHTS 8
+#define MAX_CAMS 2
 
 class ModuleRenderer3D : public Module
 {
@@ -28,4 +29,6 @@ public:
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+private:
+	int activeCam;
 };

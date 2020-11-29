@@ -5,6 +5,9 @@
 #include "FileSystem.h"
 #include "GameObject.h"
 
+#include "serializer.h"
+#include "parson/parson.h"
+
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
 #include <gl/GL.h>
@@ -27,9 +30,250 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include <string.h>
 
+namespace MaterialImporter
+{
+	void Import( char* buffer, uint fileSize)
+	{
+		ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, fileSize);
+	}
+	void Save( char** fileBuffer, const char* path, std::string* newpath)
+	{
+		std::string doc(path);
+
+		ILuint size;
+		ILubyte* data;
+		ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
+		size = ilSaveL(IL_DDS, nullptr, 0); // Get the size of the data buffer
+		if (size > 0) {
+			data = new ILubyte[size]; // allocate data buffer
+			if (ilSaveL(IL_DDS, data, size) > 0)
+			{
+				*fileBuffer = (char*)data; // Save to buffer with the ilSaveIL function
+	
+				size_t pos_dot = doc.find_last_of(".");
+				doc = doc.substr(0, pos_dot);
+				doc.append(".dds");
+				doc = "library/" + doc;
+				App->file_system->Save(doc.c_str(), *fileBuffer, size, false);
+				newpath->append("Assets/");
+				newpath->append(doc.c_str());
+				if (data != nullptr)
+				{
+					delete[]data;
+					data = nullptr;
+				}
+			}	
+		}
+
+	}
+	void Load(const char* fileBuffer, uint size, ComponentMaterial* ourMaterial)
+	{
+		uint texbuffer = 0;
+		glGenTextures(1, &texbuffer);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+		ILuint ImageName;
+		ilGenImages(1, &ImageName);
+		ilBindImage(ImageName);
+
+		ilLoadL(IL_TYPE_UNKNOWN, (const void*)fileBuffer, size);
+		texbuffer = ilutGLBindTexImage();
+
+		ourMaterial->texture_h = ilGetInteger(IL_IMAGE_HEIGHT);
+		ourMaterial->texture_w = ilGetInteger(IL_IMAGE_WIDTH);
+		ourMaterial->texbuffer = texbuffer;
+		ilDeleteImages(1, &ImageName);
+	}
+
+	void Load(const char* fileBuffer, uint size, ResourceTexture* resourceTexture)
+	{
+		uint texbuffer = 0;
+		glGenTextures(1, &texbuffer);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+		ILuint ImageName;
+		ilGenImages(1, &ImageName);
+		ilBindImage(ImageName);
+
+		ilLoadL(IL_TYPE_UNKNOWN, (const void*)fileBuffer, size);
+		texbuffer = ilutGLBindTexImage();
+
+		resourceTexture->texture_h = ilGetInteger(IL_IMAGE_HEIGHT);
+		resourceTexture->texture_w = ilGetInteger(IL_IMAGE_WIDTH);
+		resourceTexture->texbuffer = texbuffer;
+		ilDeleteImages(1, &ImageName);
+	}
+};
+
+namespace MeshImporter
+{
+	
+	void Load(char* fileBuffer, uint size, ComponentMesh* mesh)
+	{
+		char* cursor = fileBuffer;
+
+		// amount of indices / vertices / colors / normals / texture_coords
+		uint ranges[4];
+		uint bytes = sizeof(ranges);
+		memcpy(ranges, cursor, bytes);
+		cursor += bytes;
+		mesh->num_index = ranges[0];
+		mesh->num_vertex = ranges[1];
+		mesh->num_normals = ranges[2];
+		mesh->num_tex = ranges[3];
+
+		// Load indices
+		bytes = sizeof(uint) * mesh->num_index;
+		mesh->index = new uint[mesh->num_index];
+		memcpy(mesh->index, cursor, bytes);
+		cursor += bytes;
+		// Load vertex
+		bytes = sizeof(float) * mesh->num_vertex * 3;
+		mesh->vertex = new float[mesh->num_vertex * 3];
+		memcpy(mesh->vertex, cursor, bytes);
+		cursor += bytes;
+		// Load vertex
+		bytes = sizeof(float) * mesh->num_normals * 3;
+		mesh->normals = new float[mesh->num_normals * 3];
+		memcpy(mesh->normals, cursor, bytes);
+		cursor += bytes;
+		// Load vertex
+		bytes = sizeof(float) * mesh->num_tex;
+		mesh->texCoords = new float[mesh->num_tex];
+		memcpy(mesh->texCoords, cursor, bytes);
+	
+	}
+	void Load(char* fileBuffer, uint size, ResourceMesh* ResourceMesh)
+	{
+		char* cursor = fileBuffer;
+
+		// amount of indices / vertices / colors / normals / texture_coords
+		uint ranges[4];
+		uint bytes = sizeof(ranges);
+		memcpy(ranges, cursor, bytes);
+		cursor += bytes;
+		ResourceMesh->num_index = ranges[0];
+		ResourceMesh->num_vertex = ranges[1];
+		ResourceMesh->num_normals = ranges[2];
+		ResourceMesh->num_tex = ranges[3];
+
+		// Load indices
+		bytes = sizeof(uint) * ResourceMesh->num_index;
+		ResourceMesh->index = new uint[ResourceMesh->num_index];
+		memcpy(ResourceMesh->index, cursor, bytes);
+		cursor += bytes;
+		// Load vertex
+		bytes = sizeof(float) * ResourceMesh->num_vertex * 3;
+		ResourceMesh->vertex = new float[ResourceMesh->num_vertex * 3];
+		memcpy(ResourceMesh->vertex, cursor, bytes);
+		cursor += bytes;
+		// Load vertex
+		bytes = sizeof(float) * ResourceMesh->num_normals * 3;
+		ResourceMesh->normals = new float[ResourceMesh->num_normals * 3];
+		memcpy(ResourceMesh->normals, cursor, bytes);
+		cursor += bytes;
+		// Load vertex
+		bytes = sizeof(float) * ResourceMesh->num_tex;
+		ResourceMesh->texCoords = new float[ResourceMesh->num_tex];
+		memcpy(ResourceMesh->texCoords, cursor, bytes);
+
+		ResourceMesh->id_vertex = App->FBX->FillArrayBuffer(ResourceMesh->num_vertex * 3, ResourceMesh->vertex);
+
+		ResourceMesh->id_tex = App->FBX->FillArrayBuffer(ResourceMesh->num_tex, ResourceMesh->texCoords);
+
+		ResourceMesh->id_normals = App->FBX->FillArrayBuffer(ResourceMesh->num_normals * 3, ResourceMesh->normals);
+
+		ResourceMesh->id_index = App->FBX->FillElementArrayBuffer(ResourceMesh->num_index, ResourceMesh->index);
+
+	}
+	void Save(ComponentMesh* mesh, std::string* path, const char* name)
+	{
+		std::string doc;
+
+		uint ranges[4] = { mesh->num_index, mesh->num_vertex, mesh->num_normals, mesh->num_tex };
+		uint size = sizeof(ranges) + sizeof(uint) * mesh->num_index + sizeof(float) * mesh->num_vertex * 3 + sizeof(float) * mesh->num_normals * 3 + sizeof(float) * mesh->num_tex;
+
+		char* fileBuffer = new char[size]; // Allocate
+		char* cursor = fileBuffer;
+
+		uint bytes = sizeof(ranges); // First store ranges
+		memcpy(cursor, ranges, bytes);
+		cursor += bytes;
+		// Store indices
+		bytes = sizeof(uint) * mesh->num_index;
+		memcpy(cursor, mesh->index, bytes);
+		cursor += bytes;
+		// Store vertices
+		bytes = sizeof(float) * mesh->num_vertex * 3;
+		memcpy(cursor, mesh->vertex, bytes);
+		cursor += bytes;
+		// Store normals
+		bytes = sizeof(float) * mesh->num_normals * 3;
+		memcpy(cursor, mesh->normals, bytes);
+		cursor += bytes;
+		// Store textures
+		bytes = sizeof(float) * mesh->num_tex;
+		memcpy(cursor, mesh->texCoords, bytes);
+
+
+		doc.append(name);
+		doc.append(".mesh");
+		doc = "library/" + doc;
+		App->file_system->Save(doc.c_str(), fileBuffer, size, false);
+		path->append("Assets/");
+		path->append(doc.c_str());
+	}
+
+	void Save(ComponentMesh* mesh, ResourceMesh* resource, const char* name)
+	{
+		std::string doc;
+
+		uint ranges[4] = { mesh->num_index, mesh->num_vertex, mesh->num_normals, mesh->num_tex };
+		uint size = sizeof(ranges) + sizeof(uint) * mesh->num_index + sizeof(float) * mesh->num_vertex * 3 + sizeof(float) * mesh->num_normals * 3 + sizeof(float) * mesh->num_tex;
+
+		char* fileBuffer = new char[size]; // Allocate
+		char* cursor = fileBuffer;
+
+		uint bytes = sizeof(ranges); // First store ranges
+		memcpy(cursor, ranges, bytes);
+		cursor += bytes;
+		// Store indices
+		bytes = sizeof(uint) * mesh->num_index;
+		memcpy(cursor, mesh->index, bytes);
+		cursor += bytes;
+		// Store vertices
+		bytes = sizeof(float) * mesh->num_vertex * 3;
+		memcpy(cursor, mesh->vertex, bytes);
+		cursor += bytes;
+		// Store normals
+		bytes = sizeof(float) * mesh->num_normals * 3;
+		memcpy(cursor, mesh->normals, bytes);
+		cursor += bytes;
+		// Store textures
+		bytes = sizeof(float) * mesh->num_tex;
+		memcpy(cursor, mesh->texCoords, bytes);
+
+
+		doc.append(name);
+		doc.append(".mesh");
+		std::string path;
+		doc = "library/" + doc;
+		App->file_system->Save(doc.c_str(), fileBuffer, size, false);
+		path.append("Assets/");
+		path.append(doc.c_str());
+		resource->SetLibraryPath(path.c_str());
+	}
+};
 
 FBXloader::FBXloader(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	numberGO = 0;
 }
 
 FBXloader::~FBXloader()
@@ -57,33 +301,138 @@ void FBXloader::ChangeTexture(const char* path)
 {
 	LOG("changing all textures to %s", path);
 	ComponentMaterial* mat = nullptr;
-	if (App->UI->selectedObj != nullptr)
+	if (App->scene_intro->selectedObj != nullptr)
 	{
-		for (int i = 0; i < App->UI->selectedObj->Components.size(); i++)
-		{
-			if (App->UI->selectedObj->Components[i]->type == ComponentType::MATERIAL)
-			{
-				mat = (ComponentMaterial*)App->UI->selectedObj->Components[i];
-			}
-		}
-
+		mat = (ComponentMaterial*)App->scene_intro->selectedObj->GetComponent(ComponentType::MATERIAL);
 
 		if (mat != nullptr)
 		{
-			glDeleteTextures(1, &(GLuint)mat->texbuffer);
-			mat->texbuffer = LoadTexBuffer(path);
-			mat->texture_path = path;
-			mat->texture_h = texture_h;
-			mat->texture_w = texture_w;
-			if (mat->texbuffer != 0)
-				mat->hastexture = true;
+			uint UID = App->ResManager->FindInAssets(path);
+			if (UID == 0)
+			{
+				UID = App->ResManager->ImportFile(path);
+			}
 			else
-				mat->hastexture = false;
+			{
+				LOG("image already loaded");
+			}
+			if (UID != 0)
+			{
+				ResourceTexture* NewResource = (ResourceTexture*)App->ResManager->RequestResource(UID);
+
+				mat->texbuffer = NewResource->texbuffer;
+				mat->texture_h = NewResource->texture_h;
+				mat->texture_w = NewResource->texture_w;
+				mat->reference = NewResource;
+				if (mat->texbuffer != 0)
+					mat->hastexture = true;
+			}
+
+		}
+		else
+		{
+			mat->texbuffer = 0;
+			mat->hastexture = false;
 		}
 
 	}
 
 
+}
+
+void FBXloader::ChangeTexture(Resource* resource)
+{
+	ComponentMaterial* mat = nullptr;
+	if (App->scene_intro->selectedObj != nullptr)
+	{
+		mat = (ComponentMaterial*)App->scene_intro->selectedObj->GetComponent(ComponentType::MATERIAL);
+
+		if (mat != nullptr)
+		{
+			
+			ResourceTexture* NewResource = (ResourceTexture*)resource;
+				mat->reference->references--;
+				mat->texbuffer = NewResource->texbuffer;
+				mat->texture_h = NewResource->texture_h;
+				mat->texture_w = NewResource->texture_w;
+				mat->reference = NewResource;
+				mat->reference->references++;
+
+				if (mat->texbuffer != 0)
+					mat->hastexture = true;
+			
+
+		}
+		else
+		{
+			mat->texbuffer = 0;
+			mat->hastexture = false;
+		}
+
+	}
+
+
+}
+
+void FBXloader::ChangeMesh(const char* path)
+{
+	ComponentMesh* mesh = nullptr;
+	if (App->scene_intro->selectedObj != nullptr)
+	{
+		mesh = (ComponentMesh*)App->scene_intro->selectedObj->GetComponent(ComponentType::MESH);
+
+		if (mesh != nullptr)
+		{
+			char* buffer;
+			uint size;
+			size = App->file_system->Load(path, &buffer);
+			MeshImporter::Load(buffer, size, mesh);
+
+
+			mesh->id_vertex = FillArrayBuffer(mesh->num_vertex * 3, mesh->vertex);
+
+			mesh->id_tex = FillArrayBuffer(mesh->num_tex, mesh->texCoords);
+
+			mesh->id_normals = FillArrayBuffer(mesh->num_normals * 3, mesh->normals);
+
+			mesh->id_index = FillElementArrayBuffer(mesh->num_index, mesh->index);
+
+			CreateAABB(mesh);
+
+		}
+
+	}
+}
+
+void FBXloader::ChangeMesh(Resource* resource)
+{
+	ComponentMesh* mesh = nullptr;
+	if (App->scene_intro->selectedObj != nullptr)
+	{
+		mesh = (ComponentMesh*)App->scene_intro->selectedObj->GetComponent(ComponentType::MESH);
+
+		if (mesh != nullptr)
+		{
+			ResourceMesh* NewMeshResource = (ResourceMesh * )resource;
+			mesh->reference = NewMeshResource;
+			mesh->num_vertex = NewMeshResource->num_vertex;
+			mesh->num_tex = NewMeshResource->num_tex;
+			mesh->num_normals = NewMeshResource->num_normals;
+			mesh->num_index = NewMeshResource->num_index;
+			mesh->vertex = NewMeshResource->vertex;
+			mesh->texCoords = NewMeshResource->texCoords;
+			mesh->normals = NewMeshResource->normals;
+			mesh->index = NewMeshResource->index;
+			mesh->id_vertex = NewMeshResource->id_vertex;
+			mesh->id_tex = NewMeshResource->id_tex;
+			mesh->id_normals = NewMeshResource->id_normals;
+			mesh->id_index = NewMeshResource->id_index;
+
+			CreateAABB(mesh);
+
+		}
+
+	}
 }
 // Load assets
 bool FBXloader::CleanUp()
@@ -176,37 +525,58 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 	std::string name = node->mName.C_Str();
 
 	LOG("loading %s", node->mName.C_Str());
-	
+
 	if (name == "RootNode")
 	{
+		numberGO++;
+		std::string obj = std::to_string(numberGO);
+		
 		name = "GameObject";
+		name.append(obj);
+
 	}
 	GameObject* object = App->scene_intro->CreateGameObject(name.c_str(), father);
+	JSON_Object* JsonObj = App->serializer->AddObjectToArray(App->serializer->leaves);
+	App->serializer->AddFloat(JsonObj, "UID", object->UID);
+	App->serializer->AddFloat(JsonObj, "ParentUID", object->parent->UID);
+	App->serializer->AddString(JsonObj, "Name", name.c_str());
+	JSON_Array* JsonTrans = App->serializer->AddArray(JsonObj, "Translation");
+	JSON_Array* JsonScale = App->serializer->AddArray(JsonObj, "Scale");
+	JSON_Array* JsonRot = App->serializer->AddArray(JsonObj, "Rotation");
+	JSON_Array* JsonComp = App->serializer->AddArray(JsonObj, "Components");
 
 	ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
 
 	aiVector3D translation, scaling;
 	aiVector3D euler;
 	aiQuaternion rotation;
-	Quat rotate;
-	float3 translate, scale;
+
+
+	//ComponentTransform* fathertrans = nullptr;
+
 	node->mTransformation.Decompose(scaling, rotation, translation);
+
+	/*for (int i = 0; i < father->Components.size(); i++)
+	{
+		if (father->Components[i]->type == ComponentType::TRANSFORM)
+		{
+			 fathertrans = (ComponentTransform*)father->Components[i];
+			
+		}
+	}*/
 	
-	rotate.Set(rotation.x, rotation.z, rotation.z, rotation.w);
-	translate.Set(translation.x, translation.y, translation.z);
-	scale.Set(scaling.x, scaling.y, scaling.z);
-
-	NewTrans->pos.Set(translate.x, translate.y, translate.z);
-	NewTrans->scale.Set(scale.x, scale.y, scale.z);
-
+		NewTrans->pos.Set(translation.x, translation.y, translation.z);
+		NewTrans->scale.Set(scaling.x, scaling.y, scaling.z);
+		NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
+	
 	
 
-	NewTrans->rot = rotate;
-	NewTrans->transform = float4x4::FromTRS(translate, rotate, scale);
-	NewTrans->transform.Transpose();
+	//NewTrans->rot = NewTrans->rot * quat;
+	App->serializer->AddVec3(JsonTrans, NewTrans->pos.x, NewTrans->pos.y, NewTrans->pos.z);
+	App->serializer->AddVec3(JsonScale, NewTrans->scale.x, NewTrans->scale.y, NewTrans->scale.z);
+	App->serializer->AddVec4(JsonRot, NewTrans->rot.x, NewTrans->rot.y, NewTrans->rot.z, NewTrans->rot.w);
 
-	
-
+	NewTrans->local_transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
 
 
 	for (int i = 0; i < node->mNumMeshes; i++)
@@ -217,8 +587,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 		//const aiMesh* mesh = scene->mMeshes[i];
 		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		aiString str;
-		aiString folder;
-		folder.Set("Assets/");
+	
 
 		aiMaterial* newMaterial = scene->mMaterials[mesh->mMaterialIndex];
 	
@@ -229,13 +598,32 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 		}
 		else
 		{
-
+			std::string file, extension;
+			App->file_system->SplitFilePath(str.C_Str(), &file, &extension );
 			ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
-	
-			NewTex->texbuffer = LoadTexBuffer(str.C_Str());
+			//
+			uint fileSize = 0;
+			char* buffer = nullptr;
+		
+			file += extension;
+			fileSize = App->file_system->Load(file.c_str(), &buffer);
+
+			MaterialImporter::Import(buffer, fileSize);
+			std::string path;
+			MaterialImporter::Save(&buffer, file.c_str(), &path);
+			NewTex->texture_path = path.c_str();
+			App->serializer->AddComponent(JsonComp, ComponentType::MATERIAL, NewTex->texture_path.c_str());
+			//TODO_Json: create a json component mesh with this path. No need to load anything
+		//	fileSize = App->file_system->Load(path.c_str(), &buffer);
+		//	MaterialImporter::Load(buffer, fileSize, NewTex);
+
+			//
+
+		/*	NewTex->texbuffer = LoadTexBuffer(str.C_Str());
+			
 			NewTex->texture_h = texture_h;
 			NewTex->texture_w = texture_w;
-			NewTex->texture_path = str.C_Str();
+			NewTex->texture_path = str.C_Str();*/
 			if (NewTex->texbuffer != 0)
 				NewTex->hastexture = true;
 			else
@@ -244,6 +632,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 
 
 		NewMesh->num_vertex = mesh->mNumVertices;
+		
 		NewMesh->vertex = new float[NewMesh->num_vertex * 3];
 		memcpy(NewMesh->vertex, mesh->mVertices, sizeof(float) * NewMesh->num_vertex * 3);
 		LOG("New mesh with %d vertices", NewMesh->num_vertex);
@@ -286,27 +675,33 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 			}
 		}
 
-		/*		for (int i = 0; i < NewMesh->num_vertex; i++)
-				{
-					vec3 origin(NewMesh->vertex[i * 3], NewMesh->vertex[i * 3 + 1], NewMesh->vertex[i * 3 + 2]);
-					vec3 destination(NewMesh->normals[i * 3], NewMesh->normals[i * 3 + 1], NewMesh->normals[i * 3 + 2]);
-					destination *= 1;
-					destination += origin;
+		std::string path;
+		uint fileSize = 0;
+		char* buffer = nullptr;
 
-					App->PrimManager->CreateLine(origin, destination);
-				}*/
+		MeshImporter::Save(NewMesh, &path, name.c_str());
+		
+		App->serializer->AddComponent(JsonComp, ComponentType::MESH, path.c_str());
 
+		// Unnnecesary
+	//	fileSize = App->file_system->Load(path.c_str(), &buffer);
+	//	MeshImporter::Load(buffer, fileSize, NewMesh);
 
-		NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
+	//	NewMesh->id_vertex = FillArrayBuffer(NewMesh->num_vertex * 3, NewMesh->vertex);
 
-		NewMesh->id_tex = FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
+	//	NewMesh->id_tex = FillArrayBuffer(NewMesh->num_tex, NewMesh->texCoords);
 
-		NewMesh->id_normals = FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
+	//	NewMesh->id_normals = FillArrayBuffer(NewMesh->num_normals * 3, NewMesh->normals);
 
-		NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
+	//	NewMesh->id_index = FillElementArrayBuffer(NewMesh->num_index, NewMesh->index);
+		// Unnnecesary
 
+		//	CreateAABB(NewMesh);
 
 	}
+	//App->serializer->SaveScene();
+
+	
 
 	for (int n = 0; n < node->mNumChildren; n++)
 	{
@@ -314,6 +709,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 		LoadNode(scene, node->mChildren[n], object);
 
 	}
+	object->to_delete = true;
 }
 // Load assets
 bool FBXloader::LoadFBX(const char* buffer, uint size)
@@ -330,12 +726,217 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 	
 	//if (scene != nullptr && scene->HasMeshes())
 
-	if (node != nullptr && scene->HasMeshes())
+	if (node != nullptr)
 	{
-
-		LoadNode(scene, node, App->scene_intro->scene);
+		LoadNode(scene, node ,App->scene_intro->scene);
 		aiReleaseImport(scene);
 	}
+	}
+	else
+		LOG("Error loading scene");
+
+
+	return ret;
+}
+
+void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* model, GameObject* father)
+{
+	std::string name = node->mName.C_Str();
+
+	LOG("loading %s", node->mName.C_Str());
+
+	if (name == "RootNode")
+	{
+		numberGO++;
+		std::string obj = std::to_string(numberGO);
+
+		name = "GameObject";
+		name.append(obj);
+
+	}
+	GameObject* object = App->scene_intro->CreateGameObject(name.c_str(), father);
+	JSON_Object* JsonObj = App->serializer->AddObjectToArray(model->leaves);
+
+	App->serializer->AddFloat(JsonObj, "UID", object->UID);
+	if(object->parent != nullptr)
+	App->serializer->AddFloat(JsonObj, "ParentUID", object->parent->UID);
+	else
+		App->serializer->AddFloat(JsonObj, "ParentUID", 0);
+
+	App->serializer->AddString(JsonObj, "Name", name.c_str());
+
+	JSON_Array* JsonTrans = App->serializer->AddArray(JsonObj, "Translation");
+	JSON_Array* JsonScale = App->serializer->AddArray(JsonObj, "Scale");
+	JSON_Array* JsonRot = App->serializer->AddArray(JsonObj, "Rotation");
+	JSON_Array* JsonComp = App->serializer->AddArray(JsonObj, "Components");
+
+	ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
+
+	aiVector3D translation, scaling;
+	aiVector3D euler;
+	aiQuaternion rotation;
+
+	node->mTransformation.Decompose(scaling, rotation, translation);
+
+
+	NewTrans->pos.Set(translation.x, translation.y, translation.z);
+	NewTrans->scale.Set(scaling.x, scaling.y, scaling.z);
+	NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
+
+
+
+	//NewTrans->rot = NewTrans->rot * quat;
+	App->serializer->AddVec3(JsonTrans, NewTrans->pos.x, NewTrans->pos.y, NewTrans->pos.z);
+	App->serializer->AddVec3(JsonScale, NewTrans->scale.x, NewTrans->scale.y, NewTrans->scale.z);
+	App->serializer->AddVec4(JsonRot, NewTrans->rot.x, NewTrans->rot.y, NewTrans->rot.z, NewTrans->rot.w);
+
+	NewTrans->local_transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
+
+
+	for (int i = 0; i < node->mNumMeshes; i++)
+	{
+		//For now, we manually create the compoentns without checking if they are repeated or not, we'll only check taht for Models
+
+		ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
+		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		aiString str;
+
+		//****TEMP
+		uint meshUID = App->ResManager->GenerateNewUID();
+		ResourceMesh* meshResource =  new ResourceMesh(meshUID);
+		App->ResManager->resources[meshUID] = (Resource*)meshResource;
+
+		//****TEMP
+
+		aiMaterial* newMaterial = scene->mMaterials[mesh->mMaterialIndex];
+
+		if (newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &str) != 0)
+		{
+
+			LOG("couldn't find diffuse texture");
+		}
+		else
+		{
+			std::string file, extension;
+			App->file_system->SplitFilePath(str.C_Str(), &file, &extension);
+			file = "Assets/" + file + extension;
+			ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
+
+			
+			uint UID = App->ResManager->FindInAssets(file.c_str());
+			if (UID == 0)
+			{
+				UID = App->ResManager->ImportFile(file.c_str());
+			}
+			else
+			{
+				LOG("image already loaded");
+			}
+			if (UID != 0)
+			{
+				Resource* NewResource = App->ResManager->RequestResource(UID);
+				App->serializer->AddResourceComponent(JsonComp, ComponentType::MATERIAL, NewResource->GetUID(), NewResource->GetLibraryFile());
+
+			}
+	
+
+
+			if (NewTex->texbuffer != 0)
+				NewTex->hastexture = true;
+			else
+				NewTex->hastexture = false;
+		}
+
+
+		NewMesh->num_vertex = mesh->mNumVertices;
+
+		NewMesh->vertex = new float[NewMesh->num_vertex * 3];
+		memcpy(NewMesh->vertex, mesh->mVertices, sizeof(float) * NewMesh->num_vertex * 3);
+		LOG("New mesh with %d vertices", NewMesh->num_vertex);
+
+		NewMesh->num_normals = mesh->mNumVertices;
+		NewMesh->normals = new float[NewMesh->num_vertex * 3];
+
+		memcpy(NewMesh->normals, mesh->mNormals, sizeof(float) * NewMesh->num_vertex * 3);
+		if (mesh->HasTextureCoords(0)) {  // Assuming only one texture is attached to this mesh
+
+			NewMesh->texCoords = new float[mesh->mNumVertices * 2];
+			NewMesh->num_tex = mesh->mNumVertices * 2;
+			for (unsigned int k = 0; k < mesh->mNumVertices; k++) {
+
+				NewMesh->texCoords[k * 2] = mesh->mTextureCoords[0][k].x;
+				NewMesh->texCoords[k * 2 + 1] = mesh->mTextureCoords[0][k].y;
+
+			}
+		}
+		if (mesh->HasFaces())
+		{
+			NewMesh->num_index = mesh->mNumFaces * 3;
+			NewMesh->index = new uint[NewMesh->num_index]; // assume each face is a triangle
+			for (uint j = 0; j < mesh->mNumFaces; j++)
+			{
+				if (mesh->mFaces[j].mNumIndices != 3)
+				{
+					LOG("WARNING, geometry face with != 3 indices!");
+				}
+				else
+				{
+					vec3 origin(0, 0, 0);
+					vec3 dest(0, 0, 0);
+					for (int x = 0; x < 3; x++)
+					{
+						NewMesh->index[j * 3 + x] = mesh->mFaces[j].mIndices[x];
+
+					}
+				}
+			}
+		}
+
+
+
+		uint fileSize = 0;
+		char* buffer = nullptr;
+
+		MeshImporter::Save(NewMesh, meshResource, name.c_str());
+
+		App->serializer->AddResourceComponent(JsonComp, ComponentType::MESH, meshResource->GetUID(), meshResource->GetLibraryFile());
+
+		std::string file;
+		std::string extension;
+		App->file_system->SplitFilePath(model->GetLibraryFile(), &file, &extension);
+		file.append("model");
+		std::string directory = "library/";
+		App->serializer->SaveValueAsFile(model->root_value, file.c_str(), directory);
+	}
+
+	
+
+
+
+	for (int n = 0; n < node->mNumChildren; n++)
+	{
+
+		LoadNode(scene, node->mChildren[n], model, object);
+
+	}
+	object->to_delete = true;
+}
+bool FBXloader::LoadFBX(const char* buffer, uint size, ResourceModel* model)
+{
+	bool ret = true;
+
+
+	const aiScene* scene = aiImportFileFromMemory(buffer, size, aiProcessPreset_TargetRealtime_MaxQuality, nullptr);
+	if (scene != nullptr)
+	{
+		aiNode* node = scene->mRootNode;
+
+		if (node != nullptr)
+		{
+			LoadNode(scene, node, model, nullptr);
+			aiReleaseImport(scene);
+
+		}
 	}
 	else
 		LOG("Error loading scene");
@@ -379,4 +980,135 @@ uint FBXloader::LoadTexBuffer(const char* path)
 	}
 	
 	return texbuffer;
+}
+
+void FBXloader::CreateAABB(ComponentMesh* NewMesh)
+{
+	NewMesh->bbox.SetNegativeInfinity();
+	float3* vertexvert = (float3*)NewMesh->vertex;
+	NewMesh->bbox.Enclose(vertexvert, NewMesh->num_vertex);
+
+	float3 minvalue(inf, inf, inf);
+	float3 maxvalue(-inf, -inf, -inf);
+
+	for (int i = 0; i < NewMesh->num_vertex; i++)
+	{
+		if (vertexvert[i].x < minvalue.x)
+		{
+			minvalue.x = vertexvert[i].x;
+		}
+		if (vertexvert[i].y < minvalue.y)
+		{
+			minvalue.y = vertexvert[i].y;
+		}
+		if (vertexvert[i].z < minvalue.z)
+		{
+			minvalue.z = vertexvert[i].z;
+		}
+
+		if (vertexvert[i].x > maxvalue.x)
+		{
+			maxvalue.x = vertexvert[i].x;
+		}
+		if (vertexvert[i].y > maxvalue.y)
+		{
+			maxvalue.y = vertexvert[i].y;
+		}
+		if (vertexvert[i].z > maxvalue.z)
+		{
+			maxvalue.z = vertexvert[i].z;
+		}
+
+	}
+	vec3 origin, destination;
+
+
+	minvalue = NewMesh->bbox.minPoint;
+	maxvalue = NewMesh->bbox.maxPoint;
+
+	float3 array[8];
+
+	NewMesh->bbox.GetCornerPoints(array);
+	/*for (int i = 0; i < 8; i++)
+	{
+		origin.Set(array[i].x, array[i].y, array[i].z);
+		if (i != 7)
+		destination.Set(array[i+1].x, array[i+1].y, array[i+1].z);
+		else
+		destination.Set(array[0].x, array[0].y, array[0].z);
+
+		App->PrimManager->CreateLine(origin, destination);
+	}
+	*/
+	//0 = back left bot
+	//2 = back left top
+	//4 = back right bot
+	//6 = back right top
+
+	//3 = front left top
+	//7 = front right top
+	//1 = front left bot
+	//5 = front right bot
+
+	//origin.Set(array[0].x, array[0].y, array[0].z);
+	//destination.Set(array[1].x, array[1].y, array[1].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[1].x, array[1].y, array[1].z);
+	//destination.Set(array[3].x, array[3].y, array[3].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[3].x, array[3].y, array[3].z);
+	//destination.Set(array[7].x, array[7].y, array[7].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[3].x, array[3].y, array[3].z);
+	//destination.Set(array[2].x, array[2].y, array[2].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[0].x, array[0].y, array[0].z);
+	//destination.Set(array[2].x, array[2].y, array[2].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[1].x, array[1].y, array[1].z);
+	//destination.Set(array[5].x, array[5].y, array[5].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[7].x, array[7].y, array[7].z);
+	//destination.Set(array[6].x, array[6].y, array[6].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+
+	//origin.Set(array[2].x, array[2].y, array[2].z);
+	//destination.Set(array[6].x, array[6].y, array[6].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[6].x, array[6].y, array[6].z);
+	//destination.Set(array[4].x, array[4].y, array[4].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[4].x, array[4].y, array[4].z);
+	//destination.Set(array[0].x, array[0].y, array[0].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[7].x, array[7].y, array[7].z);
+	//destination.Set(array[5].x, array[5].y, array[5].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+
+	//origin.Set(array[4].x, array[4].y, array[4].z);
+	//destination.Set(array[5].x, array[5].y, array[5].z);
+
+	//App->PrimManager->CreateLine(origin, destination);
+	
 }

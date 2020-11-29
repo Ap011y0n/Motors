@@ -4,6 +4,8 @@
 
 
 class GameObject;
+class ComponentCamera;
+
 typedef unsigned char GLubyte;
 typedef unsigned int GLuint;
 
@@ -19,13 +21,14 @@ public:
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp();
-	GameObject* CreateGameObject(const char* name, GameObject* father = nullptr);
+	GameObject* CreateGameObject(const char* name, GameObject* parent = nullptr);
 	void firstCube();
 	void secondCube();
-	void UpdateGameObject(GameObject* father, float dt);
-	void SetDelete(GameObject* father);
-	void DeleteGameObject(GameObject* father);
-
+	void UpdateGameObject(GameObject* parent, float dt);
+	void SetDelete(GameObject* parent);
+	void DeleteSceneObjects(GameObject* parent);
+	bool DeleteGameObject(GameObject* parent);
+	void SaveScene(GameObject* parent);
 public:
 
 	uint my_indices = 0;
@@ -41,9 +44,12 @@ public:
 	float vert2[24];
 	uint index2[36];
 
-	vector<GameObject*> gameObjects;
+	//vector<GameObject*> gameObjects;
 	GameObject* scene;
-	 GLubyte checkImage[checkImageHeight][checkImageWidth][4];
-	 uint texName;
+	GameObject* selectedObj;
+
+	ComponentCamera* culling;
+	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
+	uint texName;
 
 };

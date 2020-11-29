@@ -6,7 +6,8 @@
 #include "ModuleWindow.h"
 #include "ModuleUI.h"
 #include "GameObject.h"   
-
+#include "serializer.h"
+#include "ResourceManager.h"
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
 #include <gl/GL.h>
@@ -24,6 +25,9 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	scene = CreateGameObject("scene");
+	selectedObj = nullptr;
+
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -34,31 +38,55 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
-	scene = CreateGameObject("scene");
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-	//GameObject* object = CreateGameObject("test");
+	culling = nullptr;
+	//GameObject* object = CreateGameObject("test", App->scene_intro->scene);
 	//object->CreateComponent(ComponentType::MESH);
 
-	std::string file_path = "Assets/BakerHouse.fbx";
+	
 	char* buffer = nullptr;
-	uint fileSize = 0;
-	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	App->FBX->LoadFBX(buffer, fileSize);
+
+	std::string file_path = "Assets/Street environment_V01.FBX";
+	//std::string file_path = "Assets/Street environment_V01.FBX";
+
+	uint UID = App->ResManager->FindInAssets(file_path.c_str());
+	if (UID == 0)
+	{
+		UID = App->ResManager->ImportFile(file_path.c_str());
+	}
+	if (UID != 0)
+	{
+		Resource* NewResource = App->ResManager->RequestResource(UID);
+		if (NewResource != nullptr)
+		{
+			LOG("Resource Found");
+			App->serializer->LoadModel(NewResource);
+		}
+	}
+	//uint fileSize = 0;
+	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	//App->FBX->LoadFBX(buffer, fileSize);
 
 	file_path = "Assets/p1character.FBX";
-	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	App->FBX->LoadFBX(buffer, fileSize);
+	//App->ResManager->ImportFile(file_path.c_str());
+
+	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	//App->FBX->LoadFBX(buffer, fileSize);
 
 	file_path = "Assets/P1_PoldelaTorre.FBX";
-	fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	App->FBX->LoadFBX(buffer, fileSize);
+	//App->ResManager->ImportFile(file_path.c_str());
+
+	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
+	//App->FBX->LoadFBX(buffer, fileSize);
 
 	vec4 coords(0, 1, 0, 0);
 	App->PrimManager->CreatePlane(coords);
-
+//	vec3 size(1, 1, 1);
+//	vec3 pos(0, 0, -2);
+//	App->PrimManager->CreateCube(size, pos);
 
 	int i, j, c;
 
@@ -101,12 +129,101 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update(float dt)
 {
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	{
+		//App->serializer->LoadScene("Assets/library/TEST.json");
+		
+		std::string file_path = "Assets/BakerHouse.fbx";
+		//std::string file_path = "Assets/Street environment_V01.FBX";
+
+		uint UID = App->ResManager->FindInAssets(file_path.c_str());
+		if (UID == 0)
+		{
+			UID = App->ResManager->ImportFile(file_path.c_str());
+		}
+		if (UID != 0)
+		{
+			Resource* NewResource = App->ResManager->RequestResource(UID);
+			if (NewResource != nullptr)
+			{
+				LOG("Resource Found");
+				App->serializer->LoadModel(NewResource);
+			}
+		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		App->serializer->CreateNewScene();
+		SaveScene(scene);
+		App->serializer->SaveScene("Scene.json");
+	}
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	{
+		DeleteSceneObjects(scene);
+		App->serializer->LoadScene("Assets/Scene.json");
+	}
 
 	UpdateGameObject(scene, dt);
 	SetDelete(scene);
 	DeleteGameObject(scene);
 	
 	return UPDATE_CONTINUE;
+}
+
+
+
+void ModuleSceneIntro::SaveScene(GameObject * parent)
+{
+	if (parent != scene)
+	{
+		JSON_Object* JsonObj = App->serializer->AddObjectToArray(App->serializer->leaves);
+		if (parent->UID == parent->parent->UID)
+		{
+			LCG();
+			LCG rand;
+			parent->UID = rand.Int();
+		}
+		App->serializer->AddFloat(JsonObj, "UID", parent->UID);
+		App->serializer->AddFloat(JsonObj, "ParentUID", parent->parent->UID);
+		App->serializer->AddString(JsonObj, "Name", parent->Name.c_str());
+		JSON_Array* JsonTrans = App->serializer->AddArray(JsonObj, "Translation");
+		JSON_Array* JsonScale = App->serializer->AddArray(JsonObj, "Scale");
+		JSON_Array* JsonRot = App->serializer->AddArray(JsonObj, "Rotation");
+		JSON_Array* JsonComp = App->serializer->AddArray(JsonObj, "Components");
+		ComponentMesh* newMesh = nullptr;
+		ComponentMaterial* NewTex = nullptr;
+		ComponentTransform* NewTrans = nullptr;
+
+		for (int i = 0; i < parent->Components.size(); i++)
+		{
+			switch (parent->Components[i]->type)
+			{
+			case ComponentType::MESH:
+				newMesh = (ComponentMesh * )parent->GetComponent(ComponentType::MESH);
+				App->serializer->AddComponent(JsonComp, ComponentType::MESH, newMesh->reference->GetLibraryFile(), newMesh->reference->GetUID());
+
+				break;
+			case ComponentType::MATERIAL:
+				NewTex = (ComponentMaterial*)parent->GetComponent(ComponentType::MATERIAL);
+				App->serializer->AddComponent(JsonComp, ComponentType::MATERIAL, NewTex->reference->GetLibraryFile(), NewTex->reference->GetUID());
+
+				break;
+			case ComponentType::TRANSFORM:
+				NewTrans = (ComponentTransform*)parent->GetComponent(ComponentType::TRANSFORM);
+				App->serializer->AddVec3(JsonTrans, NewTrans->pos.x, NewTrans->pos.y, NewTrans->pos.z);
+				App->serializer->AddVec3(JsonScale, NewTrans->scale.x, NewTrans->scale.y, NewTrans->scale.z);
+				App->serializer->AddVec4(JsonRot, NewTrans->rot.x, NewTrans->rot.y, NewTrans->rot.z, NewTrans->rot.w);
+				break;
+
+			}
+		}
+	}
+
+	for (int i = 0; i < parent->childs.size(); i++)
+	{
+		SaveScene(parent->childs[i]);
+	}
 }
 
 void ModuleSceneIntro::firstCube()
@@ -237,72 +354,89 @@ void ModuleSceneIntro::secondCube()
 	
 }
 
-GameObject* ModuleSceneIntro::CreateGameObject(const char* name, GameObject* father)
+GameObject* ModuleSceneIntro::CreateGameObject(const char* name, GameObject* parent)
 {
-	GameObject* newGameObject = new GameObject(name, father);
-	gameObjects.push_back(newGameObject);
-	TreeNode* newnode = new TreeNode(newGameObject);
-	App->UI->tree_nodes.push_back(newnode);
+	GameObject* newGameObject = new GameObject(name, parent);
+	//gameObjects.push_back(newGameObject);
+	
 	return newGameObject;
 }
 
-void ModuleSceneIntro::UpdateGameObject(GameObject* father, float dt)
+void ModuleSceneIntro::UpdateGameObject(GameObject* parent, float dt)
 {
-	father->Update(dt);
-	for (int i = 0; i < father->childs.size(); i++)
+	parent->Update(dt);
+	for (int i = 0; i < parent->childs.size(); i++)
 	{
-		UpdateGameObject(father->childs[i], dt);
+		UpdateGameObject(parent->childs[i], dt);
 	}
 
 }
 
-void ModuleSceneIntro::SetDelete(GameObject* father)
+void ModuleSceneIntro::DeleteSceneObjects(GameObject* parent)
 {
-	if (father->father != nullptr)
+	if (parent->parent != nullptr && parent != scene)
 	{
-		if (father->father->to_delete)
+		parent->to_delete = true;
+	}
+	for (int i = 0; i < parent->childs.size(); i++)
+	{
+		DeleteSceneObjects(parent->childs[i]);
+	}
+
+
+}
+
+void ModuleSceneIntro::SetDelete(GameObject* parent)
+{
+	if (parent->parent != nullptr && parent != scene)
+	{
+		if (parent->parent->to_delete)
 		{
-			father->to_delete = true;
+			parent->to_delete = true;
 		}
 	}
-	for (int i = 0; i < father->childs.size(); i++)
+	for (int i = 0; i < parent->childs.size(); i++)
 	{
-		SetDelete(father->childs[i]);
+		SetDelete(parent->childs[i]);
 	}
 	
 
 }
-void ModuleSceneIntro::DeleteGameObject(GameObject* father)
+
+bool ModuleSceneIntro::DeleteGameObject(GameObject* parent)
 {
 	
-	for (int i = 0; i < father->childs.size(); i++)
+	for (int i = 0; i < parent->childs.size(); i++)
 	{
-		DeleteGameObject(father->childs[i]);
+		if (DeleteGameObject(parent->childs[i]))
+			i--;
 	}
-	if (father->to_delete)
+	if (parent != nullptr && parent->to_delete)
 	{
-		if (father->father != nullptr)
+		if (parent->parent != nullptr)
 		{
-			for (int i = 0; i < father->father->childs.size(); i++)
+			for (int i = 0; i < parent->parent->childs.size(); i++)
 			{
-				if (father->father->childs[i] == father)
+				if (parent->parent->childs[i] == parent)
 				{
-					father->father->childs.erase(father->father->childs.begin() + i);
+					parent->parent->childs.erase(parent->parent->childs.begin() + i);
 					i--;
 				}
 			}
 		}
-		if (father != NULL)
+		if (parent != NULL)
 		{
-			if (App->UI->selectedObj = father)
+			if (selectedObj = parent)
 			{
-				App->UI->selectedObj = nullptr;
+				selectedObj = nullptr;
 			}
 
-			delete father;
-			father = NULL;
+			delete parent;
+			parent = NULL;
 		}
+		return true;
 
 	}
+	return false;
 
 }
