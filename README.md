@@ -11,6 +11,9 @@ Link to the github page of the project: https://github.com/Ap011y0n/Nidhogg-Engi
 * Pol de la Torre Solé
 * Github: polf780(https://github.com/polf780)
 
+
+### Assigment 1
+
 ##How to use the Engine
 On the left side there's the Hierarchy window where you can see the Game Objects with their correspondent childs, when clicking one the Inspector on the right side will show you the selected Game Object components.
   
@@ -58,6 +61,32 @@ The engine supports drag and drop of files like fbx, png and dds textures.
 - The changing name function loses the Focus so it's this function is still a work in progress.
 
 
+
+### Assigment 2
+Now on the Hierarchy window you can reparent all gameobjects by selecting them and dragging them into another GameObject, if you want to select one of the GameObjects from the Hierarchy you just need to left click the name of the GameObject. After selecting an object in the hierarchy the right click will open a popup where you can choose between several options, the first one is deleting the selected GameObject, creating an empty child for the selected GameObject and creating a new empty GameObject in the scene.
+
+There is a new window below the hierarchy where we can see the different resources than can be used by the user.
+After selecting some in the right part below there is a window where we can see the process where the resources use reference counting , and we can see how many there are in the scene, also there is a button to import them into the scene.
+
+Now we can move the Objects in the scene directly by selecting them with the mouse in the Game window, with the left click, after selecting one through the game window we are able to see it selected in the game Hierarchy as well, after selecting a GameObject it will appear the guizmo which can move rotate and scale the gameobject itself.
+We added on the main menu bar inside File two new options, one to save the scene and another one to Load the previous scene saved.
+
+There is now another option inside the option GameObject in the menu bar, where you can create Cameras inside the scene, when selecting a camera in  the inspector we can change the position of the Far plane, near plane, and the value Fov of the camera.
+
+On the top side under the main menú bar there is a new window with general options, where we can change the Guizmo from world to local, also we can put visible all the bounding boxes, and we can put on Play mode the engine, meanwhile is os play mode we can Pause or Stop, when he use the stop button the game will turn to the state before pushing the play button.
+
+##New controls and Shortcuts
+F1: Load Bakerhouse.fbx
+F3: Save scene.
+F4: Load scene.
+E: Guizmo translate mode.
+R: Guizmo rotate mode.
+T: Guizmo scale mode.
+
+##In progress
+Locals in gizmo
+The outliner
+Delete resources
 
 ## License & Copyright 
 
