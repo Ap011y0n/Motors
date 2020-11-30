@@ -1,9 +1,9 @@
 {
     "Game Objects": [
         {
-            "UID": 1414114553,
+            "UID": 543221805,
             "ParentUID": 0,
-            "Name": "GameObject4",
+            "Name": "GameObject2",
             "Translation": [
                 0,
                 0,
@@ -23,8 +23,8 @@
             "Components": []
         },
         {
-            "UID": 1478583599,
-            "ParentUID": 1414114553,
+            "UID": 654058437,
+            "ParentUID": 543221805,
             "Name": "Head_$AssimpFbx$_RotationPivot",
             "Translation": [
                 -3.047620,
@@ -45,8 +45,8 @@
             "Components": []
         },
         {
-            "UID": 1572014981,
-            "ParentUID": 1478583599,
+            "UID": 762179850,
+            "ParentUID": 654058437,
             "Name": "Head_$AssimpFbx$_RotationPivotInverse",
             "Translation": [
                 3.047620,
@@ -67,8 +67,8 @@
             "Components": []
         },
         {
-            "UID": 1630914347,
-            "ParentUID": 1572014981,
+            "UID": 838623708,
+            "ParentUID": 762179850,
             "Name": "Head_$AssimpFbx$_ScalingPivot",
             "Translation": [
                 -3.047620,
@@ -89,8 +89,8 @@
             "Components": []
         },
         {
-            "UID": 1690022576,
-            "ParentUID": 1630914347,
+            "UID": 907061151,
+            "ParentUID": 838623708,
             "Name": "Head_$AssimpFbx$_ScalingPivotInverse",
             "Translation": [
                 3.047620,
@@ -111,8 +111,8 @@
             "Components": []
         },
         {
-            "UID": 1771896872,
-            "ParentUID": 1690022576,
+            "UID": 965055444,
+            "ParentUID": 907061151,
             "Name": "Head",
             "Translation": [
                 0,
@@ -133,22 +133,12 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1945044299,
+                    "Resource UID": 1100120184,
                     "Path": "Assets\/library\/PoldelaTorreSoléTexP1.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 1786169177,
-                    "Path": "Assets\/library\/Head.mesh"
-                },
-                {
-                    "Type": "texture",
-                    "Resource UID": 1492264458,
-                    "Path": "Assets\/library\/PoldelaTorreSoléTexP1.dds"
-                },
-                {
-                    "Type": "Mesh",
-                    "Resource UID": 1384282287,
+                    "Resource UID": 979466991,
                     "Path": "Assets\/library\/Head.mesh"
                 }
             ]

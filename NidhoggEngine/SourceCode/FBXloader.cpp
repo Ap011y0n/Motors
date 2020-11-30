@@ -414,6 +414,7 @@ void FBXloader::ChangeMesh(Resource* resource)
 		if (mesh != nullptr)
 		{
 			ResourceMesh* NewMeshResource = (ResourceMesh * )resource;
+			mesh->reference->references--;
 			mesh->reference = NewMeshResource;
 			mesh->num_vertex = NewMeshResource->num_vertex;
 			mesh->num_tex = NewMeshResource->num_tex;
@@ -427,6 +428,7 @@ void FBXloader::ChangeMesh(Resource* resource)
 			mesh->id_tex = NewMeshResource->id_tex;
 			mesh->id_normals = NewMeshResource->id_normals;
 			mesh->id_index = NewMeshResource->id_index;
+			mesh->reference->references++;
 
 			CreateAABB(mesh);
 
@@ -578,10 +580,9 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 
 	NewTrans->local_transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
 
-
-	for (int i = 0; i < node->mNumMeshes; i++)
+	if(node->mNumMeshes > 0)
 	{
-
+		int i = 0;
 
 		ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
 		//const aiMesh* mesh = scene->mMeshes[i];
@@ -791,10 +792,10 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 	App->serializer->AddVec4(JsonRot, NewTrans->rot.x, NewTrans->rot.y, NewTrans->rot.z, NewTrans->rot.w);
 
 	NewTrans->local_transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
-
-
-	for (int i = 0; i < node->mNumMeshes; i++)
+	int i = node->mNumMeshes - 1;
+	if (i > -1)
 	{
+		
 		//For now, we manually create the compoentns without checking if they are repeated or not, we'll only check taht for Models
 
 		ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
