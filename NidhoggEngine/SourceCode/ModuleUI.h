@@ -78,6 +78,7 @@ public:
 
 	void GameObjectInspector(GameObject* obj);
 	void ChangeParent(GameObject* obj, GameObject* nextOwner);
+	void DropTrget_In_Inspector(GameObject* node);
 	void SelectGameObject(GameObject* node);
 	void GuizmoUI();
 	void ControlsGuizmo();

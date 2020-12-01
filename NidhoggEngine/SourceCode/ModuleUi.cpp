@@ -820,6 +820,7 @@ void ModuleUI::ResourceInfo()
 		ImGui::End();
 	}
 }
+
 void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 {
 	ImGuiTreeNodeFlags node_flags = /*ImGuiTreeNodeFlags_DefaultOpen | */ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
@@ -846,7 +847,7 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 		App->scene_intro->selectedObj = node;
 
 	}
-
+	DropTrget_In_Inspector(node);
 	if (ImGui::BeginDragDropTarget()) {
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
 
@@ -860,6 +861,7 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 				{
 					ChangeParent(obj, node);
 				}
+				
 			}
 			//ImGui::ClearDragDrop();
 		}
@@ -881,6 +883,37 @@ void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
 
 		ImGui::TreePop();
 	}
+}
+
+void ModuleUI::DropTrget_In_Inspector(GameObject* node)
+{
+	ImVec2 low_point = ImGui::GetWindowContentRegionMin();
+	ImVec2 top_point = ImGui::GetWindowContentRegionMax();
+
+	low_point.x += ImGui::GetWindowPos().x;low_point.y += ImGui::GetWindowPos().y;
+	top_point.x += ImGui::GetWindowPos().x;top_point.y += ImGui::GetWindowPos().y;
+	
+	ImRect space = { low_point.x, low_point.y, top_point.x, top_point.y };
+
+	if (ImGui::BeginDragDropTargetCustom(space,10)) { //This case is when user drops an object but without doing reparent
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover | ImGuiDragDropFlags_AcceptNoDrawDefaultRect);
+
+		if (payload != nullptr)
+		{
+			if (payload->IsDataType(DROP_ID_HIERARCHY_NODES))
+			{
+				GameObject* obj = *(GameObject**)payload->Data;
+
+				if (obj != nullptr) 
+				{
+					ChangeParent(obj, App->scene_intro->scene);
+				}
+
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+
 }
 
 void ModuleUI::AssetsHierarchyTree(AssetNode* node)
