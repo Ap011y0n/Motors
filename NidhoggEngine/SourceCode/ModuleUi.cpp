@@ -207,6 +207,7 @@ update_status ModuleUI::Update(float dt)
 			ImGui::MenuItem("Hierarchy", NULL, &Hierarchy_open);
 			ImGui::MenuItem("Inspector", NULL, &Inspector_open);
 			ImGui::MenuItem("Console", NULL, &Console_open);
+			ImGui::MenuItem("Camera Config", NULL, &Config_Camera_open);
 			ImGui::EndMenu();
 		}
 			
@@ -322,6 +323,7 @@ update_status ModuleUI::Update(float dt)
 	HierarchyWin(); 
 	AssetsTree();
 	ResourceInfo();
+	App->scene_intro->Camera_Editor_Window(App->camera->cameraComp);
 	InspectorWin();
 	TimeMangmentWin();
 	return UPDATE_CONTINUE;

@@ -101,6 +101,7 @@ public:
 	 bool Assetstree_open;
 	 bool ResourceInfo_open;
 	 bool Inspector_open;
+	 bool Config_Camera_open;
 	 bool Console_open;
 
 	vector <float> fpsecond;
