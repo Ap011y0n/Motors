@@ -170,116 +170,120 @@ void Serializer::LoadScene(const char* path)
 	JSON_Array* main_array;
 
 	root_value = json_parse_file(path);
-
-	main_object = json_value_get_object(root_value);
-	main_array = json_object_get_array(main_object, "Game Objects");
-
-
-	for (int i = 0; i < json_array_get_count(main_array); i++) {
-		JSON_Object* obj_in_array = json_array_get_object(main_array, i);
-		JSON_Array* component_array = json_object_get_array(obj_in_array, "Components");
-		JSON_Array* JsonTrans = json_object_get_array(obj_in_array, "Translation");
-		JSON_Array* JsonScale = json_object_get_array(obj_in_array, "Scale");
-		JSON_Array* JsonRot = json_object_get_array(obj_in_array, "Rotation");
-
-		int UID = json_object_get_number(obj_in_array, "UID");
-		int parentUID = json_object_get_number(obj_in_array, "ParentUID");
-		const char* name = json_object_get_string(obj_in_array, "Name");
-
-		GameObject* object = App->scene_intro->CreateGameObject(name, nullptr);
-		tempvector.push_back(object);
-		object->UID = UID;
-		object->parentUID = parentUID;
-		if (object->parentUID == object->UID)
-		{
-			LCG();
-			LCG rand;
-			object->UID = rand.Int();
-		}
-
-		ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
-		NewTrans->pos.x = json_array_get_number(JsonTrans, 0);
-		NewTrans->pos.y = json_array_get_number(JsonTrans, 1);
-		NewTrans->pos.z = json_array_get_number(JsonTrans, 2);
-
-		NewTrans->scale.x = json_array_get_number(JsonScale, 0);
-		NewTrans->scale.y = json_array_get_number(JsonScale, 1);
-		NewTrans->scale.z = json_array_get_number(JsonScale, 2);
-
-		NewTrans->rot.x = json_array_get_number(JsonRot, 0);
-		NewTrans->rot.y = json_array_get_number(JsonRot, 1);
-		NewTrans->rot.z = json_array_get_number(JsonRot, 2);
-		NewTrans->rot.w = json_array_get_number(JsonRot, 3);
-
-		NewTrans->local_transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
-		NewTrans->local_transform;
-
-		for (int j = 0; j < json_array_get_count(component_array); j++)
-		{
-			JSON_Object* obj_in_array_in_obj = json_array_get_object(component_array, j);
-			std::string type = json_object_get_string(obj_in_array_in_obj, "Type");
-			uint componentUID = json_object_get_number(obj_in_array_in_obj, "UID");
-			const char* componentpath = json_object_get_string(obj_in_array_in_obj, "Path");
+	if (root_value != NULL)
+	{
+		main_object = json_value_get_object(root_value);
+		main_array = json_object_get_array(main_object, "Game Objects");
 
 
-			if (type == "Mesh")
+		for (int i = 0; i < json_array_get_count(main_array); i++) {
+			JSON_Object* obj_in_array = json_array_get_object(main_array, i);
+			JSON_Array* component_array = json_object_get_array(obj_in_array, "Components");
+			JSON_Array* JsonTrans = json_object_get_array(obj_in_array, "Translation");
+			JSON_Array* JsonScale = json_object_get_array(obj_in_array, "Scale");
+			JSON_Array* JsonRot = json_object_get_array(obj_in_array, "Rotation");
+
+			int UID = json_object_get_number(obj_in_array, "UID");
+			int parentUID = json_object_get_number(obj_in_array, "ParentUID");
+			const char* name = json_object_get_string(obj_in_array, "Name");
+
+			GameObject* object = App->scene_intro->CreateGameObject(name, nullptr);
+			tempvector.push_back(object);
+			object->UID = UID;
+			object->parentUID = parentUID;
+			if (object->parentUID == object->UID)
 			{
-				App->ResManager->FindInLibrary(componentpath, componentUID);
-				ResourceMesh* NewMeshResource;
-				NewMeshResource = (ResourceMesh*)App->ResManager->RequestResource(componentUID);
-				if (NewMeshResource != nullptr)
-				{
-					ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
-					NewMesh->reference = NewMeshResource;
-					NewMesh->num_vertex = NewMeshResource->num_vertex;
-					NewMesh->num_tex = NewMeshResource->num_tex;
-					NewMesh->num_normals = NewMeshResource->num_normals;
-					NewMesh->num_index = NewMeshResource->num_index;
-					NewMesh->vertex = NewMeshResource->vertex;
-					NewMesh->texCoords = NewMeshResource->texCoords;
-					NewMesh->normals = NewMeshResource->normals;
-					NewMesh->index = NewMeshResource->index;
-					NewMesh->id_vertex = NewMeshResource->id_vertex;
-					NewMesh->id_tex = NewMeshResource->id_tex;
-					NewMesh->id_normals = NewMeshResource->id_normals;
-					NewMesh->id_index = NewMeshResource->id_index;
-
-
-					NewMesh->SetAABB();
-					//	NewMeshResource->unloadResource();
-				}
-				else
-					LOG("Error loading model resource meshes");
-
-			}
-			else if (type == "texture")
-			{
-				App->ResManager->FindInLibrary(componentpath, componentUID);
-				ResourceTexture* NewTexResource = (ResourceTexture*)App->ResManager->RequestResource(componentUID);
-				if (NewTexResource != nullptr)
-				{
-					ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
-					NewTex->reference = NewTexResource;
-
-					NewTex->texbuffer = NewTexResource->texbuffer;
-					NewTex->texture_h = NewTexResource->texture_h;
-					NewTex->texture_w = NewTexResource->texture_w;
-					NewTex->texture_path = NewTexResource->GetLibraryFile();
-					if (NewTex->texbuffer != 0)
-						NewTex->hastexture = true;
-					//	NewMeshResource->unloadResource();
-				}
-				else
-					LOG("Error loading model resource texture");
-
+				LCG();
+				LCG rand;
+				object->UID = rand.Int();
 			}
 
+			ComponentTransform* NewTrans = (ComponentTransform*)object->CreateComponent(ComponentType::TRANSFORM);
+			NewTrans->pos.x = json_array_get_number(JsonTrans, 0);
+			NewTrans->pos.y = json_array_get_number(JsonTrans, 1);
+			NewTrans->pos.z = json_array_get_number(JsonTrans, 2);
 
+			NewTrans->scale.x = json_array_get_number(JsonScale, 0);
+			NewTrans->scale.y = json_array_get_number(JsonScale, 1);
+			NewTrans->scale.z = json_array_get_number(JsonScale, 2);
+
+			NewTrans->rot.x = json_array_get_number(JsonRot, 0);
+			NewTrans->rot.y = json_array_get_number(JsonRot, 1);
+			NewTrans->rot.z = json_array_get_number(JsonRot, 2);
+			NewTrans->rot.w = json_array_get_number(JsonRot, 3);
+
+			NewTrans->local_transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
+			NewTrans->local_transform;
+
+			for (int j = 0; j < json_array_get_count(component_array); j++)
+			{
+				JSON_Object* obj_in_array_in_obj = json_array_get_object(component_array, j);
+				std::string type = json_object_get_string(obj_in_array_in_obj, "Type");
+				uint componentUID = json_object_get_number(obj_in_array_in_obj, "UID");
+				const char* componentpath = json_object_get_string(obj_in_array_in_obj, "Path");
+
+
+				if (type == "Mesh")
+				{
+					int ret = App->ResManager->FindInLibrary(componentpath, componentUID);
+					ResourceMesh* NewMeshResource;
+					NewMeshResource = (ResourceMesh*)App->ResManager->RequestResource(componentUID);
+					if (NewMeshResource != nullptr)
+					{
+						ComponentMesh* NewMesh = (ComponentMesh*)object->CreateComponent(ComponentType::MESH);
+						NewMesh->reference = NewMeshResource;
+						NewMesh->num_vertex = NewMeshResource->num_vertex;
+						NewMesh->num_tex = NewMeshResource->num_tex;
+						NewMesh->num_normals = NewMeshResource->num_normals;
+						NewMesh->num_index = NewMeshResource->num_index;
+						NewMesh->vertex = NewMeshResource->vertex;
+						NewMesh->texCoords = NewMeshResource->texCoords;
+						NewMesh->normals = NewMeshResource->normals;
+						NewMesh->index = NewMeshResource->index;
+						NewMesh->id_vertex = NewMeshResource->id_vertex;
+						NewMesh->id_tex = NewMeshResource->id_tex;
+						NewMesh->id_normals = NewMeshResource->id_normals;
+						NewMesh->id_index = NewMeshResource->id_index;
+
+
+						NewMesh->SetAABB();
+						//	NewMeshResource->unloadResource();
+					}
+					else
+						LOG("Error loading model resource meshes");
+
+				}
+				else if (type == "texture")
+				{
+					int ret = App->ResManager->FindInLibrary(componentpath, componentUID);
+
+					ResourceTexture* NewTexResource = (ResourceTexture*)App->ResManager->RequestResource(componentUID);
+					if (NewTexResource != nullptr)
+					{
+						ComponentMaterial* NewTex = (ComponentMaterial*)object->CreateComponent(ComponentType::MATERIAL);
+						NewTex->reference = NewTexResource;
+
+						NewTex->texbuffer = NewTexResource->texbuffer;
+						NewTex->texture_h = NewTexResource->texture_h;
+						NewTex->texture_w = NewTexResource->texture_w;
+						NewTex->texture_path = NewTexResource->GetLibraryFile();
+						if (NewTex->texbuffer != 0)
+							NewTex->hastexture = true;
+						//	NewMeshResource->unloadResource();
+					}
+					else
+						LOG("Error loading model resource texture");
+
+				}
+
+
+			}
 		}
+		sortScene();
+
+		tempvector.clear();
 	}
-	sortScene();
-
-	tempvector.clear();
+	
 
 }
 
