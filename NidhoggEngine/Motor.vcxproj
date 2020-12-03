@@ -110,6 +110,7 @@
     <ClInclude Include="SourceCode\Timer.h" />
     <ClInclude Include="SourceCode\Vec2.h" />
     <ClInclude Include="SourceCode\Win_CameraConfig.h" />
+    <ClInclude Include="SourceCode\Win_Configuration.h" />
     <ClInclude Include="SourceCode\Win_Inspector.h" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +149,7 @@
     <ClCompile Include="SourceCode\Timer.cpp" />
     <ClCompile Include="SourceCode\Vec2.cpp" />
     <ClCompile Include="SourceCode\Win_CameraConfig.cpp" />
+    <ClCompile Include="SourceCode\Win_Configuration.cpp" />
     <ClCompile Include="SourceCode\Win_Inspector.cpp" />
   </ItemGroup>
   <ItemGroup>
