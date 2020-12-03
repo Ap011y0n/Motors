@@ -64,7 +64,6 @@ public:
 	void AssetsTree(); //hierarchy window
 	void ResourceInfo(); //hierarchy window
 
-	void InspectorWin(); //gameobjects list
 	void TimeMangmentWin();
 	void ShowExampleAppLayout(/*bool* p_open*/);
 	void Change_Window_size(Vec2 newSize);
@@ -76,7 +75,6 @@ public:
 	void DeactivateGameObjects(GameObject* father);
 	void DeactivateAssets();
 
-	void GameObjectInspector(GameObject* obj);
 	void ChangeParent(GameObject* obj, GameObject* nextOwner);
 	void DropTrget_In_Inspector(GameObject* node);
 	void SelectGameObject(GameObject* node);

@@ -100,6 +100,9 @@
     <ClCompile Include="SourceCode\Win_CameraConfig.cpp">
       <Filter>Modules\Editor_Windows</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Win_Inspector.cpp">
+      <Filter>Modules\Editor_Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Application.h" />
@@ -205,6 +208,9 @@
       <Filter>helpers</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Win_CameraConfig.h">
+      <Filter>Modules\Editor_Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Win_Inspector.h">
       <Filter>Modules\Editor_Windows</Filter>
     </ClInclude>
   </ItemGroup>
