@@ -12,7 +12,7 @@
 #include "glew/include/glew.h"
 #include "GameObject.h"
 #include "Time.h"
-
+#include "Win_CameraConfig.h"
 
 #include "glew/include/glew.h"        
 #define DROP_ID_HIERARCHY_NODES "hierarchy_node"
@@ -323,7 +323,7 @@ update_status ModuleUI::Update(float dt)
 	HierarchyWin(); 
 	AssetsTree();
 	ResourceInfo();
-	App->scene_intro->Camera_Editor_Window(App->camera->cameraComp);
+	Win_CameraConfig::UpdateUi(App->camera->cameraComp);
 	InspectorWin();
 	TimeMangmentWin();
 	return UPDATE_CONTINUE;

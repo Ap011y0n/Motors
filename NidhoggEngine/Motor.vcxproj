@@ -109,6 +109,7 @@
     <ClInclude Include="SourceCode\Time.h" />
     <ClInclude Include="SourceCode\Timer.h" />
     <ClInclude Include="SourceCode\Vec2.h" />
+    <ClInclude Include="SourceCode\Win_CameraConfig.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Application.cpp" />
@@ -145,6 +146,7 @@
     <ClCompile Include="SourceCode\Time.cpp" />
     <ClCompile Include="SourceCode\Timer.cpp" />
     <ClCompile Include="SourceCode\Vec2.cpp" />
+    <ClCompile Include="SourceCode\Win_CameraConfig.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="SourceCode\imgui.natvis" />

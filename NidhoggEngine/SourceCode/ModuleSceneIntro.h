@@ -29,7 +29,6 @@ public:
 	void DeleteSceneObjects(GameObject* parent);
 	bool DeleteGameObject(GameObject* parent);
 	void SaveScene(GameObject* parent);
-	void Camera_Editor_Window(ComponentCamera* camera);
 public:
 
 	uint my_indices = 0;
