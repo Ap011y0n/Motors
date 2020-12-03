@@ -829,7 +829,6 @@ void ModuleUI::ImportWindow()
 			{
 				ModelOptions* modeloptions = (ModelOptions*)importsvec[0];
 				static bool axis = false;
-
 				static float f0 = modeloptions->GlobalScale;
 				ImGui::InputFloat("GlobalScale", &f0, 0.01f, 1.0f, "%.3f");
 				modeloptions->GlobalScale = f0;
@@ -869,7 +868,7 @@ void ModuleUI::ImportWindow()
 
 			if (ImGui::Button("Import"))
 			{
-				importsvec.erase(importsvec.begin());
+				App->scene_intro->WantToImport(importsvec[0]);
 			}
 			ImGui::End();
 
@@ -1576,4 +1575,46 @@ void ModuleUI::Change_Visibility_BoundingBoxes(GameObject* node,bool visibility)
 	{
 		Change_Visibility_BoundingBoxes(node->childs[i], visibility);
 	}
+}
+
+
+
+ImportOptions::ImportOptions()
+{
+	path = "";
+	type = importType::UNKNOWN;
+}
+
+ImportOptions::ImportOptions(const char* importpath)
+{
+	path = importpath;
+	type = importType::UNKNOWN;
+}
+ImportOptions::~ImportOptions()
+{
+
+}
+
+ModelOptions::ModelOptions(const char* importpath)
+{
+	type = importType::MODEL;
+	path = importpath;
+	GlobalScale = 1;
+	axis = false;
+	ignoreCameras = true;
+}
+ModelOptions::~ModelOptions() {
+
+}
+
+TextureOptions::TextureOptions(const char* importpath)
+{
+	type = importType::TEXTURE;
+	path = importpath;
+	filtering = 0;
+	wrapping = 0;
+	flipXY = false;
+}
+TextureOptions::~TextureOptions() {
+
 }

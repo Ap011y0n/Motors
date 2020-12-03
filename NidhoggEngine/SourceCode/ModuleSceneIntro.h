@@ -5,6 +5,7 @@
 
 class GameObject;
 class ComponentCamera;
+class ImportOptions;
 
 typedef unsigned char GLubyte;
 typedef unsigned int GLuint;
@@ -30,6 +31,7 @@ public:
 	bool DeleteGameObject(GameObject* parent);
 	void SaveScene(GameObject* parent);
 	void Camera_Editor_Window(ComponentCamera* camera);
+	void WantToImport(ImportOptions* options);
 public:
 
 	uint my_indices = 0;

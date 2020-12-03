@@ -141,16 +141,61 @@ uint ResourceManager::FindInLibrary(const char* file_in_library, uint id)
 	return 0;
 
 }
-
-uint ResourceManager::ImportFileStep1(const char* new_file_in_assets)
+uint ResourceManager::ImportFile(const char* new_file_in_assets)
 {
 	uint ret = 0;
-	
+
 	ResourceType type = ReturnType(new_file_in_assets);
 	if (type == ResourceType::UNKNOWN)
 	{
 		LOG("Failed to import resource, unknown type");
 		return ret;
+	}
+
+	Resource* resource = CreateNewResource(new_file_in_assets, type);
+	char* buffer = nullptr;
+	uint fileSize = 0;
+	fileSize = App->file_system->Load(new_file_in_assets, &buffer);
+
+	switch (resource->GetType())
+	{
+	case ResourceType::UNKNOWN:
+		break;
+	case ResourceType::MODEL:
+	{
+		LOG("importing model from %s", new_file_in_assets);
+		App->FBX->LoadFBX(buffer, fileSize, (ResourceModel*)resource);
+		break;
+	}
+
+	case ResourceType::TEXTURE:
+	{
+		MaterialImporter::Import(buffer, fileSize);
+		std::string path;
+		std::string file, extension;
+		App->file_system->SplitFilePath(new_file_in_assets, &file, &extension);
+		MaterialImporter::Save(&buffer, file.c_str(), &path);
+		LOG("importing texture from %s", new_file_in_assets);
+	}
+
+	break;
+	case ResourceType::MESH:
+		break;
+	}
+	//load buffers from physfs
+	//add info to resource
+	//save resource
+
+	return ret = resource->GetUID();
+}
+
+void ResourceManager::ImportFileStep1(const char* new_file_in_assets)
+{
+	
+	ResourceType type = ReturnType(new_file_in_assets);
+	if (type == ResourceType::UNKNOWN)
+	{
+		LOG("Failed to import resource, unknown type");
 	}
 	switch (type)
 	{
@@ -173,11 +218,7 @@ uint ResourceManager::ImportFileStep1(const char* new_file_in_assets)
 	}
 	}
 	
-
-	ret = ImportFileStep2(new_file_in_assets);
-
 	
-	return ret;
 }
 
 uint ResourceManager::ImportFileStep2(const char* new_file_in_assets)

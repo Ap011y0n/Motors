@@ -1,7 +1,7 @@
 {
     "Game Objects": [
         {
-            "UID": 450713822,
+            "UID": 1590386093,
             "ParentUID": 0,
             "Name": "GameObject1",
             "Translation": [
@@ -23,8 +23,8 @@
             "Components": []
         },
         {
-            "UID": 664728776,
-            "ParentUID": 450713822,
+            "UID": 1674140156,
+            "ParentUID": 1590386093,
             "Name": "Chimney",
             "Translation": [
                 0,
@@ -45,19 +45,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1216859117,
+                    "Resource UID": 1799597198,
                     "Path": "Assets\/library\/Baker_house.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 681785921,
+                    "Resource UID": 1689944123,
                     "Path": "Assets\/library\/Chimney.mesh"
                 }
             ]
         },
         {
-            "UID": 882517107,
-            "ParentUID": 450713822,
+            "UID": 365685016,
+            "ParentUID": 1590386093,
             "Name": "Baker_house",
             "Translation": [
                 0,
@@ -78,12 +78,12 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1216859117,
+                    "Resource UID": 1799597198,
                     "Path": "Assets\/library\/Baker_house.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 908555361,
+                    "Resource UID": 385109275,
                     "Path": "Assets\/library\/Baker_house.mesh"
                 }
             ]

@@ -55,7 +55,7 @@ bool ModuleSceneIntro::Start()
 	uint UID = App->ResManager->FindInAssets(file_path.c_str());
 	if (UID == 0)
 	{
-		UID = App->ResManager->ImportFileStep1(file_path.c_str());
+		App->ResManager->ImportFileStep1(file_path.c_str());
 	}
 	if (UID != 0)
 	{
@@ -139,7 +139,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		uint UID = App->ResManager->FindInAssets(file_path.c_str());
 		if (UID == 0)
 		{
-			UID = App->ResManager->ImportFileStep1(file_path.c_str());
+			App->ResManager->ImportFileStep1(file_path.c_str());
 		}
 		if (UID != 0)
 		{
@@ -171,7 +171,21 @@ update_status ModuleSceneIntro::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
+void ModuleSceneIntro::WantToImport(ImportOptions* options)
+{
+	uint UID = App->ResManager->ImportFileStep2(options->path.c_str());
 
+	if (UID != 0)
+	{
+		Resource* NewResource = App->ResManager->RequestResource(UID);
+		if (NewResource != nullptr)
+		{
+			LOG("Resource Found");
+			App->serializer->LoadModel(NewResource);
+		}
+	}
+	App->UI->importsvec.erase(App->UI->importsvec.begin());
+}
 
 void ModuleSceneIntro::SaveScene(GameObject * parent)
 {
@@ -226,133 +240,7 @@ void ModuleSceneIntro::SaveScene(GameObject * parent)
 	}
 }
 
-void ModuleSceneIntro::firstCube()
-{
 
-	uint indices[36] = {
-		// front
-			0, 1, 2,
-			2, 3, 1,
-			// right
-			1, 3, 5,
-			3, 5, 7,
-			//// back
-			7, 4, 5,
-			6, 7, 4,
-			//// left
-			6, 0, 4,
-			0, 6, 2,
-			//// bottom
-			4, 5, 0,
-			5, 1, 0,
-			//// top
-			6, 2, 3,
-			3, 7, 6
-	};
-	for (int i = 0; i < 36; i++)
-	{
-		index[i] = indices[i];
-
-	}
-	num_indices = 36;
-
-	float vertices[24] =
-	{
-		// front
-			 0.0, 0.0,  0.0,
-			 1.0, 0.0,  0.0,
-			 0.0, 1.0,  0.0,
-			 1.0, 1.0,  0.0,
-
-			 // back
-			  0.0, 0.0, -1.0,
-			  1.0, 0.0, -1.0,
-			  0.0, 1.0, -1.0,
-			  1.0, 1.0, -1.0,
-	};
-	num_vertices = 8;
-
-	for (int i = 0; i < 24; i++)
-	{
-		vert[i] = vertices[i];
-
-	}
-	my_indices = 0;
-	my_vertex = 0;
-	glGenBuffers(1, (GLuint*)&(my_vertex));
-	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vert, GL_STATIC_DRAW);
-	// … bind and use other buffers
-
-	glGenBuffers(1, (GLuint*)&(my_indices));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, index, GL_STATIC_DRAW);
-	
-}
-
-void ModuleSceneIntro::secondCube()
-{
-
-	uint indices[36] = {
-		// front
-			0, 1, 2,
-			2, 3, 1,
-			// right
-			1, 3, 5,
-			3, 5, 7,
-			//// back
-			7, 4, 5,
-			6, 7, 4,
-			//// left
-			6, 0, 4,
-			0, 6, 2,
-			//// bottom
-			4, 5, 0,
-			5, 1, 0,
-			//// top
-			6, 2, 3,
-			3, 7, 6
-	};
-	for (int i = 0; i < 36; i++)
-	{
-		index2[i] = indices[i];
-
-	}
-	num_indices2 = 36;
-
-	float vertices[24] =
-	{
-		// front
-			 0.0, 0.0,  3.0,
-			 1.0, 0.0,  3.0,
-			 0.0, 1.0,  3.0,
-			 1.0, 1.0,  3.0,
-
-			 // back
-			  0.0, 0.0, 2.0,
-			  1.0, 0.0, 2.0,
-			  0.0, 1.0, 2.0,
-			  1.0, 1.0, 2.0,
-	};
-	num_vertices2 = 8;
-
-	for (int i = 0; i < 24; i++)
-	{
-		vert2[i] = vertices[i];
-
-	}
-	my_indices2 = 0;
-	my_vertex2 = 0;
-	glGenBuffers(1, (GLuint*)&(my_vertex2));
-	glBindBuffer(GL_ARRAY_BUFFER, my_vertex2);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices2 * 3, vert2, GL_STATIC_DRAW);
-
-	glGenBuffers(1, (GLuint*)&(my_indices2));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices2);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices2, index2, GL_STATIC_DRAW);
-	
-}
 
 GameObject* ModuleSceneIntro::CreateGameObject(const char* name, GameObject* parent)
 {
@@ -496,4 +384,133 @@ void ModuleSceneIntro::Camera_Editor_Window(ComponentCamera* camera)
 
 		ImGui::End();
 	}
+}
+
+
+void ModuleSceneIntro::firstCube()
+{
+
+	uint indices[36] = {
+		// front
+			0, 1, 2,
+			2, 3, 1,
+			// right
+			1, 3, 5,
+			3, 5, 7,
+			//// back
+			7, 4, 5,
+			6, 7, 4,
+			//// left
+			6, 0, 4,
+			0, 6, 2,
+			//// bottom
+			4, 5, 0,
+			5, 1, 0,
+			//// top
+			6, 2, 3,
+			3, 7, 6
+	};
+	for (int i = 0; i < 36; i++)
+	{
+		index[i] = indices[i];
+
+	}
+	num_indices = 36;
+
+	float vertices[24] =
+	{
+		// front
+			 0.0, 0.0,  0.0,
+			 1.0, 0.0,  0.0,
+			 0.0, 1.0,  0.0,
+			 1.0, 1.0,  0.0,
+
+			 // back
+			  0.0, 0.0, -1.0,
+			  1.0, 0.0, -1.0,
+			  0.0, 1.0, -1.0,
+			  1.0, 1.0, -1.0,
+	};
+	num_vertices = 8;
+
+	for (int i = 0; i < 24; i++)
+	{
+		vert[i] = vertices[i];
+
+	}
+	my_indices = 0;
+	my_vertex = 0;
+	glGenBuffers(1, (GLuint*)&(my_vertex));
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vert, GL_STATIC_DRAW);
+	// … bind and use other buffers
+
+	glGenBuffers(1, (GLuint*)&(my_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, index, GL_STATIC_DRAW);
+
+}
+
+void ModuleSceneIntro::secondCube()
+{
+
+	uint indices[36] = {
+		// front
+			0, 1, 2,
+			2, 3, 1,
+			// right
+			1, 3, 5,
+			3, 5, 7,
+			//// back
+			7, 4, 5,
+			6, 7, 4,
+			//// left
+			6, 0, 4,
+			0, 6, 2,
+			//// bottom
+			4, 5, 0,
+			5, 1, 0,
+			//// top
+			6, 2, 3,
+			3, 7, 6
+	};
+	for (int i = 0; i < 36; i++)
+	{
+		index2[i] = indices[i];
+
+	}
+	num_indices2 = 36;
+
+	float vertices[24] =
+	{
+		// front
+			 0.0, 0.0,  3.0,
+			 1.0, 0.0,  3.0,
+			 0.0, 1.0,  3.0,
+			 1.0, 1.0,  3.0,
+
+			 // back
+			  0.0, 0.0, 2.0,
+			  1.0, 0.0, 2.0,
+			  0.0, 1.0, 2.0,
+			  1.0, 1.0, 2.0,
+	};
+	num_vertices2 = 8;
+
+	for (int i = 0; i < 24; i++)
+	{
+		vert2[i] = vertices[i];
+
+	}
+	my_indices2 = 0;
+	my_vertex2 = 0;
+	glGenBuffers(1, (GLuint*)&(my_vertex2));
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices2 * 3, vert2, GL_STATIC_DRAW);
+
+	glGenBuffers(1, (GLuint*)&(my_indices2));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices2);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices2, index2, GL_STATIC_DRAW);
+
 }

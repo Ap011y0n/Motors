@@ -19,39 +19,19 @@ enum class importType
 class ImportOptions
 {
 public:
-	ImportOptions()
-	{
-		path = "";
-		type = importType::UNKNOWN;
-	}
+	ImportOptions();
+	ImportOptions(const char* importpath);
+	~ImportOptions();
 
-	ImportOptions(const char* importpath)
-	{
-		path = importpath;
-		type = importType::UNKNOWN;
-	}
-
-	~ImportOptions() {
-
-	}
 	importType type;
-	const char* path;
+	std::string path;
 };
 
 class ModelOptions: public ImportOptions
 {
 public:
-	ModelOptions(const char* importpath)
-	{
-		type = importType::MODEL;
-		path = importpath;
-		GlobalScale = 1;
-		axis = false;
-		ignoreCameras = true;
-	}
-	~ModelOptions() {
-
-	}
+	ModelOptions(const char* importpath);
+	~ModelOptions();
 	int GlobalScale;
 	bool axis;
 	bool ignoreCameras;
@@ -60,17 +40,8 @@ public:
 class TextureOptions : public ImportOptions
 {
 public:
-	TextureOptions(const char* importpath)
-	{
-		type = importType::TEXTURE;
-		path = importpath;
-		filtering = 0;
-		wrapping = 0;
-		flipXY = false;
-	}
-	~TextureOptions() {
-
-	}
+	TextureOptions(const char* importpath);
+	~TextureOptions();
 	int filtering;
 	int wrapping;
 	bool flipXY;
@@ -199,6 +170,7 @@ public:
 	vector<AssetNode*> assets;
 	int cameras;
 	int empty_GameObjects;
+	vector<ImportOptions*> importsvec;
 
 private:
 	int c1;
@@ -206,6 +178,5 @@ private:
 	float width = 1324;
 	float height = 768;
 	AssetNode* selectedAsset;
-	vector<ImportOptions*> importsvec;
 };
 

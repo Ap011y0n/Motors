@@ -153,7 +153,7 @@ update_status ModuleInput::PreUpdate(float dt)
 					UID = App->ResManager->FindInAssets(relativePath.c_str());
 					if (UID == 0)
 					{
-						UID = App->ResManager->ImportFileStep1(relativePath.c_str());
+						App->ResManager->ImportFileStep1(relativePath.c_str());
 					}
 					if (UID != 0)
 					{
