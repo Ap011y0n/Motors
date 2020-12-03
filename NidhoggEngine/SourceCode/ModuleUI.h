@@ -97,14 +97,11 @@ public:
 	void StoreLog(const char* message);
 	void ShowAppinDockSpace(bool* p_open = NULL);
 
-	void Configuration(bool config);
-	void PlotGraph();
 	void HierarchyWin(); //hierarchy window
 	void AssetsTree(); //hierarchy window
 	void ResourceInfo(); //hierarchy window
 	void ImportWindow(); //import window
 
-	void InspectorWin(); //gameobjects list
 	void TimeMangmentWin();
 	void ShowExampleAppLayout(/*bool* p_open*/);
 	void Change_Window_size(Vec2 newSize);
@@ -116,7 +113,6 @@ public:
 	void DeactivateGameObjects(GameObject* father);
 	void DeactivateAssets();
 
-	void GameObjectInspector(GameObject* obj);
 	void ChangeParent(GameObject* obj, GameObject* nextOwner);
 	void DropTrget_In_Inspector(GameObject* node);
 	void SelectGameObject(GameObject* node);
@@ -147,8 +143,8 @@ public:
 	vector <float> fpsecond;
 	bool show_Configuration;
 	int max_fps = 61;
-	int i = 0;
-	int e = 0;
+	int Screen_i = 0;
+	int Screen_e = 0;
 	bool* open_docking;
 	ImVec2 MouseVelocity;
 	ImVec2 windowSize = { 0, 0 };

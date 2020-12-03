@@ -97,6 +97,15 @@
     <ClCompile Include="SourceCode\Time.cpp">
       <Filter>helpers</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Win_CameraConfig.cpp">
+      <Filter>Modules\Editor_Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Win_Inspector.cpp">
+      <Filter>Modules\Editor_Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Win_Configuration.cpp">
+      <Filter>Modules\Editor_Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Application.h" />
@@ -201,6 +210,15 @@
     <ClInclude Include="SourceCode\Time.h">
       <Filter>helpers</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Win_CameraConfig.h">
+      <Filter>Modules\Editor_Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Win_Inspector.h">
+      <Filter>Modules\Editor_Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Win_Configuration.h">
+      <Filter>Modules\Editor_Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Mathlibs">
@@ -223,6 +241,9 @@
     </Filter>
     <Filter Include="parson">
       <UniqueIdentifier>{0fbbcdd3-9488-4d82-8b9c-4bbde7bee39e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Editor_Windows">
+      <UniqueIdentifier>{5af9e293-6905-46af-877d-518a404d7e85}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

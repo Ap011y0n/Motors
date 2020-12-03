@@ -32,6 +32,7 @@ public:
 	void SaveScene(GameObject* parent);
 	void Camera_Editor_Window(ComponentCamera* camera);
 	void WantToImport(ImportOptions* options);
+
 public:
 
 	uint my_indices = 0;
