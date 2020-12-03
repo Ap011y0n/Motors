@@ -55,7 +55,7 @@ bool ModuleSceneIntro::Start()
 	uint UID = App->ResManager->FindInAssets(file_path.c_str());
 	if (UID == 0)
 	{
-		UID = App->ResManager->ImportFile(file_path.c_str());
+		UID = App->ResManager->ImportFileStep1(file_path.c_str());
 	}
 	if (UID != 0)
 	{
@@ -139,7 +139,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		uint UID = App->ResManager->FindInAssets(file_path.c_str());
 		if (UID == 0)
 		{
-			UID = App->ResManager->ImportFile(file_path.c_str());
+			UID = App->ResManager->ImportFileStep1(file_path.c_str());
 		}
 		if (UID != 0)
 		{

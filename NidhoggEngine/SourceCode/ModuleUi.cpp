@@ -108,6 +108,7 @@ bool ModuleUI::Init()
 	Wireframe_bool = false;
 	Hierarchy_open = true;
 	Assetstree_open = true;
+	importWindow = false;
 	ResourceInfo_open = true;
 	Inspector_open = true;
 	Console_open = true;
@@ -322,6 +323,7 @@ update_status ModuleUI::Update(float dt)
 	Configuration(show_Configuration);
 	HierarchyWin(); 
 	AssetsTree();
+	ImportWindow();
 	ResourceInfo();
 	App->scene_intro->Camera_Editor_Window(App->camera->cameraComp);
 	InspectorWin();
@@ -793,6 +795,86 @@ void ModuleUI::AssetsTree()
 	}
 }
 
+void ModuleUI::CreateImportObject(const char* importpath, importType type)
+{
+	ImportOptions* newimport;
+	switch (type)
+	{
+	case importType::UNKNOWN:
+		break;
+	case importType::MODEL:
+		newimport = new ModelOptions(importpath);
+		break;
+	case importType::TEXTURE:
+		newimport = new TextureOptions(importpath);
+		break;
+	}
+	importsvec.push_back(newimport);
+
+}
+void ModuleUI::ImportWindow()
+{
+	if (importsvec.size() > 0)
+		importWindow = true;
+	else
+		importWindow = false;
+
+	if (importWindow)
+	{
+		ImGui::Begin("ImportWindow", &importWindow);
+		
+			switch (importsvec[0]->type)
+			{
+			case importType::MODEL:
+			{
+				ModelOptions* modeloptions = (ModelOptions*)importsvec[0];
+				static bool axis = false;
+
+				static float f0 = modeloptions->GlobalScale;
+				ImGui::InputFloat("GlobalScale", &f0, 0.01f, 1.0f, "%.3f");
+				modeloptions->GlobalScale = f0;
+
+
+				ImGui::Checkbox("Axis", &axis);
+				if (axis)
+				{
+					modeloptions->axis = true;
+				}
+				static bool cameras = false;
+
+				ImGui::Checkbox("Ignore cams and lights", &cameras);
+				if (cameras)
+				{
+					modeloptions->ignoreCameras = true;
+				}
+				break;
+			}
+				
+			case importType::TEXTURE:
+			{
+				TextureOptions* texoptions = (TextureOptions*)importsvec[0];
+
+				static float f0 = texoptions->filtering;
+				ImGui::InputFloat("filtering", &f0, 0.01f, 1.0f, "%.3f");
+				texoptions->filtering = f0;
+
+				static float f1 = texoptions->wrapping;
+				ImGui::InputFloat("wrapping", &f1, 0.01f, 1.0f, "%.3f");
+				texoptions->wrapping = f1;
+
+				break;
+			}
+		
+			}
+
+			if (ImGui::Button("Import"))
+			{
+				importsvec.erase(importsvec.begin());
+			}
+			ImGui::End();
+
+	}
+}
 void ModuleUI::ResourceInfo()
 {
 	if (ResourceInfo_open == true) {

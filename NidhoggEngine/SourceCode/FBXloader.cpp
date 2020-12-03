@@ -310,7 +310,7 @@ void FBXloader::ChangeTexture(const char* path)
 			uint UID = App->ResManager->FindInAssets(path);
 			if (UID == 0)
 			{
-				UID = App->ResManager->ImportFile(path);
+				UID = App->ResManager->ImportFileStep1(path);
 			}
 			else
 			{
@@ -827,7 +827,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 			uint UID = App->ResManager->FindInAssets(file.c_str());
 			if (UID == 0)
 			{
-				UID = App->ResManager->ImportFile(file.c_str());
+				UID = App->ResManager->ImportFileStep1(file.c_str());
 			}
 			else
 			{

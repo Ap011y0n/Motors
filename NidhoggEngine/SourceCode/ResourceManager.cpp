@@ -142,7 +142,7 @@ uint ResourceManager::FindInLibrary(const char* file_in_library, uint id)
 
 }
 
-uint ResourceManager::ImportFile(const char* new_file_in_assets)
+uint ResourceManager::ImportFileStep1(const char* new_file_in_assets)
 {
 	uint ret = 0;
 	
@@ -152,7 +152,45 @@ uint ResourceManager::ImportFile(const char* new_file_in_assets)
 		LOG("Failed to import resource, unknown type");
 		return ret;
 	}
+	switch (type)
+	{
+	case ResourceType::UNKNOWN:
+		break;
+	case ResourceType::MODEL:
+	{
+		App->UI->CreateImportObject(new_file_in_assets, importType::MODEL);
+		break;
+	}
+
+	case ResourceType::TEXTURE:
+	{
+		App->UI->CreateImportObject(new_file_in_assets, importType::TEXTURE);
+		break;
+	}
+	case ResourceType::MESH:
+	{
+		break;
+	}
+	}
 	
+
+	ret = ImportFileStep2(new_file_in_assets);
+
+	
+	return ret;
+}
+
+uint ResourceManager::ImportFileStep2(const char* new_file_in_assets)
+{
+	uint ret = 0;
+
+	ResourceType type = ReturnType(new_file_in_assets);
+	if (type == ResourceType::UNKNOWN)
+	{
+		LOG("Failed to import resource, unknown type");
+		return ret;
+	}
+
 	Resource* resource = CreateNewResource(new_file_in_assets, type);
 	char* buffer = nullptr;
 	uint fileSize = 0;
@@ -179,7 +217,7 @@ uint ResourceManager::ImportFile(const char* new_file_in_assets)
 		LOG("importing texture from %s", new_file_in_assets);
 	}
 
-		break;
+	break;
 	case ResourceType::MESH:
 		break;
 	}

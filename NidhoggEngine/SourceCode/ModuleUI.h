@@ -10,6 +10,72 @@
 using namespace std;
 class GameObject;
 class Resource;
+enum class importType
+{
+	UNKNOWN,
+	MODEL,
+	TEXTURE,
+};
+class ImportOptions
+{
+public:
+	ImportOptions()
+	{
+		path = "";
+		type = importType::UNKNOWN;
+	}
+
+	ImportOptions(const char* importpath)
+	{
+		path = importpath;
+		type = importType::UNKNOWN;
+	}
+
+	~ImportOptions() {
+
+	}
+	importType type;
+	const char* path;
+};
+
+class ModelOptions: public ImportOptions
+{
+public:
+	ModelOptions(const char* importpath)
+	{
+		type = importType::MODEL;
+		path = importpath;
+		GlobalScale = 1;
+		axis = false;
+		ignoreCameras = true;
+	}
+	~ModelOptions() {
+
+	}
+	int GlobalScale;
+	bool axis;
+	bool ignoreCameras;
+};
+
+class TextureOptions : public ImportOptions
+{
+public:
+	TextureOptions(const char* importpath)
+	{
+		type = importType::TEXTURE;
+		path = importpath;
+		filtering = 0;
+		wrapping = 0;
+		flipXY = false;
+	}
+	~TextureOptions() {
+
+	}
+	int filtering;
+	int wrapping;
+	bool flipXY;
+};
+
 class AssetNode
 {
 public:
@@ -28,6 +94,7 @@ public:
 	bool is_selected = false;
 	bool to_delete;
 };
+
 class TreeNode
 {
 public:
@@ -52,6 +119,7 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 
+	void CreateImportObject(const char* importpath, importType type);
 	bool CleanUp();
 
 	void AboutMenu(bool window);
@@ -63,6 +131,7 @@ public:
 	void HierarchyWin(); //hierarchy window
 	void AssetsTree(); //hierarchy window
 	void ResourceInfo(); //hierarchy window
+	void ImportWindow(); //import window
 
 	void InspectorWin(); //gameobjects list
 	void TimeMangmentWin();
@@ -103,7 +172,7 @@ public:
 	 bool Inspector_open;
 	 bool Config_Camera_open;
 	 bool Console_open;
-
+	 bool importWindow;
 	vector <float> fpsecond;
 	bool show_Configuration;
 	int max_fps = 61;
@@ -137,5 +206,6 @@ private:
 	float width = 1324;
 	float height = 768;
 	AssetNode* selectedAsset;
+	vector<ImportOptions*> importsvec;
 };
 

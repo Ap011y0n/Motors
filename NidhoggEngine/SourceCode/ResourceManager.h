@@ -113,7 +113,9 @@ public:
 	uint FindInLibrary(const char* file_in_library, uint id);
 
 	//Use when resource is non existant, creates a resource, loads it's data from assets and saves it to library
-	uint ImportFile(const char* new_file_in_assets);
+	uint ImportFileStep1(const char* new_file_in_assets);
+	uint ImportFileStep2(const char* new_file_in_assets);
+
 	//Creates a new resource with a unique id, set both of it's paths, and saves a meta file in assets
 	Resource* CreateNewResource(const char* assetsFile, ResourceType type);
 	//Generates a random id to identify this resource in the map
