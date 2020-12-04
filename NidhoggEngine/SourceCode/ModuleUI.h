@@ -22,7 +22,7 @@ public:
 	ImportOptions();
 	ImportOptions(const char* importpath);
 	~ImportOptions();
-
+	Resource* reference;
 	importType type;
 	std::string path;
 };
@@ -90,7 +90,7 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 
-	void CreateImportObject(const char* importpath, importType type);
+	ImportOptions* CreateImportObject(const char* importpath, importType type);
 	bool CleanUp();
 
 	void AboutMenu(bool window);

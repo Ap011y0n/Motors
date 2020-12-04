@@ -57,7 +57,7 @@ bool ModuleSceneIntro::Start()
 	{
 		App->ResManager->ImportFileStep1(file_path.c_str());
 	}
-	if (UID != 0)
+	/*if (UID != 0)
 	{
 		Resource* NewResource = App->ResManager->RequestResource(UID);
 		if (NewResource != nullptr)
@@ -65,7 +65,7 @@ bool ModuleSceneIntro::Start()
 			LOG("Resource Found");
 			App->serializer->LoadModel(NewResource);
 		}
-	}
+	}*/
 	//uint fileSize = 0;
 	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
 	//App->FBX->LoadFBX(buffer, fileSize);
@@ -173,18 +173,27 @@ update_status ModuleSceneIntro::Update(float dt)
 
 void ModuleSceneIntro::WantToImport(ImportOptions* options)
 {
-	uint UID = App->ResManager->ImportFileStep2(options->path.c_str());
 
-	if (UID != 0)
+
+	uint UID = App->ResManager->ImportFileStep2(options->path.c_str(), options);
+	App->UI->importsvec.erase(App->UI->importsvec.begin());
+
+
+	/*if (UID != 0)
 	{
 		Resource* NewResource = App->ResManager->RequestResource(UID);
 		if (NewResource != nullptr)
 		{
-			LOG("Resource Found");
-			App->serializer->LoadModel(NewResource);
+		switch (NewResource->GetType())
+		{
+		case ResourceType::MODEL:
+			
+				LOG("Resource Found");
+				App->serializer->LoadModel(NewResource);
+			break;
 		}
-	}
-	App->UI->importsvec.erase(App->UI->importsvec.begin());
+		}
+	}*/
 }
 
 void ModuleSceneIntro::SaveScene(GameObject * parent)

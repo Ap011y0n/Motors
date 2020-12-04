@@ -531,7 +531,7 @@ void ModuleUI::AssetsTree()
 	}
 }
 
-void ModuleUI::CreateImportObject(const char* importpath, importType type)
+ImportOptions* ModuleUI::CreateImportObject(const char* importpath, importType type)
 {
 	ImportOptions* newimport;
 	switch (type)
@@ -546,7 +546,7 @@ void ModuleUI::CreateImportObject(const char* importpath, importType type)
 		break;
 	}
 	importsvec.push_back(newimport);
-
+	return newimport;
 }
 void ModuleUI::ImportWindow()
 {
@@ -558,12 +558,12 @@ void ModuleUI::ImportWindow()
 	if (importWindow)
 	{
 		ImGui::Begin("ImportWindow", &importWindow);
-		
-			switch (importsvec[0]->type)
+		int id = 0;
+			switch (importsvec[id]->type)
 			{
 			case importType::MODEL:
 			{
-				ModelOptions* modeloptions = (ModelOptions*)importsvec[0];
+				ModelOptions* modeloptions = (ModelOptions*)importsvec[id];
 				static bool axis = false;
 				static float f0 = modeloptions->GlobalScale;
 				ImGui::InputFloat("GlobalScale", &f0, 0.01f, 1.0f, "%.3f");
@@ -587,7 +587,7 @@ void ModuleUI::ImportWindow()
 				
 			case importType::TEXTURE:
 			{
-				TextureOptions* texoptions = (TextureOptions*)importsvec[0];
+				TextureOptions* texoptions = (TextureOptions*)importsvec[id];
 
 				static float f0 = texoptions->filtering;
 				ImGui::InputFloat("filtering", &f0, 0.01f, 1.0f, "%.3f");
@@ -604,7 +604,7 @@ void ModuleUI::ImportWindow()
 
 			if (ImGui::Button("Import"))
 			{
-				App->scene_intro->WantToImport(importsvec[0]);
+				App->scene_intro->WantToImport(importsvec[id]);
 			}
 			ImGui::End();
 

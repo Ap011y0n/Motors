@@ -742,6 +742,7 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 
 void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* model, GameObject* father)
 {
+	//Jo ho tinc a dos temps, género tots els meta i després importó tot, així les textures sempre tindran com a mínim el meta
 	std::string name = node->mName.C_Str();
 
 	LOG("loading %s", node->mName.C_Str());
@@ -825,21 +826,18 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 
 			
 			uint UID = App->ResManager->FindInAssets(file.c_str());
+			Resource* NewResource;
 			if (UID == 0)
 			{
-				UID = App->ResManager->ImportFile(file.c_str());
+				NewResource = App->ResManager->ImportFileStep1(file.c_str());
 			}
-			else
-			{
-				LOG("image already loaded");
-			}
+		
 			if (UID != 0)
 			{
-				Resource* NewResource = App->ResManager->RequestResource(UID);
-				App->serializer->AddResourceComponent(JsonComp, ComponentType::MATERIAL, NewResource->GetUID(), NewResource->GetLibraryFile());
-
+				NewResource = App->ResManager->RequestResource(UID);
+				
 			}
-	
+			App->serializer->AddResourceComponent(JsonComp, ComponentType::MATERIAL, NewResource->GetUID(), NewResource->GetLibraryFile());
 
 
 			if (NewTex->texbuffer != 0)

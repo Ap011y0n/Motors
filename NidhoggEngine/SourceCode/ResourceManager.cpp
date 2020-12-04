@@ -189,7 +189,7 @@ uint ResourceManager::ImportFile(const char* new_file_in_assets)
 	return ret = resource->GetUID();
 }
 
-void ResourceManager::ImportFileStep1(const char* new_file_in_assets)
+Resource* ResourceManager::ImportFileStep1(const char* new_file_in_assets)
 {
 	
 	ResourceType type = ReturnType(new_file_in_assets);
@@ -197,19 +197,20 @@ void ResourceManager::ImportFileStep1(const char* new_file_in_assets)
 	{
 		LOG("Failed to import resource, unknown type");
 	}
+	ImportOptions* options;
 	switch (type)
 	{
 	case ResourceType::UNKNOWN:
 		break;
 	case ResourceType::MODEL:
 	{
-		App->UI->CreateImportObject(new_file_in_assets, importType::MODEL);
+		options = App->UI->CreateImportObject(new_file_in_assets, importType::MODEL);
 		break;
 	}
 
 	case ResourceType::TEXTURE:
 	{
-		App->UI->CreateImportObject(new_file_in_assets, importType::TEXTURE);
+		options = App->UI->CreateImportObject(new_file_in_assets, importType::TEXTURE);
 		break;
 	}
 	case ResourceType::MESH:
@@ -217,11 +218,13 @@ void ResourceManager::ImportFileStep1(const char* new_file_in_assets)
 		break;
 	}
 	}
+	Resource* resource = CreateNewResource(new_file_in_assets, type);
+	options->reference = resource;
 	
-	
+	return resource;
 }
 
-uint ResourceManager::ImportFileStep2(const char* new_file_in_assets)
+uint ResourceManager::ImportFileStep2(const char* new_file_in_assets, ImportOptions* options)
 {
 	uint ret = 0;
 
@@ -232,19 +235,18 @@ uint ResourceManager::ImportFileStep2(const char* new_file_in_assets)
 		return ret;
 	}
 
-	Resource* resource = CreateNewResource(new_file_in_assets, type);
 	char* buffer = nullptr;
 	uint fileSize = 0;
 	fileSize = App->file_system->Load(new_file_in_assets, &buffer);
 
-	switch (resource->GetType())
+	switch (options->reference->GetType())
 	{
 	case ResourceType::UNKNOWN:
 		break;
 	case ResourceType::MODEL:
 	{
 		LOG("importing model from %s", new_file_in_assets);
-		App->FBX->LoadFBX(buffer, fileSize, (ResourceModel*)resource);
+		App->FBX->LoadFBX(buffer, fileSize, (ResourceModel*)options->reference);
 		break;
 	}
 
@@ -266,7 +268,7 @@ uint ResourceManager::ImportFileStep2(const char* new_file_in_assets)
 	//add info to resource
 	//save resource
 
-	return ret = resource->GetUID();
+	return ret = options->reference->GetUID();
 }
 
 ResourceType ResourceManager::ReturnType(const char* assetsFile)
