@@ -10,6 +10,8 @@
 using namespace std;
 class GameObject;
 class Resource;
+class UiFile;
+
 enum class importType
 {
 	UNKNOWN,
@@ -167,12 +169,14 @@ public:
 	int cameras;
 	int empty_GameObjects;
 	vector<ImportOptions*> importsvec;
-
 private:
 	int c1;
 	vector<string> consoleOutput;
 	float width = 1324;
 	float height = 768;
 	AssetNode* selectedAsset;
+	std::string currentDirectory;
+	vector< UiFile*> FilesInDir;
+
 };
 

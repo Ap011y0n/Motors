@@ -230,3 +230,32 @@ unsigned int FileSystem::Save(const char* file, const char* buffer, unsigned int
 
 	return ret;
 }
+
+void FileSystem::checkDirectoryFiles(const char* currentDirectory, vector<UiFile*>* fileVec)
+{
+	if(PHYSFS_exists(currentDirectory) != 0)
+	{
+		char** rc = PHYSFS_enumerateFiles(currentDirectory);
+		char** i;
+
+		for (i = rc; *i != nullptr; i++)
+		{
+			std::string extension;
+			std::string file;
+			
+			SplitFilePath(*i, &file, &extension);
+			std::string fullpath = currentDirectory;
+			fullpath += file + extension;
+
+			UiFile* filefound = new UiFile(file.c_str());
+			fileVec->push_back(filefound);
+		}
+
+	}
+}
+
+
+UiFile::UiFile(const char* name)
+{
+	file = name;
+}

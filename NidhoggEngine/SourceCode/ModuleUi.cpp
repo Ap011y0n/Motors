@@ -14,7 +14,7 @@
 #include "Win_CameraConfig.h"
 #include "Win_Inspector.h"
 #include "Win_Configuration.h"
-
+#include "FileSystem.h"
 #include "glew/include/glew.h"        
 #define DROP_ID_HIERARCHY_NODES "hierarchy_node"
 
@@ -127,6 +127,8 @@ bool ModuleUI::Init()
 	App->Maxfps(max_fps);
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	selectedAsset = nullptr;
+	currentDirectory = "Assets/";
+	App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
 	return ret;
 }
 

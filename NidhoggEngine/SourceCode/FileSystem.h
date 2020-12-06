@@ -5,7 +5,14 @@
 
 
 
-
+class UiFile
+{
+public:
+	UiFile(const char*);
+	~UiFile();
+	std::string file;
+	std::string extension;
+};
 
 enum class FileType
 {
@@ -35,6 +42,7 @@ public:
 	bool CheckFile(const char* path) const;
 	bool RemoveFile(const char* path);
 	unsigned int Save(const char* file, const char* buffer, unsigned int size, bool append) const;
+	void checkDirectoryFiles(const char* currentDirectory, vector<UiFile*>* fileVec);
 };
 
 #endif // __ASSETSMANAGER_H__
