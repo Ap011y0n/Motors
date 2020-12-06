@@ -742,7 +742,6 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 
 void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* model, GameObject* father)
 {
-	//Jo ho tinc a dos temps, género tots els meta i després importó tot, així les textures sempre tindran com a mínim el meta
 	std::string name = node->mName.C_Str();
 
 	LOG("loading %s", node->mName.C_Str());

@@ -1,0 +1,92 @@
+{
+    "Game Objects": [
+        {
+            "UID": 263545667,
+            "ParentUID": 0,
+            "Name": "GameObject1",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": []
+        },
+        {
+            "UID": 328502060,
+            "ParentUID": 263545667,
+            "Name": "Chimney",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Resource UID": 470528900,
+                    "Path": "Assets\/library\/Baker_house.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Resource UID": 344375648,
+                    "Path": "Assets\/library\/Chimney.mesh"
+                }
+            ]
+        },
+        {
+            "UID": 1702076586,
+            "ParentUID": 263545667,
+            "Name": "Baker_house",
+            "Translation": [
+                0,
+                0,
+                0
+            ],
+            "Scale": [
+                1,
+                1,
+                1
+            ],
+            "Rotation": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "Components": [
+                {
+                    "Type": "texture",
+                    "Resource UID": 329613911,
+                    "Path": "Assets\/library\/Baker_house.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Resource UID": 1782628083,
+                    "Path": "Assets\/library\/Baker_house.mesh"
+                }
+            ]
+        }
+    ]
+}

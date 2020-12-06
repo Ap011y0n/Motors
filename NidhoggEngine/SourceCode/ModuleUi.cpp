@@ -811,6 +811,13 @@ void ModuleUI::DeactivateAssets()
 
 void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 {
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+	{
+		currentDirectory = "Assets/library";
+		FilesInDir.clear();
+		App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+
+	}
 	ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Example: Simple layout",&Console_open))
 	{
@@ -830,7 +837,11 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 				if (ImGui::BeginTabItem("Assets"))
 				{
 					ImGui::Text("Folders...");
+					for (int i = 0; i < FilesInDir.size(); i++)
+					{
+						ImGui::Text("%s", FilesInDir[i]->file.c_str());
 
+					}
 					
 					ImGui::EndTabItem();
 				}
