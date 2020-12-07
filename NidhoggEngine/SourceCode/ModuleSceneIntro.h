@@ -55,5 +55,6 @@ public:
 	ComponentCamera* culling;
 	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 	uint texName;
+	bool wanttoload;
 
 };

@@ -56,7 +56,7 @@ bool ModuleSceneIntro::Start()
 
 	App->file_system->importAssetsFiles();
 
-	
+	wanttoload = true;
 
 	vec4 coords(0, 1, 0, 0);
 	App->PrimManager->CreatePlane(coords);
@@ -103,6 +103,13 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update(float dt)
 {
+	if (wanttoload && App->UI->importsvec.empty())
+	{
+		wanttoload = false;
+		DeleteSceneObjects(scene);
+		App->serializer->LoadScene("Assets/Scene.json");
+
+	}
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
 		//App->serializer->LoadScene("Assets/library/TEST.json");
