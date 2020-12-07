@@ -321,6 +321,7 @@ void FileSystem::RefreshAssets()
 				}
 				else
 				{
+
 					uint id = 0;
 					std::string MetaPath = fullpath;
 					MetaPath.append(+".meta");
@@ -334,6 +335,8 @@ void FileSystem::RefreshAssets()
 					if (timestamp1 != timestamp2)
 					{
 						LOG("needs update");
+						Resource* NewResource = App->ResManager->RequestResource(UID);
+						App->ResManager->RefreshResource(NewResource);
 					}
 				}
 			}

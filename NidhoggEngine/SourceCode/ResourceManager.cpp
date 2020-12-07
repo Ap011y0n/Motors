@@ -189,6 +189,41 @@ uint ResourceManager::ImportFile(const char* new_file_in_assets)
 	return ret = resource->GetUID();
 }
 
+Resource* ResourceManager::RefreshResource(Resource* resource)
+{
+
+	ResourceType type = resource->GetType();
+	if (type == ResourceType::UNKNOWN)
+	{
+		LOG("Failed to import resource, unknown type");
+	}
+	ImportOptions* options = nullptr;
+	switch (type)
+	{
+	case ResourceType::UNKNOWN:
+		break;
+	case ResourceType::MODEL:
+	{
+		options = App->UI->CreateImportObject(resource->GetAssetFile(), importType::MODEL);
+		break;
+	}
+
+	case ResourceType::TEXTURE:
+	{
+		options = App->UI->CreateImportObject(resource->GetAssetFile(), importType::TEXTURE);
+		break;
+	}
+	case ResourceType::MESH:
+	{
+		break;
+	}
+	}
+	
+	options->reference = resource;
+
+	return resource;
+}
+
 Resource* ResourceManager::ImportFileStep1(const char* new_file_in_assets)
 {
 	
@@ -267,7 +302,11 @@ uint ResourceManager::ImportFileStep2(const char* new_file_in_assets, ImportOpti
 	//load buffers from physfs
 	//add info to resource
 	//save resource
-
+	if (options->reference->isLoaded == true)
+	{
+		//we need to refresh
+		options->reference->loadResource();
+	}
 	return ret = options->reference->GetUID();
 }
 
@@ -554,6 +593,7 @@ void ResourceTexture::loadResource()
 	fileSize = App->file_system->Load(GetLibraryFile(), &buffer);
 	MaterialImporter::Load(buffer, fileSize, this);
 }
+
 
 void ResourceTexture::unloadResource()
 {

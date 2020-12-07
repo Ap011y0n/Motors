@@ -116,6 +116,7 @@ public:
 	uint ImportFile(const char* new_file_in_assets);
 
 	Resource* ImportFileStep1(const char* new_file_in_assets);
+	Resource* RefreshResource (Resource* resource);
 	uint ImportFileStep2(const char* new_file_in_assets, ImportOptions* options);
 
 	//Creates a new resource with a unique id, set both of it's paths, and saves a meta file in assets
