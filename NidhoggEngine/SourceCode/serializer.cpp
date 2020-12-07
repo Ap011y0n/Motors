@@ -441,7 +441,7 @@ void Serializer::LoadModel(Resource* model)
 	tempvector.clear();
 }
 
-bool Serializer::LoadMeta(const char* path, uint* uid, ResourceType* type, std::string* Assets, std::string* library)
+bool Serializer::LoadMeta(const char* path, uint* uid, ResourceType* type, std::string* Assets, std::string* library, uint* timestamp)
 {
 	bool ret = false;
 	JSON_Value* value;
@@ -458,6 +458,12 @@ bool Serializer::LoadMeta(const char* path, uint* uid, ResourceType* type, std::
 
 	if (json_object_has_value_of_type(object, "UID", JSONNumber))
 		*uid = json_object_get_number(object, "UID");
+	if (timestamp != nullptr)
+	{
+		if (json_object_has_value_of_type(object, "Last modified", JSONNumber))
+			*timestamp = json_object_get_number(object, "Last modified");
+	}
+
 
 	std::string Type;
 	if (json_object_has_value_of_type(object, "Type", JSONString))

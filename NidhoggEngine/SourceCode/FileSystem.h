@@ -43,6 +43,10 @@ public:
 	bool RemoveFile(const char* path);
 	unsigned int Save(const char* file, const char* buffer, unsigned int size, bool append) const;
 	void checkDirectoryFiles(const char* currentDirectory, vector<UiFile*>* fileVec);
+	void importAssetsFiles();
+	void RefreshAssets();
+	int GetDate(const char* path);
+
 };
 
 #endif // __ASSETSMANAGER_H__

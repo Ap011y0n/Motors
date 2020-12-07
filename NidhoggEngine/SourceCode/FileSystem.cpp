@@ -231,18 +231,20 @@ unsigned int FileSystem::Save(const char* file, const char* buffer, unsigned int
 	return ret;
 }
 
+
+
 void FileSystem::checkDirectoryFiles(const char* currentDirectory, vector<UiFile*>* fileVec)
 {
-	if(PHYSFS_exists(currentDirectory) != 0)
+	if (PHYSFS_exists(currentDirectory) != 0)
 	{
-		char** rc = PHYSFS_enumerateFiles(currentDirectory);
+		char** Assets_List = PHYSFS_enumerateFiles(currentDirectory);
 		char** i;
 
-		for (i = rc; *i != nullptr; i++)
+		for (i = Assets_List; *i != nullptr; i++)
 		{
 			std::string extension;
 			std::string file;
-			
+
 			SplitFilePath(*i, &file, &extension);
 			std::string fullpath = currentDirectory;
 			fullpath += file + extension;
@@ -252,6 +254,98 @@ void FileSystem::checkDirectoryFiles(const char* currentDirectory, vector<UiFile
 		}
 
 	}
+}
+
+void FileSystem::importAssetsFiles()
+{
+	if (PHYSFS_exists("Assets/") != 0)
+	{
+		char** Assets_List = PHYSFS_enumerateFiles("Assets/");
+		char** i;
+
+		for (i = Assets_List; *i != nullptr; i++)
+		{
+			std::string extension;
+			std::string file;
+
+			SplitFilePath(*i, &file, &extension);
+			std::string fullpath = "Assets/";
+			fullpath += file + extension;
+			uint UID = 0;
+			switch (SetFileType(extension))
+			{
+			case FileType::FBX:
+				UID = App->ResManager->FindInAssets(fullpath.c_str());
+				if (UID == 0)
+				{
+					App->ResManager->ImportFileStep1(fullpath.c_str());
+				}
+				break;
+			case FileType::IMAGE:
+				UID = App->ResManager->FindInAssets(fullpath.c_str());
+				if (UID == 0)
+				{
+					App->ResManager->ImportFileStep1(fullpath.c_str());
+				}
+				break;
+			}
+			
+		}
+
+	}
+}
+
+void FileSystem::RefreshAssets()
+{
+	if (PHYSFS_exists("Assets/") != 0)
+	{
+		char** Assets_List = PHYSFS_enumerateFiles("Assets/");
+		char** i;
+
+		for (i = Assets_List; *i != nullptr; i++)
+		{
+			std::string extension;
+			std::string file;
+
+			SplitFilePath(*i, &file, &extension);
+			std::string fullpath = "Assets/";
+			fullpath += file + extension;
+			uint UID = 0;
+			FileType type = SetFileType(extension);
+			if (type == FileType::FBX || type == FileType::IMAGE)
+			{
+				UID = App->ResManager->FindInAssets(fullpath.c_str());
+				if (UID == 0)
+				{
+					App->ResManager->ImportFileStep1(fullpath.c_str());
+				}
+				else
+				{
+					uint id = 0;
+					std::string MetaPath = fullpath;
+					MetaPath.append(+".meta");
+
+					ResourceType type;
+					std::string Assets;
+					std::string Library;
+					uint timestamp1, timestamp2;
+					App->serializer->LoadMeta(MetaPath.c_str(), &id, &type, &Assets, &Library, &timestamp1);
+					timestamp2 = GetDate(fullpath.c_str());
+					if (timestamp1 != timestamp2)
+					{
+						LOG("needs update");
+					}
+				}
+			}
+		
+
+		}
+
+	}
+}
+int FileSystem::GetDate(const char* path)
+{
+	return PHYSFS_getLastModTime(path);
 }
 
 

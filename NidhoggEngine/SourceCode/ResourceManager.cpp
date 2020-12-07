@@ -329,6 +329,7 @@ Resource* ResourceManager::CreateNewResource(const char* assetsFile, ResourceTyp
 		JSON_Object* root_object;
 		root_object = json_value_get_object(root_value);
 		App->serializer->AddFloat(root_object, "UID", ret->GetUID());
+		App->serializer->AddFloat(root_object, "Last modified", App->file_system->GetDate(assetsFile));
 		switch (type) {
 		case ResourceType::MODEL: App->serializer->AddString(root_object, "Type", "3D Model"); break;
 		case ResourceType::TEXTURE: App->serializer->AddString(root_object, "Type", "Texture"); break;

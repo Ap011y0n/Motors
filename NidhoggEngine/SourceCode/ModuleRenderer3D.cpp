@@ -120,14 +120,14 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	glMatrixMode(GL_MODELVIEW);
 
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	/*if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		activeCam++;
 		if (activeCam == MAX_CAMS)
 		{
 			activeCam = 0;
 		}
-	}
+	}*/
 
 	switch (activeCam)
 	{

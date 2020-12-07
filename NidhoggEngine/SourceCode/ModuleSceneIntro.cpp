@@ -43,50 +43,24 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	culling = nullptr;
-	//GameObject* object = CreateGameObject("test", App->scene_intro->scene);
-	//object->CreateComponent(ComponentType::MESH);
 
-	
 	char* buffer = nullptr;
 
 	std::string file_path = "Assets/Street environment_V01.FBX";
-	//std::string file_path = "Assets/Street environment_V01.FBX";
 
-	uint UID = App->ResManager->FindInAssets(file_path.c_str());
-	if (UID == 0)
-	{
-		App->ResManager->ImportFileStep1(file_path.c_str());
-	}
-	/*if (UID != 0)
-	{
-		Resource* NewResource = App->ResManager->RequestResource(UID);
-		if (NewResource != nullptr)
-		{
-			LOG("Resource Found");
-			App->serializer->LoadModel(NewResource);
-		}
-	}*/
-	//uint fileSize = 0;
-	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	//App->FBX->LoadFBX(buffer, fileSize);
+	//uint UID = App->ResManager->FindInAssets(file_path.c_str());
+	//if (UID == 0)
+	//{
+	//	App->ResManager->ImportFileStep1(file_path.c_str());
+	//}
 
-	file_path = "Assets/p1character.FBX";
-	//App->ResManager->ImportFile(file_path.c_str());
+	App->file_system->importAssetsFiles();
 
-	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	//App->FBX->LoadFBX(buffer, fileSize);
-
-	file_path = "Assets/P1_PoldelaTorre.FBX";
-	//App->ResManager->ImportFile(file_path.c_str());
-
-	//fileSize = App->file_system->Load(file_path.c_str(), &buffer);
-	//App->FBX->LoadFBX(buffer, fileSize);
+	
 
 	vec4 coords(0, 1, 0, 0);
 	App->PrimManager->CreatePlane(coords);
-//	vec3 size(1, 1, 1);
-//	vec3 pos(0, 0, -2);
-//	App->PrimManager->CreateCube(size, pos);
+
 
 	int i, j, c;
 
@@ -151,6 +125,11 @@ update_status ModuleSceneIntro::Update(float dt)
 			}
 		}
 	}
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		App->file_system->RefreshAssets();
+	}
+
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{

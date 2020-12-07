@@ -29,7 +29,7 @@ public:
 	void SaveValueAsFile(JSON_Value* root, const char* name, std::string directory = "");
 	void LoadScene(const char* path);
 	void LoadModel(Resource* model);
-	bool LoadMeta(const char* path, uint* uid, ResourceType* type, std::string* Assets, std::string* library);
+	bool LoadMeta(const char* path, uint* uid, ResourceType* type, std::string* Assets, std::string* library, uint* timestamp = nullptr);
 
 	void sortScene();
 	void AddFloat(JSON_Object* obj, const char* name, double value);
