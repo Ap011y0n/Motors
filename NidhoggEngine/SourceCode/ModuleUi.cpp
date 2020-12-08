@@ -591,13 +591,17 @@ void ModuleUI::ImportWindow()
 			{
 				TextureOptions* texoptions = (TextureOptions*)importsvec[id];
 
-				static float f0 = texoptions->filtering;
-				ImGui::InputFloat("filtering", &f0, 0.01f, 1.0f, "%.3f");
+				static bool f0 = texoptions->filtering;
+				ImGui::Checkbox("filtering", &f0);
 				texoptions->filtering = f0;
 
-				static float f1 = texoptions->wrapping;
-				ImGui::InputFloat("wrapping", &f1, 0.01f, 1.0f, "%.3f");
+				static bool f1 = texoptions->wrapping;
+				ImGui::Checkbox("wrapping", &f1);
 				texoptions->wrapping = f1;
+
+				static bool f2 = texoptions->flipXY;
+				ImGui::Checkbox("flip X/Y", &f2);
+				texoptions->flipXY = f2;
 
 				break;
 			}
@@ -635,7 +639,22 @@ void ModuleUI::ResourceInfo()
 				}
 			}
 			ImGui::Text("References: %d", selectedAsset->owner->references);
-
+			switch (selectedAsset->owner->GetType())
+			{
+				
+			case ResourceType::MODEL:
+				break;
+			case ResourceType::TEXTURE:
+			{
+				ResourceTexture* texture = (ResourceTexture*)selectedAsset->owner;
+				ImGui::Text("Wraping: %d", texture->wrapping);
+				ImGui::Text("References: %d", texture->filtering);
+				ImGui::Text("References: %d", texture->flipXY);
+			}
+				break;
+			case ResourceType::MESH:
+				break;
+			}
 		}
 
 		ImGui::End();
@@ -1072,8 +1091,8 @@ TextureOptions::TextureOptions(const char* importpath)
 {
 	type = importType::TEXTURE;
 	path = importpath;
-	filtering = 0;
-	wrapping = 0;
+	filtering = false;
+	wrapping = false;
 	flipXY = false;
 }
 TextureOptions::~TextureOptions() {

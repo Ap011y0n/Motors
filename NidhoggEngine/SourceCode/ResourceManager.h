@@ -92,6 +92,9 @@ public:
 		uint texbuffer;				//texture loaded in VRAM
 		int texture_w;
 		int texture_h;
+		bool filtering;
+		bool wrapping;
+		bool flipXY;
 	
 };
 

@@ -90,18 +90,51 @@ namespace MaterialImporter
 
 	void Load(const char* fileBuffer, uint size, ResourceTexture* resourceTexture)
 	{
+
+
 		uint texbuffer = 0;
+		/*glGenTextures(1, &texbuffer);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		if (resourceTexture->wrapping)
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+		}
+		if (resourceTexture->flipXY)
+		{
+			iluFlipImage();
+		}
+		if (resourceTexture->filtering)
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		}
+		else
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		}
+		*/
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glGenTextures(1, &texbuffer);
 		glBindTexture(GL_TEXTURE_2D, 0);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
 		ILuint ImageName;
 		ilGenImages(1, &ImageName);
 		ilBindImage(ImageName);
 
+
 		ilLoadL(IL_TYPE_UNKNOWN, (const void*)fileBuffer, size);
+		if (resourceTexture->flipXY)
+		{
+			iluFlipImage();
+		}
 		texbuffer = ilutGLBindTexImage();
 
 		resourceTexture->texture_h = ilGetInteger(IL_IMAGE_HEIGHT);

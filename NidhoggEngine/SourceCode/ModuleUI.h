@@ -44,8 +44,8 @@ class TextureOptions : public ImportOptions
 public:
 	TextureOptions(const char* importpath);
 	~TextureOptions();
-	int filtering;
-	int wrapping;
+	bool filtering;
+	bool wrapping;
 	bool flipXY;
 };
 

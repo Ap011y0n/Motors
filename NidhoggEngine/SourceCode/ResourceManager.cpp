@@ -59,7 +59,7 @@ uint ResourceManager::FindInAssets(const char* file_in_assets)
 				case ResourceType::MODEL: NewResource = (Resource*) new ResourceModel(id); break;
 				case ResourceType::TEXTURE: NewResource = (Resource*) new ResourceTexture(id); break;
 					//	case ResourceType::MESH: ret = (Resource*) new ResourceMesh(uid); break;
-
+				//Load Param from meta, in the case of textures?
 				}
 
 				if (NewResource != nullptr)
@@ -287,6 +287,12 @@ uint ResourceManager::ImportFileStep2(const char* new_file_in_assets, ImportOpti
 
 	case ResourceType::TEXTURE:
 	{
+		TextureOptions* textureOptions = (TextureOptions*)options;
+		ResourceTexture* resourceTexture = (ResourceTexture*)textureOptions->reference;
+		resourceTexture->filtering = textureOptions->filtering;
+		resourceTexture->wrapping = textureOptions->wrapping;
+		resourceTexture->flipXY = textureOptions->flipXY;
+
 		MaterialImporter::Import(buffer, fileSize);
 		std::string path;
 		std::string file, extension;
@@ -578,6 +584,9 @@ void ResourceMesh::unloadResource()
 ResourceTexture::ResourceTexture(uint id) : Resource(id)
 {
 	type = ResourceType::TEXTURE;
+	filtering = false;
+	wrapping = false;
+	flipXY = false;
 }
 
 ResourceTexture::~ResourceTexture()
