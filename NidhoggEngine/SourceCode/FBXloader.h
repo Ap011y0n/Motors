@@ -17,6 +17,7 @@ class Resource;
 class ResourceModel;
 class ResourceMesh;
 class ResourceTexture;
+class ImportOptions;
 struct aiScene;
 struct aiNode;
 
@@ -72,10 +73,10 @@ public:
 	uint FillElementArrayBuffer(uint size, uint* array);
 	uint LoadTexBuffer(const char* path);
 	bool LoadFBX(const char* buffer, uint size);
-	bool LoadFBX(const char* buffer, uint size, ResourceModel* resource);
+	bool LoadFBX(const char* buffer, uint size, ResourceModel* resource, ImportOptions* options = nullptr);
 
 	void LoadNode(const aiScene* scene, aiNode* node, GameObject* father = nullptr);
-	void LoadNode(const aiScene* scene, aiNode* node, ResourceModel* model, GameObject* father = nullptr);
+	void LoadNode(const aiScene* scene, aiNode* node, ResourceModel* model, GameObject* father = nullptr, ImportOptions* options = nullptr);
 
 	void PrintMeshes();
 	void ChangeTexture(const char* path);

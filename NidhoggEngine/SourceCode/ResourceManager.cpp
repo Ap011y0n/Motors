@@ -281,7 +281,7 @@ uint ResourceManager::ImportFileStep2(const char* new_file_in_assets, ImportOpti
 	case ResourceType::MODEL:
 	{
 		LOG("importing model from %s", new_file_in_assets);
-		App->FBX->LoadFBX(buffer, fileSize, (ResourceModel*)options->reference);
+		App->FBX->LoadFBX(buffer, fileSize, (ResourceModel*)options->reference, options);
 		break;
 	}
 

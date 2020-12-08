@@ -1062,7 +1062,7 @@ ModelOptions::ModelOptions(const char* importpath)
 	path = importpath;
 	GlobalScale = 1;
 	axis = false;
-	ignoreCameras = true;
+	ignoreCameras = false;
 }
 ModelOptions::~ModelOptions() {
 

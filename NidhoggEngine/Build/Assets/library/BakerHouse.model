@@ -1,18 +1,18 @@
 {
     "Game Objects": [
         {
-            "UID": 26378941,
+            "UID": 586445165,
             "ParentUID": 0,
-            "Name": "GameObject1",
+            "Name": "GameObject3",
             "Translation": [
                 0,
                 0,
                 0
             ],
             "Scale": [
-                1,
-                1,
-                1
+                5,
+                5,
+                5
             ],
             "Rotation": [
                 0,
@@ -23,8 +23,8 @@
             "Components": []
         },
         {
-            "UID": 103519009,
-            "ParentUID": 26378941,
+            "UID": 414778666,
+            "ParentUID": 586445165,
             "Name": "Chimney",
             "Translation": [
                 0,
@@ -45,19 +45,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 897844820,
+                    "Resource UID": 1970009048,
                     "Path": "Assets\/library\/Baker_house.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 125240761,
+                    "Resource UID": 444854938,
                     "Path": "Assets\/library\/Chimney.mesh"
                 }
             ]
         },
         {
-            "UID": 2057471838,
-            "ParentUID": 26378941,
+            "UID": 1377171566,
+            "ParentUID": 586445165,
             "Name": "Baker_house",
             "Translation": [
                 0,
@@ -78,12 +78,12 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 897844820,
+                    "Resource UID": 1970009048,
                     "Path": "Assets\/library\/Baker_house.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 2086086069,
+                    "Resource UID": 1397431277,
                     "Path": "Assets\/library\/Baker_house.mesh"
                 }
             ]

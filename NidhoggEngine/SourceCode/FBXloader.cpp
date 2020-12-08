@@ -740,11 +740,13 @@ bool FBXloader::LoadFBX(const char* buffer, uint size)
 	return ret;
 }
 
-void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* model, GameObject* father)
+void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* model, GameObject* father, ImportOptions* importOptions)
 {
 	std::string name = node->mName.C_Str();
 
 	LOG("loading %s", node->mName.C_Str());
+
+	ModelOptions* options = (ModelOptions*)importOptions;
 
 	if (name == "RootNode")
 	{
@@ -784,7 +786,10 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 	NewTrans->scale.Set(scaling.x, scaling.y, scaling.z);
 	NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
 
-
+	if (options != nullptr)
+	{
+		NewTrans->scale *= options->GlobalScale;
+	}
 
 	//NewTrans->rot = NewTrans->rot * quat;
 	App->serializer->AddVec3(JsonTrans, NewTrans->pos.x, NewTrans->pos.y, NewTrans->pos.z);
@@ -919,10 +924,9 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 	}
 	object->to_delete = true;
 }
-bool FBXloader::LoadFBX(const char* buffer, uint size, ResourceModel* model)
+bool FBXloader::LoadFBX(const char* buffer, uint size, ResourceModel* model, ImportOptions* ImportOptions)
 {
 	bool ret = true;
-
 
 	const aiScene* scene = aiImportFileFromMemory(buffer, size, aiProcessPreset_TargetRealtime_MaxQuality, nullptr);
 	if (scene != nullptr)
@@ -931,7 +935,7 @@ bool FBXloader::LoadFBX(const char* buffer, uint size, ResourceModel* model)
 
 		if (node != nullptr)
 		{
-			LoadNode(scene, node, model, nullptr);
+			LoadNode(scene, node, model, nullptr, ImportOptions);
 			aiReleaseImport(scene);
 
 		}
