@@ -441,11 +441,12 @@ void Serializer::LoadModel(Resource* model)
 	tempvector.clear();
 }
 
-bool Serializer::LoadMeta(const char* path, uint* uid, ResourceType* type, std::string* Assets, std::string* library, uint* timestamp)
+bool Serializer::LoadMeta(const char* path, uint* uid, ResourceType* type, std::string* Assets, std::string* library, TextureOptions* options, uint* timestamp)
 {
 	bool ret = false;
 	JSON_Value* value;
 	JSON_Object* object;
+
 
 	value = json_parse_file(path);
 	if (value == NULL)
@@ -464,10 +465,22 @@ bool Serializer::LoadMeta(const char* path, uint* uid, ResourceType* type, std::
 			*timestamp = json_object_get_number(object, "Last modified");
 	}
 
+	if (options != nullptr)
+	{
+		if (json_object_has_value_of_type(object, "Filtering", JSONNumber))
+			options->filtering = json_object_get_number(object, "Filtering");
 
+		if (json_object_has_value_of_type(object, "Wrapping", JSONNumber))
+			options->filtering = json_object_get_number(object, "Wrapping");
+
+		if (json_object_has_value_of_type(object, "FlipXY", JSONNumber))
+			options->flipXY = json_object_get_number(object, "FlipXY");
+	}
 	std::string Type;
+
 	if (json_object_has_value_of_type(object, "Type", JSONString))
 		Type = json_object_get_string(object, "Type");
+	
 
 	if (Type == "3D Model")
 		*type = ResourceType::MODEL;

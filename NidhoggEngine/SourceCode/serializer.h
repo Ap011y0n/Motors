@@ -8,6 +8,7 @@ typedef struct json_object_t JSON_Object;
 typedef struct json_array_t  JSON_Array;
 typedef struct json_value_t  JSON_Value;
 
+class TextureOptions;
 enum class ComponentType;
 enum class ResourceType;
 
@@ -29,7 +30,7 @@ public:
 	void SaveValueAsFile(JSON_Value* root, const char* name, std::string directory = "");
 	void LoadScene(const char* path);
 	void LoadModel(Resource* model);
-	bool LoadMeta(const char* path, uint* uid, ResourceType* type, std::string* Assets, std::string* library, uint* timestamp = nullptr);
+	bool LoadMeta(const char* path, uint* uid, ResourceType* type, std::string* Assets, std::string* library, TextureOptions* options = nullptr, uint* timestamp = nullptr);
 
 	void sortScene();
 	void AddFloat(JSON_Object* obj, const char* name, double value);

@@ -330,7 +330,7 @@ void FileSystem::RefreshAssets()
 					std::string Assets;
 					std::string Library;
 					uint timestamp1, timestamp2;
-					App->serializer->LoadMeta(MetaPath.c_str(), &id, &type, &Assets, &Library, &timestamp1);
+					App->serializer->LoadMeta(MetaPath.c_str(), &id, &type, &Assets, &Library, nullptr, &timestamp1);
 					timestamp2 = GetDate(fullpath.c_str());
 					if (timestamp1 != timestamp2)
 					{

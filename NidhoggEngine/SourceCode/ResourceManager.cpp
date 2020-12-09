@@ -43,7 +43,9 @@ uint ResourceManager::FindInAssets(const char* file_in_assets)
 	ResourceType type;
 	std::string Assets;
 	std::string Library;
-	if (App->serializer->LoadMeta(MetaPath.c_str(), &id, &type, &Assets, &Library))
+	TextureOptions* texOptions = new TextureOptions("");
+
+	if (App->serializer->LoadMeta(MetaPath.c_str(), &id, &type, &Assets, &Library, texOptions))
 	{
 		if (App->file_system->CheckFile(Library.c_str()))
 		{
@@ -57,7 +59,14 @@ uint ResourceManager::FindInAssets(const char* file_in_assets)
 
 				switch (type) {
 				case ResourceType::MODEL: NewResource = (Resource*) new ResourceModel(id); break;
-				case ResourceType::TEXTURE: NewResource = (Resource*) new ResourceTexture(id); break;
+				case ResourceType::TEXTURE:
+				{
+					ResourceTexture* textureres = new ResourceTexture(id);
+					textureres->flipXY = texOptions->flipXY;
+					textureres->wrapping = texOptions->wrapping;
+					textureres->filtering = texOptions->filtering;
+					NewResource = (Resource*)textureres;
+				}break;
 					//	case ResourceType::MESH: ret = (Resource*) new ResourceMesh(uid); break;
 				//Load Param from meta, in the case of textures?
 				}
@@ -90,6 +99,7 @@ uint ResourceManager::FindInAssets(const char* file_in_assets)
 
 	}
 
+	delete texOptions;
 	return 0;
 
 }
@@ -299,6 +309,24 @@ uint ResourceManager::ImportFileStep2(const char* new_file_in_assets, ImportOpti
 		App->file_system->SplitFilePath(new_file_in_assets, &file, &extension);
 		MaterialImporter::Save(&buffer, file.c_str(), &path);
 		LOG("importing texture from %s", new_file_in_assets);
+
+
+			JSON_Value* root_value = json_value_init_object();
+			JSON_Object* root_object;
+			root_object = json_value_get_object(root_value);
+			App->serializer->AddFloat(root_object, "UID", resourceTexture->GetUID());
+			App->serializer->AddFloat(root_object, "Last modified", App->file_system->GetDate(resourceTexture->GetAssetFile()));
+			App->serializer->AddString(root_object, "Type", "Texture"); 
+			App->serializer->AddFloat(root_object, "Filtering", textureOptions->filtering);
+			App->serializer->AddFloat(root_object, "Wrapping", textureOptions->wrapping);
+			App->serializer->AddFloat(root_object, "FlipXY", textureOptions->flipXY);
+
+			App->serializer->AddString(root_object, "Asset Path", resourceTexture->GetAssetFile());
+			App->serializer->AddString(root_object, "Library path", resourceTexture->GetLibraryFile());
+
+			file = file + extension + ".meta";
+			App->serializer->SaveValueAsFile(root_value, file.c_str());
+
 	}
 
 	break;

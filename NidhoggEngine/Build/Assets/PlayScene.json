@@ -2,7 +2,7 @@
     "Game Objects": [
         {
             "UID": 320249023,
-            "ParentUID": 1233011590,
+            "ParentUID": 981074474,
             "Name": "GameObject2",
             "Translation": [
                 0,
@@ -1152,11 +1152,11 @@
             ]
         },
         {
-            "UID": 169628039,
-            "ParentUID": 1233011590,
-            "Name": "GameObject2",
+            "UID": 1727316108,
+            "ParentUID": 981074474,
+            "Name": "GameObject1",
             "Translation": [
-                -8.121682,
+                0,
                 0,
                 0
             ],
@@ -1174,8 +1174,8 @@
             "Components": []
         },
         {
-            "UID": 169697660,
-            "ParentUID": 169628039,
+            "UID": 1727455350,
+            "ParentUID": 1727316108,
             "Name": "Chimney",
             "Translation": [
                 0,
@@ -1197,18 +1197,18 @@
                 {
                     "Type": "texture",
                     "Path": "Assets\/library\/Baker_house.dds",
-                    "UID": 1970009048
+                    "UID": 1175769976
                 },
                 {
                     "Type": "Mesh",
                     "Path": "Assets\/library\/Chimney.mesh",
-                    "UID": 1037890957
+                    "UID": 34954741
                 }
             ]
         },
         {
-            "UID": 169836902,
-            "ParentUID": 169628039,
+            "UID": 1727594592,
+            "ParentUID": 1727316108,
             "Name": "Baker_house",
             "Translation": [
                 0,
@@ -1230,12 +1230,12 @@
                 {
                     "Type": "texture",
                     "Path": "Assets\/library\/Baker_house.dds",
-                    "UID": 1970009048
+                    "UID": 1175769976
                 },
                 {
                     "Type": "Mesh",
                     "Path": "Assets\/library\/Baker_house.mesh",
-                    "UID": 1895156147
+                    "UID": 1932888652
                 }
             ]
         }
