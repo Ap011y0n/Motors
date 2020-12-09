@@ -8,7 +8,7 @@
 class UiFile
 {
 public:
-	UiFile(const char*);
+	UiFile(const char* filename, const char* extension);
 	~UiFile();
 	std::string file;
 	std::string extension;

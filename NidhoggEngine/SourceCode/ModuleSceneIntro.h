@@ -56,5 +56,6 @@ public:
 	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 	uint texName;
 	bool wanttoload;
+	uint FolderIco;
 
 };

@@ -54,6 +54,8 @@ bool ModuleSceneIntro::Start()
 	//	App->ResManager->ImportFileStep1(file_path.c_str());
 	//}
 
+	FolderIco = App->FBX->LoadTexBuffer("Assets/icons/folder-icon.png");
+
 	App->file_system->importAssetsFiles();
 
 	wanttoload = true;

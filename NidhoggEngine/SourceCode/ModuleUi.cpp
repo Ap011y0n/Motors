@@ -855,10 +855,13 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 				}
 				if (ImGui::BeginTabItem("Assets"))
 				{
-					ImGui::Text("Folders...");
 					for (int i = 0; i < FilesInDir.size(); i++)
 					{
-						ImGui::Text("%s", FilesInDir[i]->file.c_str());
+						std::string filedir = FilesInDir[i]->file.c_str();
+						filedir += FilesInDir[i]->extension.c_str();
+						ImGui::ImageButton((ImTextureID)App->scene_intro->FolderIco, { 64, 64 }, ImVec2( 0,1 ), ImVec2(1,0));
+						ImGui::Text("%s", filedir.c_str());
+
 
 					}
 					
