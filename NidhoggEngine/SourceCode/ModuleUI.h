@@ -68,6 +68,29 @@ public:
 	bool to_delete;
 };
 
+class FolderNode
+{
+public:
+
+	FolderNode(string res, FolderNode* Nodeparent)
+	{
+		path = res;
+		parent = Nodeparent;
+		if (parent != nullptr) 
+		{
+			parent->childs.push_back(this);
+		}
+	}
+	~FolderNode() {
+
+	}
+
+public:
+	std::string path;
+	FolderNode* parent;
+	std::vector<FolderNode*> childs;
+};
+
 class TreeNode
 {
 public:
@@ -101,6 +124,7 @@ public:
 
 	void HierarchyWin(); //hierarchy window
 	void AssetsTree(); //hierarchy window
+	void FolderTree(); //hierarchy window
 	void ResourceInfo(); //hierarchy window
 	void ImportWindow(); //import window
 
@@ -112,6 +136,7 @@ public:
 	void GameObjectHierarchyTree(GameObject* node, int id);
 	void Change_Visibility_BoundingBoxes(GameObject* node,bool visibility);
 	void AssetsHierarchyTree(AssetNode* node);
+	void FileHierarchyTree(FolderNode* node);
 
 	void DeactivateGameObjects(GameObject* father);
 	void DeactivateAssets();
@@ -140,6 +165,7 @@ public:
 
 	 bool Hierarchy_open;
 	 bool Assetstree_open;
+	 bool Foldertree_open;
 	 bool ResourceInfo_open;
 	 bool Inspector_open;
 	 bool Config_Camera_open;
@@ -179,8 +205,11 @@ private:
 	float width = 1324;
 	float height = 768;
 	AssetNode* selectedAsset;
+	FolderNode* selectedFolder;
 	std::string currentDirectory;
+	std::string currentFolderDirectory;
 	vector< UiFile*> FilesInDir;
+	FolderNode* FoldersInDir;
 
 };
 

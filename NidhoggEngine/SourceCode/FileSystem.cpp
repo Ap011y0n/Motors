@@ -264,6 +264,34 @@ void FileSystem::checkDirectoryFiles(const char* currentDirectory, vector<UiFile
 	}
 }
 
+
+void FileSystem::checkDirectoryFolders(const char* currentDirectory, FolderNode *node)
+{
+	if (PHYSFS_exists(currentDirectory) != 0)
+	{
+		char** Assets_List = PHYSFS_enumerateFiles(currentDirectory);
+		char** i;
+
+		for (i = Assets_List; *i != nullptr; i++)
+		{
+			std::string extension;
+			std::string file;
+
+			SplitFilePath(*i, &file, &extension);
+			std::string fullpath = currentDirectory;
+			fullpath += file + extension;
+
+			if (extension == "") 
+			{
+				FolderNode* NewFolder = new FolderNode(file.c_str(), node);
+				NewFolder->parent = node->parent;
+				checkDirectoryFolders(fullpath.c_str(), NewFolder);
+			}
+		}
+
+	}
+}
+
 void FileSystem::importAssetsFiles()
 {
 	if (PHYSFS_exists("Assets/") != 0)

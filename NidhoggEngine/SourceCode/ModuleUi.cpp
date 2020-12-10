@@ -109,6 +109,7 @@ bool ModuleUI::Init()
 	Wireframe_bool = false;
 	Hierarchy_open = true;
 	Assetstree_open = true;
+	Foldertree_open = true;
 	importWindow = false;
 	ResourceInfo_open = true;
 	Inspector_open = true;
@@ -129,6 +130,9 @@ bool ModuleUI::Init()
 	selectedAsset = nullptr;
 	currentDirectory = "Assets/";
 	App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+	currentFolderDirectory= "Assets";
+	FoldersInDir = new FolderNode(currentFolderDirectory,nullptr);
+	App->file_system->checkDirectoryFolders(currentDirectory.c_str(),FoldersInDir);
 	SortFilesinDir();
 	return ret;
 }
@@ -327,6 +331,7 @@ update_status ModuleUI::Update(float dt)
 	Win_Configuration::UpdateUi(show_Configuration);
 	HierarchyWin(); 
 	AssetsTree();
+	FolderTree();
 	ImportWindow();
 	ResourceInfo();
 	Win_CameraConfig::UpdateUi(App->camera->cameraComp);
@@ -512,6 +517,7 @@ AssetNode* ModuleUI::createAssetNode(Resource* resource)
 	return node;
 }
 
+
 void ModuleUI::AssetsTree()
 {
 	if (Assetstree_open == true) {
@@ -529,6 +535,23 @@ void ModuleUI::AssetsTree()
 			else
 			AssetsHierarchyTree(assets[i]);
 		}
+
+		ImGui::End();
+	}
+}
+
+void ModuleUI::FolderTree()
+{
+	currentFolderDirectory = "Assets";
+	App->file_system->checkDirectoryFolders(currentFolderDirectory.c_str(), FoldersInDir);
+
+	if (Foldertree_open == true) {
+
+		ImGui::Begin("Folder Tree", &Foldertree_open);
+
+	
+		FileHierarchyTree(FoldersInDir);
+		
 
 		ImGui::End();
 	}
@@ -791,6 +814,44 @@ void ModuleUI::AssetsHierarchyTree(AssetNode* node)
 	}
 
 }
+
+void ModuleUI::FileHierarchyTree(FolderNode* node)
+{
+	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+	int node_clicked = -1;
+
+	/*std::string file, extension;
+	App->file_system->SplitFilePath(node->owner->GetAssetFile(), &file, &extension);
+	file.append(extension);
+	node->owner->name = file.c_str();*/
+
+	
+
+	/*if (node->is_selected == true)
+	{
+		node_flags += ImGuiTreeNodeFlags_Selected;
+	}*/
+
+	bool open = ImGui::TreeNodeEx(node->path.c_str(), node_flags);
+
+	if (ImGui::IsItemClicked())
+	{
+		//DeactivateAssets();
+		//node->is_selected = true;
+		selectedFolder = node;
+	}
+
+	if (open)
+	{
+		ImGui::TreePop();
+	}
+
+	for (int i = 0; i < node->childs.size(); i++) 
+	{
+		FileHierarchyTree(node->childs[i]);
+	}
+}
+
 void ModuleUI::ChangeParent(GameObject* obj, GameObject* nextOwner)
 {
 	if (obj != nullptr && nextOwner != nullptr) {
