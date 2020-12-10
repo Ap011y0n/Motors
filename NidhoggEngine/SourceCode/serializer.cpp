@@ -441,6 +441,39 @@ void Serializer::LoadModel(Resource* model)
 	tempvector.clear();
 }
 
+void Serializer::LoadLibPathsFromModel(const char* path, std::vector<std::string>* direvector)
+{
+	JSON_Value* root_value;
+	JSON_Object* main_object;
+	JSON_Array* main_array;
+
+	root_value = json_parse_file(path);
+	main_object = json_value_get_object(root_value);
+	main_array = json_object_get_array(main_object, "Game Objects");
+
+
+	for (int i = 0; i < json_array_get_count(main_array); i++) {
+		JSON_Object* obj_in_array = json_array_get_object(main_array, i);
+		JSON_Array* component_array = json_object_get_array(obj_in_array, "Components");
+
+		for (int j = 0; j < json_array_get_count(component_array); j++)
+		{
+			JSON_Object* obj_in_array_in_obj = json_array_get_object(component_array, j);
+			std::string type = json_object_get_string(obj_in_array_in_obj, "Type");
+			const char* componentpath = json_object_get_string(obj_in_array_in_obj, "Path");
+
+
+			if (type == "Mesh")
+			{
+				direvector->push_back(componentpath);
+
+			}
+
+		}
+	}
+	
+}
+
 bool Serializer::LoadMeta(const char* path, uint* uid, ResourceType* type, std::string* Assets, std::string* library, TextureOptions* options, uint* timestamp)
 {
 	bool ret = false;

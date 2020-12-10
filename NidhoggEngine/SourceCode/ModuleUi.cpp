@@ -1145,6 +1145,43 @@ void ModuleUI::RightClick_Assets_Menu(const char* path)
 {
 	if (ImGui::MenuItem("Delete"))
 	{
+		std::string meta = "Assets/";
+		meta += path;
+		meta += ".meta";
+		uint id = 0;
+		ResourceType type = ResourceType::UNKNOWN;
+		std::string Assets;
+		std::string Library;
+		uint timestamp1, timestamp2;
+
+		App->serializer->LoadMeta(meta.c_str(), &id, &type, &Assets, &Library, nullptr, &timestamp1);
+		if (type != ResourceType::UNKNOWN)
+		{
+			if (type != ResourceType::MODEL)
+			{
+				Library = App->file_system->substractPrefix(Library);
+				meta = App->file_system->substractPrefix(meta);
+
+				App->file_system->RemoveFile(Library.c_str());
+				App->file_system->RemoveFile(meta.c_str());
+			}
+			else
+			{
+				std::vector<std::string> libpaths;
+				App->serializer->LoadLibPathsFromModel(Library.c_str(), &libpaths);
+				for (int i = 0; i < libpaths.size(); i++)
+				{
+					libpaths[i] = App->file_system->substractPrefix(libpaths[i]);
+					App->file_system->RemoveFile(libpaths[i].c_str());
+				}
+
+				meta = App->file_system->substractPrefix(meta);
+				App->file_system->RemoveFile(meta.c_str());
+				Library = App->file_system->substractPrefix(Library);
+				App->file_system->RemoveFile(Library.c_str());
+
+			}
+		}
 		App->file_system->RemoveFile(path);
 		App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
 		SortFilesinDir();

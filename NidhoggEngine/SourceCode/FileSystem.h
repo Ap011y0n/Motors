@@ -32,6 +32,7 @@ public:
 	FileType SetFileType(std::string file);
 	const char* GetWriteDir();
 	// Called before render is available
+	std::string substractPrefix(std::string dir);
 	bool Init();
 
 	// Called before quitting
