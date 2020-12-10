@@ -867,7 +867,24 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 					{
 						std::string filedir = FilesInDir[i]->file.c_str();
 						filedir += FilesInDir[i]->extension.c_str();
-						ImGui::ImageButton((ImTextureID)App->scene_intro->FolderIco, { 64, 64 }, ImVec2( 0,1 ), ImVec2(1,0));
+						ImGui::PushID(i);
+
+						if (ImGui::ImageButton((ImTextureID)App->scene_intro->FolderIco, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
+						{
+							LOG("%s", filedir.c_str());
+						}
+
+					/*	const bool is_active = ImGui::IsItemActive();
+						if (is_active == true)
+						{
+							LOG("penis man");
+							currentDirectory = "Assets/library";
+							FilesInDir.clear();
+							App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+							SortFilesinDir();
+						}*/
+						ImGui::PopID();
+
 						ImGui::Text("%s", filedir.c_str());
 						ImGui::Dummy(ImVec2(0.0f, 20.0f));
 
