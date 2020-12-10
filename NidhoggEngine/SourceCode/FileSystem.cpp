@@ -288,7 +288,7 @@ void FileSystem::checkDirectoryFolders(const char* currentDirectory, FolderNode 
 
 			SplitFilePath(*i, &file, &extension);
 			std::string fullpath = currentDirectory;
-			fullpath += file + extension;
+			fullpath += "/" + file + extension;
 
 			if (extension == "") 
 			{

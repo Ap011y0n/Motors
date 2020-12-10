@@ -133,6 +133,8 @@ bool ModuleUI::Init()
 	currentFolderDirectory= "Assets";
 	FoldersInDir = new FolderNode(currentFolderDirectory,nullptr);
 	App->file_system->checkDirectoryFolders(currentDirectory.c_str(),FoldersInDir);
+	selectedFolder = FoldersInDir;
+
 	SortFilesinDir();
 	return ret;
 }
@@ -522,7 +524,7 @@ void ModuleUI::AssetsTree()
 {
 	if (Assetstree_open == true) {
 
-		ImGui::Begin("Assets Tree", &Assetstree_open);
+		ImGui::Begin("Resources", &Assetstree_open);
 
 		for (int i = 0; i < assets.size(); i++)
 		{
@@ -542,15 +544,13 @@ void ModuleUI::AssetsTree()
 
 void ModuleUI::FolderTree()
 {
-	currentFolderDirectory = "Assets";
-	App->file_system->checkDirectoryFolders(currentFolderDirectory.c_str(), FoldersInDir);
 
 	if (Foldertree_open == true) {
 
 		ImGui::Begin("Folder Tree", &Foldertree_open);
 
 	
-		FileHierarchyTree(FoldersInDir);
+		FolderHierarchyTree(FoldersInDir);
 		
 
 		ImGui::End();
@@ -815,40 +815,40 @@ void ModuleUI::AssetsHierarchyTree(AssetNode* node)
 
 }
 
-void ModuleUI::FileHierarchyTree(FolderNode* node)
+void ModuleUI::FolderHierarchyTree(FolderNode* node)
 {
-	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 	int node_clicked = -1;
 
-	/*std::string file, extension;
-	App->file_system->SplitFilePath(node->owner->GetAssetFile(), &file, &extension);
-	file.append(extension);
-	node->owner->name = file.c_str();*/
 
-	
-
-	/*if (node->is_selected == true)
+	if (selectedFolder == node)
 	{
 		node_flags += ImGuiTreeNodeFlags_Selected;
-	}*/
+	}
+	if (node->childs.empty())
+	{
+		node_flags += ImGuiTreeNodeFlags_Leaf;
+	}
 
 	bool open = ImGui::TreeNodeEx(node->path.c_str(), node_flags);
 
 	if (ImGui::IsItemClicked())
 	{
-		//DeactivateAssets();
-		//node->is_selected = true;
+
 		selectedFolder = node;
+		currentDirectory = selectedFolder->path;
+		App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+		SortFilesinDir();
 	}
 
 	if (open)
 	{
-		ImGui::TreePop();
-	}
+		for (int i = 0; i < node->childs.size(); i++)
+		{
+			FolderHierarchyTree(node->childs[i]);
+		}
 
-	for (int i = 0; i < node->childs.size(); i++) 
-	{
-		FileHierarchyTree(node->childs[i]);
+		ImGui::TreePop();
 	}
 }
 
@@ -900,15 +900,7 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 			ImGui::BeginGroup();
 			if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
 			{
-				if (ImGui::BeginTabItem("Console"))
-				{
-					for (int i = 0; i < consoleOutput.size(); i++)
-					{
-						const char* text = consoleOutput[i].c_str();
-						ImGui::Text(text);
-					}
-					ImGui::EndTabItem();
-				}
+				
 			
 
 				if (ImGui::BeginTabItem("Assets"))
@@ -933,7 +925,7 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 					ImGui::PopID();
 
 
-					ImGui::Columns(4, NULL, false);
+					ImGui::Columns(5, NULL, false);
 				
 				
 					for (int i = 0; i < FilesInDir.size(); i++)
@@ -976,6 +968,16 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 							RightClick_Assets_Menu(clickedAsset.c_str());
 							ImGui::EndPopup();
 						}
+					ImGui::EndTabItem();
+				}
+
+				if (ImGui::BeginTabItem("Console"))
+				{
+					for (int i = 0; i < consoleOutput.size(); i++)
+					{
+						const char* text = consoleOutput[i].c_str();
+						ImGui::Text(text);
+					}
 					ImGui::EndTabItem();
 				}
 				ImGui::EndTabBar();

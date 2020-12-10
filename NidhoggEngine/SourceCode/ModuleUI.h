@@ -136,7 +136,7 @@ public:
 	void GameObjectHierarchyTree(GameObject* node, int id);
 	void Change_Visibility_BoundingBoxes(GameObject* node,bool visibility);
 	void AssetsHierarchyTree(AssetNode* node);
-	void FileHierarchyTree(FolderNode* node);
+	void FolderHierarchyTree(FolderNode* node);
 
 	void DeactivateGameObjects(GameObject* father);
 	void DeactivateAssets();
