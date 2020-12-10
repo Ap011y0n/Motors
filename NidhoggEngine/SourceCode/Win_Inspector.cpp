@@ -63,6 +63,12 @@ void Win_Inspector::GameObjectInspector(GameObject* obj)
 			obj->to_delete = true;
 		}
 		ImGui::SameLine();
+
+		static bool hastodeactivate = obj->active;
+		ImGui::Checkbox("Active", &hastodeactivate);
+		obj->active = hastodeactivate;
+
+		ImGui::SameLine();
 		const char* items[] = { "Untagged" };
 		static int item_current_idx = 0;
 		const char* combo_label = items[item_current_idx];
@@ -83,8 +89,7 @@ void Win_Inspector::GameObjectInspector(GameObject* obj)
 			//ImGui::Columns(1);
 			ImGui::Columns(4, "mycolumns");
 			ImGui::Separator();
-			static bool active = false;
-			ImGui::Checkbox("Active", &active); ImGui::NextColumn(); ImGui::Text("x"); ImGui::NextColumn(); ImGui::Text("y"); ImGui::NextColumn(); ImGui::Text("z"); ImGui::NextColumn();
+			
 			ImGui::Separator();
 			ImGui::Text("Position"); ImGui::Spacing(); ImGui::Spacing();// ImGui::NextColumn();
 			ImGui::Text("Rotation"); ImGui::Spacing(); ImGui::Spacing(); //ImGui::NextColumn();
@@ -202,6 +207,9 @@ void Win_Inspector::GameObjectInspector(GameObject* obj)
 		if (ImGui::TreeNodeEx("Mesh", node_flags))
 		{
 			static bool cheked = false;
+			static bool active = true;
+			ImGui::Checkbox("Active", &active);
+			mesh->active = active;
 			ImGui::Checkbox("Display normals", &cheked);
 			if (cheked)
 			{
@@ -231,6 +239,10 @@ void Win_Inspector::GameObjectInspector(GameObject* obj)
 	{
 		if (ImGui::TreeNodeEx("Material", node_flags))
 		{
+			static bool active = true;
+			ImGui::Checkbox("Active", &active);
+			material->active = active;
+
 			static bool checkers_tex = false;
 			ImGui::Checkbox("Use checkers Texture", &checkers_tex);
 			if (checkers_tex) {

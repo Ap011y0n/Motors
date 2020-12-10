@@ -8,9 +8,10 @@
 class UiFile
 {
 public:
-	UiFile(const char* filename, const char* extension);
+	UiFile(const char* filename, const char* extension, const char* path);
 	~UiFile();
 	std::string file;
+	std::string fullpath;
 	std::string extension;
 };
 
@@ -32,6 +33,7 @@ public:
 	FileType SetFileType(std::string file);
 	const char* GetWriteDir();
 	// Called before render is available
+	std::string substractPrefix(std::string dir);
 	bool Init();
 
 	// Called before quitting

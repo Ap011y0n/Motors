@@ -95,6 +95,14 @@ void FileSystem::SplitFilePath(const char* full_path, std::string* file, std::st
 	}
 }
 
+std::string FileSystem::substractPrefix(std::string dir)
+{
+	size_t pos_separator = dir.find_first_of("\\/") + 1;
+
+	std::string ret = dir.substr(pos_separator, dir.back());
+	return ret;
+}
+
 FileType FileSystem::SetFileType(std::string extension)
 {
 	FileType ret = FileType::UNKNOWN;
@@ -243,6 +251,7 @@ unsigned int FileSystem::Save(const char* file, const char* buffer, unsigned int
 
 void FileSystem::checkDirectoryFiles(const char* currentDirectory, vector<UiFile*>* fileVec)
 {
+	fileVec->clear();
 	if (PHYSFS_exists(currentDirectory) != 0)
 	{
 		char** Assets_List = PHYSFS_enumerateFiles(currentDirectory);
@@ -255,9 +264,9 @@ void FileSystem::checkDirectoryFiles(const char* currentDirectory, vector<UiFile
 
 			SplitFilePath(*i, &file, &extension);
 			std::string fullpath = currentDirectory;
-			fullpath += file + extension;
+			fullpath += "/" + file + extension;
 
-			UiFile* filefound = new UiFile(file.c_str(), extension.c_str());
+			UiFile* filefound = new UiFile(file.c_str(), extension.c_str(), fullpath.c_str());
 			fileVec->push_back(filefound);
 		}
 
@@ -388,8 +397,9 @@ int FileSystem::GetDate(const char* path)
 }
 
 
-UiFile::UiFile(const char* name, const char* ext)
+UiFile::UiFile(const char* name, const char* ext, const char* path)
 {
 	extension = ext;
 	file = name;
+	fullpath = path;
 }

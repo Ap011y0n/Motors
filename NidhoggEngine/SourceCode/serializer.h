@@ -31,7 +31,7 @@ public:
 	void LoadScene(const char* path);
 	void LoadModel(Resource* model);
 	bool LoadMeta(const char* path, uint* uid, ResourceType* type, std::string* Assets, std::string* library, TextureOptions* options = nullptr, uint* timestamp = nullptr);
-
+	void LoadLibPathsFromModel(const char* path, std::vector<std::string>* direvector);
 	void sortScene();
 	void AddFloat(JSON_Object* obj, const char* name, double value);
 	void AddString(JSON_Object* obj, const char* name, const char* string);
