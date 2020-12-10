@@ -873,16 +873,14 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 						{
 							LOG("%s", filedir.c_str());
 						}
+						const bool is_hovered = ImGui::IsItemHovered(); // Hovered
 
-					/*	const bool is_active = ImGui::IsItemActive();
-						if (is_active == true)
+						if (is_hovered  && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
 						{
-							LOG("penis man");
-							currentDirectory = "Assets/library";
-							FilesInDir.clear();
-							App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-							SortFilesinDir();
-						}*/
+							clickedAsset = filedir;
+						}
+
+					
 						ImGui::PopID();
 
 						ImGui::Text("%s", filedir.c_str());
@@ -892,6 +890,12 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 
 					}
 					ImGui::Columns(1);
+
+					if (ImGui::BeginPopupContextWindow())
+						{
+							RightClick_Assets_Menu(clickedAsset.c_str());
+							ImGui::EndPopup();
+						}
 					ImGui::EndTabItem();
 				}
 				ImGui::EndTabBar();
@@ -1137,6 +1141,15 @@ void ModuleUI::RightClick_Inspector_Menu()
 
 }
 
+void ModuleUI::RightClick_Assets_Menu(const char* path)
+{
+	if (ImGui::MenuItem("Delete"))
+	{
+		App->file_system->RemoveFile(path);
+		App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+		SortFilesinDir();
+	}
+}
 void ModuleUI::Change_Visibility_BoundingBoxes(GameObject* node,bool visibility)
 {
 	node->displayAABB = visibility;

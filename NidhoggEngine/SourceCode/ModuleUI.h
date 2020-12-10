@@ -122,6 +122,8 @@ public:
 	void GuizmoUI();
 	void ControlsGuizmo();
 	void RightClick_Inspector_Menu();
+	void RightClick_Assets_Menu(const char* path);
+
 	vec3 ReturnLookAtCamera(vec3 direction);
 	AssetNode* createAssetNode(Resource* resource);
 public:
@@ -170,6 +172,7 @@ public:
 	int cameras;
 	int empty_GameObjects;
 	vector<ImportOptions*> importsvec;
+	std::string clickedAsset;
 private:
 	int c1;
 	vector<string> consoleOutput;

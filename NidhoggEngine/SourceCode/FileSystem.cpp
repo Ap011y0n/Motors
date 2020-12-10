@@ -129,15 +129,23 @@ bool FileSystem::CheckFile(const char* path) const
 bool FileSystem::RemoveFile(const char* path)
 {
 	bool ret = false;
-	if (PHYSFS_delete(path) != 0)
+	/*if (CheckFile(path))
+	{*/
+		if (PHYSFS_delete(path) != 0)
+		{
+			LOG("Deleting [%s]", path);
+			ret = true;
+		}
+		else
+		{
+			LOG("error while trying to delete [%s]: %s", path, PHYSFS_getLastError());
+		}
+//	}
+	
+	/*else
 	{
-		LOG("Deleting [%s]", path);
-		ret = true;
-	}
-	else
-	{
-		LOG("error while trying to delete [%s]: %s", path, PHYSFS_getLastError());
-	}
+		LOG("couldn't delete file %s, path not found", path);
+	}*/
 	return ret;
 }
 uint FileSystem::Load(const char* path, char** buffer) const
