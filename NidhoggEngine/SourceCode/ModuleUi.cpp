@@ -999,21 +999,21 @@ void ModuleUI::GuizmoUI()
 		float4x4 projection = App->camera->cameraComp->frustrum.ProjectionMatrix();
 		projection.Transpose();
 
-		float4x4 modelProjection = transform->local_transform;
+		float4x4 modelProjection = transform->global_transform;
 		modelProjection.Transpose();
 
 		ImGuizmo::SetDrawlist();
 		cornerPos = Vec2(imgcorner.x, App->window->windowSize.y - imgcorner.y - image_size.y);
 		ImGuizmo::SetRect(imgcorner.x, cornerPos.y, image_size.x, image_size.y);
+		float4x4 InverseGlobal = modelProjection.Inverted();
 
 		ImGuizmo::Manipulate(view.ptr(), projection.ptr(),guizmo_type, guizmo_mode, modelProjection.ptr());
 		if (ImGuizmo::IsUsing())
 		{
 			using_gizmo = true;
 			float4x4 MovementMatrix;
-			MovementMatrix.Set(modelProjection);
-			transform->local_transform = MovementMatrix.Transposed();
-			transform->UpdateFromGuizmo(transform->local_transform);
+			MovementMatrix = InverseGlobal.Transposed() * modelProjection.Transposed();
+			transform->local_transform = transform->local_transform * MovementMatrix;
 		}
 	}
 }
