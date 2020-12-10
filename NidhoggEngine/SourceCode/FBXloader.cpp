@@ -780,6 +780,10 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 
 	ModelOptions* options = (ModelOptions*)importOptions;
 
+	int upAxis = 0;
+	node->mMetaData->Get<int>("UpAxis", upAxis);
+	
+
 	if (name == "RootNode")
 	{
 		numberGO++;
@@ -788,6 +792,12 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 		name = "GameObject";
 		name.append(obj);
 
+	}
+	if (options->ignoreCameras)
+	{
+		std::size_t found = name.find("Sky001");
+			if (found != std::string::npos)
+			return;
 	}
 	GameObject* object = App->scene_intro->CreateGameObject(name.c_str(), father);
 	JSON_Object* JsonObj = App->serializer->AddObjectToArray(model->leaves);
@@ -818,7 +828,8 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 	NewTrans->scale.Set(scaling.x, scaling.y, scaling.z);
 	NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
 
-	if (options != nullptr)
+	name = node->mName.C_Str();
+	if (options != nullptr && name == "RootNode")
 	{
 		NewTrans->scale *= options->GlobalScale;
 	}
@@ -951,7 +962,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 	for (int n = 0; n < node->mNumChildren; n++)
 	{
 
-		LoadNode(scene, node->mChildren[n], model, object);
+		LoadNode(scene, node->mChildren[n], model, object, importOptions);
 
 	}
 	object->to_delete = true;

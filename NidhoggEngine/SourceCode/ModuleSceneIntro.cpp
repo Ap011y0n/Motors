@@ -110,7 +110,15 @@ update_status ModuleSceneIntro::Update(float dt)
 	{
 		wanttoload = false;
 		DeleteSceneObjects(scene);
-		App->serializer->LoadScene("Assets/Scene.json");
+		std::string file_path = "Assets/Street environment_V01.FBX";
+
+		uint UID = App->ResManager->FindInAssets(file_path.c_str());
+		Resource* NewResource = App->ResManager->RequestResource(UID);
+		if (NewResource != nullptr)
+		{
+			LOG("Resource Found");
+			App->serializer->LoadModel(NewResource);
+		}
 
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
