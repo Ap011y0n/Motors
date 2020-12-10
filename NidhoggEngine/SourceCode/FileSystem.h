@@ -8,9 +8,10 @@
 class UiFile
 {
 public:
-	UiFile(const char* filename, const char* extension);
+	UiFile(const char* filename, const char* extension, const char* path);
 	~UiFile();
 	std::string file;
+	std::string fullpath;
 	std::string extension;
 };
 

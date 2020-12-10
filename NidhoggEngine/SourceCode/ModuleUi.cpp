@@ -127,7 +127,7 @@ bool ModuleUI::Init()
 	App->Maxfps(max_fps);
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	selectedAsset = nullptr;
-	currentDirectory = "Assets/";
+	currentDirectory = "Assets";
 	App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
 	SortFilesinDir();
 	return ret;
@@ -831,14 +831,7 @@ void ModuleUI::DeactivateAssets()
 
 void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 {
-	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
-	{
-		currentDirectory = "Assets/library";
-		FilesInDir.clear();
-		App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-		SortFilesinDir();
-
-	}
+	
 	ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Example: Simple layout",&Console_open))
 	{
@@ -859,10 +852,29 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 
 				if (ImGui::BeginTabItem("Assets"))
 				{
-					ImGui::Columns(4, NULL, false);
-			
-					//	if (ImGui::Selectable(label, &selected[i])) {}
+					ImGui::PushID(-1);
 
+					if (ImGui::ImageButton((ImTextureID)App->scene_intro->FolderIco, { 18, 18 }, ImVec2(0, 1), ImVec2(1, 0)))
+					{
+						if (currentDirectory != "Assets")
+						{
+							size_t pos_separator = currentDirectory.find_first_of("\\/") + 1;
+
+							currentDirectory = currentDirectory.substr(0, pos_separator);
+							App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+							SortFilesinDir();
+
+						}
+						
+
+					}
+		
+					ImGui::PopID();
+
+
+					ImGui::Columns(4, NULL, false);
+				
+				
 					for (int i = 0; i < FilesInDir.size(); i++)
 					{
 						std::string filedir = FilesInDir[i]->file.c_str();
@@ -872,12 +884,19 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 						if (ImGui::ImageButton((ImTextureID)App->scene_intro->FolderIco, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
 						{
 							LOG("%s", filedir.c_str());
+							if (FilesInDir[i]->extension == "")
+							{
+								currentDirectory = FilesInDir[i]->fullpath.c_str();
+								App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+								SortFilesinDir();
+
+							}
 						}
 						const bool is_hovered = ImGui::IsItemHovered(); // Hovered
 
 						if (is_hovered  && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
 						{
-							clickedAsset = filedir;
+							clickedAsset = FilesInDir[i]->fullpath;
 						}
 
 					
@@ -1145,8 +1164,7 @@ void ModuleUI::RightClick_Assets_Menu(const char* path)
 {
 	if (ImGui::MenuItem("Delete"))
 	{
-		std::string meta = "Assets/";
-		meta += path;
+		std::string meta = path;
 		meta += ".meta";
 		uint id = 0;
 		ResourceType type = ResourceType::UNKNOWN;
@@ -1182,7 +1200,8 @@ void ModuleUI::RightClick_Assets_Menu(const char* path)
 
 			}
 		}
-		App->file_system->RemoveFile(path);
+		std::string deletepath = App->file_system->substractPrefix(path);
+		App->file_system->RemoveFile(deletepath.c_str());
 		App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
 		SortFilesinDir();
 	}

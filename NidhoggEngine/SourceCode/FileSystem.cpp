@@ -264,9 +264,9 @@ void FileSystem::checkDirectoryFiles(const char* currentDirectory, vector<UiFile
 
 			SplitFilePath(*i, &file, &extension);
 			std::string fullpath = currentDirectory;
-			fullpath += file + extension;
+			fullpath += "/" + file + extension;
 
-			UiFile* filefound = new UiFile(file.c_str(), extension.c_str());
+			UiFile* filefound = new UiFile(file.c_str(), extension.c_str(), fullpath.c_str());
 			fileVec->push_back(filefound);
 		}
 
@@ -369,8 +369,9 @@ int FileSystem::GetDate(const char* path)
 }
 
 
-UiFile::UiFile(const char* name, const char* ext)
+UiFile::UiFile(const char* name, const char* ext, const char* path)
 {
 	extension = ext;
 	file = name;
+	fullpath = path;
 }
