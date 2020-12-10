@@ -258,10 +258,14 @@ GameObject* ModuleSceneIntro::CreateGameObject(const char* name, GameObject* par
 
 void ModuleSceneIntro::UpdateGameObject(GameObject* parent, float dt)
 {
-	parent->Update(dt);
-	for (int i = 0; i < parent->childs.size(); i++)
+	if (parent->active)
 	{
-		UpdateGameObject(parent->childs[i], dt);
+		parent->Update(dt);
+		for (int i = 0; i < parent->childs.size(); i++)
+		{
+			UpdateGameObject(parent->childs[i], dt);
+		}
+
 	}
 
 }
