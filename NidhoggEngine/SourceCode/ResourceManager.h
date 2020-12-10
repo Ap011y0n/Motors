@@ -131,10 +131,12 @@ public:
 	//Searches for a resource in resources map, only useful when initializing application
 	bool SearchForResource(uint UID);
 
+	ResourceType ReturnType(const char* assetsFile);
+
+
 	std::map<uint, Resource*> resources;
 
 private:
-	ResourceType ReturnType(const char* assetsFile);
 
 };
 

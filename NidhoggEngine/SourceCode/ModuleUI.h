@@ -106,6 +106,7 @@ public:
 
 	void TimeMangmentWin();
 	void ShowExampleAppLayout(/*bool* p_open*/);
+	void SortFilesinDir();
 	void Change_Window_size(Vec2 newSize);
 
 	void GameObjectHierarchyTree(GameObject* node, int id);

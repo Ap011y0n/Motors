@@ -129,6 +129,7 @@ bool ModuleUI::Init()
 	selectedAsset = nullptr;
 	currentDirectory = "Assets/";
 	App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+	SortFilesinDir();
 	return ret;
 }
 
@@ -835,6 +836,7 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 		currentDirectory = "Assets/library";
 		FilesInDir.clear();
 		App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+		SortFilesinDir();
 
 	}
 	ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
@@ -853,18 +855,26 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 					}
 					ImGui::EndTabItem();
 				}
+			
+
 				if (ImGui::BeginTabItem("Assets"))
 				{
+					ImGui::Columns(4, NULL, false);
+			
+					//	if (ImGui::Selectable(label, &selected[i])) {}
+
 					for (int i = 0; i < FilesInDir.size(); i++)
 					{
 						std::string filedir = FilesInDir[i]->file.c_str();
 						filedir += FilesInDir[i]->extension.c_str();
 						ImGui::ImageButton((ImTextureID)App->scene_intro->FolderIco, { 64, 64 }, ImVec2( 0,1 ), ImVec2(1,0));
 						ImGui::Text("%s", filedir.c_str());
+						ImGui::Dummy(ImVec2(0.0f, 20.0f));
 
+						ImGui::NextColumn();
 
 					}
-					
+					ImGui::Columns(1);
 					ImGui::EndTabItem();
 				}
 				ImGui::EndTabBar();
@@ -876,7 +886,66 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 	ImGui::End();
 }
 
+void ModuleUI::SortFilesinDir()
+{
+	vector< UiFile*> NewVec;
+	for (int i = 0; i < FilesInDir.size(); i++)
+	{
+		if (FilesInDir[i]->extension == "")
+		{
+			NewVec.push_back(FilesInDir[i]);
+		}
+	}
+	for (int i = 0; i < FilesInDir.size(); i++)
+	{
+		if (FilesInDir[i]->extension == "json")
+		{
+			NewVec.push_back(FilesInDir[i]);
+		}
+	}
 
+	for (int i = 0; i < FilesInDir.size(); i++)
+	{
+		std::string path = FilesInDir[i]->file;
+		path += FilesInDir[i]->extension;
+		ResourceType type = App->ResManager->ReturnType(path.c_str());
+		if(type == ResourceType::MODEL)
+		NewVec.push_back(FilesInDir[i]);
+		
+	}
+
+	for (int i = 0; i < FilesInDir.size(); i++)
+	{
+		std::string path = FilesInDir[i]->file;
+		path += FilesInDir[i]->extension;
+		ResourceType type = App->ResManager->ReturnType(path.c_str());
+		if (type == ResourceType::TEXTURE)
+			NewVec.push_back(FilesInDir[i]);
+
+	}
+
+	for (int i = 0; i < FilesInDir.size(); i++)
+	{
+		std::string path = FilesInDir[i]->file;
+		path += FilesInDir[i]->extension;
+		ResourceType type = App->ResManager->ReturnType(path.c_str());
+		if (type == ResourceType::MESH)
+			NewVec.push_back(FilesInDir[i]);
+
+	}
+
+	for (int i = 0; i < FilesInDir.size(); i++)
+	{
+		if (FilesInDir[i]->extension == "meta")
+		{
+			NewVec.push_back(FilesInDir[i]);
+		}
+	}
+
+
+	FilesInDir = NewVec;
+
+}
 void ModuleUI::Change_Window_size(Vec2 newSize)
 {
 	//Get window size

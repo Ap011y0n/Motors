@@ -780,8 +780,8 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 
 	ModelOptions* options = (ModelOptions*)importOptions;
 
-	int upAxis = 0;
-	node->mMetaData->Get<int>("UpAxis", upAxis);
+	//int upAxis = 0;
+	//node->mMetaData->Get<int>("UpAxis", upAxis);
 	
 
 	if (name == "RootNode")
