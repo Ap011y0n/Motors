@@ -378,11 +378,11 @@ void FBXloader::ChangeTexture(Resource* resource)
 	if (App->scene_intro->selectedObj != nullptr)
 	{
 		mat = (ComponentMaterial*)App->scene_intro->selectedObj->GetComponent(ComponentType::MATERIAL);
+		ResourceTexture* NewResource = (ResourceTexture*)resource;
 
 		if (mat != nullptr)
 		{
 			
-			ResourceTexture* NewResource = (ResourceTexture*)resource;
 				mat->reference->references--;
 				mat->texbuffer = NewResource->texbuffer;
 				mat->texture_h = NewResource->texture_h;
@@ -392,13 +392,17 @@ void FBXloader::ChangeTexture(Resource* resource)
 
 				if (mat->texbuffer != 0)
 					mat->hastexture = true;
-			
 
 		}
 		else
 		{
-			mat->texbuffer = 0;
-			mat->hastexture = false;
+			mat = (ComponentMaterial*)App->scene_intro->selectedObj->CreateComponent(ComponentType::MATERIAL);
+			mat->texbuffer = NewResource->texbuffer;
+			mat->texture_h = NewResource->texture_h;
+			mat->texture_w = NewResource->texture_w;
+			mat->reference = NewResource;
+			mat->reference->references++;
+			mat->hastexture = true;
 		}
 
 	}
@@ -442,10 +446,10 @@ void FBXloader::ChangeMesh(Resource* resource)
 	if (App->scene_intro->selectedObj != nullptr)
 	{
 		mesh = (ComponentMesh*)App->scene_intro->selectedObj->GetComponent(ComponentType::MESH);
+		ResourceMesh* NewMeshResource = (ResourceMesh*)resource;
 
 		if (mesh != nullptr)
 		{
-			ResourceMesh* NewMeshResource = (ResourceMesh * )resource;
 			mesh->reference->references--;
 			mesh->reference = NewMeshResource;
 			mesh->num_vertex = NewMeshResource->num_vertex;
@@ -462,6 +466,26 @@ void FBXloader::ChangeMesh(Resource* resource)
 			mesh->id_index = NewMeshResource->id_index;
 			mesh->reference->references++;
 
+			CreateAABB(mesh);
+
+		}
+		else
+		{
+			mesh = (ComponentMesh*)App->scene_intro->selectedObj->CreateComponent(ComponentType::MESH);
+			mesh->reference = NewMeshResource;
+			mesh->num_vertex = NewMeshResource->num_vertex;
+			mesh->num_tex = NewMeshResource->num_tex;
+			mesh->num_normals = NewMeshResource->num_normals;
+			mesh->num_index = NewMeshResource->num_index;
+			mesh->vertex = NewMeshResource->vertex;
+			mesh->texCoords = NewMeshResource->texCoords;
+			mesh->normals = NewMeshResource->normals;
+			mesh->index = NewMeshResource->index;
+			mesh->id_vertex = NewMeshResource->id_vertex;
+			mesh->id_tex = NewMeshResource->id_tex;
+			mesh->id_normals = NewMeshResource->id_normals;
+			mesh->id_index = NewMeshResource->id_index;
+			mesh->reference->references++;
 			CreateAABB(mesh);
 
 		}
