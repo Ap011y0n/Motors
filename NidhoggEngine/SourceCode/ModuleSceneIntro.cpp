@@ -55,6 +55,15 @@ bool ModuleSceneIntro::Start()
 	//}
 
 	FolderIco = App->FBX->LoadTexBuffer("Assets/icons/folder-icon.png");
+	FolderGoBack = App->FBX->LoadTexBuffer("Assets/icons/folder-icon-go_back.png");
+	FbxIcon = App->FBX->LoadTexBuffer("Assets/icons/fbx-icon.png");
+	PngIcon = App->FBX->LoadTexBuffer("Assets/icons/png-icon.png");
+	TgaIcon = App->FBX->LoadTexBuffer("Assets/icons/tga-icon.png");
+	MetaIcon = App->FBX->LoadTexBuffer("Assets/icons/meta-icon.png");
+	MeshIcon = App->FBX->LoadTexBuffer("Assets/icons/mesh-icon.png");
+	DdsIcon = App->FBX->LoadTexBuffer("Assets/icons/dds-icon.png");
+	JsonIcon = App->FBX->LoadTexBuffer("Assets/icons/scene2-icon.png");
+	ModelIcon = App->FBX->LoadTexBuffer("Assets/icons/model-icon.png");
 
 	App->file_system->importAssetsFiles();
 

@@ -907,7 +907,7 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 				{
 					ImGui::PushID(-1);
 
-					if (ImGui::ImageButton((ImTextureID)App->scene_intro->FolderIco, { 18, 18 }, ImVec2(0, 1), ImVec2(1, 0)))
+					if (ImGui::ImageButton((ImTextureID)App->scene_intro->FolderGoBack, { 18, 18 }, ImVec2(0, 1), ImVec2(1, 0)))
 					{
 						if (currentDirectory != "Assets")
 						{
@@ -934,7 +934,125 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 						filedir += FilesInDir[i]->extension.c_str();
 						ImGui::PushID(i);
 
-						if (ImGui::ImageButton((ImTextureID)App->scene_intro->FolderIco, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
+						if (FilesInDir[i]->extension == "fbx" || FilesInDir[i]->extension == "FBX")
+						{
+							if (ImGui::ImageButton((ImTextureID)App->scene_intro->FbxIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
+							{
+								LOG("%s", filedir.c_str());
+								if (FilesInDir[i]->extension == "")
+								{
+									currentDirectory = FilesInDir[i]->fullpath.c_str();
+									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+									SortFilesinDir();
+
+								}
+							}
+						}
+						else if (FilesInDir[i]->extension == "png")
+						{
+							if (ImGui::ImageButton((ImTextureID)App->scene_intro->PngIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
+							{
+								LOG("%s", filedir.c_str());
+								if (FilesInDir[i]->extension == "")
+								{
+									currentDirectory = FilesInDir[i]->fullpath.c_str();
+									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+									SortFilesinDir();
+
+								}
+							}
+						}
+
+						else if (FilesInDir[i]->extension == "png")
+						{
+							if (ImGui::ImageButton((ImTextureID)App->scene_intro->PngIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
+							{
+								LOG("%s", filedir.c_str());
+								if (FilesInDir[i]->extension == "")
+								{
+									currentDirectory = FilesInDir[i]->fullpath.c_str();
+									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+									SortFilesinDir();
+
+								}
+							}
+						}
+
+						else if (FilesInDir[i]->extension == "tga")
+						{
+							if (ImGui::ImageButton((ImTextureID)App->scene_intro->TgaIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
+							{
+								LOG("%s", filedir.c_str());
+								if (FilesInDir[i]->extension == "")
+								{
+									currentDirectory = FilesInDir[i]->fullpath.c_str();
+									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+									SortFilesinDir();
+
+								}
+							}
+						}
+
+						else if (FilesInDir[i]->extension == "meta")
+						{
+							if (ImGui::ImageButton((ImTextureID)App->scene_intro->MetaIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
+							{
+								LOG("%s", filedir.c_str());
+								if (FilesInDir[i]->extension == "")
+								{
+									currentDirectory = FilesInDir[i]->fullpath.c_str();
+									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+									SortFilesinDir();
+
+								}
+							}
+						}
+						else if (FilesInDir[i]->extension == "mesh")
+						{
+							if (ImGui::ImageButton((ImTextureID)App->scene_intro->MeshIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
+							{
+								LOG("%s", filedir.c_str());
+								if (FilesInDir[i]->extension == "")
+								{
+									currentDirectory = FilesInDir[i]->fullpath.c_str();
+									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+									SortFilesinDir();
+
+								}
+							}
+						}
+						else if (FilesInDir[i]->extension == "dds")
+						{
+							if (ImGui::ImageButton((ImTextureID)App->scene_intro->DdsIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
+							{
+								LOG("%s", filedir.c_str());
+								if (FilesInDir[i]->extension == "")
+								{
+									currentDirectory = FilesInDir[i]->fullpath.c_str();
+									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+									SortFilesinDir();
+
+								}
+							}
+						}
+						else if (FilesInDir[i]->extension == "json")
+						{
+							if (ImGui::ImageButton((ImTextureID)App->scene_intro->JsonIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
+							{
+								LOG("%s", filedir.c_str());
+								if (FilesInDir[i]->extension == "")
+								{
+									currentDirectory = FilesInDir[i]->fullpath.c_str();
+									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+									SortFilesinDir();
+
+								}
+							}
+						}
+
+						else if (FilesInDir[i]->extension == "model")
+						{
+						if (ImGui::ImageButton((ImTextureID)App->scene_intro->ModelIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
 						{
 							LOG("%s", filedir.c_str());
 							if (FilesInDir[i]->extension == "")
@@ -945,6 +1063,22 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 
 							}
 						}
+						}
+						else {
+
+							if (ImGui::ImageButton((ImTextureID)App->scene_intro->FolderIco, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
+							{
+								LOG("%s", filedir.c_str());
+								if (FilesInDir[i]->extension == "")
+								{
+									currentDirectory = FilesInDir[i]->fullpath.c_str();
+									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+									SortFilesinDir();
+
+								}
+							}
+						}
+						
 						const bool is_hovered = ImGui::IsItemHovered(); // Hovered
 
 						if (is_hovered  && ImGui::IsMouseClicked(ImGuiMouseButton_Right))

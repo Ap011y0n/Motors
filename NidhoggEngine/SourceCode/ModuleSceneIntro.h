@@ -57,5 +57,13 @@ public:
 	uint texName;
 	bool wanttoload;
 	uint FolderIco;
-
+	uint FolderGoBack;
+	uint FbxIcon;
+	uint PngIcon;
+	uint TgaIcon;
+	uint MetaIcon;
+	uint MeshIcon;
+	uint DdsIcon;
+	uint JsonIcon;
+	uint ModelIcon;
 };
