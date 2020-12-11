@@ -63,17 +63,55 @@ The engine supports drag and drop of files like fbx, png and dds textures.
 
 
 ### Assigment 2
+
+Main Menu Bar updated:
+- We added on the main menu bar inside File two new options, one to save the scene and another one to Load the previous scene saved.
+- Now there is now another option inside the option GameObject in the menu bar, where you can create Cameras inside the scene, when selecting a camera in  the inspector we can change the position of the Far plane, near plane, and the value Fov of the camera.
+
+Hierarchy updated:
 Now on the Hierarchy window you can reparent all gameobjects by selecting them and dragging them into another GameObject, if you want to select one of the GameObjects from the Hierarchy you just need to left click the name of the GameObject. After selecting an object in the hierarchy the right click will open a popup where you can choose between several options, the first one is deleting the selected GameObject, creating an empty child for the selected GameObject and creating a new empty GameObject in the scene.
 
+Inspecot Updated:
+In the inspector there is a checkbox to activate and desactivate the GameObject.
+
+Cameras Updated:
+- Now when selecting a camera on the inspector have a functional Culling option.
+- Also can change the FOV and the far plane distance and near plane as well.
+
+New Guizmo: 
+- Now we can move the Objects in the scene directly by selecting them with the mouse in the Game window, with the left click, after selecting one through the game window we are able to see it selected in the game Hierarchy as well, after selecting a GameObject it will appear the guizmo which can move rotate and scale the gameobject itself.
+
+New winodw "Resources":
 There is a new window below the hierarchy where we can see the different resources than can be used by the user.
-After selecting some in the right part below there is a window where we can see the process where the resources use reference counting , and we can see how many there are in the scene, also there is a button to import them into the scene.
+After selecting some in the right part below there is a window where we can see the process where the resources use reference counting, and we can see how many there are in the scene, also there is a button to import them into the scene.
 
-Now we can move the Objects in the scene directly by selecting them with the mouse in the Game window, with the left click, after selecting one through the game window we are able to see it selected in the game Hierarchy as well, after selecting a GameObject it will appear the guizmo which can move rotate and scale the gameobject itself.
-We added on the main menu bar inside File two new options, one to save the scene and another one to Load the previous scene saved.
+New window General Bar: 
+- There is a new window under the Main menu Bar, where the first button "PLAY" will put the engine in play mode, while the engine is in play mode you can either Pause or Stop the play mode, when using the stop button the scene will come back to the state before hiting the play button.
+- Next we can change the gizmo mode from world to global or from global to world.
+- Followed by the Bounding Box checkbox were we can activate the visibility from all the Bounding boxes from the scene.
+- "Refresh Scene" is the last button from this window which updates the engine and delets all the files that have been deleted and updates all files (example: modify a png on Photoshop, then pressing the "Refresh Scene" and the texture will update on the engine).
 
-There is now another option inside the option GameObject in the menu bar, where you can create Cameras inside the scene, when selecting a camera in  the inspector we can change the position of the Far plane, near plane, and the value Fov of the camera.
+New window "Folder":
+- The user is able to navigate through folders using the Folder window, first image is the yellow arrow that let you go back to the folder Assets.
+- The user can delete any file from this folder first selectig with the left click and then opening a popup menu with the left click and using the delte option.
+- The popup menu also have the option to add to scene.
 
-On the top side under the main menú bar there is a new window with general options, where we can change the Guizmo from world to local, also we can put visible all the bounding boxes, and we can put on Play mode the engine, meanwhile is os play mode we can Pause or Stop, when he use the stop button the game will turn to the state before pushing the play button.
+New window "Folder Tree":
+- In this window we can visualize the assets folder divided in, the primitives, icons and the library.
+- This window let you select the folder that you will see on the folder window(the next window on the right).
+
+New Winodw "Camera Config":
+- With this window you can change all the parameters of the Editor's Camera.
+
+New Mouse picking:
+Now we can select any Object inside the Game window with the right click of the mouse.
+
+New Importer Window:
+- When importing the user is able to:
+1. Change the frontal axis.
+2. Change the scale of the mesh.
+3. Invert textures.
+4. Ignore cameras.
 
 ##New controls and Shortcuts
 F1: Load Bakerhouse.fbx
@@ -83,16 +121,17 @@ E: Guizmo translate mode.
 R: Guizmo rotate mode.
 T: Guizmo scale mode.
 
-##In progress
-Locals in gizmo
-The outliner
-Delete resources
+##Comments
+If you want to add something to the scene you will need to use the Window Folder, right click to add on scene, if it's not imported it will be imported when adding, if it's already imported it will apear on the scene.
+To change a mesh you will need to use the Resource window, and then the Resource Info will appear a button to import to the current scene.
+If it's a model it will be imported to the scene, but if it's a texture and it detects that it's a new one it will create a nre component, but if there is already one component it will get swaped.
+This can also be made with meshes, when selecting one mesh in the scene, then and with the Resoursce and Resouce info window we can swap meshes.
 
 ## License & Copyright 
 
 [MIT License]
 
-Copyright (c) 2019 by Pol de la Torre & Albert Garcia
+Copyright (c) 2020 by Pol de la Torre & Albert Garcia
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1234,6 +1234,15 @@ void ModuleUI::GuizmoUI()
 			float4x4 MovementMatrix;
 			MovementMatrix = InverseGlobal.Transposed() * modelProjection.Transposed();
 			transform->local_transform = transform->local_transform * MovementMatrix;
+
+			float3 translation, scaling;
+			vec3 euler;
+			Quat rotation;
+
+			transform->local_transform.Decompose(translation, rotation, scaling);
+			transform->pos.Set(translation.x, translation.y, translation.z);
+			transform->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
+			transform->scale.Set(scaling.x, scaling.y, scaling.z);
 		}
 	}
 }
