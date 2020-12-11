@@ -152,10 +152,7 @@ update_status ModuleSceneIntro::Update(float dt)
 			}
 		}
 	}
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-	{
-		App->file_system->RefreshAssets();
-	}
+
 
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)

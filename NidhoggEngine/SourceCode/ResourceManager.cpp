@@ -241,6 +241,7 @@ Resource* ResourceManager::ImportFileStep1(const char* new_file_in_assets)
 	if (type == ResourceType::UNKNOWN)
 	{
 		LOG("Failed to import resource, unknown type");
+		return nullptr;
 	}
 	ImportOptions* options;
 	switch (type)

@@ -1319,6 +1319,7 @@ void ModuleUI::TimeMangmentWin()
 			}
 		}
 
+
 		ImGui::End();
 	}
 
@@ -1397,11 +1398,39 @@ void ModuleUI::RightClick_Assets_Menu(const char* path)
 
 			}
 		}
-		std::string deletepath = App->file_system->substractPrefix(path);
-		App->file_system->RemoveFile(deletepath.c_str());
-		App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-		SortFilesinDir();
 	}
+	if (ImGui::MenuItem("AddToScene"))
+	{
+		std::string meta = path;
+		meta += ".meta";
+		uint UID = App->ResManager->FindInAssets(path);
+		if (UID == 0)
+		{
+			App->ResManager->ImportFileStep1(path);
+		}
+		if (UID != 0)
+		{
+			Resource* NewResource = App->ResManager->RequestResource(UID);
+			
+			switch (NewResource->GetType())
+			{
+			case ResourceType::MODEL:
+				App->serializer->LoadModel(NewResource);
+				break;
+			case ResourceType::TEXTURE:
+				App->FBX->ChangeTexture(NewResource);
+				break;
+			case ResourceType::MESH:
+				App->FBX->ChangeMesh(NewResource);
+				break;
+		}
+
+		
+		}
+	}
+		
+	
+
 }
 void ModuleUI::Change_Visibility_BoundingBoxes(GameObject* node,bool visibility)
 {
