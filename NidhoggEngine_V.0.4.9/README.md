@@ -126,6 +126,7 @@ If you want to add something to the scene you will need to use the Window Folder
 To change a mesh you will need to use the Resource window, and then the Resource Info will appear a button to import to the current scene.
 If it's a model it will be imported to the scene, but if it's a texture and it detects that it's a new one it will create a nre component, but if there is already one component it will get swaped.
 This can also be made with meshes, when selecting one mesh in the scene, then and with the Resoursce and Resouce info window we can swap meshes.
+Important!! When opening for the first time the engine import will appear many times, remember to push repeatedly the button until all is imported.
 
 ## License & Copyright 
 
