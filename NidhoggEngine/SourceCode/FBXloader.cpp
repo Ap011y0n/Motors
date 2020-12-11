@@ -817,7 +817,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 		name.append(obj);
 
 	}
-	if (options->ignoreCameras)
+	if (options != nullptr && options->ignoreCameras)
 	{
 		std::size_t found = name.find("Sky001");
 			if (found != std::string::npos)
@@ -856,6 +856,8 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, ResourceModel* mode
 	if (options != nullptr && name == "RootNode")
 	{
 		NewTrans->scale *= options->GlobalScale;
+		if(options->axis)
+		NewTrans->rot = Quat::RotateAxisAngle( float3(1, 0, 0), 1.5707963268);
 	}
 
 	//NewTrans->rot = NewTrans->rot * quat;

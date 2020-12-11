@@ -1310,15 +1310,25 @@ void ModuleUI::TimeMangmentWin()
 
 		}
 		ImGui::Text("|"); ImGui::SameLine();
-		static bool BoundingBox = false;
-		if (ImGui::Checkbox("BoundingBox",&BoundingBox))
 		{
-			for (int i = 0; i < App->scene_intro->scene->childs.size(); i++) 
+			static bool BoundingBox = false;
+			if (ImGui::Checkbox("BoundingBox", &BoundingBox))
 			{
-				Change_Visibility_BoundingBoxes(App->scene_intro->scene->childs[i],BoundingBox);
+				for (int i = 0; i < App->scene_intro->scene->childs.size(); i++)
+				{
+					Change_Visibility_BoundingBoxes(App->scene_intro->scene->childs[i], BoundingBox);
+				}
 			}
 		}
+		ImGui::SameLine(); ImGui::Text("|"); ImGui::SameLine();
 
+		if (ImGui::Button("Refresh Scene"))
+		{
+			App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+			SortFilesinDir();
+			App->file_system->RefreshAssets();
+
+		}
 
 		ImGui::End();
 	}
