@@ -1,9 +1,9 @@
 {
     "Game Objects": [
         {
-            "UID": 623733084,
+            "UID": 1100205486,
             "ParentUID": 0,
-            "Name": "GameObject2",
+            "Name": "GameObject1",
             "Translation": [
                 0,
                 0,
@@ -23,8 +23,8 @@
             "Components": []
         },
         {
-            "UID": 762278874,
-            "ParentUID": 623733084,
+            "UID": 1127427297,
+            "ParentUID": 1100205486,
             "Name": "Sky001_$AssimpFbx$_Translation",
             "Translation": [
                 18.153732,
@@ -45,8 +45,8 @@
             "Components": []
         },
         {
-            "UID": 866501511,
-            "ParentUID": 762278874,
+            "UID": 1149845259,
+            "ParentUID": 1127427297,
             "Name": "Sky001_$AssimpFbx$_PreRotation",
             "Translation": [
                 0,
@@ -67,8 +67,8 @@
             "Components": []
         },
         {
-            "UID": 928603443,
-            "ParentUID": 866501511,
+            "UID": 1176161997,
+            "ParentUID": 1149845259,
             "Name": "Sky001_$AssimpFbx$_PostRotation",
             "Translation": [
                 0,
@@ -89,8 +89,8 @@
             "Components": []
         },
         {
-            "UID": 1011939780,
-            "ParentUID": 928603443,
+            "UID": 1196630571,
+            "ParentUID": 1176161997,
             "Name": "Sky001",
             "Translation": [
                 0,
@@ -111,8 +111,8 @@
             "Components": []
         },
         {
-            "UID": 1074877164,
-            "ParentUID": 623733084,
+            "UID": 1217934597,
+            "ParentUID": 1100205486,
             "Name": "Dummy001_$AssimpFbx$_PreRotation",
             "Translation": [
                 0,
@@ -133,8 +133,8 @@
             "Components": []
         },
         {
-            "UID": 1187384700,
-            "ParentUID": 1074877164,
+            "UID": 1240700664,
+            "ParentUID": 1217934597,
             "Name": "Dummy001_$AssimpFbx$_Rotation",
             "Translation": [
                 0,
@@ -155,8 +155,8 @@
             "Components": []
         },
         {
-            "UID": 1259233572,
-            "ParentUID": 1187384700,
+            "UID": 1260751512,
+            "ParentUID": 1240700664,
             "Name": "Dummy001",
             "Translation": [
                 0,
@@ -177,8 +177,8 @@
             "Components": []
         },
         {
-            "UID": 1315348098,
-            "ParentUID": 1259233572,
+            "UID": 1280315013,
+            "ParentUID": 1260751512,
             "Name": "City_building_004",
             "Translation": [
                 -41.475891,
@@ -199,19 +199,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1603282936,
+                    "Resource UID": 1369917240,
                     "Path": "Assets\/library\/building03_c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 1329898887,
+                    "Resource UID": 1287277113,
                     "Path": "Assets\/library\/City_building_004.mesh"
                 }
             ]
         },
         {
-            "UID": 1944160800,
-            "ParentUID": 1259233572,
+            "UID": 362690350,
+            "ParentUID": 1260751512,
             "Name": "City_building_001",
             "Translation": [
                 17.707165,
@@ -232,19 +232,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1646706708,
+                    "Resource UID": 428621437,
                     "Path": "Assets\/library\/Building_V02_C.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 1963167333,
+                    "Resource UID": 373411984,
                     "Path": "Assets\/library\/City_building_001.mesh"
                 }
             ]
         },
         {
-            "UID": 2079641181,
-            "ParentUID": 1259233572,
+            "UID": 67552336,
+            "ParentUID": 1260751512,
             "Name": "City_building_007",
             "Translation": [
                 16.010492,
@@ -265,19 +265,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1780977545,
+                    "Resource UID": 138217651,
                     "Path": "Assets\/library\/building_016_c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 2101711038,
+                    "Resource UID": 83077819,
                     "Path": "Assets\/library\/City_building_007.mesh"
                 }
             ]
         },
         {
-            "UID": 235657290,
-            "ParentUID": 1259233572,
+            "UID": 1735569633,
+            "ParentUID": 1260751512,
             "Name": "City_building_008",
             "Translation": [
                 40.979996,
@@ -298,19 +298,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1714952935,
+                    "Resource UID": 1803241245,
                     "Path": "Assets\/library\/building_025_c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 251739741,
+                    "Resource UID": 1747683687,
                     "Path": "Assets\/library\/City_building_008.mesh"
                 }
             ]
         },
         {
-            "UID": 421079830,
-            "ParentUID": 1259233572,
+            "UID": 1217280752,
+            "ParentUID": 1260751512,
             "Name": "Line002",
             "Translation": [
                 -2.159772,
@@ -331,14 +331,14 @@
             "Components": [
                 {
                     "Type": "Mesh",
-                    "Resource UID": 438067354,
+                    "Resource UID": 1227723902,
                     "Path": "Assets\/library\/Line002.mesh"
                 }
             ]
         },
         {
-            "UID": 2008693212,
-            "ParentUID": 1259233572,
+            "UID": 2039341618,
+            "ParentUID": 1260751512,
             "Name": "Plane001",
             "Translation": [
                 -0.028603,
@@ -359,14 +359,14 @@
             "Components": [
                 {
                     "Type": "Mesh",
-                    "Resource UID": 2027421261,
+                    "Resource UID": 2047905001,
                     "Path": "Assets\/library\/Plane001.mesh"
                 }
             ]
         },
         {
-            "UID": 1349821885,
-            "ParentUID": 1259233572,
+            "UID": 935940206,
+            "ParentUID": 1260751512,
             "Name": "City_building_010",
             "Translation": [
                 25.154011,
@@ -387,19 +387,29 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1769331106,
+                    "Resource UID": 1024637360,
                     "Path": "Assets\/library\/building 01_c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 1366809409,
+                    "Resource UID": 947775776,
+                    "Path": "Assets\/library\/City_building_010.mesh"
+                },
+                {
+                    "Type": "texture",
+                    "Resource UID": 1024637360,
+                    "Path": "Assets\/library\/building 01_c.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Resource UID": 1014058987,
                     "Path": "Assets\/library\/City_building_010.mesh"
                 }
             ]
         },
         {
-            "UID": 395150661,
-            "ParentUID": 1259233572,
+            "UID": 91811417,
+            "ParentUID": 1260751512,
             "Name": "City_building_011",
             "Translation": [
                 30.134541,
@@ -420,19 +430,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1780977545,
+                    "Resource UID": 138217651,
                     "Path": "Assets\/library\/building_016_c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 413252121,
+                    "Resource UID": 102811535,
                     "Path": "Assets\/library\/City_building_011.mesh"
                 }
             ]
         },
         {
-            "UID": 109030168,
-            "ParentUID": 1259233572,
+            "UID": 1412637127,
+            "ParentUID": 1260751512,
             "Name": "City_building_013",
             "Translation": [
                 -42.288055,
@@ -453,19 +463,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1665408770,
+                    "Resource UID": 1475435269,
                     "Path": "Assets\/library\/building 06_ c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 132631687,
+                    "Resource UID": 1421409373,
                     "Path": "Assets\/library\/City_building_013.mesh"
                 }
             ]
         },
         {
-            "UID": 902844640,
-            "ParentUID": 1259233572,
+            "UID": 1879452036,
+            "ParentUID": 1260751512,
             "Name": "City_building_014",
             "Translation": [
                 -19.439707,
@@ -486,19 +496,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1603282936,
+                    "Resource UID": 1369917240,
                     "Path": "Assets\/library\/building03_c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 922756246,
+                    "Resource UID": 1891148364,
                     "Path": "Assets\/library\/City_building_014.mesh"
                 }
             ]
         },
         {
-            "UID": 975481160,
-            "ParentUID": 1259233572,
+            "UID": 1568128741,
+            "ParentUID": 1260751512,
             "Name": "City_building_016",
             "Translation": [
                 34.270424,
@@ -519,19 +529,29 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1769331106,
+                    "Resource UID": 1024637360,
                     "Path": "Assets\/library\/building 01_c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 993721862,
+                    "Resource UID": 1578780754,
+                    "Path": "Assets\/library\/City_building_016.mesh"
+                },
+                {
+                    "Type": "texture",
+                    "Resource UID": 1024637360,
+                    "Path": "Assets\/library\/building 01_c.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Resource UID": 757205150,
                     "Path": "Assets\/library\/City_building_016.mesh"
                 }
             ]
         },
         {
-            "UID": 1436672481,
-            "ParentUID": 1259233572,
+            "UID": 140036802,
+            "ParentUID": 1260751512,
             "Name": "City_building_017",
             "Translation": [
                 44.260082,
@@ -552,19 +572,29 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1769331106,
+                    "Resource UID": 1024637360,
                     "Path": "Assets\/library\/building 01_c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 1462919598,
+                    "Resource UID": 147973596,
+                    "Path": "Assets\/library\/City_building_017.mesh"
+                },
+                {
+                    "Type": "texture",
+                    "Resource UID": 1024637360,
+                    "Path": "Assets\/library\/building 01_c.dds"
+                },
+                {
+                    "Type": "Mesh",
+                    "Resource UID": 1560699026,
                     "Path": "Assets\/library\/City_building_017.mesh"
                 }
             ]
         },
         {
-            "UID": 1861915464,
-            "ParentUID": 1259233572,
+            "UID": 1035708882,
+            "ParentUID": 1260751512,
             "Name": "City_building_022",
             "Translation": [
                 -20.831324,
@@ -585,19 +615,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1776406461,
+                    "Resource UID": 1098367782,
                     "Path": "Assets\/library\/building05 _c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 1889624622,
+                    "Resource UID": 1048310283,
                     "Path": "Assets\/library\/City_building_022.mesh"
                 }
             ]
         },
         {
-            "UID": 2097994020,
-            "ParentUID": 1259233572,
+            "UID": 1845916380,
+            "ParentUID": 1260751512,
             "Name": "City_building_023",
             "Translation": [
                 42.130642,
@@ -618,19 +648,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1780977545,
+                    "Resource UID": 138217651,
                     "Path": "Assets\/library\/building_016_c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 2117487900,
+                    "Resource UID": 1856220288,
                     "Path": "Assets\/library\/City_building_023.mesh"
                 }
             ]
         },
         {
-            "UID": 98592155,
-            "ParentUID": 1259233572,
+            "UID": 2034402244,
+            "ParentUID": 1260751512,
             "Name": "City_building_024",
             "Translation": [
                 -20.572771,
@@ -651,19 +681,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1714952935,
+                    "Resource UID": 1803241245,
                     "Path": "Assets\/library\/building_025_c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 113421428,
+                    "Resource UID": 2056193617,
                     "Path": "Assets\/library\/City_building_024.mesh"
                 }
             ]
         },
         {
-            "UID": 467117925,
-            "ParentUID": 1259233572,
+            "UID": 1870953953,
+            "ParentUID": 1260751512,
             "Name": "City_building_026",
             "Translation": [
                 31.511889,
@@ -684,19 +714,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1776406461,
+                    "Resource UID": 1098367782,
                     "Path": "Assets\/library\/building05 _c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 485428248,
+                    "Resource UID": 1880770514,
                     "Path": "Assets\/library\/City_building_026.mesh"
                 }
             ]
         },
         {
-            "UID": 1130140525,
-            "ParentUID": 1259233572,
+            "UID": 1864849122,
+            "ParentUID": 1260751512,
             "Name": "City_building_028",
             "Translation": [
                 13.387990,
@@ -717,19 +747,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1623059470,
+                    "Resource UID": 1927508022,
                     "Path": "Assets\/library\/Building_V01_C.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 1146988807,
+                    "Resource UID": 1873760610,
                     "Path": "Assets\/library\/City_building_028.mesh"
                 }
             ]
         },
         {
-            "UID": 1246520850,
-            "ParentUID": 1259233572,
+            "UID": 414348528,
+            "ParentUID": 1260751512,
             "Name": "Object010",
             "Translation": [
                 -2.503353,
@@ -750,14 +780,14 @@
             "Components": [
                 {
                     "Type": "Mesh",
-                    "Resource UID": 1265945109,
+                    "Resource UID": 431753778,
                     "Path": "Assets\/library\/Object010.mesh"
                 }
             ]
         },
         {
-            "UID": 1649369773,
-            "ParentUID": 1259233572,
+            "UID": 902459274,
+            "ParentUID": 1260751512,
             "Name": "City_building_030",
             "Translation": [
                 -42.807240,
@@ -778,19 +808,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1623059470,
+                    "Resource UID": 1927508022,
                     "Path": "Assets\/library\/Building_V01_C.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 1665382603,
+                    "Resource UID": 922162017,
                     "Path": "Assets\/library\/City_building_030.mesh"
                 }
             ]
         },
         {
-            "UID": 1440783172,
-            "ParentUID": 1259233572,
+            "UID": 1745219394,
+            "ParentUID": 1260751512,
             "Name": "City_building_031",
             "Translation": [
                 -34.679482,
@@ -811,19 +841,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1623059470,
+                    "Resource UID": 1927508022,
                     "Path": "Assets\/library\/Building_V01_C.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 1459023874,
+                    "Resource UID": 1771536132,
                     "Path": "Assets\/library\/City_building_031.mesh"
                 }
             ]
         },
         {
-            "UID": 517328143,
-            "ParentUID": 1259233572,
+            "UID": 831348161,
+            "ParentUID": 1260751512,
             "Name": "City_building_032",
             "Translation": [
                 -29.478403,
@@ -844,19 +874,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1603282936,
+                    "Resource UID": 1369917240,
                     "Path": "Assets\/library\/building03_c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 536334676,
+                    "Resource UID": 842766005,
                     "Path": "Assets\/library\/City_building_032.mesh"
                 }
             ]
         },
         {
-            "UID": 1601488172,
-            "ParentUID": 1259233572,
+            "UID": 1894134543,
+            "ParentUID": 1260751512,
             "Name": "City_building_033",
             "Translation": [
                 -32.361496,
@@ -877,19 +907,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1665408770,
+                    "Resource UID": 1475435269,
                     "Path": "Assets\/library\/building 06_ c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 1617849107,
+                    "Resource UID": 1912166382,
                     "Path": "Assets\/library\/City_building_033.mesh"
                 }
             ]
         },
         {
-            "UID": 666058331,
-            "ParentUID": 1259233572,
+            "UID": 1414026042,
+            "ParentUID": 1260751512,
             "Name": "City_building_034",
             "Translation": [
                 16.049517,
@@ -910,19 +940,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1776406461,
+                    "Resource UID": 1098367782,
                     "Path": "Assets\/library\/building05 _c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 684090170,
+                    "Resource UID": 1426000854,
                     "Path": "Assets\/library\/City_building_034.mesh"
                 }
             ]
         },
         {
-            "UID": 413192774,
-            "ParentUID": 1259233572,
+            "UID": 439584539,
+            "ParentUID": 1260751512,
             "Name": "City_building_035",
             "Translation": [
                 13.387990,
@@ -943,19 +973,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1623059470,
+                    "Resource UID": 1927508022,
                     "Path": "Assets\/library\/Building_V01_C.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 436167704,
+                    "Resource UID": 450584657,
                     "Path": "Assets\/library\/City_building_035.mesh"
                 }
             ]
         },
         {
-            "UID": 2080498299,
-            "ParentUID": 1259233572,
+            "UID": 1982755821,
+            "ParentUID": 1260751512,
             "Name": "City_building_036",
             "Translation": [
                 -31.216331,
@@ -976,19 +1006,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1665408770,
+                    "Resource UID": 1475435269,
                     "Path": "Assets\/library\/building 06_ c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 2100897252,
+                    "Resource UID": 1994521770,
                     "Path": "Assets\/library\/City_building_036.mesh"
                 }
             ]
         },
         {
-            "UID": 1423761321,
-            "ParentUID": 1259233572,
+            "UID": 981464514,
+            "ParentUID": 1260751512,
             "Name": "City_building_037",
             "Translation": [
                 -20.317694,
@@ -1009,19 +1039,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1776406461,
+                    "Resource UID": 1098367782,
                     "Path": "Assets\/library\/building05 _c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 1443324822,
+                    "Resource UID": 1002211572,
                     "Path": "Assets\/library\/City_building_037.mesh"
                 }
             ]
         },
         {
-            "UID": 534072477,
-            "ParentUID": 1259233572,
+            "UID": 498292689,
+            "ParentUID": 1260751512,
             "Name": "City_building_038",
             "Translation": [
                 -41.649002,
@@ -1042,19 +1072,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1776406461,
+                    "Resource UID": 1098367782,
                     "Path": "Assets\/library\/building05 _c.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 552730905,
+                    "Resource UID": 509432049,
                     "Path": "Assets\/library\/City_building_038.mesh"
                 }
             ]
         },
         {
-            "UID": 87242814,
-            "ParentUID": 1259233572,
+            "UID": 1843252984,
+            "ParentUID": 1260751512,
             "Name": "City_building_039",
             "Translation": [
                 -42.807240,
@@ -1075,19 +1105,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1623059470,
+                    "Resource UID": 1927508022,
                     "Path": "Assets\/library\/Building_V01_C.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 105901242,
+                    "Resource UID": 1854461965,
                     "Path": "Assets\/library\/City_building_039.mesh"
                 }
             ]
         },
         {
-            "UID": 1699826233,
-            "ParentUID": 1259233572,
+            "UID": 20827701,
+            "ParentUID": 1260751512,
             "Name": "City_building_040",
             "Translation": [
                 -34.679482,
@@ -1108,19 +1138,19 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1623059470,
+                    "Resource UID": 1927508022,
                     "Path": "Assets\/library\/Building_V01_C.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 1730529094,
+                    "Resource UID": 38232951,
                     "Path": "Assets\/library\/City_building_040.mesh"
                 }
             ]
         },
         {
-            "UID": 597142848,
-            "ParentUID": 1259233572,
+            "UID": 751219527,
+            "ParentUID": 1260751512,
             "Name": "City_building_041",
             "Translation": [
                 30.695278,
@@ -1141,12 +1171,12 @@
             "Components": [
                 {
                     "Type": "texture",
-                    "Resource UID": 1646706708,
+                    "Resource UID": 428621437,
                     "Path": "Assets\/library\/Building_V02_C.dds"
                 },
                 {
                     "Type": "Mesh",
-                    "Resource UID": 618168390,
+                    "Resource UID": 763542444,
                     "Path": "Assets\/library\/City_building_041.mesh"
                 }
             ]

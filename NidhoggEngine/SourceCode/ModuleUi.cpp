@@ -130,6 +130,7 @@ bool ModuleUI::Init()
 	selectedAsset = nullptr;
 	currentDirectory = "Assets";
 	App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+	SortFilesinDir();
 	currentFolderDirectory= "Assets";
 	FoldersInDir = new FolderNode(currentFolderDirectory,nullptr);
 	App->file_system->checkDirectoryFolders(currentDirectory.c_str(),FoldersInDir);
@@ -1408,8 +1409,13 @@ void ModuleUI::RightClick_Assets_Menu(const char* path)
 				App->file_system->RemoveFile(meta.c_str());
 				Library = App->file_system->substractPrefix(Library);
 				App->file_system->RemoveFile(Library.c_str());
-
 			}
+
+			Assets = App->file_system->substractPrefix(Assets);
+			App->file_system->RemoveFile(Assets.c_str());
+			currentDirectory = "Assets";
+			App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
+			SortFilesinDir();
 		}
 	}
 	if (ImGui::MenuItem("AddToScene"))
