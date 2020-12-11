@@ -217,8 +217,11 @@ update_status ModuleUI::Update(float dt)
 
 			ImGui::MenuItem("Hierarchy", NULL, &Hierarchy_open);
 			ImGui::MenuItem("Inspector", NULL, &Inspector_open);
-			ImGui::MenuItem("Console", NULL, &Console_open);
+			ImGui::MenuItem("Folders", NULL, &Console_open);
 			ImGui::MenuItem("Camera Config", NULL, &Config_Camera_open);
+			ImGui::MenuItem("Assets tree ", NULL, &Assetstree_open);
+			ImGui::MenuItem("Folder tree", NULL, &Foldertree_open);
+			ImGui::MenuItem("Resource Info", NULL, &ResourceInfo_open);
 			ImGui::EndMenu();
 		}
 			
@@ -894,7 +897,7 @@ void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
 {
 	
 	ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
-	if (ImGui::Begin("Example: Simple layout",&Console_open))
+	if (ImGui::Begin("Folders",&Console_open))
 	{
 		{
 			ImGui::BeginGroup();
