@@ -112,6 +112,7 @@
     <ClInclude Include="SourceCode\Win_AboutMenu.h" />
     <ClInclude Include="SourceCode\Win_CameraConfig.h" />
     <ClInclude Include="SourceCode\Win_Configuration.h" />
+    <ClInclude Include="SourceCode\Win_Folder.h" />
     <ClInclude Include="SourceCode\Win_Hierarchy.h" />
     <ClInclude Include="SourceCode\Win_Inspector.h" />
     <ClInclude Include="SourceCode\Win_TimeManagement.h" />
@@ -154,6 +155,7 @@
     <ClCompile Include="SourceCode\Win_AboutMenu.cpp" />
     <ClCompile Include="SourceCode\Win_CameraConfig.cpp" />
     <ClCompile Include="SourceCode\Win_Configuration.cpp" />
+    <ClCompile Include="SourceCode\Win_Folder.cpp" />
     <ClCompile Include="SourceCode\Win_Hierarchy.cpp" />
     <ClCompile Include="SourceCode\Win_Inspector.cpp" />
     <ClCompile Include="SourceCode\Win_TimeManagement.cpp" />

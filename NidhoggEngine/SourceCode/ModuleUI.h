@@ -127,7 +127,6 @@ public:
 	void ResourceInfo(); //hierarchy window
 	void ImportWindow(); //import window
 
-	void ShowExampleAppLayout(/*bool* p_open*/);
 	void SortFilesinDir();
 	void Change_Window_size(Vec2 newSize);
 
@@ -198,9 +197,9 @@ public:
 	std::string clickedAsset;
 	vector< UiFile*> FilesInDir;
 	std::string currentDirectory;
+	vector<string> consoleOutput;
 private:
 	int c1;
-	vector<string> consoleOutput;
 	float width = 1324;
 	float height = 768;
 	AssetNode* selectedAsset;

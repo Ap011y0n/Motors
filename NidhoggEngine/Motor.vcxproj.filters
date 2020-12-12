@@ -115,6 +115,9 @@
     <ClCompile Include="SourceCode\Win_TimeManagement.cpp">
       <Filter>Modules\Editor_Windows</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Win_Folder.cpp">
+      <Filter>Modules\Editor_Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Application.h" />
@@ -235,6 +238,9 @@
       <Filter>Modules\Editor_Windows</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Win_TimeManagement.h">
+      <Filter>Modules\Editor_Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Win_Folder.h">
       <Filter>Modules\Editor_Windows</Filter>
     </ClInclude>
   </ItemGroup>

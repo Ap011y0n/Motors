@@ -16,6 +16,7 @@
 #include "Win_Configuration.h"
 #include "Win_AboutMenu.h"
 #include "Win_TimeManagement.h"
+#include "Win_Folder.h"
 #include "FileSystem.h"
 #include "glew/include/glew.h"        
 #define DROP_ID_HIERARCHY_NODES "hierarchy_node"
@@ -30,13 +31,10 @@ ModuleUI::~ModuleUI()
 
 bool ModuleUI::Init()
 {
-
-
 	App->renderer3D->context = SDL_GL_CreateContext(App->window->window);
 	SDL_GL_MakeCurrent(App->window->window, App->renderer3D->context);
 
 	bool err = glewInit();
-
 
 	if (err)
 	{
@@ -51,19 +49,8 @@ bool ModuleUI::Init()
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
-	/* *io = ImGui::GetIO(); (void)io;
-	io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-	io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    */     // Enable Multi-Viewport / Platform Windows
-	//io.ConfigViewportsNoAutoMerge = true;
-	//io.ConfigViewportsNoTaskBarIcon = true;
-
-	   // Setup Dear ImGui style
+	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsClassic();
-	//ImGui::StyleColorsLight();
 	 // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 	ImGuiStyle& style = ImGui::GetStyle();
 	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -75,23 +62,6 @@ bool ModuleUI::Init()
 	// Setup Platform/Renderer bindings
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL3_Init(App->window->glsl_version);
-
-	// Load Fonts
-// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-// - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-// - Read 'docs/FONTS.md' for more instructions and details.
-// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-//io.Fonts->AddFontDefault();
-//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-//io.Fonts->AddFontFromFileTTF("../../misc/fonts/ProggyTiny.ttf", 10.0f);
-//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-//IM_ASSERT(font != NULL);
-
-
 
 // Load assets
 
@@ -231,11 +201,7 @@ update_status ModuleUI::Update(float dt)
 
 		ImGui::EndMenu();
 	}
-	if (Console_open == true) {
-		ShowExampleAppLayout();
-	}
-
-
+	
 	if (ImGui::BeginMenu("Help"))
 	{
 		if (ImGui::MenuItem("Gui demo"))
@@ -334,7 +300,8 @@ update_status ModuleUI::Update(float dt)
 	
 	if (show_demo_window == true)
 		ImGui::ShowDemoWindow(&show_demo_window);
-
+	
+	if (Console_open == true)Win_Folder::Update_Ui();
 	Win_AboutMenu::Update_Ui(show_About);
 	Win_Configuration::UpdateUi(show_Configuration);
 	Win_Hierarchy::Update_Ui();
@@ -593,70 +560,6 @@ void ModuleUI::ResourceInfo()
 	}
 }
 
-void ModuleUI::GameObjectHierarchyTree(GameObject* node, int id)
-{
-	ImGuiTreeNodeFlags node_flags = /*ImGuiTreeNodeFlags_DefaultOpen | */ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-	int node_clicked = -1;
-
-	const char* GameObjname = node->Name.c_str();
-
-	if (App->scene_intro->selectedObj == node)
-	{
-		node_flags += ImGuiTreeNodeFlags_Selected;
-	}
-	if (node->childs.empty())
-	{
-		node_flags += ImGuiTreeNodeFlags_Leaf;
-	}
-	
-	bool open = ImGui::TreeNodeEx(GameObjname, node_flags);
-
-	if (ImGui::IsItemClicked())
-	{
-		DeactivateGameObjects(App->scene_intro->scene);
-
-		node->isSelected = true;
-		App->scene_intro->selectedObj = node;
-
-	}
-	DropTrget_In_Inspector(node);
-	if (ImGui::BeginDragDropTarget()) {
-		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
-
-		if (payload != nullptr) 
-		{
-			if (payload->IsDataType(DROP_ID_HIERARCHY_NODES)) 
-			{
-				GameObject* obj = *(GameObject**)payload->Data;
-
-				if (obj != nullptr) //The second part of this is bug that needs to be fixed
-				{
-					ChangeParent(obj, node);
-				}
-				
-			}
-			//ImGui::ClearDragDrop();
-		}
-		ImGui::EndDragDropTarget();
-	}
-
-	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
-		ImGui::SetDragDropPayload(DROP_ID_HIERARCHY_NODES, &node, sizeof(GameObject), ImGuiCond_Once);
-		ImGui::Text(GameObjname);
-		ImGui::EndDragDropSource();
-	}
-
-	if (open)
-	{
-		for (int i = 0; i < node->childs.size(); i++)
-		{
-			GameObjectHierarchyTree(node->childs[i], i);
-		}
-
-		ImGui::TreePop();
-	}
-}
-
 void ModuleUI::DropTrget_In_Inspector(GameObject* node)
 {
 	ImVec2 low_point = ImGui::GetWindowContentRegionMin();
@@ -796,239 +699,6 @@ void ModuleUI::DeactivateAssets()
 	{
 		assets[i]->is_selected = false;
 	}
-}
-
-void ModuleUI::ShowExampleAppLayout(/*bool* p_open*/)
-{
-	
-	ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
-	if (ImGui::Begin("Folders",&Console_open))
-	{
-		{
-			ImGui::BeginGroup();
-			if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
-			{
-				
-			
-
-				if (ImGui::BeginTabItem("Assets"))
-				{
-					ImGui::PushID(-1);
-
-					if (ImGui::ImageButton((ImTextureID)App->scene_intro->FolderGoBack, { 18, 18 }, ImVec2(0, 1), ImVec2(1, 0)))
-					{
-						if (currentDirectory != "Assets")
-						{
-							size_t pos_separator = currentDirectory.find_first_of("\\/") + 1;
-
-							currentDirectory = currentDirectory.substr(0, pos_separator);
-							App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-							SortFilesinDir();
-
-						}
-						
-
-					}
-		
-					ImGui::PopID();
-
-
-					ImGui::Columns(5, NULL, false);
-				
-				
-					for (int i = 0; i < FilesInDir.size(); i++)
-					{
-						std::string filedir = FilesInDir[i]->file.c_str();
-						filedir += FilesInDir[i]->extension.c_str();
-						ImGui::PushID(i);
-
-						if (FilesInDir[i]->extension == "fbx" || FilesInDir[i]->extension == "FBX")
-						{
-							if (ImGui::ImageButton((ImTextureID)App->scene_intro->FbxIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
-							{
-								LOG("%s", filedir.c_str());
-								if (FilesInDir[i]->extension == "")
-								{
-									currentDirectory = FilesInDir[i]->fullpath.c_str();
-									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-									SortFilesinDir();
-
-								}
-							}
-						}
-						else if (FilesInDir[i]->extension == "png")
-						{
-							if (ImGui::ImageButton((ImTextureID)App->scene_intro->PngIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
-							{
-								LOG("%s", filedir.c_str());
-								if (FilesInDir[i]->extension == "")
-								{
-									currentDirectory = FilesInDir[i]->fullpath.c_str();
-									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-									SortFilesinDir();
-
-								}
-							}
-						}
-
-						else if (FilesInDir[i]->extension == "png")
-						{
-							if (ImGui::ImageButton((ImTextureID)App->scene_intro->PngIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
-							{
-								LOG("%s", filedir.c_str());
-								if (FilesInDir[i]->extension == "")
-								{
-									currentDirectory = FilesInDir[i]->fullpath.c_str();
-									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-									SortFilesinDir();
-
-								}
-							}
-						}
-
-						else if (FilesInDir[i]->extension == "tga")
-						{
-							if (ImGui::ImageButton((ImTextureID)App->scene_intro->TgaIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
-							{
-								LOG("%s", filedir.c_str());
-								if (FilesInDir[i]->extension == "")
-								{
-									currentDirectory = FilesInDir[i]->fullpath.c_str();
-									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-									SortFilesinDir();
-
-								}
-							}
-						}
-
-						else if (FilesInDir[i]->extension == "meta")
-						{
-							if (ImGui::ImageButton((ImTextureID)App->scene_intro->MetaIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
-							{
-								LOG("%s", filedir.c_str());
-								if (FilesInDir[i]->extension == "")
-								{
-									currentDirectory = FilesInDir[i]->fullpath.c_str();
-									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-									SortFilesinDir();
-
-								}
-							}
-						}
-						else if (FilesInDir[i]->extension == "mesh")
-						{
-							if (ImGui::ImageButton((ImTextureID)App->scene_intro->MeshIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
-							{
-								LOG("%s", filedir.c_str());
-								if (FilesInDir[i]->extension == "")
-								{
-									currentDirectory = FilesInDir[i]->fullpath.c_str();
-									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-									SortFilesinDir();
-
-								}
-							}
-						}
-						else if (FilesInDir[i]->extension == "dds")
-						{
-							if (ImGui::ImageButton((ImTextureID)App->scene_intro->DdsIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
-							{
-								LOG("%s", filedir.c_str());
-								if (FilesInDir[i]->extension == "")
-								{
-									currentDirectory = FilesInDir[i]->fullpath.c_str();
-									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-									SortFilesinDir();
-
-								}
-							}
-						}
-						else if (FilesInDir[i]->extension == "json")
-						{
-							if (ImGui::ImageButton((ImTextureID)App->scene_intro->JsonIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
-							{
-								LOG("%s", filedir.c_str());
-								if (FilesInDir[i]->extension == "")
-								{
-									currentDirectory = FilesInDir[i]->fullpath.c_str();
-									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-									SortFilesinDir();
-
-								}
-							}
-						}
-
-						else if (FilesInDir[i]->extension == "model")
-						{
-						if (ImGui::ImageButton((ImTextureID)App->scene_intro->ModelIcon, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
-						{
-							LOG("%s", filedir.c_str());
-							if (FilesInDir[i]->extension == "")
-							{
-								currentDirectory = FilesInDir[i]->fullpath.c_str();
-								App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-								SortFilesinDir();
-
-							}
-						}
-						}
-						else {
-
-							if (ImGui::ImageButton((ImTextureID)App->scene_intro->FolderIco, { 64, 64 }, ImVec2(0, 1), ImVec2(1, 0)))
-							{
-								LOG("%s", filedir.c_str());
-								if (FilesInDir[i]->extension == "")
-								{
-									currentDirectory = FilesInDir[i]->fullpath.c_str();
-									App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-									SortFilesinDir();
-
-								}
-							}
-						}
-						
-						const bool is_hovered = ImGui::IsItemHovered(); // Hovered
-
-						if (is_hovered  && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
-						{
-							clickedAsset = FilesInDir[i]->fullpath;
-						}
-
-					
-						ImGui::PopID();
-
-						ImGui::Text("%s", filedir.c_str());
-						ImGui::Dummy(ImVec2(0.0f, 20.0f));
-
-						ImGui::NextColumn();
-
-					}
-					ImGui::Columns(1);
-
-					if (ImGui::BeginPopupContextWindow())
-						{
-							RightClick_Assets_Menu(clickedAsset.c_str());
-							ImGui::EndPopup();
-						}
-					ImGui::EndTabItem();
-				}
-
-				if (ImGui::BeginTabItem("Console"))
-				{
-					for (int i = 0; i < consoleOutput.size(); i++)
-					{
-						const char* text = consoleOutput[i].c_str();
-						ImGui::Text(text);
-					}
-					ImGui::EndTabItem();
-				}
-				ImGui::EndTabBar();
-			}
-			
-			ImGui::EndGroup();
-		}
-	}
-	ImGui::End();
 }
 
 void ModuleUI::SortFilesinDir()
