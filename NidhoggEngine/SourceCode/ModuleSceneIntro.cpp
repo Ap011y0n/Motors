@@ -321,7 +321,50 @@ bool ModuleSceneIntro::DeleteGameObject(GameObject* parent)
 
 }
 
+void ModuleSceneIntro::ManageDropEvent(std::string file_path)
+{
 
+	char* buffer = nullptr;
+	uint fileSize = 0;
+	std::string fileStr, extensionStr;
+	App->file_system->SplitFilePath(file_path.c_str(), &fileStr, &extensionStr);
+	std::string relativePath = "";
+	FileType type = App->file_system->SetFileType(extensionStr);
+	uint UID;
+	switch (type)
+	{
+	case FileType::UNKNOWN:
+		break;
+	case FileType::FBX:
+		relativePath.append("Assets").append("/").append(fileStr).append(extensionStr);
+		UID = App->ResManager->FindInAssets(relativePath.c_str());
+		if (UID == 0)
+		{
+			App->ResManager->ImportFileStep1(relativePath.c_str());
+		}
+		if (UID != 0)
+		{
+			Resource* NewResource = App->ResManager->RequestResource(UID);
+			if (NewResource != nullptr)
+			{
+				LOG("Resource Found");
+				App->serializer->LoadModel(NewResource);
+			}
+		}
+		break;
+	case  FileType::IMAGE:
+		relativePath.append("Assets").append("/").append(fileStr).append(extensionStr);
+		App->FBX->ChangeTexture(relativePath.c_str());
+		break;
+	case  FileType::MESH:
+		relativePath.append("Assets/library/").append(fileStr).append(extensionStr);
+
+		App->FBX->ChangeMesh(relativePath.c_str());
+		break;
+	}
+
+
+}
 void ModuleSceneIntro::Camera_Editor_Window(ComponentCamera* camera)
 {
 	if (App->UI->Config_Camera_open) {

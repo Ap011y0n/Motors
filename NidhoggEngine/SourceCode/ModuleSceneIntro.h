@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 
+#include <string>
 
 class GameObject;
 class ComponentCamera;
@@ -31,7 +32,7 @@ public:
 	void SaveScene(GameObject* parent);
 	void Camera_Editor_Window(ComponentCamera* camera);
 	void WantToImport(ImportOptions* options);
-
+	void ManageDropEvent(std::string file_path);
 public:
 
 	uint my_indices = 0;
