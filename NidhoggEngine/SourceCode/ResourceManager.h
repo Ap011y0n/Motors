@@ -113,7 +113,8 @@ public:
 	bool CleanUp();
 	//Checks if a library file for this assets file is already created, and return it's id
 	uint FindInAssets(const char* file_in_assets);
-	uint FindInLibrary(const char* file_in_library, uint id);
+	//Checks if a file is loaded in library and creates it's resource if it's not already created
+	void FindInLibrary(const char* file_in_library, uint id);
 
 	//Use when resource is non existant, creates a resource, loads it's data from assets and saves it to library
 	uint ImportFile(const char* new_file_in_assets);

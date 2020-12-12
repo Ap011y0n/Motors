@@ -225,7 +225,7 @@ void Serializer::LoadScene(const char* path)
 
 				if (type == "Mesh")
 				{
-					int ret = App->ResManager->FindInLibrary(componentpath, componentUID);
+					App->ResManager->FindInLibrary(componentpath, componentUID);
 					ResourceMesh* NewMeshResource;
 					NewMeshResource = (ResourceMesh*)App->ResManager->RequestResource(componentUID);
 					if (NewMeshResource != nullptr)
@@ -255,7 +255,7 @@ void Serializer::LoadScene(const char* path)
 				}
 				else if (type == "texture")
 				{
-					int ret = App->ResManager->FindInLibrary(componentpath, componentUID);
+					App->ResManager->FindInLibrary(componentpath, componentUID);
 
 					ResourceTexture* NewTexResource = (ResourceTexture*)App->ResManager->RequestResource(componentUID);
 					if (NewTexResource != nullptr)

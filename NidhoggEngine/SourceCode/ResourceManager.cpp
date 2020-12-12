@@ -87,14 +87,14 @@ uint ResourceManager::FindInAssets(const char* file_in_assets)
 		}
 		else
 		{
-			LOG("Library file not found");
+			LOG("Library file [%s] not found", file_in_assets);
 			return 0;
 		}
 
 	}
 	else
 	{
-		LOG("Meta not found");
+		LOG("Meta [%s] not found", MetaPath.c_str());
 		return 0;
 
 	}
@@ -104,7 +104,7 @@ uint ResourceManager::FindInAssets(const char* file_in_assets)
 
 }
 
-uint ResourceManager::FindInLibrary(const char* file_in_library, uint id)
+void ResourceManager::FindInLibrary(const char* file_in_library, uint id)
 {
 
 	std::string MetaPath = file_in_library;
@@ -117,11 +117,11 @@ uint ResourceManager::FindInLibrary(const char* file_in_library, uint id)
 		{
 			if (SearchForResource(id))
 			{
-				return id;
+				LOG("Resource from [%s] found", file_in_library);
 			}
 			else
 			{
-
+				LOG("Library file found, creating new resource from [%s]", file_in_library);
 				Resource* NewResource = nullptr;
 
 				switch (type) {
@@ -138,17 +138,14 @@ uint ResourceManager::FindInLibrary(const char* file_in_library, uint id)
 					NewResource->SetLibraryPath(file_in_library);
 
 				}
-				return id;
 
 			}
 		}
 		else
 		{
-			LOG("Library file not found");
-			return 0;
+			LOG("Library file [%s] not found", file_in_library);
 		}
 
-	return 0;
 
 }
 uint ResourceManager::ImportFile(const char* new_file_in_assets)
