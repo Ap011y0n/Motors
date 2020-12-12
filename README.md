@@ -71,17 +71,18 @@ Main Menu Bar updated:
 Hierarchy updated:
 Now on the Hierarchy window you can reparent all gameobjects by selecting them and dragging them into another GameObject, if you want to select one of the GameObjects from the Hierarchy you just need to left click the name of the GameObject. After selecting an object in the hierarchy the right click will open a popup where you can choose between several options, the first one is deleting the selected GameObject, creating an empty child for the selected GameObject and creating a new empty GameObject in the scene.
 
-Inspecot Updated:
+Inspector Updated:
 In the inspector there is a checkbox to activate and desactivate the GameObject.
 
 Cameras Updated:
-- Now when selecting a camera on the inspector have a functional Culling option.
+- You can create cameras in GameObjects->Camera
+- Now when selecting a camera on the inspector, it has a functional Culling option.
 - Also can change the FOV and the far plane distance and near plane as well.
 
 New Guizmo: 
 - Now we can move the Objects in the scene directly by selecting them with the mouse in the Game window, with the left click, after selecting one through the game window we are able to see it selected in the game Hierarchy as well, after selecting a GameObject it will appear the guizmo which can move rotate and scale the gameobject itself.
 
-New winodw "Resources":
+New window "Resources":
 There is a new window below the hierarchy where we can see the different resources than can be used by the user.
 After selecting some in the right part below there is a window where we can see the process where the resources use reference counting, and we can see how many there are in the scene, also there is a button to import them into the scene.
 
@@ -124,8 +125,8 @@ T: Guizmo scale mode.
 ##Comments
 If you want to add something to the scene you will need to use the Window Folder, right click to add on scene, if it's not imported it will be imported when adding, if it's already imported it will apear on the scene.
 To change a mesh you will need to use the Resource window, and then the Resource Info will appear a button to import to the current scene.
-If it's a model it will be imported to the scene, but if it's a texture and it detects that it's a new one it will create a nre component, but if there is already one component it will get swaped.
-This can also be made with meshes, when selecting one mesh in the scene, then and with the Resoursce and Resouce info window we can swap meshes.
+If it's a model it will be imported to the scene, but if it's a texture and it detects that it's a new one it will create a new component, but if there is already one component it will get swaped.
+This can also be made with meshes, when selecting one mesh in the scene, then with the Resource window and Resource info window we can swap meshes.
 Important!! When opening for the first time the engine import will appear many times, remember to push repeatedly the button until all is imported.
 
 ## License & Copyright 

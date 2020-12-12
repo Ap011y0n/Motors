@@ -460,6 +460,7 @@ void ModuleUI::ImportWindow()
 	{
 		ImGui::Begin("ImportWindow", &importWindow);
 		int id = 0;
+		ImGui::Text(importsvec[id]->path.c_str());
 			switch (importsvec[id]->type)
 			{
 			case importType::MODEL:
@@ -547,8 +548,8 @@ void ModuleUI::ResourceInfo()
 			{
 				ResourceTexture* texture = (ResourceTexture*)selectedAsset->owner;
 				ImGui::Text("Wraping: %d", texture->wrapping);
-				ImGui::Text("References: %d", texture->filtering);
-				ImGui::Text("References: %d", texture->flipXY);
+				ImGui::Text("Filtering: %d", texture->filtering);
+				ImGui::Text("Flip: %d", texture->flipXY);
 			}
 				break;
 			case ResourceType::MESH:
