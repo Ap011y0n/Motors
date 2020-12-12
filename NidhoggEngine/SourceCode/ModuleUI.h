@@ -122,13 +122,11 @@ public:
 	void StoreLog(const char* message);
 	void ShowAppinDockSpace(bool* p_open = NULL);
 
-	void HierarchyWin(); //hierarchy window
 	void AssetsTree(); //hierarchy window
 	void FolderTree(); //hierarchy window
 	void ResourceInfo(); //hierarchy window
 	void ImportWindow(); //import window
 
-	void TimeMangmentWin();
 	void ShowExampleAppLayout(/*bool* p_open*/);
 	void SortFilesinDir();
 	void Change_Window_size(Vec2 newSize);
@@ -146,7 +144,6 @@ public:
 	void SelectGameObject(GameObject* node);
 	void GuizmoUI();
 	void ControlsGuizmo();
-	void RightClick_Inspector_Menu();
 	void RightClick_Assets_Menu(const char* path);
 
 	vec3 ReturnLookAtCamera(vec3 direction);
@@ -199,6 +196,8 @@ public:
 	int empty_GameObjects;
 	vector<ImportOptions*> importsvec;
 	std::string clickedAsset;
+	vector< UiFile*> FilesInDir;
+	std::string currentDirectory;
 private:
 	int c1;
 	vector<string> consoleOutput;
@@ -206,10 +205,7 @@ private:
 	float height = 768;
 	AssetNode* selectedAsset;
 	FolderNode* selectedFolder;
-	std::string currentDirectory;
 	std::string currentFolderDirectory;
-	vector< UiFile*> FilesInDir;
 	FolderNode* FoldersInDir;
-
 };
 

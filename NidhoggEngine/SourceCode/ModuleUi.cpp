@@ -10,10 +10,12 @@
 #include "imgui_internal.h"
 #include "ModuleWindow.h"
 #include "GameObject.h"
-#include "Time.h"
 #include "Win_CameraConfig.h"
+#include "Win_Hierarchy.h"
 #include "Win_Inspector.h"
 #include "Win_Configuration.h"
+#include "Win_AboutMenu.h"
+#include "Win_TimeManagement.h"
 #include "FileSystem.h"
 #include "glew/include/glew.h"        
 #define DROP_ID_HIERARCHY_NODES "hierarchy_node"
@@ -333,16 +335,16 @@ update_status ModuleUI::Update(float dt)
 	if (show_demo_window == true)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
-	AboutMenu(show_About);
+	Win_AboutMenu::Update_Ui(show_About);
 	Win_Configuration::UpdateUi(show_Configuration);
-	HierarchyWin(); 
+	Win_Hierarchy::Update_Ui();
 	AssetsTree();
 	FolderTree();
 	ImportWindow();
 	ResourceInfo();
 	Win_CameraConfig::UpdateUi(App->camera->cameraComp);
 	Win_Inspector::InspectorWin();
-	TimeMangmentWin();
+	Win_TimeManagement::Update_Ui();
 	return UPDATE_CONTINUE;
 }
 
@@ -353,8 +355,6 @@ update_status ModuleUI::PostUpdate(float dt)
 	// Rendering
 	ImGui::Render();
 	glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
-	//glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-	//glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
@@ -362,74 +362,8 @@ update_status ModuleUI::PostUpdate(float dt)
 	ImGui::UpdatePlatformWindows();
 	ImGui::RenderPlatformWindowsDefault();
 	SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-	
-	/*glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-	glClear(GL_COLOR_BUFFER_BIT);
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());*/
 
 	return UPDATE_CONTINUE;
-}
-
-void ModuleUI::AboutMenu(bool show_windoww)
-{
-	if (show_windoww == true)
-	{
-		
-		ImGui::Begin("About", &show_windoww);
-		ImGui::Text("NIDHOGG ENGINE"); //ImGui::SameLine(); ImGui::Text("Nidhogg engine ");
-		ImGui::Text("");
-		ImGui::TextWrapped("This will be the next best 3D Game Engine");
-		ImGui::Text("");
-		ImGui::Text("Made by:");
-		ImGui::Text("Albert Garcia github -->"); ImGui::SameLine();  
-		if (ImGui::Button("Albert github"))
-		{
-			ShellExecuteA(NULL, "open", "https://github.com/Ap011y0n", NULL, NULL, SW_SHOWNORMAL);
-		} 
-		ImGui::Text("Pol de la Torre github -->"); ImGui::SameLine(); 
-		if (ImGui::Button("Pol github"))
-		{
-			ShellExecuteA(NULL, "open", "https://github.com/polf780", NULL, NULL, SW_SHOWNORMAL);
-		}
-		ImGui::Separator();
-		ImGui::Text("3rd Party libraries used");
-		ImGui::BulletText("SDL 2.0");
-		ImGui::BulletText("SDL Mixer 2.0");
-		ImGui::BulletText("Cereal 1.2.2");
-		ImGui::BulletText("Glew 2.0.0");
-		ImGui::BulletText("ImGui 1.78");
-		ImGui::BulletText("MathGeoLib 1.5");
-		ImGui::BulletText("OpenGL 3.1");
-		ImGui::BulletText("Assimp 3.1.1");
-		ImGui::BulletText("Devil 1.7.8");
-		ImGui::Separator();
-		ImGui::Text("License:");
-		ImGui::Text("MIT License");
-		ImGui::TextWrapped("Copyright 2020 Pol de la Torre Solé & Albert Garcia Belerda ");
-		ImGui::TextWrapped("Permission is hereby granted, free of charge, to any person obtaining a copy"); 
-		ImGui::TextWrapped("of this softwareand associated documentation files(the Software), to deal");
-		ImGui::TextWrapped("in the Software without restriction, including without limitation the rights ");
-		ImGui::TextWrapped("to use, copy, modify, merge, publish, distribute, sublicense, and /or sell ");
-		ImGui::TextWrapped("copies of the Software, and to permit persons to whom the Software is");
-		ImGui::TextWrapped("furnished to do so, subject to the following conditions :");
-		ImGui::TextWrapped("");
-		ImGui::TextWrapped("The above copyright noticeand this permission notice shall be included in all");
-		ImGui::TextWrapped("copies or substantial portions of the Software.");
-		ImGui::TextWrapped("THE SOFTWARE IS PROVIDED ¡'AS IS`, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR");
-		ImGui::TextWrapped("IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,");
-		ImGui::TextWrapped("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE");
-		ImGui::TextWrapped("AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER");
-		ImGui::TextWrapped("LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,");
-		ImGui::TextWrapped("OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE");
-		ImGui::TextWrapped("SOFTWARE.");
-		ImGui::End();
-	}
-	if (show_windoww == false)
-	{
-		show_About = false;
-		
-	}
 }
 
 void ModuleUI::StoreLog(const char* message)
@@ -446,8 +380,6 @@ void ModuleUI::ShowAppinDockSpace(bool* p_open)
 	bool opt_fullscreen = opt_fullscreen_persistant;
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-	// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-	// because it would be confusing to have two docking targets within each others.
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 	if (opt_fullscreen)
 	{
@@ -461,16 +393,9 @@ void ModuleUI::ShowAppinDockSpace(bool* p_open)
 		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 	}
 
-	// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
-	// and handle the pass-thru hole, so we ask Begin() to not render a background.
 	if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
 		window_flags |= ImGuiWindowFlags_NoBackground;
 
-	// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-	// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
-	// all active windows docked into it will lose their parent and become undocked.
-	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
-	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::Begin("DockSpace Demo", p_open, window_flags);
 ImGui::PopStyleVar();
@@ -493,27 +418,6 @@ else {
 
 ImGui::End();
 
-}
-
-void ModuleUI::HierarchyWin()
-{
-	if (Hierarchy_open == true) {
-
-		ImGui::Begin("Hierarchy", &Hierarchy_open);
-		std::map<uint, Resource*>::iterator it = App->ResManager->resources.begin();
-		for (int i = 0; i < App->scene_intro->scene->childs.size(); i++)
-		{
-			GameObjectHierarchyTree(App->scene_intro->scene->childs[i], i);
-		}
-
-		if (ImGui::BeginPopupContextWindow())
-		{
-			RightClick_Inspector_Menu();
-
-			ImGui::EndPopup();
-		}
-		ImGui::End();
-	}
 }
 
 AssetNode* ModuleUI::createAssetNode(Resource* resource)
@@ -1257,128 +1161,6 @@ void ModuleUI::ControlsGuizmo()
 	{
 		guizmo_mode = ImGuizmo::MODE::WORLD;
 	} 
-}
-
-void ModuleUI::TimeMangmentWin()
-{
-	if (Inspector_open == true)
-	{
-		ImGui::Begin("Time", (bool*)false, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse);
-		ImGui::Text("|"); ImGui::SameLine();
-		
-
-		if (Time::Engine_Active == false) {
-
-			if (ImGui::Button("PLAY")) 
-			{
-				Time::Start();
-				App->serializer->CreateNewScene();
-				App->scene_intro->SaveScene(App->scene_intro->scene);
-				App->serializer->SaveScene("PlayScene.json");
-			} ImGui::SameLine();
-		}
-		else {
-
-			if (Time::Game_Paused == false) 
-			{
-				if (ImGui::Button("PAUSE"))
-				{
-					Time::Pause();
-
-				} ImGui::SameLine();
-			}
-
-			if (Time::Game_Paused == true)
-			{
-				if (ImGui::Button("CONTINUE"))
-				{
-					Time::Resume();
-
-				}ImGui::SameLine();
-			}
-
-			if (ImGui::Button("STOP"))
-			{
-				App->scene_intro->DeleteSceneObjects(App->scene_intro->scene);
-				App->serializer->LoadScene("Assets/PlayScene.json");
-				Time::Stop();
-			}ImGui::SameLine();
-			
-		}
-		//LOG("time: %f", Time::Game_Timer.ReadSec());
-		ImGui::Text("|"); ImGui::SameLine();
-		{
-			ImGui::SetNextItemWidth(130);
-			static int selectedMode = 0;
-			static const char* Mode[]{ "WORLD","LOCAL" };
-			ImGui::Combo("Mode", &selectedMode, Mode, IM_ARRAYSIZE(Mode)); ImGui::SameLine();
-			if (selectedMode == 1)
-			{
-				guizmo_mode = ImGuizmo::MODE::LOCAL;
-			}
-			if (selectedMode == 0)
-			{
-				guizmo_mode = ImGuizmo::MODE::WORLD;
-			}
-
-		}
-		ImGui::Text("|"); ImGui::SameLine();
-		{
-			static bool BoundingBox = false;
-			if (ImGui::Checkbox("BoundingBox", &BoundingBox))
-			{
-				for (int i = 0; i < App->scene_intro->scene->childs.size(); i++)
-				{
-					Change_Visibility_BoundingBoxes(App->scene_intro->scene->childs[i], BoundingBox);
-				}
-			}
-		}
-		ImGui::SameLine(); ImGui::Text("|"); ImGui::SameLine();
-
-		if (ImGui::Button("Refresh Scene"))
-		{
-			App->file_system->checkDirectoryFiles(currentDirectory.c_str(), &FilesInDir);
-			SortFilesinDir();
-			App->file_system->RefreshAssets();
-
-		}
-
-		ImGui::End();
-	}
-
-}
-
-void ModuleUI::RightClick_Inspector_Menu()
-{
-	if (ImGui::MenuItem("Delete"))
-	{
-		App->scene_intro->selectedObj->to_delete = true;
-	}
-
-	if (ImGui::MenuItem("Create empty Child"))
-	{
-		empty_GameObjects++;
-		std::string obj = std::to_string(empty_GameObjects);
-
-		std::string name = "Empty_Child";
-		name.append(obj);
-
-		GameObject* empty_GameObject = new GameObject(name.c_str(), App->scene_intro->selectedObj);
-		empty_GameObject->CreateComponent(ComponentType::TRANSFORM);
-	}
-
-	if (ImGui::MenuItem("Create empty GameObject"))
-	{
-		empty_GameObjects++;
-		std::string obj = std::to_string(empty_GameObjects);
-
-		std::string name = "Empty_GameObject";
-		name.append(obj);
-
-		GameObject* empty_GameObject = new GameObject(name.c_str(), App->scene_intro->scene);
-		empty_GameObject->CreateComponent(ComponentType::TRANSFORM);
-	}
-
 }
 
 void ModuleUI::RightClick_Assets_Menu(const char* path)
