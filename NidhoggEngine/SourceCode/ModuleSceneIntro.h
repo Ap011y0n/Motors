@@ -23,8 +23,7 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 	GameObject* CreateGameObject(const char* name, GameObject* parent = nullptr);
-	void firstCube();
-	void secondCube();
+
 	void UpdateGameObject(GameObject* parent, float dt);
 	void SetDelete(GameObject* parent);
 	void DeleteSceneObjects(GameObject* parent);

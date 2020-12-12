@@ -45,14 +45,8 @@ bool ModuleSceneIntro::Start()
 	culling = nullptr;
 
 	char* buffer = nullptr;
-	//App->file_system->RemoveFile("test.txt");
 	std::string file_path = "Assets/Street environment_V01.FBX";
 
-	//uint UID = App->ResManager->FindInAssets(file_path.c_str());
-	//if (UID == 0)
-	//{
-	//	App->ResManager->ImportFileStep1(file_path.c_str());
-	//}
 
 	FolderIco = App->FBX->LoadTexBuffer("Assets/icons/folder-icon.png");
 	FolderGoBack = App->FBX->LoadTexBuffer("Assets/icons/folder-icon-go_back.png");
@@ -132,10 +126,8 @@ update_status ModuleSceneIntro::Update(float dt)
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
-		//App->serializer->LoadScene("Assets/library/TEST.json");
 		
 		std::string file_path = "Assets/BakerHouse.fbx";
-		//std::string file_path = "Assets/Street environment_V01.FBX";
 
 		uint UID = App->ResManager->FindInAssets(file_path.c_str());
 		if (UID == 0)
@@ -182,21 +174,6 @@ void ModuleSceneIntro::WantToImport(ImportOptions* options)
 	App->UI->importsvec.erase(App->UI->importsvec.begin());
 
 
-	/*if (UID != 0)
-	{
-		Resource* NewResource = App->ResManager->RequestResource(UID);
-		if (NewResource != nullptr)
-		{
-		switch (NewResource->GetType())
-		{
-		case ResourceType::MODEL:
-			
-				LOG("Resource Found");
-				App->serializer->LoadModel(NewResource);
-			break;
-		}
-		}
-	}*/
 }
 
 void ModuleSceneIntro::SaveScene(GameObject * parent)
@@ -257,7 +234,6 @@ void ModuleSceneIntro::SaveScene(GameObject * parent)
 GameObject* ModuleSceneIntro::CreateGameObject(const char* name, GameObject* parent)
 {
 	GameObject* newGameObject = new GameObject(name, parent);
-	//gameObjects.push_back(newGameObject);
 	
 	return newGameObject;
 }
@@ -403,130 +379,3 @@ void ModuleSceneIntro::Camera_Editor_Window(ComponentCamera* camera)
 }
 
 
-void ModuleSceneIntro::firstCube()
-{
-
-	uint indices[36] = {
-		// front
-			0, 1, 2,
-			2, 3, 1,
-			// right
-			1, 3, 5,
-			3, 5, 7,
-			//// back
-			7, 4, 5,
-			6, 7, 4,
-			//// left
-			6, 0, 4,
-			0, 6, 2,
-			//// bottom
-			4, 5, 0,
-			5, 1, 0,
-			//// top
-			6, 2, 3,
-			3, 7, 6
-	};
-	for (int i = 0; i < 36; i++)
-	{
-		index[i] = indices[i];
-
-	}
-	num_indices = 36;
-
-	float vertices[24] =
-	{
-		// front
-			 0.0, 0.0,  0.0,
-			 1.0, 0.0,  0.0,
-			 0.0, 1.0,  0.0,
-			 1.0, 1.0,  0.0,
-
-			 // back
-			  0.0, 0.0, -1.0,
-			  1.0, 0.0, -1.0,
-			  0.0, 1.0, -1.0,
-			  1.0, 1.0, -1.0,
-	};
-	num_vertices = 8;
-
-	for (int i = 0; i < 24; i++)
-	{
-		vert[i] = vertices[i];
-
-	}
-	my_indices = 0;
-	my_vertex = 0;
-	glGenBuffers(1, (GLuint*)&(my_vertex));
-	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vert, GL_STATIC_DRAW);
-	// … bind and use other buffers
-
-	glGenBuffers(1, (GLuint*)&(my_indices));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, index, GL_STATIC_DRAW);
-
-}
-
-void ModuleSceneIntro::secondCube()
-{
-
-	uint indices[36] = {
-		// front
-			0, 1, 2,
-			2, 3, 1,
-			// right
-			1, 3, 5,
-			3, 5, 7,
-			//// back
-			7, 4, 5,
-			6, 7, 4,
-			//// left
-			6, 0, 4,
-			0, 6, 2,
-			//// bottom
-			4, 5, 0,
-			5, 1, 0,
-			//// top
-			6, 2, 3,
-			3, 7, 6
-	};
-	for (int i = 0; i < 36; i++)
-	{
-		index2[i] = indices[i];
-
-	}
-	num_indices2 = 36;
-
-	float vertices[24] =
-	{
-		// front
-			 0.0, 0.0,  3.0,
-			 1.0, 0.0,  3.0,
-			 0.0, 1.0,  3.0,
-			 1.0, 1.0,  3.0,
-
-			 // back
-			  0.0, 0.0, 2.0,
-			  1.0, 0.0, 2.0,
-			  0.0, 1.0, 2.0,
-			  1.0, 1.0, 2.0,
-	};
-	num_vertices2 = 8;
-
-	for (int i = 0; i < 24; i++)
-	{
-		vert2[i] = vertices[i];
-
-	}
-	my_indices2 = 0;
-	my_vertex2 = 0;
-	glGenBuffers(1, (GLuint*)&(my_vertex2));
-	glBindBuffer(GL_ARRAY_BUFFER, my_vertex2);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices2 * 3, vert2, GL_STATIC_DRAW);
-
-	glGenBuffers(1, (GLuint*)&(my_indices2));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices2);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices2, index2, GL_STATIC_DRAW);
-
-}

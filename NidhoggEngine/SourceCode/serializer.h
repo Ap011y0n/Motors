@@ -47,9 +47,7 @@ public:
 
 	void get_Array(const char* file);
 
-	void serialization_example();
-	void arrayExample();
-	void arrayExample2();
+
 
 public:
 	JSON_Value* root_value;

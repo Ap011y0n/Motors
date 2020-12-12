@@ -579,7 +579,7 @@ uint FBXloader::FillElementArrayBuffer(uint size, uint* array)
 void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 {
 	// Use scene->mNumMeshes to iterate on scene->mMeshes array
-	//for (int i = 0; i < scene->mNumMeshes; i++)
+
 	std::string name = node->mName.C_Str();
 
 	LOG("loading %s", node->mName.C_Str());
@@ -610,26 +610,16 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 	aiQuaternion rotation;
 
 
-	//ComponentTransform* fathertrans = nullptr;
 
 	node->mTransformation.Decompose(scaling, rotation, translation);
 
-	/*for (int i = 0; i < father->Components.size(); i++)
-	{
-		if (father->Components[i]->type == ComponentType::TRANSFORM)
-		{
-			 fathertrans = (ComponentTransform*)father->Components[i];
-			
-		}
-	}*/
-	
+
 		NewTrans->pos.Set(translation.x, translation.y, translation.z);
 		NewTrans->scale.Set(scaling.x, scaling.y, scaling.z);
 		NewTrans->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
 	
 	
 
-	//NewTrans->rot = NewTrans->rot * quat;
 	App->serializer->AddVec3(JsonTrans, NewTrans->pos.x, NewTrans->pos.y, NewTrans->pos.z);
 	App->serializer->AddVec3(JsonScale, NewTrans->scale.x, NewTrans->scale.y, NewTrans->scale.z);
 	App->serializer->AddVec4(JsonRot, NewTrans->rot.x, NewTrans->rot.y, NewTrans->rot.z, NewTrans->rot.w);
@@ -670,17 +660,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 			MaterialImporter::Save(&buffer, file.c_str(), &path);
 			NewTex->texture_path = path.c_str();
 			App->serializer->AddComponent(JsonComp, ComponentType::MATERIAL, NewTex->texture_path.c_str());
-			//TODO_Json: create a json component mesh with this path. No need to load anything
-		//	fileSize = App->file_system->Load(path.c_str(), &buffer);
-		//	MaterialImporter::Load(buffer, fileSize, NewTex);
 
-			//
-
-		/*	NewTex->texbuffer = LoadTexBuffer(str.C_Str());
-			
-			NewTex->texture_h = texture_h;
-			NewTex->texture_w = texture_w;
-			NewTex->texture_path = str.C_Str();*/
 			if (NewTex->texbuffer != 0)
 				NewTex->hastexture = true;
 			else
@@ -1100,86 +1080,5 @@ void FBXloader::CreateAABB(ComponentMesh* NewMesh)
 	float3 array[8];
 
 	NewMesh->bbox.GetCornerPoints(array);
-	/*for (int i = 0; i < 8; i++)
-	{
-		origin.Set(array[i].x, array[i].y, array[i].z);
-		if (i != 7)
-		destination.Set(array[i+1].x, array[i+1].y, array[i+1].z);
-		else
-		destination.Set(array[0].x, array[0].y, array[0].z);
-
-		App->PrimManager->CreateLine(origin, destination);
-	}
-	*/
-	//0 = back left bot
-	//2 = back left top
-	//4 = back right bot
-	//6 = back right top
-
-	//3 = front left top
-	//7 = front right top
-	//1 = front left bot
-	//5 = front right bot
-
-	//origin.Set(array[0].x, array[0].y, array[0].z);
-	//destination.Set(array[1].x, array[1].y, array[1].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[1].x, array[1].y, array[1].z);
-	//destination.Set(array[3].x, array[3].y, array[3].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[3].x, array[3].y, array[3].z);
-	//destination.Set(array[7].x, array[7].y, array[7].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[3].x, array[3].y, array[3].z);
-	//destination.Set(array[2].x, array[2].y, array[2].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[0].x, array[0].y, array[0].z);
-	//destination.Set(array[2].x, array[2].y, array[2].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[1].x, array[1].y, array[1].z);
-	//destination.Set(array[5].x, array[5].y, array[5].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[7].x, array[7].y, array[7].z);
-	//destination.Set(array[6].x, array[6].y, array[6].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-
-	//origin.Set(array[2].x, array[2].y, array[2].z);
-	//destination.Set(array[6].x, array[6].y, array[6].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[6].x, array[6].y, array[6].z);
-	//destination.Set(array[4].x, array[4].y, array[4].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[4].x, array[4].y, array[4].z);
-	//destination.Set(array[0].x, array[0].y, array[0].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[7].x, array[7].y, array[7].z);
-	//destination.Set(array[5].x, array[5].y, array[5].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[4].x, array[4].y, array[4].z);
-	//destination.Set(array[5].x, array[5].y, array[5].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
 	
 }
