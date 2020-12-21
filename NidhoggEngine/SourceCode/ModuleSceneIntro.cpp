@@ -14,11 +14,7 @@
 #include <gl/GLU.h>
 
 
-#ifdef _DEBUG
-#pragma comment( lib, "SourceCode/MathGeoLib/libx86/Debug/MathGeoLib.lib" )
-#else
-#pragma comment( lib, "SourceCode/MathGeoLib/libx86/Release/MathGeoLib.lib" )
-#endif
+
 
 #include "MathGeoLib/include/MathGeoLib.h"
 

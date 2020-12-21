@@ -13,6 +13,10 @@
 #include "Time.h"
 
 #include "FileSystem.h"
+
+#include "MathGeoLib/include/MathGeoLib.h"
+#include "MathGeoLib/include/MathBuildConfig.h"
+
 Application::Application()
 {
 	window = new ModuleWindow(this);
