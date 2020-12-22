@@ -11,6 +11,7 @@
 #include "PrimitiveManager.h"
 #include "FBXloader.h"
 #include "Time.h"
+#include "ModulePhysics3D.h"
 
 #include "FileSystem.h"
 
@@ -31,6 +32,7 @@ Application::Application()
 	serializer = new Serializer(this);
 	ResManager = new ResourceManager(this);
 	MousePick = new MousePicking(this);
+	Physics = new ModulePhysics3D(this);
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
@@ -41,6 +43,7 @@ Application::Application()
 	AddModule(input);
 	AddModule(file_system);
 	AddModule(serializer);
+	AddModule(Physics);
 	// Scenes
 	AddModule(PrimManager);
 	AddModule(ResManager);

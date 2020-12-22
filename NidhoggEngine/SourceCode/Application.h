@@ -18,6 +18,7 @@
 #include "serializer.h"
 #include "MousePicking.h"
 #include "ResourceManager.h"
+#include "ModulePhysics3D.h"
 
 #include <vector>
 
@@ -42,6 +43,7 @@ public:
 	Serializer* serializer;
 	ResourceManager* ResManager;
 	MousePicking* MousePick;
+	ModulePhysics3D* Physics;
 private:
 
 	Timer	ms_timer;

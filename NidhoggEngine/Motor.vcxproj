@@ -14,6 +14,7 @@
     <ProjectGuid>{746CC4C3-787F-4B0E-AA66-E388FE3FF4F6}</ProjectGuid>
     <RootNamespace>SDLGame</RootNamespace>
     <ProjectName>NidhoggEngine</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -62,7 +63,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -156,6 +157,7 @@
     <ClInclude Include="SourceCode\Module.h" />
     <ClInclude Include="SourceCode\ModuleCamera3D.h" />
     <ClInclude Include="SourceCode\ModuleInput.h" />
+    <ClInclude Include="SourceCode\ModulePhysics3D.h" />
     <ClInclude Include="SourceCode\ModuleRenderer3D.h" />
     <ClInclude Include="SourceCode\ModuleSceneIntro.h" />
     <ClInclude Include="SourceCode\ModuleUI.h" />
@@ -231,6 +233,7 @@
     <ClCompile Include="SourceCode\MathGeoLib\include\Time\Clock.cpp" />
     <ClCompile Include="SourceCode\ModuleCamera3D.cpp" />
     <ClCompile Include="SourceCode\ModuleInput.cpp" />
+    <ClCompile Include="SourceCode\ModulePhysics3D.cpp" />
     <ClCompile Include="SourceCode\ModuleRenderer3D.cpp" />
     <ClCompile Include="SourceCode\ModuleSceneIntro.cpp" />
     <ClCompile Include="SourceCode\ModuleUi.cpp" />
