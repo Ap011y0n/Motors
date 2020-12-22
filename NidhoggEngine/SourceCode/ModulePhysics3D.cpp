@@ -79,7 +79,7 @@ bool ModulePhysics3D::Start()
 // ---------------------------------------------------------
 update_status ModulePhysics3D::PreUpdate(float dt)
 {
-	world->stepSimulation(0.001, 15);
+	world->stepSimulation(dt, 15);
 
 	for (int n = 0; n < world->getDispatcher()->getNumManifolds(); n++)
 	{
