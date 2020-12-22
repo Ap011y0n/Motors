@@ -164,6 +164,7 @@
     <ClInclude Include="SourceCode\ModuleWindow.h" />
     <ClInclude Include="SourceCode\MousePicking.h" />
     <ClInclude Include="SourceCode\parson\parson.h" />
+    <ClInclude Include="SourceCode\PhysBody3D.h" />
     <ClInclude Include="SourceCode\Primitive.h" />
     <ClInclude Include="SourceCode\PrimitiveManager.h" />
     <ClInclude Include="SourceCode\ResourceManager.h" />
@@ -240,6 +241,7 @@
     <ClCompile Include="SourceCode\ModuleWindow.cpp" />
     <ClCompile Include="SourceCode\MousePicking.cpp" />
     <ClCompile Include="SourceCode\parson\parson.c" />
+    <ClCompile Include="SourceCode\PhysBody3D.cpp" />
     <ClCompile Include="SourceCode\Primitive.cpp" />
     <ClCompile Include="SourceCode\PrimitiveManager.cpp" />
     <ClCompile Include="SourceCode\ResourceManager.cpp" />

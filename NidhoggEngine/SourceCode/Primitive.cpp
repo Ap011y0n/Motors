@@ -91,6 +91,9 @@ void Primitive::InnerRender() const
 	glPointSize(1.0f);
 }
 
+void Primitive::Update()
+{
+}
 // ------------------------------------------------------------
 void Primitive::SetPos(float x, float y, float z)
 {
@@ -199,12 +202,17 @@ Cube::Cube(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, siz
 
 }
 
+void Cube::Update()
+{
+	body.GetTransform(&transform);
+}
+
 void Cube::InnerRender() const
 {
-
 	//glColor4ub(255, 0.0, 0.0, 0.0);
 	//if (App->UI->Wireframe_bool)
-
+	glPushMatrix();
+	glMultMatrixf(transform.M);
 	if (wire)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
@@ -267,6 +275,8 @@ void Cube::InnerRender() const
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glPopMatrix();
+
 }
 
 

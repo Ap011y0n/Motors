@@ -45,7 +45,7 @@ update_status PrimitiveManager::PostUpdate(float dt)
 	MenuOptions();
 
 	for (int i = 0; i < prim_list.size(); i++) {
-		
+		prim_list[i]->Update();
 		prim_list[i]->Render();
 		
 	}
@@ -115,6 +115,8 @@ Cube* PrimitiveManager::CreateCube(vec3 size, vec3 pos)
 {
 	Cube* cube = new Cube(size.x, size.y, size.z);
 	cube->SetPos(pos.x, pos.y, pos.z);
+	cube->body.SetBody(cube, 1);
+
 	prim_list.push_back((Primitive*)cube);
 	return cube;
 }

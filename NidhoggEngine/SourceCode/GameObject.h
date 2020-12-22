@@ -143,7 +143,7 @@ public:
 public:
 	float aspectRatio;
 	Frustum frustrum;
-	Plane* planes;
+	math::Plane* planes;
 	bool cullingActive;
 	bool print;
 

@@ -4,11 +4,12 @@
 #include "glmath.h"
 //#include "Module.h"
 #include "Globals.h"
+#include <vector>
 
 class btRigidBody;
 class btCollisionShape;
 struct btDefaultMotionState;
-//class Module;
+class Module;
 class btRaycastVehicle;
 
 class vec3;
@@ -56,7 +57,7 @@ private:
 	btDefaultMotionState* motionState;
 public:
 	Primitive* parentPrimitive;
-//	std::vector<Module*> collision_listeners;
+	std::vector<Module*> collision_listeners;
 	btRaycastVehicle* vehicle;
 	bool is_sensor = false;
 };

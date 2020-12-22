@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "PhysBody3D.h"
 
 using namespace std;
 
@@ -37,6 +38,8 @@ public:
 	void			SetPos(float x, float y, float z);
 	void			SetRotation(float angle, const vec3 &u);
 	void			Scale(float x, float y, float z);
+	virtual	void	Update();
+
 	PrimitiveTypes	GetType() const;
 
 public:
@@ -45,6 +48,7 @@ public:
 	bool axis,wire;
 	mat4x4 transform;
 	bool to_delete;
+	PhysBody3D body;
 
 protected:
 	PrimitiveTypes type;
@@ -57,7 +61,7 @@ public :
 	Cube();
 	Cube(float sizeX = 1.f, float sizeY = 1.f, float sizeZ = 1.f);
 	~Cube();
-
+	void Update();
 	void InnerRender() const;
 public:
 	vec3 size;

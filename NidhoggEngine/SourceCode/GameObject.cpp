@@ -669,7 +669,7 @@ ComponentCamera::ComponentCamera(GameObject* ObjectOwner) :Component() {
 
 	frustrum.horizontalFov = (65* DEGTORAD);//This will stay as it is
 	frustrum.verticalFov = (65 * DEGTORAD) / aspectRatio; //This will be adaptable
-	planes = new Plane[6];
+	planes = new math::Plane[6];
 	frustrum.GetPlanes(planes);
 	print = true;
 	SetFOV(60);

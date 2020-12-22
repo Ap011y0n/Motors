@@ -3,6 +3,7 @@
 #include "ModulePhysics3D.h"
 #include "Primitive.h"
 #include "Globals.h"
+#include "PhysBody3D.h"
 
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
@@ -78,15 +79,15 @@ bool ModulePhysics3D::Start()
 // ---------------------------------------------------------
 update_status ModulePhysics3D::PreUpdate(float dt)
 {
-	world->stepSimulation(dt, 15);
+	world->stepSimulation(0.001, 15);
 
 	for (int n = 0; n < world->getDispatcher()->getNumManifolds(); n++)
 	{
 		btPersistentManifold* manifold = world->getDispatcher()->getManifoldByIndexInternal(n);
 		if (manifold->getNumContacts() > 0)
 		{
-		//	PhysBody3D* body1 = (PhysBody3D*)manifold->getBody0()->getUserPointer();
-		//	PhysBody3D* body2 = (PhysBody3D*)manifold->getBody1()->getUserPointer();
+			PhysBody3D* body1 = (PhysBody3D*)manifold->getBody0()->getUserPointer();
+			PhysBody3D* body2 = (PhysBody3D*)manifold->getBody1()->getUserPointer();
 
 			/*if (body1 != nullptr && body2 != nullptr)
 			{
@@ -109,14 +110,14 @@ update_status ModulePhysics3D::PreUpdate(float dt)
 // ---------------------------------------------------------
 update_status ModulePhysics3D::Update(float dt)
 {
-	bool draw = true;
+	/*bool draw = true;
 	if (draw)
 	{
 		glDisable(GL_LIGHTING);
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		world->debugDrawWorld();
 		glEnable(GL_LIGHTING);
-	}
+	}*/
 
 	return UPDATE_CONTINUE;
 }

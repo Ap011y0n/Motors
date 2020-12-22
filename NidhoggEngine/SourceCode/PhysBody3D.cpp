@@ -35,8 +35,8 @@ void PhysBody3D::SetBody(PrimSphere* primitive, float mass)
 
 void PhysBody3D::SetBody(Cube* primitive, float mass)
 {
-	/*const btVector3 vec(primitive->GetSize().x / 2, primitive->GetSize().y / 2, primitive->GetSize().z / 2);
-	SetBody(new btBoxShape(btVector3(vec)),primitive, mass);*/
+	const btVector3 vec(primitive->size.x / 2, primitive->size.y / 2, primitive->size.z / 2);
+	SetBody(new btBoxShape(btVector3(vec)), primitive, mass);
 }
 
 void PhysBody3D::SetBody(PrimCylinder* primitive, float mass)
@@ -143,7 +143,7 @@ void PhysBody3D::SetBody(btCollisionShape * shape, Primitive* parent, float mass
 
 	body->setUserPointer(this);
 
-	//App->Physics->AddBodyToWorld(body);
+	App->Physics->AddBodyToWorld(body);
 }
 
 const vec3 PhysBody3D::GetPos() const
