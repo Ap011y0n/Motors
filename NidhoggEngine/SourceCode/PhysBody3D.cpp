@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "Primitive.h"
+#include "GameObject.h"
 #include "glmath.h"
 #include "Bullet/include/btBulletDynamicsCommon.h"
 
@@ -37,6 +38,29 @@ void PhysBody3D::SetBody(Cube* primitive, float mass)
 {
 	const btVector3 vec(primitive->size.x / 2, primitive->size.y / 2, primitive->size.z / 2);
 	SetBody(new btBoxShape(btVector3(vec)), primitive, mass);
+}
+
+void PhysBody3D::SetBody(GameObject* obj, float mass)
+{
+	ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
+		if (mesh != nullptr)
+		{
+			AABB bbox = mesh->GetAABB();
+			float3 corners[8];
+			bbox.GetCornerPoints(corners);
+			float width = corners[0].Distance(corners[1]);
+			float heigth = corners[1].Distance(corners[3]);
+			float depth = corners[3].Distance(corners[2]);
+			const btVector3 vec(width / 2, heigth / 2, depth / 2);
+			SetBody(new btBoxShape(btVector3(vec)), obj, mass);
+		}
+		else
+		{
+			const btVector3 vec(1 / 2, 1 / 2, 1 / 2);
+			SetBody(new btBoxShape(btVector3(vec)), obj, mass);
+		}
+	
+	//
 }
 
 void PhysBody3D::SetBody(PrimCylinder* primitive, float mass)
@@ -146,6 +170,33 @@ void PhysBody3D::SetBody(btCollisionShape * shape, Primitive* parent, float mass
 	App->Physics->AddBodyToWorld(body);
 }
 
+void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass)
+{
+	assert(HasBody() == false);
+
+	parentGameObject = parent;
+
+	colShape = shape;
+
+	btTransform startTransform;
+	ComponentTransform* transform = nullptr;
+	transform = (ComponentTransform*)parent->GetComponent(ComponentType::TRANSFORM);
+
+	startTransform.setFromOpenGLMatrix(transform->global_transform.Transposed().ptr());
+
+	btVector3 localInertia(0, 0, 0);
+	if (mass != 0.f)
+		colShape->calculateLocalInertia(mass, localInertia);
+
+	motionState = new btDefaultMotionState(startTransform);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, colShape, localInertia);
+
+	body = new btRigidBody(rbInfo);
+
+	body->setUserPointer(this);
+
+	App->Physics->AddBodyToWorld(body);
+}
 const vec3 PhysBody3D::GetPos() const
 {
 	float matrix[16];

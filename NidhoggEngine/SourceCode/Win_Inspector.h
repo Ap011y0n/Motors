@@ -13,5 +13,7 @@ public:
 
 	static void InspectorWin(); //gameobjects list
 	static void GameObjectInspector(GameObject* obj);
+	static void AddComponent(GameObject* obj);
+
 };
 #endif // !__WIN_INSPECTOR_H__

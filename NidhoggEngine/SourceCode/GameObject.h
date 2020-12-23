@@ -15,6 +15,7 @@ enum class ComponentType
 	MATERIAL,
 	TRANSFORM,
 	CAMERA,
+	COLLIDER,
 };
 
 
@@ -37,7 +38,17 @@ public:
 	Resource* reference;
 
 };
+//Collider
+class Collider : public Component
+{
+public:
+	Collider(GameObject* ObjectOwner);
+	~Collider();
+	bool Update(float dt);
+public:
+	PhysBody3D body;
 
+};
 //Mesh, child to component
 class ComponentMesh : public Component
 {

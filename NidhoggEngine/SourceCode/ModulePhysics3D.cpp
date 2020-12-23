@@ -54,6 +54,7 @@ bool ModulePhysics3D::Start()
 	LOG("Creating Physics environment");
 
 	world = new btDiscreteDynamicsWorld(dispatcher, broad_phase, solver, collision_conf);
+	debug_draw->setDebugMode(2);
 	world->setDebugDrawer(debug_draw);
 	world->setGravity(GRAVITY);
 
@@ -110,6 +111,8 @@ update_status ModulePhysics3D::PreUpdate(float dt)
 // ---------------------------------------------------------
 update_status ModulePhysics3D::Update(float dt)
 {
+	world->debugDrawWorld();
+
 	/*bool draw = true;
 	if (draw)
 	{

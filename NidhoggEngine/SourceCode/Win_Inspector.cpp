@@ -19,7 +19,11 @@ void Win_Inspector::InspectorWin()
 	{
 		ImGui::Begin("Inspector", &App->UI->Inspector_open);
 		if (App->scene_intro->selectedObj != nullptr)
+		{
 			GameObjectInspector(App->scene_intro->selectedObj);
+			AddComponent(App->scene_intro->selectedObj);
+
+		}
 
 		ImGui::End();
 	}
@@ -312,4 +316,15 @@ void Win_Inspector::GameObjectInspector(GameObject* obj)
 
 	}
 
+}
+
+void Win_Inspector::AddComponent(GameObject* obj)
+{
+	if (ImGui::Button("AddComponent"))
+	{
+		ComponentType type = ComponentType::COLLIDER;
+	
+		if (obj->GetComponent(type) == nullptr)
+			obj->CreateComponent(type);
+	}
 }

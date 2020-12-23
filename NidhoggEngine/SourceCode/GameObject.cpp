@@ -127,7 +127,7 @@ Component* GameObject::CreateComponent(ComponentType type)
 	case ComponentType::MATERIAL: { ComponentMaterial* material = new ComponentMaterial(this); newComponent = material; break; }
 	case ComponentType::TRANSFORM: { ComponentTransform* transform = new ComponentTransform(this); newComponent = transform; break; }
 	case ComponentType::CAMERA: {ComponentCamera* camera = new ComponentCamera(this); newComponent = camera; break; }
-
+	case ComponentType::COLLIDER: {Collider* collider = new Collider(this); newComponent = collider; break; }
 	}
 	Components.push_back(newComponent);
 
@@ -143,14 +143,9 @@ Component* GameObject::GetComponent(ComponentType type)
 		if (type == Components[i]->type)
 		{
 			newComponent = Components[i];
-			counter++;
 		}
 	}
-	if (counter > 1)
-	{
-		counter = 0;
-		this;
-	}
+
 	return newComponent;
 
 	return nullptr;
@@ -203,6 +198,32 @@ void Component::Disable()
 {
 	if (active)
 		active = false;
+}
+//*************************		Collider
+Collider::Collider(GameObject* ObjectOwner) : Component()
+{
+	type = ComponentType::COLLIDER;
+	active = true;
+	owner = ObjectOwner;
+	body.SetBody(ObjectOwner, 1);
+}
+
+Collider::~Collider()
+{
+
+}
+
+bool Collider::Update(float dt)
+{
+	//float* matrix;
+	//body.GetTransform(matrix);
+	//btVector3 min, max;
+	//btTransform t;
+	//t.setIdentity();
+	//body.GetBody()->getAabb(min, max);
+	//body.GetBody()->getCollisionShape()->getAabb(t, min, max);
+	//
+	return true;
 }
 
 //*************************		ComponentMesh
@@ -424,80 +445,6 @@ void ComponentMesh::SetAABB()
 	float3* vertexvert = (float3*)vertex;
 	bbox.Enclose(vertexvert, num_vertex);
 
-	//float3 array[8];
-	//bbox.GetCornerPoints(array);
-
-	////0 = back left bot
-	////2 = back left top
-	////4 = back right bot
-	////6 = back right top
-
-	////3 = front left top
-	////7 = front right top
-	////1 = front left bot
-	////5 = front right bot
-	//vec3 origin, destination;
-
-	//origin.Set(array[0].x, array[0].y, array[0].z);
-	//destination.Set(array[1].x, array[1].y, array[1].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[1].x, array[1].y, array[1].z);
-	//destination.Set(array[3].x, array[3].y, array[3].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[3].x, array[3].y, array[3].z);
-	//destination.Set(array[7].x, array[7].y, array[7].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[3].x, array[3].y, array[3].z);
-	//destination.Set(array[2].x, array[2].y, array[2].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[0].x, array[0].y, array[0].z);
-	//destination.Set(array[2].x, array[2].y, array[2].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[1].x, array[1].y, array[1].z);
-	//destination.Set(array[5].x, array[5].y, array[5].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[7].x, array[7].y, array[7].z);
-	//destination.Set(array[6].x, array[6].y, array[6].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-
-	//origin.Set(array[2].x, array[2].y, array[2].z);
-	//destination.Set(array[6].x, array[6].y, array[6].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[6].x, array[6].y, array[6].z);
-	//destination.Set(array[4].x, array[4].y, array[4].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[4].x, array[4].y, array[4].z);
-	//destination.Set(array[0].x, array[0].y, array[0].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[7].x, array[7].y, array[7].z);
-	//destination.Set(array[5].x, array[5].y, array[5].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
-
-	//origin.Set(array[4].x, array[4].y, array[4].z);
-	//destination.Set(array[5].x, array[5].y, array[5].z);
-
-	//App->PrimManager->CreateLine(origin, destination);
 }
 AABB ComponentMesh::GetAABB()
 {

@@ -19,6 +19,7 @@ class PrimCylinder;
 class Plane;
 class btQuaternion;
 
+class GameObject;
 class Primitive;
 
 class PhysBody3D
@@ -30,6 +31,8 @@ public:
 	void SetBody(PrimSphere* primitive, float mass);
 	void SetBody(Cube* primitive, float mass);
 	void SetBody(PrimCylinder* primitive, float mass);
+	void SetBody(GameObject* primitive, float mass);
+
 	bool HasBody() const;
 	btRigidBody* GetBody() const;
 
@@ -50,13 +53,15 @@ public:
 	void Stop();
 
 private:
-	void SetBody(btCollisionShape* shape, Primitive* parent, float mass);
+	void SetBody(btCollisionShape* shape, Primitive* parent, float mass);	
+	void SetBody(btCollisionShape* shape, GameObject* parent, float mass);
 
 	btRigidBody* body;
 	btCollisionShape* colShape;
 	btDefaultMotionState* motionState;
 public:
 	Primitive* parentPrimitive;
+	GameObject* parentGameObject;
 	std::vector<Module*> collision_listeners;
 	btRaycastVehicle* vehicle;
 	bool is_sensor = false;

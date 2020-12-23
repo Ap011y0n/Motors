@@ -211,71 +211,71 @@ void Cube::InnerRender() const
 {
 	//glColor4ub(255, 0.0, 0.0, 0.0);
 	//if (App->UI->Wireframe_bool)
-	glPushMatrix();
-	glMultMatrixf(transform.M);
-	if (wire)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	else
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glPushMatrix();
+	//glMultMatrixf(transform.M);
+	//if (wire)
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//else
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	//float sx = size.x * 0.5f;
-	//float sy = size.y * 0.5f;
-	//float sz = size.z * 0.5f;
+	////float sx = size.x * 0.5f;
+	////float sy = size.y * 0.5f;
+	////float sz = size.z * 0.5f;
 
-	//glBegin(GL_QUADS);
-	//glNormal3f(0.0f, 0.0f, 1.0f);
-	//glVertex3f(-sx, -sy, sz);
-	//glVertex3f( sx, -sy, sz);
-	//glVertex3f( sx,  sy, sz);
-	//glVertex3f(-sx,  sy, sz);
+	////glBegin(GL_QUADS);
+	////glNormal3f(0.0f, 0.0f, 1.0f);
+	////glVertex3f(-sx, -sy, sz);
+	////glVertex3f( sx, -sy, sz);
+	////glVertex3f( sx,  sy, sz);
+	////glVertex3f(-sx,  sy, sz);
 
-	//glNormal3f(0.0f, 0.0f, -1.0f);
-	//glVertex3f( sx, -sy, -sz);
-	//glVertex3f(-sx, -sy, -sz);
-	//glVertex3f(-sx,  sy, -sz);
-	//glVertex3f( sx,  sy, -sz);
+	////glNormal3f(0.0f, 0.0f, -1.0f);
+	////glVertex3f( sx, -sy, -sz);
+	////glVertex3f(-sx, -sy, -sz);
+	////glVertex3f(-sx,  sy, -sz);
+	////glVertex3f( sx,  sy, -sz);
 
-	//glNormal3f(1.0f, 0.0f, 0.0f);
-	//glVertex3f(sx, -sy,  sz);
-	//glVertex3f(sx, -sy, -sz);
-	//glVertex3f(sx,  sy, -sz);
-	//glVertex3f(sx,  sy,  sz);
+	////glNormal3f(1.0f, 0.0f, 0.0f);
+	////glVertex3f(sx, -sy,  sz);
+	////glVertex3f(sx, -sy, -sz);
+	////glVertex3f(sx,  sy, -sz);
+	////glVertex3f(sx,  sy,  sz);
 
-	//glNormal3f(-1.0f, 0.0f, 0.0f);
-	//glVertex3f(-sx, -sy, -sz);
-	//glVertex3f(-sx, -sy,  sz);
-	//glVertex3f(-sx,  sy,  sz);
-	//glVertex3f(-sx,  sy, -sz);
+	////glNormal3f(-1.0f, 0.0f, 0.0f);
+	////glVertex3f(-sx, -sy, -sz);
+	////glVertex3f(-sx, -sy,  sz);
+	////glVertex3f(-sx,  sy,  sz);
+	////glVertex3f(-sx,  sy, -sz);
 
-	//glNormal3f(0.0f, 1.0f, 0.0f);
-	//glVertex3f(-sx, sy,  sz);
-	//glVertex3f( sx, sy,  sz);
-	//glVertex3f( sx, sy, -sz);
-	//glVertex3f(-sx, sy, -sz);
+	////glNormal3f(0.0f, 1.0f, 0.0f);
+	////glVertex3f(-sx, sy,  sz);
+	////glVertex3f( sx, sy,  sz);
+	////glVertex3f( sx, sy, -sz);
+	////glVertex3f(-sx, sy, -sz);
 
-	//glNormal3f(0.0f, -1.0f, 0.0f);
-	//glVertex3f(-sx, -sy, -sz);
-	//glVertex3f( sx, -sy, -sz);
-	//glVertex3f( sx, -sy,  sz);
-	//glVertex3f(-sx, -sy,  sz);
-	//glEnd();
+	////glNormal3f(0.0f, -1.0f, 0.0f);
+	////glVertex3f(-sx, -sy, -sz);
+	////glVertex3f( sx, -sy, -sz);
+	////glVertex3f( sx, -sy,  sz);
+	////glVertex3f(-sx, -sy,  sz);
+	////glEnd();
 
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glEnableClientState(GL_VERTEX_ARRAY);
+	////glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glEnableClientState(GL_VERTEX_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	//glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+	//glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 
-	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+	//glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 
 
-	glDisableClientState(GL_VERTEX_ARRAY);
+	//glDisableClientState(GL_VERTEX_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glPopMatrix();
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//glPopMatrix();
 
 }
 
@@ -746,29 +746,39 @@ PrimLine::PrimLine(float x, float y, float z, float x2, float y2, float z2) : Pr
 
 void PrimLine::InnerRender() const
 {
-	glLineWidth(4.0f);
-	glColor4ub(255, 0.0, 0.0, 0.0);
+	glLineWidth(2.0f);
 
-	/*glBegin(GL_LINES);
+	glBegin(GL_LINES);
 
 	glVertex3f(origin.x, origin.y, origin.z);
 	glVertex3f(destination.x, destination.y, destination.z);
 
-	glEnd();*/
+	glEnd();
 
-	glEnableClientState(GL_VERTEX_ARRAY);
+	glLineWidth(1.0f);
+	//glLineWidth(4.0f);
+	//glColor4ub(255, 0.0, 0.0, 0.0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	///*glBegin(GL_LINES);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	//glVertex3f(origin.x, origin.y, origin.z);
+	//glVertex3f(destination.x, destination.y, destination.z);
 
-	glDrawElements(GL_LINES, num_indices, GL_UNSIGNED_INT, NULL);
+	//glEnd();*/
 
-	glDisableClientState(GL_VERTEX_ARRAY);
+	//glEnableClientState(GL_VERTEX_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+	//glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+
+	//glDrawElements(GL_LINES, num_indices, GL_UNSIGNED_INT, NULL);
+
+	//glDisableClientState(GL_VERTEX_ARRAY);
+
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glColor4ub(255, 255, 255, 0.0);
 
 }
