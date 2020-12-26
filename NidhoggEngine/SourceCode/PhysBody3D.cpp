@@ -48,7 +48,7 @@ void PhysBody3D::SetBody(GameObject* obj, float mass)
 			AABB bbox = mesh->GetAABB();
 			float3 corners[8];
 			bbox.GetCornerPoints(corners);
-			float width = corners[0].Distance(corners[1]);
+			float width = corners[0].Distance(corners[4]);
 			float heigth = corners[1].Distance(corners[3]);
 			float depth = corners[3].Distance(corners[2]);
 			const btVector3 vec(width / 2, heigth / 2, depth / 2);
@@ -182,6 +182,12 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 	ComponentTransform* transform = nullptr;
 	transform = (ComponentTransform*)parent->GetComponent(ComponentType::TRANSFORM);
 
+	ComponentMesh* mesh = (ComponentMesh*)parent->GetComponent(ComponentType::MESH);
+	
+	AABB bbox = mesh->GetAABB();
+	
+	transform->SetPos(bbox.CenterPoint().x, bbox.CenterPoint().y, bbox.CenterPoint().z);
+	transform->Update(0);
 	startTransform.setFromOpenGLMatrix(transform->global_transform.Transposed().ptr());
 
 	btVector3 localInertia(0, 0, 0);
@@ -196,6 +202,7 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 	body->setUserPointer(this);
 
 	App->Physics->AddBodyToWorld(body);
+
 }
 const vec3 PhysBody3D::GetPos() const
 {
