@@ -209,73 +209,73 @@ void Cube::Update()
 
 void Cube::InnerRender() const
 {
-	//glColor4ub(255, 0.0, 0.0, 0.0);
-	//if (App->UI->Wireframe_bool)
-	//glPushMatrix();
-	//glMultMatrixf(transform.M);
-	//if (wire)
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//else
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glColor4ub(255, 0.0, 0.0, 0.0);
+	if (App->UI->Wireframe_bool)
+	glPushMatrix();
+	glMultMatrixf(transform.M);
+	if (wire)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	////float sx = size.x * 0.5f;
-	////float sy = size.y * 0.5f;
-	////float sz = size.z * 0.5f;
+	//float sx = size.x * 0.5f;
+	//float sy = size.y * 0.5f;
+	//float sz = size.z * 0.5f;
 
-	////glBegin(GL_QUADS);
-	////glNormal3f(0.0f, 0.0f, 1.0f);
-	////glVertex3f(-sx, -sy, sz);
-	////glVertex3f( sx, -sy, sz);
-	////glVertex3f( sx,  sy, sz);
-	////glVertex3f(-sx,  sy, sz);
+	//glBegin(GL_QUADS);
+	//glNormal3f(0.0f, 0.0f, 1.0f);
+	//glVertex3f(-sx, -sy, sz);
+	//glVertex3f( sx, -sy, sz);
+	//glVertex3f( sx,  sy, sz);
+	//glVertex3f(-sx,  sy, sz);
 
-	////glNormal3f(0.0f, 0.0f, -1.0f);
-	////glVertex3f( sx, -sy, -sz);
-	////glVertex3f(-sx, -sy, -sz);
-	////glVertex3f(-sx,  sy, -sz);
-	////glVertex3f( sx,  sy, -sz);
+	//glNormal3f(0.0f, 0.0f, -1.0f);
+	//glVertex3f( sx, -sy, -sz);
+	//glVertex3f(-sx, -sy, -sz);
+	//glVertex3f(-sx,  sy, -sz);
+	//glVertex3f( sx,  sy, -sz);
 
-	////glNormal3f(1.0f, 0.0f, 0.0f);
-	////glVertex3f(sx, -sy,  sz);
-	////glVertex3f(sx, -sy, -sz);
-	////glVertex3f(sx,  sy, -sz);
-	////glVertex3f(sx,  sy,  sz);
+	//glNormal3f(1.0f, 0.0f, 0.0f);
+	//glVertex3f(sx, -sy,  sz);
+	//glVertex3f(sx, -sy, -sz);
+	//glVertex3f(sx,  sy, -sz);
+	//glVertex3f(sx,  sy,  sz);
 
-	////glNormal3f(-1.0f, 0.0f, 0.0f);
-	////glVertex3f(-sx, -sy, -sz);
-	////glVertex3f(-sx, -sy,  sz);
-	////glVertex3f(-sx,  sy,  sz);
-	////glVertex3f(-sx,  sy, -sz);
+	//glNormal3f(-1.0f, 0.0f, 0.0f);
+	//glVertex3f(-sx, -sy, -sz);
+	//glVertex3f(-sx, -sy,  sz);
+	//glVertex3f(-sx,  sy,  sz);
+	//glVertex3f(-sx,  sy, -sz);
 
-	////glNormal3f(0.0f, 1.0f, 0.0f);
-	////glVertex3f(-sx, sy,  sz);
-	////glVertex3f( sx, sy,  sz);
-	////glVertex3f( sx, sy, -sz);
-	////glVertex3f(-sx, sy, -sz);
+	//glNormal3f(0.0f, 1.0f, 0.0f);
+	//glVertex3f(-sx, sy,  sz);
+	//glVertex3f( sx, sy,  sz);
+	//glVertex3f( sx, sy, -sz);
+	//glVertex3f(-sx, sy, -sz);
 
-	////glNormal3f(0.0f, -1.0f, 0.0f);
-	////glVertex3f(-sx, -sy, -sz);
-	////glVertex3f( sx, -sy, -sz);
-	////glVertex3f( sx, -sy,  sz);
-	////glVertex3f(-sx, -sy,  sz);
-	////glEnd();
+	//glNormal3f(0.0f, -1.0f, 0.0f);
+	//glVertex3f(-sx, -sy, -sz);
+	//glVertex3f( sx, -sy, -sz);
+	//glVertex3f( sx, -sy,  sz);
+	//glVertex3f(-sx, -sy,  sz);
+	//glEnd();
 
-	////glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-	//glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
-	//glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, my_vertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 
-	//glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 
 
-	//glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
 
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	//glPopMatrix();
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glPopMatrix();
 
 }
 

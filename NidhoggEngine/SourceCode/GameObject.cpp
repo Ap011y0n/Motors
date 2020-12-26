@@ -84,7 +84,7 @@ bool GameObject::Update(float dt)
 			if (myTrans != nullptr)
 			{
 				
-				obb.Transform(myTrans->AcumulateparentTransform());
+				obb.Transform(myTrans->global_transform);
 				aabb.SetNegativeInfinity();
 				aabb.Enclose(obb);
 
@@ -515,12 +515,24 @@ bool ComponentTransform::Update(float dt)
 	bool ret = true;
 	//UpdatePos(pos.x, pos.y, pos.z);
 	//vec3 axis(1, 0, 0);
-	if (should_update)
+	Collider* collider = (Collider*)owner->GetComponent(ComponentType::COLLIDER);
+	if (collider)
 	{
-		local_transform = float4x4::FromTRS(pos, rot, scale);
-		should_update = false;
+		collider->body.GetTransform(local_transform.ptr());
+		local_transform.Transpose();
+		global_transform = local_transform;
 	}
-	global_transform = AcumulateparentTransform();
+	else
+	{
+		if (should_update)
+		{
+			local_transform = float4x4::FromTRS(pos, rot, scale);
+			should_update = false;
+		}
+		global_transform = AcumulateparentTransform();
+	}
+
+	
 	//UpdateScale(scale.x, scale.y, scale.z);
 	return ret;
 }
