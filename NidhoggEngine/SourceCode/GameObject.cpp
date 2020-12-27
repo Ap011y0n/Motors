@@ -85,8 +85,10 @@ bool GameObject::Update(float dt)
 			{
 				
 				obb.Transform(myTrans->global_transform);
+			
 				aabb.SetNegativeInfinity();
 				aabb.Enclose(obb);
+				
 				HideAABB();
 				if (displayAABB)
 				{
@@ -523,7 +525,7 @@ bool ComponentTransform::Update(float dt)
 
 			collider->body.GetTransform(local_transform.ptr());
 			local_transform.Transpose();
-			global_transform = local_transform;
+			global_transform = local_transform * collider->body.localTransform;
 		}
 	}
 	

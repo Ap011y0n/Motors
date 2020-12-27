@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "glmath.h"
 #include "Bullet/include/btBulletDynamicsCommon.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 // ---------------------------------------------------------
 PhysBody3D::PhysBody3D()
@@ -179,16 +180,28 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 	colShape = shape;
 
 	btTransform startTransform;
-	ComponentTransform* transform = nullptr;
-	transform = (ComponentTransform*)parent->GetComponent(ComponentType::TRANSFORM);
+	ComponentTransform* comp_transform = nullptr;
+	comp_transform = (ComponentTransform*)parent->GetComponent(ComponentType::TRANSFORM);
 
 	ComponentMesh* mesh = (ComponentMesh*)parent->GetComponent(ComponentType::MESH);
 	
-	AABB bbox = mesh->GetAABB();
+	OBB obb = mesh->GetAABB();
+	obb.Transform(comp_transform->global_transform);
+	float3 pos;
+	float3 scale;
+	Quat rot;
+	comp_transform->global_transform.Decompose(pos, rot, scale);
+	pos = { obb.pos.x, obb.pos.y, obb.pos.z };
 	
+	//App->PrimManager->CreateSphere(1, 20, 20, pos);
+
+	float4x4 transform = float4x4::FromTRS(pos, rot, scale);
+	float4x4 inversedtransform = comp_transform->global_transform;
+	localTransform = transform.Inverted() * inversedtransform ;
+	/*
 	transform->SetPos(bbox.CenterPoint().x, bbox.CenterPoint().y, bbox.CenterPoint().z);
-	transform->Update(0);
-	startTransform.setFromOpenGLMatrix(transform->global_transform.Transposed().ptr());
+	transform->Update(0);*/
+	startTransform.setFromOpenGLMatrix(transform.Transposed().ptr());
 
 	btVector3 localInertia(0, 0, 0);
 	if (mass != 0.f)

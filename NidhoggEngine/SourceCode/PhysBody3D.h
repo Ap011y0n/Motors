@@ -5,6 +5,7 @@
 //#include "Module.h"
 #include "Globals.h"
 #include <vector>
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class btRigidBody;
 class btCollisionShape;
@@ -62,6 +63,7 @@ private:
 public:
 	Primitive* parentPrimitive;
 	GameObject* parentGameObject;
+	float4x4 localTransform;
 	std::vector<Module*> collision_listeners;
 	btRaycastVehicle* vehicle;
 	bool is_sensor = false;
