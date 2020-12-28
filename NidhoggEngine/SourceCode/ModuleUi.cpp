@@ -818,6 +818,8 @@ void ModuleUI::GuizmoUI()
 			transform->pos.Set(translation.x, translation.y, translation.z);
 			transform->rot.Set(rotation.x, rotation.y, rotation.z, rotation.w);
 			transform->scale.Set(scaling.x, scaling.y, scaling.z);
+			transform->using_guizmo = true;
+
 		}
 	}
 }

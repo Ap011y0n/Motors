@@ -504,6 +504,7 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 	rot.Set(0, 0, 0, 1);
 	local_transform = local_transform.identity;
 	should_update = false;
+	using_guizmo = false;
 }
 
 ComponentTransform::~ComponentTransform()
@@ -517,29 +518,32 @@ bool ComponentTransform::Update(float dt)
 	//UpdatePos(pos.x, pos.y, pos.z);
 	//vec3 axis(1, 0, 0);
 	Collider* collider = nullptr;
-	if (owner != nullptr)
-	{
-		collider = (Collider*)owner->GetComponent(ComponentType::COLLIDER);
-		if (collider)
-		{
-
-			collider->body.GetTransform(local_transform.ptr());
-			local_transform.Transpose();
-			global_transform = local_transform * collider->body.localTransform;
-		}
-	}
-	
-	if(collider == nullptr)
-	{
-		if (should_update)
-		{
-			local_transform = float4x4::FromTRS(pos, rot, scale);
-			should_update = false;
-		}
-		global_transform = AcumulateparentTransform();
-	}
 
 	
+	
+	if (should_update)
+	{
+		local_transform = float4x4::FromTRS(pos, rot, scale);
+	}
+	global_transform = AcumulateparentTransform();
+	if (!should_update )
+	{
+		if (owner != nullptr)
+		{
+			collider = (Collider*)owner->GetComponent(ComponentType::COLLIDER);
+			if (collider)
+			{
+
+				collider->body.GetTransform(local_transform.ptr());
+				local_transform.Transpose();
+				global_transform = local_transform * collider->body.localTransform;
+			}
+		}
+
+	}
+	using_guizmo = false;
+	should_update = false;
+
 	//UpdateScale(scale.x, scale.y, scale.z);
 	return ret;
 }

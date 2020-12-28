@@ -132,6 +132,7 @@ public:
 	float4x4 global_transform;
 
 	bool should_update;
+	bool using_guizmo;
 
 };
 
