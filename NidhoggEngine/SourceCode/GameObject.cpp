@@ -525,18 +525,19 @@ bool ComponentTransform::Update(float dt)
 	{
 		local_transform = float4x4::FromTRS(pos, rot, scale);
 	}
+
 	global_transform = AcumulateparentTransform();
-	if (!should_update )
+	if (!should_update && !using_guizmo)
 	{
 		if (owner != nullptr)
 		{
 			collider = (Collider*)owner->GetComponent(ComponentType::COLLIDER);
 			if (collider)
 			{
-
-				collider->body.GetTransform(local_transform.ptr());
-				local_transform.Transpose();
-				global_transform = local_transform * collider->body.localTransform;
+				float4x4 collider_trans;
+				collider->body.GetTransform(collider_trans.ptr());
+				collider_trans.Transpose();
+				global_transform = collider_trans * collider->body.localTransform;
 			}
 		}
 
