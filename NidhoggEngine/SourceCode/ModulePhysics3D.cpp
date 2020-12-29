@@ -194,32 +194,32 @@ void ModulePhysics3D::RemoveBodyFromWorld(btRigidBody * body)
 }
 
 
-//btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(const Primitive& bodyA, const Primitive& bodyB, btVector3& pivotInA, btVector3& pivotInB) {
-//	btPoint2PointConstraint* constraint = new btPoint2PointConstraint(*bodyA.body.GetBody(), *bodyB.body.GetBody(), pivotInA, pivotInB);
-//	world->addConstraint(constraint);
-//	P2PConstraints.push_back(constraint);
-//	return constraint;
-//}
-//
-//btHingeConstraint* ModulePhysics3D::AddConstraintHinge(const Primitive& bodyA, const Primitive& bodyB, btVector3& pivotInA, btVector3& pivotInB, btVector3& axisInA, btVector3& axisInB) {
-//	btHingeConstraint* constraint = new btHingeConstraint(*bodyA.body.GetBody(), *bodyB.body.GetBody(), pivotInA, pivotInB, axisInA, axisInB);
-//	world->addConstraint(constraint);
-//	HingeConstraints.push_back(constraint);
-//	return constraint;
-//}
-//
-//btSliderConstraint* ModulePhysics3D::AddConstraintSlider(const Primitive& bodyA, const Primitive& bodyB, btTransform& frameinA, btTransform& frameinB, bool linearreference) {
-//	btSliderConstraint* constraint = new btSliderConstraint(*bodyA.body.GetBody(), *bodyB.body.GetBody(),frameinA, frameinB, linearreference);
-//	constraint->setLowerLinLimit(0.f);
-//	constraint->setUpperLinLimit(0.4f);
-//	constraint->setLowerAngLimit(-0.2f);
-//	constraint->setUpperAngLimit(0.2f);
-//	
-//	world->addConstraint(constraint);
-//	SliderConstraints.push_back(constraint);
-//
-//	return constraint;
-//}
+btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(const Primitive& bodyA, const Primitive& bodyB, btVector3& pivotInA, btVector3& pivotInB) {
+	btPoint2PointConstraint* constraint = new btPoint2PointConstraint(*bodyA.body.GetBody(), *bodyB.body.GetBody(), pivotInA, pivotInB);
+	world->addConstraint(constraint);
+	P2PConstraints.push_back(constraint);
+	return constraint;
+}
+
+btHingeConstraint* ModulePhysics3D::AddConstraintHinge(const Primitive& bodyA, const Primitive& bodyB, btVector3& pivotInA, btVector3& pivotInB, btVector3& axisInA, btVector3& axisInB) {
+	btHingeConstraint* constraint = new btHingeConstraint(*bodyA.body.GetBody(), *bodyB.body.GetBody(), pivotInA, pivotInB, axisInA, axisInB);
+	world->addConstraint(constraint);
+	HingeConstraints.push_back(constraint);
+	return constraint;
+}
+
+btSliderConstraint* ModulePhysics3D::AddConstraintSlider(const Primitive& bodyA, const Primitive& bodyB, btTransform& frameinA, btTransform& frameinB, bool linearreference) {
+	btSliderConstraint* constraint = new btSliderConstraint(*bodyA.body.GetBody(), *bodyB.body.GetBody(),frameinA, frameinB, linearreference);
+	constraint->setLowerLinLimit(0.f);
+	constraint->setUpperLinLimit(0.4f);
+	constraint->setLowerAngLimit(-0.2f);
+	constraint->setUpperAngLimit(0.2f);
+	
+	world->addConstraint(constraint);
+	SliderConstraints.push_back(constraint);
+
+	return constraint;
+}
 
 // =============================================
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)

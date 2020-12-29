@@ -538,9 +538,21 @@ bool ComponentTransform::Update(float dt)
 				collider->body.GetTransform(collider_trans.ptr());
 				collider_trans.Transpose();
 				global_transform = collider_trans * collider->body.localTransform;
+				btQuaternion quat(rot.x, rot.y, rot.z, rot.w);
 			}
 		}
 
+	}
+	else
+	{
+		collider = (Collider*)owner->GetComponent(ComponentType::COLLIDER);
+		if (collider)
+		{
+
+			float4x4 colltrans = global_transform * collider->body.localTransform.Inverted() ;
+			collider->body.SetTransform(colltrans.Transposed().ptr());
+
+		}
 	}
 	using_guizmo = false;
 	should_update = false;

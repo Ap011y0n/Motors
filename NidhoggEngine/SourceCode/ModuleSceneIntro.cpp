@@ -62,9 +62,14 @@ bool ModuleSceneIntro::Start()
 	vec4 coords(0, 1, 0, 0);
 	App->PrimManager->CreatePlane(coords);
 	
-	vec3 size(1, 1, 1);
+	vec3 size(2, 2, 2);
 	vec3 pos(0, 3, 0);
-	App->PrimManager->CreateCube(size, pos);
+	Primitive* cube1 = App->PrimManager->CreateCube(size, pos);
+	
+	pos.Set(1, 6, 0);
+	Primitive* cube2 = App->PrimManager->CreateCube(size, pos);
+	App->Physics->AddConstraintHinge(*cube1, *cube2,
+		btVector3{ 4.f,-0.,-0 }, btVector3{ 0, 0,0 }, btVector3{ 1, 0,0 }, btVector3{ 0,1,0 });
 
 	int i, j, c;
 

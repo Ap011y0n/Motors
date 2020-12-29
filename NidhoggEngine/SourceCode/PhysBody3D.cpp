@@ -197,7 +197,7 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 
 	float4x4 transform = float4x4::FromTRS(pos, rot, scale);
 	float4x4 inversedtransform = comp_transform->global_transform;
-	localTransform = transform.Inverted() * inversedtransform ;
+	localTransform = transform.Inverted() * inversedtransform;
 	/*
 	transform->SetPos(bbox.CenterPoint().x, bbox.CenterPoint().y, bbox.CenterPoint().z);
 	transform->Update(0);*/
@@ -208,6 +208,7 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 		colShape->calculateLocalInertia(mass, localInertia);
 
 	motionState = new btDefaultMotionState(startTransform);
+	
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, colShape, localInertia);
 
 	body = new btRigidBody(rbInfo);
