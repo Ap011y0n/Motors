@@ -220,6 +220,12 @@
     <ClCompile Include="SourceCode\PhysBody3D.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\PhysVehicle3D.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ModulePlayer.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Application.h" />
@@ -529,6 +535,12 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\PhysBody3D.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\PhysVehicle3D.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ModulePlayer.h">
       <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>

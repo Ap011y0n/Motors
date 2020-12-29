@@ -19,6 +19,7 @@
 #include "MousePicking.h"
 #include "ResourceManager.h"
 #include "ModulePhysics3D.h"
+#include "ModulePlayer.h"
 
 #include <vector>
 
@@ -44,6 +45,8 @@ public:
 	ResourceManager* ResManager;
 	MousePicking* MousePick;
 	ModulePhysics3D* Physics;
+	ModulePlayer* player;
+
 private:
 
 	Timer	ms_timer;
