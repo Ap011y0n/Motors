@@ -96,8 +96,8 @@ bool ModulePlayer::Start()
 	car.wheels[3].brake = true;
 	car.wheels[3].steering = false;
 
-	/*vehicle = App->Physics->AddVehicle(car);
-	vehicle->SetPos(0, 12, 10);*/
+	vehicle = App->Physics->AddVehicle(car);
+	vehicle->SetPos(0, 12, 10);
 
 	return true;
 }
@@ -136,12 +136,15 @@ update_status ModulePlayer::Update(float dt)
 	{
 		brake = BRAKE_POWER;
 	}
+	if (vehicle != nullptr)
+	{
+		vehicle->ApplyEngineForce(acceleration);
+		vehicle->Turn(turn);
+		vehicle->Brake(brake);
 
-	vehicle->ApplyEngineForce(acceleration);
-	vehicle->Turn(turn);
-	vehicle->Brake(brake);
+		//vehicle->Render();
+	}
 
-	vehicle->Render();
 
 	/*char title[80];
 	sprintf_s(title, "%.1f Km/h", vehicle->GetKmh());

@@ -57,9 +57,11 @@ private:
 	void SetBody(btCollisionShape* shape, Primitive* parent, float mass);	
 	void SetBody(btCollisionShape* shape, GameObject* parent, float mass);
 
-	btRigidBody* body;
 	btCollisionShape* colShape;
 	btDefaultMotionState* motionState;
+protected:
+	btRigidBody* body;
+
 public:
 	Primitive* parentPrimitive;
 	GameObject* parentGameObject;

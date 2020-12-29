@@ -59,6 +59,7 @@ bool ModulePhysics3D::Start()
 	debug_draw->setDebugMode(1);
 	world->setDebugDrawer(debug_draw);
 	world->setGravity(GRAVITY);
+	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
 
 	// Big rectangle as ground
 	{
@@ -167,7 +168,7 @@ bool ModulePhysics3D::CleanUp()
 		delete SliderConstraints[i];
 	}
 	
-	
+	delete vehicle_raycaster;
 	delete world;
 
 	return true;
@@ -255,10 +256,10 @@ PhysVehicle3D* ModulePhysics3D::AddVehicle(const VehicleInfo& info)
 		vehicle->addWheel(conn, dir, axis, info.wheels[i].suspensionRestLength, info.wheels[i].radius, tuning, info.wheels[i].front);
 	}
 	// ---------------------
-
+//	PhysVehicle3D* pvehicle = nullptr;
 	PhysVehicle3D* pvehicle = new PhysVehicle3D(body, vehicle, info);
 	world->addVehicle(vehicle);
-	vehicles.push_back(pvehicle);
+	//vehicles.push_back(pvehicle);
 
 	return pvehicle;
 }
