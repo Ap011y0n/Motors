@@ -31,8 +31,7 @@ PhysBody3D::~PhysBody3D()
 
 void PhysBody3D::SetBody(PrimSphere* primitive, float mass)
 {
-	/*SetBody(new btSphereShape(primitive->GetRadius()),
-		primitive, mass);*/
+	SetBody(new btSphereShape(/*primitive->GetRadius()*/1),primitive, mass);
 }
 
 void PhysBody3D::SetBody(Cube* primitive, float mass)

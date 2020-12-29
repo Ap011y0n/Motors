@@ -467,6 +467,11 @@ PrimSphere::PrimSphere(float radius, unsigned int rings, unsigned int sectors) :
 	delete[] index;
 }
 
+void PrimSphere::Update()
+{
+	body.GetTransform(&transform);
+}
+
 void PrimSphere::InnerRender() const
 {
 	if (wire)

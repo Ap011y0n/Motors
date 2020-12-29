@@ -101,6 +101,7 @@ public:
 	PrimSphere();
 	PrimSphere(float radius, unsigned int rings, unsigned int sectors);
 	~PrimSphere();
+	void Update();
 
 	void InnerRender() const;
 protected:

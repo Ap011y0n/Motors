@@ -4,6 +4,7 @@
 #include "Primitive.h"
 #include "Globals.h"
 #include "PhysBody3D.h"
+#include "ModuleCamera3D.h"
 
 #include "Glew/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
@@ -54,7 +55,7 @@ bool ModulePhysics3D::Start()
 	LOG("Creating Physics environment");
 
 	world = new btDiscreteDynamicsWorld(dispatcher, broad_phase, solver, collision_conf);
-	debug_draw->setDebugMode(2);
+	debug_draw->setDebugMode(1);
 	world->setDebugDrawer(debug_draw);
 	world->setGravity(GRAVITY);
 
@@ -121,6 +122,15 @@ update_status ModulePhysics3D::Update(float dt)
 		world->debugDrawWorld();
 		glEnable(GL_LIGHTING);
 	}*/
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) 
+	{
+		float radius = 1;
+		int rings = 40;
+		vec3 pos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+		Primitive* sphere1 = App->PrimManager->CreateSphere(radius, rings, 116 , pos);
+		float force = 900.0f;
+		sphere1->body.Push({ -(App->camera->Z.x * force), -(App->camera->Z.y * force), -(App->camera->Z.z * force) });
+	}
 
 	return UPDATE_CONTINUE;
 }

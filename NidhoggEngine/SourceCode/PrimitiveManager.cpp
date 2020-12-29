@@ -134,6 +134,8 @@ PrimSphere* PrimitiveManager::CreateSphere(float radius, unsigned int rings, uns
 {
 	PrimSphere* sphere = new PrimSphere(radius, rings, sectors);
 	sphere->SetPos(pos.x, pos.y, pos.z);
+	sphere->body.SetBody(sphere, 1);
+
 	prim_list.push_back((Primitive*)sphere);
 	return sphere;
 }
