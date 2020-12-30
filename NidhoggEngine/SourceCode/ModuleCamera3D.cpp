@@ -94,13 +94,22 @@ update_status ModuleCamera3D::Update(float dt)
 		App->UI->guizmo_type = ImGuizmo::OPERATION::SCALE;
 	}
 
-	if (App->input->mouse_z > 0) //
+	if (App->input->mouse_z > 0) 
 	{
-		newPos -= Z * 20.0f * dt;;
+		if(App->input->mouse_x > App->UI->img_corner.x && App->input->mouse_x < (App->UI->img_corner.x + App->UI->image_size.x) && 
+		   App->input->mouse_y > App->UI->img_corner.y && App->input->mouse_y < (App->UI->img_corner.y + App->UI->image_size.y))
+		{
+			newPos -= Z * 20.0f * dt;
+		}
+		
 	}
-	if (App->input->mouse_z < 0)//
+	if (App->input->mouse_z < 0)
 	{
-		newPos += Z * 20.0f * dt;;
+		if (App->input->mouse_x > App->UI->img_corner.x && App->input->mouse_x < (App->UI->img_corner.x + App->UI->image_size.x) &&
+			App->input->mouse_y > App->UI->img_corner.y && App->input->mouse_y < (App->UI->img_corner.y + App->UI->image_size.y))
+		{
+			newPos += Z * 20.0f * dt;
+		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) 
