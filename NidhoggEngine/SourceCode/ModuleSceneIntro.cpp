@@ -56,7 +56,7 @@ bool ModuleSceneIntro::Start()
 	obj2->parent = scene;
 	scene->childs.push_back(obj2);
 
-	App->Physics->AddConstraintP2P(*obj1, *obj2,
+	App->Physics->AddConstraintP2P(*collider1, *collider2,
 		btVector3{ 4.f,-0.,-0 }, btVector3{ 0, 0,0 });
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));

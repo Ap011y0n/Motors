@@ -344,8 +344,8 @@ void Win_Inspector::AddComponent(GameObject* obj)
 		if (ImGui::Button("Confirm"))
 		{
 			App->scene_intro->CreatingJoint = false;
-			App->Physics->AddConstraintP2P(*App->scene_intro->JointObj1, *App->scene_intro->JointObj2,
-				btVector3{ 4.f,-0.,-0 }, btVector3{ 0, 0,0 });
+		/*	App->Physics->AddConstraintP2P(*App->scene_intro->JointObj1, *App->scene_intro->JointObj2,
+				btVector3{ 4.f,-0.,-0 }, btVector3{ 0, 0,0 });*/
 		}
 	}
 }

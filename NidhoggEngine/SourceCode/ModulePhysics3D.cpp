@@ -216,20 +216,15 @@ btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(const Primitive& body
 	return constraint;
 }
 
-btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(GameObject bodyA, GameObject bodyB, btVector3& pivotInA, btVector3& pivotInB) {
-	Collider* colliderA = (Collider*)bodyA.GetComponent(ComponentType::COLLIDER);
-	Collider* colliderB = (Collider*)bodyB.GetComponent(ComponentType::COLLIDER);
+btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(const Collider& bodyA, const Collider& bodyB, btVector3& pivotInA, btVector3& pivotInB) {
 
-	if (colliderA && colliderB)
-	{
-		btRigidBody body1 = *colliderA->body.GetBody();
-		btRigidBody body2 = *colliderB->body.GetBody();
-		btPoint2PointConstraint* constraint = new btPoint2PointConstraint(body1, body2, pivotInA, pivotInB);
-		world->addConstraint(constraint);
-		P2PConstraints.push_back(constraint);
-		return constraint;
 
-	}
+	btPoint2PointConstraint* constraint = new btPoint2PointConstraint(*bodyA.body.GetBody(), *bodyB.body.GetBody(), pivotInA, pivotInB);
+	world->addConstraint(constraint);
+	P2PConstraints.push_back(constraint);
+	return constraint;
+
+	
 	return nullptr;
 }
 
