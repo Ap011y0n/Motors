@@ -11,6 +11,7 @@
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f) 
 
+class GameObject;
 class DebugDrawer;
 //class  PhysBody3D;
 
@@ -35,10 +36,13 @@ public:
 	//void AddConstraintP2P(const Primitive& bodyA, const Primitive& bodyB, ...);
 	
 	btPoint2PointConstraint* AddConstraintP2P(const Primitive& bodyA, const Primitive& bodyB, btVector3& pivotInA, btVector3& pivotInB);
+	btPoint2PointConstraint* AddConstraintP2P(GameObject bodyA, GameObject bodyB, btVector3& pivotInA, btVector3& pivotInB);
 
 	//TODO 3: Implement the code to add a Hinge constraint ( btHingeConstraint )
 
 	btHingeConstraint* AddConstraintHinge(const Primitive & bodyA, const Primitive & bodyB, btVector3& pivotInA, btVector3& pivotInB, btVector3& axisInA, btVector3& axisInB);
+	btHingeConstraint* AddConstraintHinge(GameObject* bodyA, GameObject* bodyB, btVector3& pivotInA, btVector3& pivotInB, btVector3& axisInA, btVector3& axisInB);
+
 	btSliderConstraint* AddConstraintSlider(const Primitive& bodyA, const Primitive& bodyB, btTransform& frameinA, btTransform& frameinB, bool linearreference = true);
 
 	// Create map walls

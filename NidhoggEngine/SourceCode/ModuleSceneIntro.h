@@ -5,6 +5,7 @@
 #include <string>
 
 class GameObject;
+class Primitive;
 class ComponentCamera;
 class ImportOptions;
 
@@ -66,4 +67,9 @@ public:
 	uint DdsIcon;
 	uint JsonIcon;
 	uint ModelIcon;
+
+	bool CreatingJoint;
+	GameObject* JointObj1;
+	GameObject* JointObj2;
+	Primitive* cube1;
 };

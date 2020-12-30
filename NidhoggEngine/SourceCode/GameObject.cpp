@@ -499,10 +499,11 @@ ComponentTransform::ComponentTransform(GameObject* ObjectOwner) : Component()
 	active = true;
 	owner = ObjectOwner;
 
-	pos.Set(0, 0, 0);
+	pos.Set(0, 1, 0);
 	scale.Set(1, 1, 1);
 	rot.Set(0, 0, 0, 1);
 	local_transform = local_transform.identity;
+	global_transform = AcumulateparentTransform();
 	should_update = false;
 	using_guizmo = false;
 }

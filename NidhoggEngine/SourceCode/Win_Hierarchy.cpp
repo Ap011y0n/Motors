@@ -57,10 +57,17 @@ void Win_Hierarchy::GameObjectHierarchyTree(GameObject* node, int id)
 
 	if (ImGui::IsItemClicked())
 	{
-		App->UI->DeactivateGameObjects(App->scene_intro->scene);
-
-		node->isSelected = true;
-		App->scene_intro->selectedObj = node;
+		if (!App->scene_intro->CreatingJoint)
+		{
+			App->UI->DeactivateGameObjects(App->scene_intro->scene);
+			node->isSelected = true;
+			App->scene_intro->selectedObj = node;
+		}
+		else
+		{
+			App->scene_intro->JointObj2 = node;
+		}
+		
 
 	}
 	App->UI->DropTrget_In_Inspector(node);

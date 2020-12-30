@@ -5,7 +5,6 @@
 
 Win_Inspector::Win_Inspector(Application* app, bool start_enabled)
 {
-
 }
 
 Win_Inspector::~Win_Inspector()
@@ -326,5 +325,27 @@ void Win_Inspector::AddComponent(GameObject* obj)
 	
 		if (obj->GetComponent(type) == nullptr)
 			obj->CreateComponent(type);
+	}
+	if (ImGui::Button("AddJoint"))
+	{
+		App->scene_intro->CreatingJoint = true;
+	}
+	if (App->scene_intro->CreatingJoint)
+	{
+		App->scene_intro->JointObj1 = App->scene_intro->selectedObj;
+		ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
+
+		if(App->scene_intro->JointObj2 != nullptr)
+		ImGui::Text("Object2 %s:", App->scene_intro->JointObj2->Name.c_str());
+		else
+		{
+			ImGui::Text("Select another object to create a joint");
+		}
+		if (ImGui::Button("Confirm"))
+		{
+			App->scene_intro->CreatingJoint = false;
+			App->Physics->AddConstraintP2P(*App->scene_intro->JointObj1, *App->scene_intro->JointObj2,
+				btVector3{ 4.f,-0.,-0 }, btVector3{ 0, 0,0 });
+		}
 	}
 }

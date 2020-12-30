@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModulePhysics3D.h"
 #include "Primitive.h"
+#include "GameObject.h"
 #include "Globals.h"
 #include "PhysBody3D.h"
 #include "ModuleCamera3D.h"
@@ -122,6 +123,7 @@ update_status ModulePhysics3D::Update(float dt)
 		world->debugDrawWorld();
 		glEnable(GL_LIGHTING);
 	}*/
+
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) 
 	{
 		float radius = 1;
@@ -205,14 +207,44 @@ void ModulePhysics3D::RemoveBodyFromWorld(btRigidBody * body)
 
 
 btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(const Primitive& bodyA, const Primitive& bodyB, btVector3& pivotInA, btVector3& pivotInB) {
+	
+	btRigidBody body1 = *bodyA.body.GetBody();
+	btRigidBody body2 = *bodyB.body.GetBody();
 	btPoint2PointConstraint* constraint = new btPoint2PointConstraint(*bodyA.body.GetBody(), *bodyB.body.GetBody(), pivotInA, pivotInB);
 	world->addConstraint(constraint);
 	P2PConstraints.push_back(constraint);
 	return constraint;
 }
 
+btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(GameObject bodyA, GameObject bodyB, btVector3& pivotInA, btVector3& pivotInB) {
+	Collider* colliderA = (Collider*)bodyA.GetComponent(ComponentType::COLLIDER);
+	Collider* colliderB = (Collider*)bodyB.GetComponent(ComponentType::COLLIDER);
+
+	if (colliderA && colliderB)
+	{
+		btRigidBody body1 = *colliderA->body.GetBody();
+		btRigidBody body2 = *colliderB->body.GetBody();
+		btPoint2PointConstraint* constraint = new btPoint2PointConstraint(body1, body2, pivotInA, pivotInB);
+		world->addConstraint(constraint);
+		P2PConstraints.push_back(constraint);
+		return constraint;
+
+	}
+	return nullptr;
+}
+
 btHingeConstraint* ModulePhysics3D::AddConstraintHinge(const Primitive& bodyA, const Primitive& bodyB, btVector3& pivotInA, btVector3& pivotInB, btVector3& axisInA, btVector3& axisInB) {
 	btHingeConstraint* constraint = new btHingeConstraint(*bodyA.body.GetBody(), *bodyB.body.GetBody(), pivotInA, pivotInB, axisInA, axisInB);
+	world->addConstraint(constraint);
+	HingeConstraints.push_back(constraint);
+	return constraint;
+}
+
+btHingeConstraint* ModulePhysics3D::AddConstraintHinge(GameObject* bodyA, GameObject* bodyB, btVector3& pivotInA, btVector3& pivotInB, btVector3& axisInA, btVector3& axisInB) {
+	Collider* colliderA = (Collider*)bodyA->GetComponent(ComponentType::COLLIDER);
+	Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
+
+	btHingeConstraint* constraint = new btHingeConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), pivotInA, pivotInB, axisInA, axisInB);
 	world->addConstraint(constraint);
 	HingeConstraints.push_back(constraint);
 	return constraint;

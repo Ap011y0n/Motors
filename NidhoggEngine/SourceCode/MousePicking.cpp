@@ -52,6 +52,7 @@ void MousePicking::NewRay(LineSegment ray)
 {
 	if (App->scene_intro->selectedObj != nullptr)
 		App->scene_intro->selectedObj->isSelected = false;
+	if(!App->scene_intro->CreatingJoint)
 	App->scene_intro->selectedObj = nullptr;
 
 	closestPoint = inf;
@@ -69,10 +70,18 @@ void MousePicking::checkAABB(LineSegment ray, GameObject* parent)
 		if (close < closestPoint && hit_tri)
 		{
 			closestPoint = close;
-			if (App->scene_intro->selectedObj != nullptr)
+			if (App->scene_intro->selectedObj != nullptr && !App->scene_intro->CreatingJoint)
 			App->scene_intro->selectedObj->isSelected = false;
-			App->scene_intro->selectedObj = parent;
-			parent->isSelected = true;
+			if (!App->scene_intro->CreatingJoint)
+			{
+				App->scene_intro->selectedObj = parent;
+				parent->isSelected = true;
+			}
+	
+			else
+			{
+				App->scene_intro->JointObj2 = parent;
+			}
 		}
 
 	}
