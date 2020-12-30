@@ -12,7 +12,6 @@
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f) 
 
 class GameObject;
-class Collider;
 class DebugDrawer;
 //class  PhysBody3D;
 
@@ -37,7 +36,7 @@ public:
 	//void AddConstraintP2P(const Primitive& bodyA, const Primitive& bodyB, ...);
 	
 	btPoint2PointConstraint* AddConstraintP2P(const Primitive& bodyA, const Primitive& bodyB, btVector3& pivotInA, btVector3& pivotInB);
-	btPoint2PointConstraint* AddConstraintP2P(const Collider& bodyA, const Collider& bodyB, btVector3& pivotInA, btVector3& pivotInB);
+	btPoint2PointConstraint* AddConstraintP2P(GameObject* bodyA, GameObject* bodyB, btVector3& pivotInA, btVector3& pivotInB);
 
 	//TODO 3: Implement the code to add a Hinge constraint ( btHingeConstraint )
 

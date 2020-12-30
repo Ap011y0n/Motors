@@ -38,26 +38,26 @@ bool ModuleSceneIntro::Start()
 	JointObj1 = nullptr;
 	JointObj2 = nullptr;
 
-	GameObject* obj1 = new GameObject();
-	selectedObj = obj1;
-	obj1->CreateComponent(ComponentType::TRANSFORM);
-	obj1->CreateComponent(ComponentType::MESH);
-	App->FBX->ChangeMesh("library/Baker_house.mesh");
-	Collider* collider1 = (Collider*)obj1->CreateComponent(ComponentType::COLLIDER);
-	obj1->parent = scene;
-	scene->childs.push_back(obj1);
+	//GameObject* obj1 = new GameObject();
+	//selectedObj = obj1;
+	//obj1->CreateComponent(ComponentType::TRANSFORM);
+	//obj1->CreateComponent(ComponentType::MESH);
+	//App->FBX->ChangeMesh("library/Baker_house.mesh");
+	//Collider* collider1 = (Collider*)obj1->CreateComponent(ComponentType::COLLIDER);
+	//obj1->parent = scene;
+	//scene->childs.push_back(obj1);
 
-	GameObject* obj2 = new GameObject();
-	selectedObj = obj2;
-	obj2->CreateComponent(ComponentType::TRANSFORM);
-	obj2->CreateComponent(ComponentType::MESH);
-	App->FBX->ChangeMesh("library/Baker_house.mesh");
-	Collider* collider2 = (Collider*)obj2->CreateComponent(ComponentType::COLLIDER);
-	obj2->parent = scene;
-	scene->childs.push_back(obj2);
+	//GameObject* obj2 = new GameObject();
+	//selectedObj = obj2;
+	//obj2->CreateComponent(ComponentType::TRANSFORM);
+	//obj2->CreateComponent(ComponentType::MESH);
+	//App->FBX->ChangeMesh("library/Baker_house.mesh");
+	//Collider* collider2 = (Collider*)obj2->CreateComponent(ComponentType::COLLIDER);
+	//obj2->parent = scene;
+	//scene->childs.push_back(obj2);
 
-	App->Physics->AddConstraintP2P(*collider1, *collider2,
-		btVector3{ 4.f,-0.,-0 }, btVector3{ 0, 0,0 });
+	//App->Physics->AddConstraintP2P(obj1, obj2,
+	//	btVector3{ 4.f,-0.,-0 }, btVector3{ 0, 0,0 });
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
@@ -139,7 +139,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update(float dt)
 {
-	/*if (wanttoload && App->UI->importsvec.empty())
+	if (wanttoload && App->UI->importsvec.empty())
 	{
 		wanttoload = false;
 		DeleteSceneObjects(scene);
@@ -153,7 +153,7 @@ update_status ModuleSceneIntro::Update(float dt)
 			App->serializer->LoadModel(NewResource);
 		}
 
-	}*/
+	}
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
 		
