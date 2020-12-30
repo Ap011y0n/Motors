@@ -320,11 +320,55 @@ void Win_Inspector::GameObjectInspector(GameObject* obj)
 
 void Win_Inspector::AddComponent(GameObject* obj)
 {
-	if (ImGui::Button("AddComponent"))
+	ImGui::Separator();
+	ImGui::SetNextItemWidth(130);
+	static int selectedMode = 0;
+	static const char* Mode[]{ "Box","Sphere", "Capsule" };
+	ImGui::Combo(" ", &selectedMode, Mode, IM_ARRAYSIZE(Mode)); ImGui::SameLine();
+
+	if (selectedMode == 0)
 	{
-		ComponentType type = ComponentType::COLLIDER;
-	
-		if (obj->GetComponent(type) == nullptr)
-			obj->CreateComponent(type);
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
+		if (ImGui::Button("AddComponent Box"))
+		{
+			ComponentType type = ComponentType::COLLIDER;
+
+			if (obj->GetComponent(type) == nullptr)
+				obj->CreateComponent(type);
+
+			    Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
+				collider->collidertype = ColliderType::BOX;
+				collider->body.SetBody(obj, 1);
+		} 
+		ImGui::PopStyleColor();
 	}
+	if (selectedMode == 1)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
+		if (ImGui::Button("AddComponent Sphere"))
+		{
+			ComponentType type = ComponentType::COLLIDER;
+
+			if (obj->GetComponent(type) == nullptr)
+				obj->CreateComponent(type);
+			
+			Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
+			collider->collidertype = ColliderType::SPHERE;
+			collider->body.SetBody(obj, 1,collider->collidertype);
+		}
+		ImGui::PopStyleColor();
+	}
+	if (selectedMode == 2)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
+		if (ImGui::Button("AddComponent Capsule"))
+		{
+			ComponentType type = ComponentType::COLLIDER;
+
+			if (obj->GetComponent(type) == nullptr)
+				obj->CreateComponent(type);
+		}ImGui::PopStyleColor();
+	}
+
+	
 }

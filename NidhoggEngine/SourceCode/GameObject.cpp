@@ -204,9 +204,10 @@ void Component::Disable()
 Collider::Collider(GameObject* ObjectOwner) : Component()
 {
 	type = ComponentType::COLLIDER;
+	collidertype = ColliderType::NONE;
 	active = true;
 	owner = ObjectOwner;
-	body.SetBody(ObjectOwner, 1);
+	body.SetBody(ObjectOwner, 1, collidertype);
 }
 
 Collider::~Collider()
