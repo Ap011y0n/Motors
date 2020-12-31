@@ -5,6 +5,8 @@
 #include "Globals.h"
 
 #include "Primitive.h"
+#include "PhysBody3D.h"
+#include "PhysVehicle3D.h"
 
 #include "Bullet/include/btBulletDynamicsCommon.h"
 
@@ -13,6 +15,7 @@
 
 class GameObject;
 class DebugDrawer;
+struct VehicleInfo;
 //class  PhysBody3D;
 
 class ModulePhysics3D : public Module
@@ -44,7 +47,7 @@ public:
 	btHingeConstraint* AddConstraintHinge(GameObject* bodyA, GameObject* bodyB, btVector3& pivotInA, btVector3& pivotInB, btVector3& axisInA, btVector3& axisInB);
 
 	btSliderConstraint* AddConstraintSlider(const Primitive& bodyA, const Primitive& bodyB, btTransform& frameinA, btTransform& frameinB, bool linearreference = true);
-
+	PhysVehicle3D* AddVehicle(const VehicleInfo& info);
 	// Create map walls
 	
 	btDiscreteDynamicsWorld*			world;
@@ -57,7 +60,9 @@ private:
 	DebugDrawer*						debug_draw;
 	std::vector<btHingeConstraint*>			HingeConstraints;
 	std::vector<btSliderConstraint*>			SliderConstraints;
-
+	std::vector<btCollisionShape*>		shapes;
+	std::vector<PhysVehicle3D*>		vehicles;
+	btDefaultVehicleRaycaster*			vehicle_raycaster;
 	// Change color of map walls
 	int color = 0;
 public:

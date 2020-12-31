@@ -22,6 +22,7 @@ class btQuaternion;
 
 class GameObject;
 class Primitive;
+enum class ColliderType;
 
 class PhysBody3D
 {
@@ -32,7 +33,10 @@ public:
 	void SetBody(PrimSphere* primitive, float mass);
 	void SetBody(Cube* primitive, float mass);
 	void SetBody(PrimCylinder* primitive, float mass);
+	void SetBody(GameObject* objECT, float mass, ColliderType type12);
 	void SetBody(GameObject* primitive, float mass);
+
+	
 
 	bool HasBody() const;
 	btRigidBody* GetBody() const;
@@ -57,9 +61,11 @@ private:
 	void SetBody(btCollisionShape* shape, Primitive* parent, float mass);	
 	void SetBody(btCollisionShape* shape, GameObject* parent, float mass);
 
-	btRigidBody* body;
 	btCollisionShape* colShape;
 	btDefaultMotionState* motionState;
+protected:
+	btRigidBody* body;
+
 public:
 	Primitive* parentPrimitive;
 	GameObject* parentGameObject;

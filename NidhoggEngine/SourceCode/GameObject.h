@@ -18,6 +18,13 @@ enum class ComponentType
 	COLLIDER,
 };
 
+enum class ColliderType
+{
+	NONE,
+	BOX,
+	SPHERE,
+	CAPSULE,
+};
 
 class GameObject;
 class Resource;
@@ -47,7 +54,7 @@ public:
 	bool Update(float dt);
 public:
 	PhysBody3D body;
-
+	ColliderType collidertype = ColliderType::NONE; 	//Type of collider
 };
 //Mesh, child to component
 class ComponentMesh : public Component

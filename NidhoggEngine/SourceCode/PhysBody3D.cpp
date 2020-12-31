@@ -42,7 +42,37 @@ void PhysBody3D::SetBody(Cube* primitive, float mass)
 
 void PhysBody3D::SetBody(GameObject* obj, float mass)
 {
+	
 	ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
+	if (mesh != nullptr)
+	{
+		AABB bbox = mesh->GetAABB();
+		float3 corners[8];
+		bbox.GetCornerPoints(corners);
+		float width = corners[0].Distance(corners[4]);
+		float heigth = corners[1].Distance(corners[3]);
+		float depth = corners[3].Distance(corners[2]);
+		const btVector3 vec(width / 2, heigth / 2, depth / 2);
+		SetBody(new btBoxShape(btVector3(vec)), obj, mass);
+	}
+	else
+	{
+		const btVector3 vec(1 / 2, 1 / 2, 1 / 2);
+		SetBody(new btBoxShape(btVector3(vec)), obj, mass);
+	}
+	
+}
+
+void PhysBody3D::SetBody(GameObject* obj, float mass, ColliderType type12)
+{
+	if (type12 == ColliderType::NONE)
+	{
+		//ha nothing will happen muhahaha
+	}
+	if (type12 == ColliderType::BOX)
+	{
+
+		ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
 		if (mesh != nullptr)
 		{
 			AABB bbox = mesh->GetAABB();
@@ -59,8 +89,43 @@ void PhysBody3D::SetBody(GameObject* obj, float mass)
 			const btVector3 vec(1 / 2, 1 / 2, 1 / 2);
 			SetBody(new btBoxShape(btVector3(vec)), obj, mass);
 		}
-	
-	//
+	}
+
+	if (type12 == ColliderType::SPHERE) 
+	{
+		ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
+		if (mesh != nullptr)
+		{
+			AABB bbox = mesh->GetAABB();
+			float3 corners[8];
+			bbox.GetCornerPoints(corners);
+			float width = corners[0].Distance(corners[4]);
+			SetBody(new btSphereShape(width/2), obj, mass);
+		}
+		else
+		{
+			SetBody(new btSphereShape(1 / 2), obj, mass);
+		}
+	}
+
+	if (type12 == ColliderType::CAPSULE)
+	{
+		ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
+		if (mesh != nullptr)
+		{
+			AABB bbox = mesh->GetAABB();
+			float3 corners[8];
+			bbox.GetCornerPoints(corners);
+			float width = corners[0].Distance(corners[4]);
+			float heigth = corners[1].Distance(corners[3]);
+			float depth = corners[3].Distance(corners[2]);
+			SetBody(new btCapsuleShape(width /2, heigth / 2), obj, mass);
+		}
+		else
+		{
+			SetBody(new btCapsuleShape(1 / 2, 1/2), obj, mass);
+		}
+	}
 }
 
 void PhysBody3D::SetBody(PrimCylinder* primitive, float mass)
