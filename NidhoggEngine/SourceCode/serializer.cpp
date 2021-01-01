@@ -275,7 +275,18 @@ void Serializer::LoadScene(const char* path)
 						LOG("Error loading model resource texture");
 
 				}
+				else if (type == "Collider")
+				{
+					ComponentType type = ComponentType::COLLIDER;
 
+					if (object->GetComponent(type) == nullptr)
+						object->CreateComponent(type);
+
+					Collider* collider = (Collider*)object->GetComponent(ComponentType::COLLIDER);
+					collider->collidertype = ColliderType::BOX;
+					collider->body.SetBody(object, 1);
+
+				}
 
 			}
 		}
@@ -571,6 +582,12 @@ void Serializer::AddComponent(JSON_Array* componentsArray, ComponentType type, c
 		case ComponentType::TRANSFORM: { 
 
 			break; 
+		}
+		case ComponentType::COLLIDER:
+		{
+			AddString(leaf_object, "Type", "Collider");
+		
+			break;
 		}
 
 	}

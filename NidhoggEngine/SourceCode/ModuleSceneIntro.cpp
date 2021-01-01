@@ -228,7 +228,7 @@ void ModuleSceneIntro::SaveScene(GameObject * parent)
 		ComponentMesh* newMesh = nullptr;
 		ComponentMaterial* NewTex = nullptr;
 		ComponentTransform* NewTrans = nullptr;
-
+		Collider* NewCollider = nullptr;
 		for (int i = 0; i < parent->Components.size(); i++)
 		{
 			switch (parent->Components[i]->type)
@@ -248,6 +248,11 @@ void ModuleSceneIntro::SaveScene(GameObject * parent)
 				App->serializer->AddVec3(JsonTrans, NewTrans->pos.x, NewTrans->pos.y, NewTrans->pos.z);
 				App->serializer->AddVec3(JsonScale, NewTrans->scale.x, NewTrans->scale.y, NewTrans->scale.z);
 				App->serializer->AddVec4(JsonRot, NewTrans->rot.x, NewTrans->rot.y, NewTrans->rot.z, NewTrans->rot.w);
+				break;
+			case ComponentType::COLLIDER:
+				NewCollider = (Collider*)parent->GetComponent(ComponentType::COLLIDER);
+				App->serializer->AddComponent(JsonComp, ComponentType::COLLIDER, "", 0);
+
 				break;
 
 			}
