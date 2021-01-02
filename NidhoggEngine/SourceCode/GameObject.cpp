@@ -529,6 +529,7 @@ bool ComponentTransform::Update(float dt)
 	}
 
 	global_transform = AcumulateparentTransform();
+	float4x4 worldtolocal = local_transform * global_transform.Inverted();
 	if (!should_update && !using_guizmo)
 	{
 		if (owner != nullptr)
@@ -540,7 +541,9 @@ bool ComponentTransform::Update(float dt)
 				collider->body.GetTransform(collider_trans.ptr());
 				collider_trans.Transpose();
 				global_transform = collider_trans * collider->body.localTransform;
-				btQuaternion quat(rot.x, rot.y, rot.z, rot.w);
+				local_transform = worldtolocal * global_transform;
+				local_transform.Decompose(pos, rot, scale);
+				//btQuaternion quat(rot.x, rot.y, rot.z, rot.w);
 			}
 		}
 

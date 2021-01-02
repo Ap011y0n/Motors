@@ -8,6 +8,7 @@ typedef struct json_object_t JSON_Object;
 typedef struct json_array_t  JSON_Array;
 typedef struct json_value_t  JSON_Value;
 
+class Component;
 class TextureOptions;
 enum class ComponentType;
 enum class ResourceType;
@@ -37,7 +38,7 @@ public:
 	void AddString(JSON_Object* obj, const char* name, const char* string);
 	void AddVec3(JSON_Array* obj, float x, float y, float z);
 	void AddVec4(JSON_Array* obj, float x, float y, float z, float w);
-	void AddComponent(JSON_Array* obj, ComponentType type, const char* path, uint UID = 0);
+	void AddComponent(JSON_Array* obj, Component* type, const char* path, uint UID = 0);
 	void AddResourceComponent(JSON_Array* obj, ComponentType type, uint UID, const char* path);
 
 	JSON_Array* AddArray(JSON_Object* obj, const char* name);

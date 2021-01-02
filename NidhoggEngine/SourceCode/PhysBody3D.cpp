@@ -22,7 +22,7 @@ PhysBody3D::~PhysBody3D()
 {
 	if (HasBody() == true)
 	{
-		//App->Physics->RemoveBodyFromWorld(body);
+		App->Physics->RemoveBodyFromWorld(body);
 		delete body;
 		delete colShape;
 		delete motionState;
@@ -67,10 +67,11 @@ void PhysBody3D::SetBody(GameObject* obj, float mass, ColliderType type12)
 {
 	if (type12 == ColliderType::NONE)
 	{
-		//ha nothing will happen muhahaha
+		type = ColliderType::NONE;
 	}
 	if (type12 == ColliderType::BOX)
 	{
+		type = ColliderType::BOX;
 
 		ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
 		if (mesh != nullptr)
@@ -93,9 +94,12 @@ void PhysBody3D::SetBody(GameObject* obj, float mass, ColliderType type12)
 
 	if (type12 == ColliderType::SPHERE) 
 	{
+		type = ColliderType::SPHERE;
+
 		ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
 		if (mesh != nullptr)
 		{
+
 			AABB bbox = mesh->GetAABB();
 			float3 corners[8];
 			bbox.GetCornerPoints(corners);
@@ -110,6 +114,8 @@ void PhysBody3D::SetBody(GameObject* obj, float mass, ColliderType type12)
 
 	if (type12 == ColliderType::CAPSULE)
 	{
+		type = ColliderType::CAPSULE;
+
 		ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
 		if (mesh != nullptr)
 		{

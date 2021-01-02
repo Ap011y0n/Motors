@@ -235,12 +235,12 @@ void ModuleSceneIntro::SaveScene(GameObject * parent)
 			{
 			case ComponentType::MESH:
 				newMesh = (ComponentMesh * )parent->GetComponent(ComponentType::MESH);
-				App->serializer->AddComponent(JsonComp, ComponentType::MESH, newMesh->reference->GetLibraryFile(), newMesh->reference->GetUID());
+				App->serializer->AddComponent(JsonComp, newMesh, newMesh->reference->GetLibraryFile(), newMesh->reference->GetUID());
 
 				break;
 			case ComponentType::MATERIAL:
 				NewTex = (ComponentMaterial*)parent->GetComponent(ComponentType::MATERIAL);
-				App->serializer->AddComponent(JsonComp, ComponentType::MATERIAL, NewTex->reference->GetLibraryFile(), NewTex->reference->GetUID());
+				App->serializer->AddComponent(JsonComp, NewTex, NewTex->reference->GetLibraryFile(), NewTex->reference->GetUID());
 
 				break;
 			case ComponentType::TRANSFORM:
@@ -251,7 +251,7 @@ void ModuleSceneIntro::SaveScene(GameObject * parent)
 				break;
 			case ComponentType::COLLIDER:
 				NewCollider = (Collider*)parent->GetComponent(ComponentType::COLLIDER);
-				App->serializer->AddComponent(JsonComp, ComponentType::COLLIDER, "", 0);
+				App->serializer->AddComponent(JsonComp, NewCollider, "", 0);
 
 				break;
 

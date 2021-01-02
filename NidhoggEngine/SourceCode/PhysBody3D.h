@@ -73,6 +73,7 @@ public:
 	std::vector<Module*> collision_listeners;
 	btRaycastVehicle* vehicle;
 	bool is_sensor = false;
+	ColliderType type;
 };
 
 #endif // __PhysBody3D_H__

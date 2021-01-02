@@ -215,6 +215,8 @@ void Serializer::LoadScene(const char* path)
 			NewTrans->local_transform = float4x4::FromTRS(NewTrans->pos, NewTrans->rot, NewTrans->scale);
 			NewTrans->local_transform;
 
+			NewTrans->global_transform = NewTrans->AcumulateparentTransform();
+
 			for (int j = 0; j < json_array_get_count(component_array); j++)
 			{
 				JSON_Object* obj_in_array_in_obj = json_array_get_object(component_array, j);
@@ -277,6 +279,10 @@ void Serializer::LoadScene(const char* path)
 				}
 				else if (type == "Collider")
 				{
+					ComponentTransform* myTrans = (ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM);
+					myTrans->should_update = true;
+				
+
 					ComponentType type = ComponentType::COLLIDER;
 
 					if (object->GetComponent(type) == nullptr)
@@ -442,13 +448,13 @@ void Serializer::LoadModel(Resource* model)
 		}
 	}
 	sortScene();
-	for (int i = 0; i < tempvector.size(); i++)
+	/*for (int i = 0; i < tempvector.size(); i++)
 	{
 		LCG();
 		LCG rand;
 		tempvector[i]->UID = rand.Int();
 
-	}
+	}*/
 	tempvector.clear();
 }
 
@@ -557,12 +563,12 @@ JSON_Array* Serializer::AddArray(JSON_Object* obj, const char* name)
 	return componentsArray;
 }
 
-void Serializer::AddComponent(JSON_Array* componentsArray, ComponentType type, const char* path, uint UID)
+void Serializer::AddComponent(JSON_Array* componentsArray, Component* component, const char* path, uint UID)
 {
 	
 	JSON_Value* leaf_value = json_value_init_object();
 	JSON_Object* leaf_object = json_value_get_object(leaf_value);
-	switch (type)
+	switch (component->type)
 	{
 		case ComponentType::NONE: 
 			break;
@@ -586,6 +592,22 @@ void Serializer::AddComponent(JSON_Array* componentsArray, ComponentType type, c
 		case ComponentType::COLLIDER:
 		{
 			AddString(leaf_object, "Type", "Collider");
+			Collider* collider = (Collider*)component;
+			switch (collider->body.type)
+			{
+			case ColliderType::NONE:
+				AddString(leaf_object, "ColliderType", "None");
+				break;
+			case ColliderType::BOX:
+				AddString(leaf_object, "ColliderType", "Box");
+				break;
+			case ColliderType::SPHERE:
+				AddString(leaf_object, "ColliderType", "Sphere");
+				break;
+			case ColliderType::CAPSULE:
+				AddString(leaf_object, "ColliderType", "Capsule");
+				break;
+			}
 		
 			break;
 		}

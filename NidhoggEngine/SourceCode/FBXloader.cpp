@@ -659,7 +659,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 			std::string path;
 			MaterialImporter::Save(&buffer, file.c_str(), &path);
 			NewTex->texture_path = path.c_str();
-			App->serializer->AddComponent(JsonComp, ComponentType::MATERIAL, NewTex->texture_path.c_str());
+			App->serializer->AddComponent(JsonComp, NewTex, NewTex->texture_path.c_str());
 
 			if (NewTex->texbuffer != 0)
 				NewTex->hastexture = true;
@@ -718,7 +718,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 
 		MeshImporter::Save(NewMesh, &path, name.c_str());
 		
-		App->serializer->AddComponent(JsonComp, ComponentType::MESH, path.c_str());
+		App->serializer->AddComponent(JsonComp, NewMesh, path.c_str());
 
 		// Unnnecesary
 	//	fileSize = App->file_system->Load(path.c_str(), &buffer);
