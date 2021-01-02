@@ -526,51 +526,31 @@ bool ComponentTransform::Update(float dt)
 	{
 		local_transform = float4x4::FromTRS(pos, rot, scale);
 	}
-	
+
 	global_transform = AcumulateparentTransform();
-
-
+	float4x4 worldtolocal = local_transform * global_transform.Inverted();
 	if (!should_update && !using_guizmo)
 	{
 		if (owner != nullptr)
 		{
-			
-
 			collider = (Collider*)owner->GetComponent(ComponentType::COLLIDER);
 			if (collider)
 			{
-				float3 localscale, localpos, prevlocalscale;
-				Quat localrot;
-				float3 globalscale, globalpos, prevscale;
-				Quat globalrot;
-
-			
-
-				float4x4 worldtolocal = local_transform * global_transform.Inverted();
-
 				float4x4 collider_trans;
 				collider->body.GetTransform(collider_trans.ptr());
 				collider_trans.Transpose();
 
-				global_transform.Decompose(globalpos, globalrot, prevscale);
+				float3 globscale, globscale2, globcolpos;
+				Quat globcolrot;
+				global_transform.Decompose(globcolpos, globcolrot, globscale);
+				global_transform = collider_trans * collider->body.localTransform;
+				global_transform.Decompose(globcolpos, globcolrot, globscale2);
 
-				global_transform = collider_trans;
-			
-
-				
-
-				global_transform = global_transform * collider->body.localTransform;
-				global_transform.Decompose(globalpos, globalrot, globalscale);
-				global_transform = float4x4::FromTRS(globalpos, globalrot, prevscale);
+				global_transform = float4x4::FromTRS(globcolpos, globcolrot, globscale);
 
 				local_transform = worldtolocal * global_transform;
-			//	local_transform.Decompose(localpos, localrot, scale);
-
-			//	local_transform = float4x4::FromTRS(localpos, localrot, scale);
-
 				local_transform.Decompose(pos, rot, scale);
-
-
+				//btQuaternion quat(rot.x, rot.y, rot.z, rot.w);
 			}
 		}
 
@@ -580,22 +560,11 @@ bool ComponentTransform::Update(float dt)
 		collider = (Collider*)owner->GetComponent(ComponentType::COLLIDER);
 		if (collider)
 		{
-			//si se hace desde el padre no se aplica
+
 			float4x4 colltrans = global_transform * collider->body.localTransform.Inverted();
 			float3 colscale, colpos;
 			Quat colrot;
-
-			float3 globalscale, globalpos;
-			Quat globalrot;
-
-			global_transform.Decompose(globalpos, globalrot, globalscale);
 			colltrans.Decompose(colpos, colrot, colscale);
-
-			btVector3 size;
-			size.setValue(globalscale.x, globalscale.y, globalscale.z);
-
-			collider->body.GetBody()->getCollisionShape()->setLocalScaling(size);
-			
 			colscale.Set(1, 1, 1);
 			colltrans = float4x4::FromTRS(colpos, colrot, colscale);
 
