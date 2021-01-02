@@ -142,7 +142,7 @@ update_status ModulePlayer::Update(float dt)
 		vehicle->Turn(turn);
 		vehicle->Brake(brake);
 
-		//vehicle->Render();
+		vehicle->Render();
 	}
 
 
