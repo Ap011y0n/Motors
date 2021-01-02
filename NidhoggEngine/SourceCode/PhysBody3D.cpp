@@ -247,6 +247,7 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 
 	parentGameObject = parent;
 
+	
 	colShape = shape;
 
 	btTransform startTransform;
@@ -264,7 +265,13 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 	pos = { obb.pos.x, obb.pos.y, obb.pos.z };
 	
 	//App->PrimManager->CreateSphere(1, 20, 20, pos);
+	
 
+	btVector3 size;
+	size.setValue(scale.x, scale.y, scale.z);
+
+	colShape->setLocalScaling(size);
+	scale.Set(1, 1, 1);
 	float4x4 transform = float4x4::FromTRS(pos, rot, scale);
 	float4x4 inversedtransform = comp_transform->global_transform;
 	localTransform = transform.Inverted() * inversedtransform;
@@ -286,7 +293,7 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 	body->setUserPointer(this);
 
 	App->Physics->AddBodyToWorld(body);
-
+	
 }
 const vec3 PhysBody3D::GetPos() const
 {
