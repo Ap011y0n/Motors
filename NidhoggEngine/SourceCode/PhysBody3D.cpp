@@ -273,8 +273,8 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 	colShape->setLocalScaling(size);
 	scale.Set(1, 1, 1);
 	float4x4 transform = float4x4::FromTRS(pos, rot, scale);
-	float4x4 inversedtransform = comp_transform->global_transform;
-	localTransform = transform.Inverted() * inversedtransform;
+
+	localTransform = comp_transform->global_transform * transform.Inverted();
 	/*
 	transform->SetPos(bbox.CenterPoint().x, bbox.CenterPoint().y, bbox.CenterPoint().z);
 	transform->Update(0);*/
