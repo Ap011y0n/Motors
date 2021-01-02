@@ -529,6 +529,8 @@ bool ComponentTransform::Update(float dt)
 	
 	global_transform = AcumulateparentTransform();
 	float4x4 worldtolocal = local_transform * global_transform.Inverted();
+
+
 	if (!should_update && !using_guizmo)
 	{
 		if (owner != nullptr)
@@ -539,17 +541,31 @@ bool ComponentTransform::Update(float dt)
 				float4x4 collider_trans;
 				collider->body.GetTransform(collider_trans.ptr());
 				collider_trans.Transpose();
+
 				float3 globalscale, globalpos, prevscale;
 				Quat globalrot;
+			
 				global_transform.Decompose(globalpos, globalrot, prevscale);
-				global_transform = collider_trans * collider->body.localTransform;
-				
+				//prevscale.Set(1, 1, 1);
+				global_transform = collider_trans;
 				global_transform.Decompose(globalpos, globalrot, globalscale);
+
 				global_transform = float4x4::FromTRS(globalpos, globalrot, prevscale);
 
+				global_transform = global_transform * collider->body.localTransform;
+
+				float3 localscale, localpos, prevlocalscale;
+				Quat localrot;
+
+				local_transform.Decompose(localpos, localrot, prevlocalscale);
 				local_transform = worldtolocal * global_transform;
+				local_transform.Decompose(localpos, localrot, localscale);
+
+				local_transform = float4x4::FromTRS(localpos, localrot, scale);
+
+
 				local_transform.Decompose(pos, rot, scale);
-				
+
 
 			}
 		}
@@ -566,7 +582,7 @@ bool ComponentTransform::Update(float dt)
 			Quat colrot;
 			colltrans.Decompose(colpos, colrot, colscale);
 			btVector3 size;
-			size.setValue(scale.x, scale.y, scale.z);
+			size.setValue(colscale.x, colscale.y, colscale.z);
 			collider->body.GetBody()->getCollisionShape()->setLocalScaling(size);
 			colscale.Set(1, 1, 1);
 			colltrans = float4x4::FromTRS(colpos, colrot, colscale);
