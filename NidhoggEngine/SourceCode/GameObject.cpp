@@ -543,7 +543,7 @@ bool ComponentTransform::Update(float dt)
 				float3 globscale, globscale2, globcolpos;
 				Quat globcolrot;
 				global_transform.Decompose(globcolpos, globcolrot, globscale);
-				global_transform = collider->body.localTransform * collider_trans;
+				global_transform = collider_trans * collider->body.localTransform;
 				global_transform.Decompose(globcolpos, globcolrot, globscale2);
 
 				global_transform = float4x4::FromTRS(globcolpos, globcolrot, globscale);
@@ -561,17 +561,10 @@ bool ComponentTransform::Update(float dt)
 		if (collider)
 		{
 
-			float4x4 colltrans = collider->body.localTransform.Inverted() * global_transform;
-
+			float4x4 colltrans = global_transform * collider->body.localTransform.Inverted();
 			float3 colscale, colpos;
 			Quat colrot;
 			colltrans.Decompose(colpos, colrot, colscale);
-			
-			btVector3 size;
-			size.setValue(colscale.x, colscale.y, colscale.z);
-
-			//collider->body.GetBody()->getCollisionShape()->setLocalScaling(size);
-
 			colscale.Set(1, 1, 1);
 			colltrans = float4x4::FromTRS(colpos, colrot, colscale);
 
