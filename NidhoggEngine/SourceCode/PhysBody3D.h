@@ -34,7 +34,7 @@ public:
 	void SetBody(Cube* primitive, float mass);
 	void SetBody(PrimCylinder* primitive, float mass);
 	void SetBody(GameObject* objECT, float mass, ColliderType type12);
-	void SetBody(GameObject* primitive, float mass);
+	//void SetBody(GameObject* primitive, float mass);
 
 	
 

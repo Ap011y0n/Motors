@@ -289,8 +289,21 @@ void Serializer::LoadScene(const char* path)
 						object->CreateComponent(type);
 
 					Collider* collider = (Collider*)object->GetComponent(ComponentType::COLLIDER);
-					collider->collidertype = ColliderType::BOX;
-					collider->body.SetBody(object, 1);
+
+					std::string Collidertype = json_object_get_string(obj_in_array_in_obj, "ColliderType");
+
+					if (Collidertype == "Box")
+						collider->collidertype = ColliderType::BOX;
+
+					else if (Collidertype == "Sphere")
+						collider->collidertype = ColliderType::SPHERE;
+
+					else if (Collidertype == "Capsule")
+						collider->collidertype = ColliderType::CAPSULE;
+					else if (Collidertype == "None")
+						LOG("Collider type unknown");
+
+					collider->body.SetBody(object, 1, collider->collidertype);
 
 				}
 

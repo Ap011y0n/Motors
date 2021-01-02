@@ -40,28 +40,28 @@ void PhysBody3D::SetBody(Cube* primitive, float mass)
 	SetBody(new btBoxShape(btVector3(vec)), primitive, mass);
 }
 
-void PhysBody3D::SetBody(GameObject* obj, float mass)
-{
-	
-	ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
-	if (mesh != nullptr)
-	{
-		AABB bbox = mesh->GetAABB();
-		float3 corners[8];
-		bbox.GetCornerPoints(corners);
-		float width = corners[0].Distance(corners[4]);
-		float heigth = corners[1].Distance(corners[3]);
-		float depth = corners[3].Distance(corners[2]);
-		const btVector3 vec(width / 2, heigth / 2, depth / 2);
-		SetBody(new btBoxShape(btVector3(vec)), obj, mass);
-	}
-	else
-	{
-		const btVector3 vec(1 / 2, 1 / 2, 1 / 2);
-		SetBody(new btBoxShape(btVector3(vec)), obj, mass);
-	}
-	
-}
+//void PhysBody3D::SetBody(GameObject* obj, float mass)
+//{
+//	
+//	ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(ComponentType::MESH);
+//	if (mesh != nullptr)
+//	{
+//		AABB bbox = mesh->GetAABB();
+//		float3 corners[8];
+//		bbox.GetCornerPoints(corners);
+//		float width = corners[0].Distance(corners[4]);
+//		float heigth = corners[1].Distance(corners[3]);
+//		float depth = corners[3].Distance(corners[2]);
+//		const btVector3 vec(width / 2, heigth / 2, depth / 2);
+//		SetBody(new btBoxShape(btVector3(vec)), obj, mass);
+//	}
+//	else
+//	{
+//		const btVector3 vec(1 / 2, 1 / 2, 1 / 2);
+//		SetBody(new btBoxShape(btVector3(vec)), obj, mass);
+//	}
+//	
+//}
 
 void PhysBody3D::SetBody(GameObject* obj, float mass, ColliderType type12)
 {

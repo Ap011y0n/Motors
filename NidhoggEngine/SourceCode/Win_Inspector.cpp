@@ -337,7 +337,7 @@ void Win_Inspector::AddComponent(GameObject* obj)
 
 			    Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
 				collider->collidertype = ColliderType::BOX;
-				collider->body.SetBody(obj, 1);
+				collider->body.SetBody(obj, 1, collider->collidertype);
 		} 
 		ImGui::PopStyleColor();
 	}

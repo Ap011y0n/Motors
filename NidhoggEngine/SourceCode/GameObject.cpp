@@ -149,7 +149,6 @@ Component* GameObject::GetComponent(ComponentType type)
 
 	return newComponent;
 
-	return nullptr;
 }
 
 void GameObject::HideAABB()
