@@ -43,6 +43,8 @@ public:
 
 	void GetTransform(float* matrix) const;
 	void SetTransform(const float* matrix) const;
+	void SetTransform(float4x4 matrix);
+
 	void SetPos(float x, float y, float z);
 	void SetRotation(btQuaternion quat);
 
@@ -70,6 +72,8 @@ public:
 	Primitive* parentPrimitive;
 	GameObject* parentGameObject;
 	float4x4 localTransform;
+	float4x4 globalTransform;
+	float4x4 TransformMatrix;
 	std::vector<Module*> collision_listeners;
 	btRaycastVehicle* vehicle;
 	bool is_sensor = false;

@@ -14,7 +14,7 @@ PhysBody3D::PhysBody3D()
 	, motionState(nullptr)
 	, parentPrimitive(nullptr)
 {
-	
+	TransformMatrix = float4x4::identity;
 }
 
 // ---------------------------------------------------------
@@ -172,6 +172,19 @@ void PhysBody3D::SetTransform(const float* matrix) const
 	body->activate();
 }
 
+void PhysBody3D::SetTransform(float4x4 matrix)
+{
+	if (HasBody() == false)
+		return;
+	globalTransform = matrix;
+	float4x4 newtrans = globalTransform * TransformMatrix;
+
+	btTransform trans;
+	trans.setFromOpenGLMatrix(newtrans.Transposed().ptr());
+	body->setWorldTransform(trans);
+	body->activate();
+}
+
 // ---------------------------------------------------------
 void PhysBody3D::SetPos(float x, float y, float z)
 {
@@ -279,6 +292,7 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 	/*
 	transform->SetPos(bbox.CenterPoint().x, bbox.CenterPoint().y, bbox.CenterPoint().z);
 	transform->Update(0);*/
+	globalTransform = transform;
 	startTransform.setFromOpenGLMatrix(transform.Transposed().ptr());
 
 	btVector3 localInertia(0, 0, 0);

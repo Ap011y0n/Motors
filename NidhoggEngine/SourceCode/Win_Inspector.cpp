@@ -399,4 +399,155 @@ void Win_Inspector::AddComponent(GameObject* obj)
 				btVector3{ 4.f,-0.,-0 }, btVector3{ 0, 0,0 });
 		}
 	}
+	Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
+	if (collider != nullptr)
+	{
+		ColliderEditor(collider);
+	}
+}
+
+void Win_Inspector::ColliderEditor(Collider* collider)
+{
+	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+
+	ImGui::Separator();
+	if (ImGui::TreeNodeEx("Edit Collider", node_flags))
+	{
+		
+		
+		ImGui::Columns(4, "Collidercolumns");
+		ImGui::Separator();
+
+		ImGui::Text("Position"); ImGui::Spacing(); ImGui::Spacing();// ImGui::NextColumn();
+		ImGui::Text("Rotation"); ImGui::Spacing(); ImGui::Spacing(); //ImGui::NextColumn();
+		ImGui::Text("Scale"); ImGui::NextColumn();
+
+		// Position
+		float3 pos, scale;
+		Quat rot;
+		collider->body.TransformMatrix.Decompose(pos, rot, scale);
+		float t = pos.x;
+		ImGui::SetNextItemWidth(50);
+		ImGui::DragFloat(" ", &t);
+		if (ImGui::IsItemActive())
+		{
+			pos.x = t;
+			collider->body.TransformMatrix = float4x4::FromTRS(pos, rot, scale);
+
+			collider->body.SetTransform(collider->body.globalTransform);
+
+			//transform->SetPos(t - transform->pos.x, 0, 0);
+		}
+		//Rotation
+		float r1 = rot.x;
+		ImGui::SetNextItemWidth(50);
+		ImGui::DragFloat("  ", &r1);
+		if (ImGui::IsItemActive())
+		{
+			if (r1 > 1)
+				LOG("hola");
+			float3 axis(1, 0, 0);
+			float newrot = r1 - rot.x;
+			rot = Quat::RotateAxisAngle(axis, newrot * pi / 180);
+			//transform->SetRotation(Quat::RotateAxisAngle(axis, newrot * pi / 180));
+
+			//transform->rot.x = r1;
+		//	transform->UpdateRotation(r1, axis);
+		}
+		//Scale
+		ImGui::SetNextItemWidth(50);
+		float s1 = scale.x;
+
+		ImGui::DragFloat("   ", &s1, 0.1f);
+		if (ImGui::IsItemActive())
+		{
+			//transform->Scale(s1 - transform->scale.x, 0, 0);
+		}
+		ImGui::NextColumn();
+
+
+		// Position
+		ImGui::SetNextItemWidth(50);
+		float t1 = pos.y;
+		ImGui::DragFloat("    ", &t1);
+		if (ImGui::IsItemActive())
+		{
+			pos.y = t1;
+			collider->body.TransformMatrix = float4x4::FromTRS(pos, rot, scale);
+
+			collider->body.SetTransform(collider->body.globalTransform);
+			//transform->SetPos(0, t1 - transform->pos.y, 0);
+		}
+		// Rotation
+		float r2 = rot.y;
+		ImGui::SetNextItemWidth(50);
+		ImGui::DragFloat("     ", &r2);
+		if (ImGui::IsItemActive())
+		{
+			float3 axis(0, 1, 0);
+			float newrot = r2 - rot.y;
+			rot = Quat::RotateAxisAngle(axis, newrot * pi / 180);
+			//transform->SetRotation(Quat::RotateAxisAngle(axis, newrot * pi / 180));
+			//	transform->rot.y = r2;
+
+		}
+		//Scale
+		float s2 = scale.y;
+		ImGui::SetNextItemWidth(50);
+		ImGui::DragFloat("      .", &s2, 0.1f);
+		if (ImGui::IsItemActive())
+		{
+			
+			//transform->Scale(0, s2 - transform->scale.y, 0);
+		}
+		ImGui::NextColumn();
+
+
+		// Position
+		ImGui::SetNextItemWidth(50);
+		float t2 = pos.z;
+		ImGui::DragFloat("       ", &t2);
+		if (ImGui::IsItemActive())
+		{
+
+			pos.z = t2;
+			collider->body.TransformMatrix = float4x4::FromTRS(pos, rot, scale);
+
+			collider->body.SetTransform(collider->body.globalTransform);
+			//transform->SetPos(0, 0, t2 - transform->pos.z);
+
+		}
+		// Rotation
+		float r3 = rot.z;
+		ImGui::SetNextItemWidth(50);
+		ImGui::DragFloat("        ", &r3);
+		if (ImGui::IsItemActive())
+		{
+			float3 axis(0, 0, 1);
+			float newrot = r3 - rot.z;
+			rot = Quat::RotateAxisAngle(axis, newrot * pi / 180);
+			//transform->SetRotation(Quat::RotateAxisAngle(axis, newrot * pi / 180));
+			//		transform->UpdateRotation(r3, axis);
+				//	transform->rot.z = r3;
+
+		}
+		//Scale
+		float s3 = scale.z;
+		ImGui::SetNextItemWidth(50);
+		ImGui::DragFloat("         ", &s3, 0.1f);
+		if (ImGui::IsItemActive())
+		{
+			//transform->Scale(0, 0, s3 - transform->scale.z);
+
+		}
+
+		//transform->rot = Quat::FromEulerXYZ(r1 * pi / 180, r2 * pi / 180, r3 * pi / 180);
+		ImGui::NextColumn();
+
+		ImGui::Columns(1);
+		ImGui::TreePop();
+
+
+	}
+	ImGui::Separator();
 }
