@@ -464,7 +464,13 @@ void Win_Inspector::ColliderEditor(Collider* collider)
 		ImGui::DragFloat("   ", &s1, 0.1f);
 		if (ImGui::IsItemActive())
 		{
-			//transform->Scale(s1 - transform->scale.x, 0, 0);
+			scale.x = s1;
+			btVector3 size;
+			size.setValue(scale.x, scale.y, scale.z);
+
+			collider->body.GetBody()->getCollisionShape()->setLocalScaling(size);
+			collider->body.TransformMatrix = float4x4::FromTRS(pos, rot, scale);
+			collider->body.SetTransform(collider->body.globalTransform);
 		}
 		ImGui::NextColumn();
 
@@ -503,7 +509,13 @@ void Win_Inspector::ColliderEditor(Collider* collider)
 		if (ImGui::IsItemActive())
 		{
 			
-			//transform->Scale(0, s2 - transform->scale.y, 0);
+			scale.y = s2;
+			btVector3 size;
+			size.setValue(scale.x, scale.y, scale.z);
+
+			collider->body.GetBody()->getCollisionShape()->setLocalScaling(size);
+			collider->body.TransformMatrix = float4x4::FromTRS(pos, rot, scale);
+			collider->body.SetTransform(collider->body.globalTransform);
 		}
 		ImGui::NextColumn();
 
@@ -533,6 +545,8 @@ void Win_Inspector::ColliderEditor(Collider* collider)
 			Quat newquat = Quat::RotateAxisAngle(axis, newrot * pi / 180);
 			rot = rot * newquat;
 			collider->body.TransformMatrix = float4x4::FromTRS(pos, rot, scale);
+			collider->body.SetTransform(collider->body.globalTransform);
+
 			//transform->SetRotation(Quat::RotateAxisAngle(axis, newrot * pi / 180));
 			//		transform->UpdateRotation(r3, axis);
 				//	transform->rot.z = r3;
@@ -544,8 +558,13 @@ void Win_Inspector::ColliderEditor(Collider* collider)
 		ImGui::DragFloat("         ", &s3, 0.1f);
 		if (ImGui::IsItemActive())
 		{
-			//transform->Scale(0, 0, s3 - transform->scale.z);
+			scale.z = s3;
+			btVector3 size;
+			size.setValue(scale.x, scale.y, scale.z);
 
+			collider->body.GetBody()->getCollisionShape()->setLocalScaling(size);
+			collider->body.TransformMatrix = float4x4::FromTRS(pos, rot, scale);
+			collider->body.SetTransform(collider->body.globalTransform);
 		}
 
 		//transform->rot = Quat::FromEulerXYZ(r1 * pi / 180, r2 * pi / 180, r3 * pi / 180);

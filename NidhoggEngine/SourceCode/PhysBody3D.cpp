@@ -178,7 +178,11 @@ void PhysBody3D::SetTransform(float4x4 matrix)
 		return;
 	globalTransform = matrix;
 	float4x4 newtrans = globalTransform * TransformMatrix;
-
+	float3 pos, scale;
+	Quat rot;
+	newtrans.Decompose(pos, rot, scale);
+	scale.Set(1, 1, 1);
+	newtrans = float4x4::FromTRS(pos, rot, scale);
 	btTransform trans;
 	trans.setFromOpenGLMatrix(newtrans.Transposed().ptr());
 	body->setWorldTransform(trans);
