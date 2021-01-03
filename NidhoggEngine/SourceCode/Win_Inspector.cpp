@@ -426,6 +426,7 @@ void Win_Inspector::ColliderEditor(Collider* collider)
 		float3 pos, scale;
 		Quat rot;
 		collider->body.TransformMatrix.Decompose(pos, rot, scale);
+		LOG("( %f., %f, %f, %f", rot.x, rot.y, rot.z, rot.w);
 		float t = pos.x;
 		ImGui::SetNextItemWidth(50);
 		ImGui::DragFloat(" ", &t);
@@ -444,11 +445,13 @@ void Win_Inspector::ColliderEditor(Collider* collider)
 		ImGui::DragFloat("  ", &r1);
 		if (ImGui::IsItemActive())
 		{
-			if (r1 > 1)
-				LOG("hola");
 			float3 axis(1, 0, 0);
-			float newrot = r1 - rot.x;
-			rot = Quat::RotateAxisAngle(axis, newrot * pi / 180);
+			float newrot = r1;
+			Quat newquat = Quat::RotateAxisAngle(axis, newrot * pi / 180);
+			rot = rot * newquat;
+			collider->body.TransformMatrix = float4x4::FromTRS(pos, rot, scale);
+
+			collider->body.SetTransform(collider->body.globalTransform);
 			//transform->SetRotation(Quat::RotateAxisAngle(axis, newrot * pi / 180));
 
 			//transform->rot.x = r1;
@@ -485,8 +488,10 @@ void Win_Inspector::ColliderEditor(Collider* collider)
 		if (ImGui::IsItemActive())
 		{
 			float3 axis(0, 1, 0);
-			float newrot = r2 - rot.y;
-			rot = Quat::RotateAxisAngle(axis, newrot * pi / 180);
+			float newrot = r2;
+			Quat newquat = Quat::RotateAxisAngle(axis, newrot * pi / 180);
+			rot = rot * newquat;
+			collider->body.TransformMatrix = float4x4::FromTRS(pos, rot, scale);
 			//transform->SetRotation(Quat::RotateAxisAngle(axis, newrot * pi / 180));
 			//	transform->rot.y = r2;
 
@@ -524,8 +529,10 @@ void Win_Inspector::ColliderEditor(Collider* collider)
 		if (ImGui::IsItemActive())
 		{
 			float3 axis(0, 0, 1);
-			float newrot = r3 - rot.z;
-			rot = Quat::RotateAxisAngle(axis, newrot * pi / 180);
+			float newrot = r3;
+			Quat newquat = Quat::RotateAxisAngle(axis, newrot * pi / 180);
+			rot = rot * newquat;
+			collider->body.TransformMatrix = float4x4::FromTRS(pos, rot, scale);
 			//transform->SetRotation(Quat::RotateAxisAngle(axis, newrot * pi / 180));
 			//		transform->UpdateRotation(r3, axis);
 				//	transform->rot.z = r3;
