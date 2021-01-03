@@ -42,6 +42,8 @@ public:
 	btRigidBody* GetBody() const;
 
 	void GetTransform(float* matrix) const;
+	float4x4 GetTransform(float4x4 mat);
+
 	void SetTransform(const float* matrix) const;
 	void SetTransform(float4x4 matrix);
 

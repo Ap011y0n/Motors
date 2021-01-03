@@ -160,6 +160,25 @@ void PhysBody3D::GetTransform(float* matrix) const
 	body->getWorldTransform().getOpenGLMatrix(matrix);
 }
 
+float4x4 PhysBody3D::GetTransform(float4x4 mat)
+{
+	
+
+	if (HasBody() == false)
+		return mat;
+
+	float3 pos, scale;
+	Quat rot;
+	mat.Decompose(pos, rot, scale);
+
+	float4x4 newtrans = globalTransform * TransformMatrix;
+	float3 pos2, scale2;
+	Quat rot2;
+	newtrans.Decompose(pos2, rot2, scale2);
+	mat = float4x4::FromTRS(pos, rot, scale2);
+	return mat;
+}
+
 // ---------------------------------------------------------
 void PhysBody3D::SetTransform(const float* matrix) const
 {

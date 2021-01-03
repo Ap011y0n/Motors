@@ -539,6 +539,8 @@ bool ComponentTransform::Update(float dt)
 				float4x4 collider_trans;
 				collider->body.GetTransform(collider_trans.ptr());
 				collider_trans.Transpose();
+				collider_trans = collider->body.GetTransform(collider_trans);
+
 				collider_trans = collider_trans * collider->body.TransformMatrix.Inverted();
 				float3 globscale, globscale2, globcolpos;
 				Quat globcolrot;
@@ -546,7 +548,7 @@ bool ComponentTransform::Update(float dt)
 				global_transform = collider_trans * collider->body.localTransform;
 				global_transform.Decompose(globcolpos, globcolrot, globscale2);
 
-				global_transform = float4x4::FromTRS(globcolpos, globcolrot, globscale);
+				//global_transform = float4x4::FromTRS(globcolpos, globcolrot, globscale2);
 
 				local_transform = worldtolocal * global_transform;
 				local_transform.Decompose(pos, rot, scale);
@@ -565,7 +567,6 @@ bool ComponentTransform::Update(float dt)
 			float3 colscale, colpos;
 			Quat colrot;
 			colltrans.Decompose(colpos, colrot, colscale);
-			colscale.Set(1, 1, 1);
 			colltrans = float4x4::FromTRS(colpos, colrot, colscale);
 
 			collider->body.SetTransform(colltrans);
