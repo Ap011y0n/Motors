@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "Globals.h"
 #include "PhysBody3D.h"
+#include "Time.h"
 #include "ModuleCamera3D.h"
 #include "PhysVehicle3D.h"
 
@@ -84,7 +85,8 @@ bool ModulePhysics3D::Start()
 // ---------------------------------------------------------
 update_status ModulePhysics3D::PreUpdate(float dt)
 {
-	world->stepSimulation(dt, 15);
+	
+	world->stepSimulation(Time::delta_time_fisics, 15);
 
 	for (int n = 0; n < world->getDispatcher()->getNumManifolds(); n++)
 	{

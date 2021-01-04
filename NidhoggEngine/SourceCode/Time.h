@@ -21,7 +21,7 @@ public:
 public:
 	static float time_Since_Game_Start;
 	static float time_Scale;
-	static float delta_time;
+	static float delta_time_fisics;
 
 	float time_Since_Engine_Start;
 	static float delta_time_Engine;
