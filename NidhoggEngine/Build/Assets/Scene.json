@@ -2,7 +2,7 @@
     "Game Objects": [
         {
             "UID": 1100205486,
-            "ParentUID": 977800828,
+            "ParentUID": 849803169,
             "Name": "GameObject1",
             "Translation": [
                 0,
@@ -181,20 +181,20 @@
             "ParentUID": 1260751512,
             "Name": "City_building_004",
             "Translation": [
-                -15.328959,
-                21.162701,
-                8.918427
+                -41.475891,
+                21.014099,
+                0
             ],
             "Scale": [
-                1.000000,
-                0.999999,
-                1.000000
+                1,
+                1,
+                1
             ],
             "Rotation": [
-                -0.007705,
-                0.329860,
-                0.022054,
-                0.943741
+                0,
+                0,
+                0,
+                1
             ],
             "Components": [
                 {
@@ -206,10 +206,6 @@
                     "Type": "Mesh",
                     "Path": "Assets\/library\/City_building_004.mesh",
                     "UID": 1287277113
-                },
-                {
-                    "Type": "Collider",
-                    "ColliderType": "Capsule"
                 }
             ]
         },
@@ -482,20 +478,20 @@
             "ParentUID": 1260751512,
             "Name": "City_building_014",
             "Translation": [
-                -19.213112,
-                32.152771,
-                0.005424
+                -19.439709,
+                32.062130,
+                1.481806
             ],
             "Scale": [
+                1,
                 1.000000,
-                1.000000,
-                1.000000
+                1
             ],
             "Rotation": [
-                -0.000000,
-                -0.000000,
-                0.999828,
-                -0.018558
+                0.000000,
+                -0.000001,
+                1,
+                -0.000000
             ],
             "Components": [
                 {
@@ -510,7 +506,23 @@
                 },
                 {
                     "Type": "Collider",
-                    "ColliderType": "Box"
+                    "ColliderType": "Box",
+                    "Translation": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "Scale": [
+                        1.600000,
+                        1.200000,
+                        1.500000
+                    ],
+                    "Rotation": [
+                        0,
+                        0,
+                        0,
+                        1
+                    ]
                 }
             ]
         },
@@ -864,20 +876,20 @@
             "ParentUID": 1260751512,
             "Name": "City_building_032",
             "Translation": [
-                -39.898884,
-                20.750994,
-                5.694128
+                -29.478403,
+                21.014099,
+                0
             ],
             "Scale": [
-                1.000000,
-                0.999999,
+                1,
+                1,
                 1
             ],
             "Rotation": [
-                0.013050,
-                -0.557901,
-                -0.038376,
-                0.828917
+                0,
+                0,
+                0,
+                1
             ],
             "Components": [
                 {
@@ -889,10 +901,6 @@
                     "Type": "Mesh",
                     "Path": "Assets\/library\/City_building_032.mesh",
                     "UID": 842766005
-                },
-                {
-                    "Type": "Collider",
-                    "ColliderType": "Sphere"
                 }
             ]
         },

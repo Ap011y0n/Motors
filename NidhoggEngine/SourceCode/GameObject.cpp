@@ -539,7 +539,17 @@ bool ComponentTransform::Update(float dt)
 				float4x4 collider_trans;
 				collider->body.GetTransform(collider_trans.ptr());
 				collider_trans.Transpose();
+				collider_trans = collider->body.GetTransform(collider_trans);
+
+				collider_trans = collider_trans * collider->body.TransformMatrix.Inverted();
+				float3 globscale, globscale2, globcolpos;
+				Quat globcolrot;
+				global_transform.Decompose(globcolpos, globcolrot, globscale);
 				global_transform = collider_trans * collider->body.localTransform;
+				global_transform.Decompose(globcolpos, globcolrot, globscale2);
+
+				//global_transform = float4x4::FromTRS(globcolpos, globcolrot, globscale2);
+
 				local_transform = worldtolocal * global_transform;
 				local_transform.Decompose(pos, rot, scale);
 				//btQuaternion quat(rot.x, rot.y, rot.z, rot.w);
@@ -553,8 +563,15 @@ bool ComponentTransform::Update(float dt)
 		if (collider)
 		{
 
-			float4x4 colltrans = global_transform * collider->body.localTransform.Inverted() ;
-			collider->body.SetTransform(colltrans.Transposed().ptr());
+			float4x4 colltrans = global_transform * collider->body.localTransform.Inverted();
+			/*float3 colscale, colpos;
+			Quat colrot;
+			global_transform.Decompose(colpos, colrot, colscale);
+			btVector3 size;
+			size.setValue(colscale.x, colscale.y, colscale.z);
+
+			collider->body.GetBody()->getCollisionShape()->setLocalScaling(size);*/
+			collider->body.SetTransform(colltrans);
 
 		}
 	}

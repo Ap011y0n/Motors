@@ -3,7 +3,7 @@
 
 #include "Globals.h"
 #include "ModuleUI.h"
-
+class Collider;
 class Win_Inspector
 {
 
@@ -14,6 +14,7 @@ public:
 	static void InspectorWin(); //gameobjects list
 	static void GameObjectInspector(GameObject* obj);
 	static void AddComponent(GameObject* obj);
+	static void ColliderEditor(Collider*);
 public:
 
 };

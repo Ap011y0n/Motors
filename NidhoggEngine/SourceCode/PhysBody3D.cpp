@@ -14,7 +14,7 @@ PhysBody3D::PhysBody3D()
 	, motionState(nullptr)
 	, parentPrimitive(nullptr)
 {
-	
+	TransformMatrix = float4x4::identity;
 }
 
 // ---------------------------------------------------------
@@ -160,6 +160,25 @@ void PhysBody3D::GetTransform(float* matrix) const
 	body->getWorldTransform().getOpenGLMatrix(matrix);
 }
 
+float4x4 PhysBody3D::GetTransform(float4x4 mat)
+{
+	
+
+	if (HasBody() == false)
+		return mat;
+
+	float3 pos, scale;
+	Quat rot;
+	mat.Decompose(pos, rot, scale);
+
+	float4x4 newtrans = globalTransform * TransformMatrix;
+	float3 pos2, scale2;
+	Quat rot2;
+	newtrans.Decompose(pos2, rot2, scale2);
+	mat = float4x4::FromTRS(pos, rot, scale2);
+	return mat;
+}
+
 // ---------------------------------------------------------
 void PhysBody3D::SetTransform(const float* matrix) const
 {
@@ -168,6 +187,23 @@ void PhysBody3D::SetTransform(const float* matrix) const
 
 	btTransform trans;
 	trans.setFromOpenGLMatrix(matrix);
+	body->setWorldTransform(trans);
+	body->activate();
+}
+
+void PhysBody3D::SetTransform(float4x4 matrix)
+{
+	if (HasBody() == false)
+		return;
+	globalTransform = matrix;
+	float4x4 newtrans = globalTransform * TransformMatrix;
+	float3 pos, scale;
+	Quat rot;
+	newtrans.Decompose(pos, rot, scale);
+	scale.Set(1, 1, 1);
+	newtrans = float4x4::FromTRS(pos, rot, scale);
+	btTransform trans;
+	trans.setFromOpenGLMatrix(newtrans.Transposed().ptr());
 	body->setWorldTransform(trans);
 	body->activate();
 }
@@ -247,6 +283,7 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 
 	parentGameObject = parent;
 
+	
 	colShape = shape;
 
 	btTransform startTransform;
@@ -264,13 +301,21 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 	pos = { obb.pos.x, obb.pos.y, obb.pos.z };
 	
 	//App->PrimManager->CreateSphere(1, 20, 20, pos);
+	
+
+	btVector3 size;
+	size.setValue(scale.x, scale.y, scale.z);
+
+	colShape->setLocalScaling(size);
+	scale.Set(1, 1, 1);
 
 	float4x4 transform = float4x4::FromTRS(pos, rot, scale);
 	float4x4 inversedtransform = comp_transform->global_transform;
-	localTransform = transform.Inverted() * inversedtransform;
+	localTransform = transform.Inverted() * inversedtransform;	
 	/*
 	transform->SetPos(bbox.CenterPoint().x, bbox.CenterPoint().y, bbox.CenterPoint().z);
 	transform->Update(0);*/
+	globalTransform = transform;
 	startTransform.setFromOpenGLMatrix(transform.Transposed().ptr());
 
 	btVector3 localInertia(0, 0, 0);
@@ -286,7 +331,7 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 	body->setUserPointer(this);
 
 	App->Physics->AddBodyToWorld(body);
-
+	
 }
 const vec3 PhysBody3D::GetPos() const
 {
