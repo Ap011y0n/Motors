@@ -305,6 +305,30 @@ void Serializer::LoadScene(const char* path)
 
 					collider->body.SetBody(object, 1, collider->collidertype);
 
+					JSON_Array* JsonTrans = json_object_get_array(obj_in_array_in_obj, "Translation");
+					JSON_Array* JsonScale = json_object_get_array(obj_in_array_in_obj, "Scale");
+					JSON_Array* JsonRot = json_object_get_array(obj_in_array_in_obj, "Rotation");
+					float3 pos, scale;
+					Quat rot;
+					pos.x = json_array_get_number(JsonTrans, 0);
+					pos.y = json_array_get_number(JsonTrans, 1);
+					pos.z = json_array_get_number(JsonTrans, 2);
+
+					scale.x = json_array_get_number(JsonScale, 0);
+					scale.y = json_array_get_number(JsonScale, 1);
+					scale.z = json_array_get_number(JsonScale, 2);
+
+					rot.x = json_array_get_number(JsonRot, 0);
+					rot.y = json_array_get_number(JsonRot, 1);
+					rot.z = json_array_get_number(JsonRot, 2);
+					rot.w = json_array_get_number(JsonRot, 3);
+
+					btVector3 size;
+					size.setValue(scale.x, scale.y, scale.z);
+
+					collider->body.GetBody()->getCollisionShape()->setLocalScaling(size);
+					collider->body.TransformMatrix = float4x4::FromTRS(pos, rot, scale);
+					collider->body.SetTransform(collider->body.globalTransform);
 				}
 
 			}
@@ -621,7 +645,17 @@ void Serializer::AddComponent(JSON_Array* componentsArray, Component* component,
 				AddString(leaf_object, "ColliderType", "Capsule");
 				break;
 			}
-		
+			float4x4 collider_trans = collider->body.TransformMatrix;
+			
+			float3 trans, scale;
+			Quat rot;
+			collider_trans.Decompose(trans, rot, scale);
+			JSON_Array* JsonTrans = App->serializer->AddArray(leaf_object, "Translation");
+			JSON_Array* JsonScale = App->serializer->AddArray(leaf_object, "Scale");
+			JSON_Array* JsonRot = App->serializer->AddArray(leaf_object, "Rotation");
+			App->serializer->AddVec3(JsonTrans, trans.x, trans.y, trans.z);
+			App->serializer->AddVec3(JsonScale, scale.x, scale.y, scale.z);
+			App->serializer->AddVec4(JsonRot, rot.x, rot.y, rot.z, rot.w);
 			break;
 		}
 

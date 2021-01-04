@@ -333,11 +333,13 @@ void Win_Inspector::AddComponent(GameObject* obj)
 			ComponentType type = ComponentType::COLLIDER;
 
 			if (obj->GetComponent(type) == nullptr)
+			{
 				obj->CreateComponent(type);
 
 			    Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
 				collider->collidertype = ColliderType::BOX;
 				collider->body.SetBody(obj, 1, collider->collidertype);
+			}
 		} 
 		ImGui::PopStyleColor();
 	}
@@ -349,11 +351,14 @@ void Win_Inspector::AddComponent(GameObject* obj)
 			ComponentType type = ComponentType::COLLIDER;
 
 			if (obj->GetComponent(type) == nullptr)
+			{
 				obj->CreateComponent(type);
+
+				Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
+				collider->collidertype = ColliderType::SPHERE;
+				collider->body.SetBody(obj, 1, collider->collidertype);
+			}
 			
-			Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
-			collider->collidertype = ColliderType::SPHERE;
-			collider->body.SetBody(obj, 1,collider->collidertype);
 		}
 		ImGui::PopStyleColor();
 	}
@@ -368,11 +373,14 @@ void Win_Inspector::AddComponent(GameObject* obj)
 			ComponentType type = ComponentType::COLLIDER;
 
 			if (obj->GetComponent(type) == nullptr)
+			{
 				obj->CreateComponent(type);
 
-			Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
-			collider->collidertype = ColliderType::CAPSULE;
-			collider->body.SetBody(obj, 1, collider->collidertype);
+				Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
+				collider->collidertype = ColliderType::CAPSULE;
+				collider->body.SetBody(obj, 1, collider->collidertype);
+			}
+			
 		}ImGui::PopStyleColor();
 	}
 
@@ -426,7 +434,6 @@ void Win_Inspector::ColliderEditor(Collider* collider)
 		float3 pos, scale;
 		Quat rot;
 		collider->body.TransformMatrix.Decompose(pos, rot, scale);
-		LOG("( %f., %f, %f, %f", rot.x, rot.y, rot.z, rot.w);
 		float t = pos.x;
 		ImGui::SetNextItemWidth(50);
 		ImGui::DragFloat(" ", &t);

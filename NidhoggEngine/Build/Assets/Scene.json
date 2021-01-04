@@ -2,7 +2,7 @@
     "Game Objects": [
         {
             "UID": 1100205486,
-            "ParentUID": 298246773,
+            "ParentUID": 849803169,
             "Name": "GameObject1",
             "Translation": [
                 0,
@@ -478,20 +478,20 @@
             "ParentUID": 1260751512,
             "Name": "City_building_014",
             "Translation": [
-                -1.954282,
-                32.061909,
-                25.052212
+                -19.439709,
+                32.062130,
+                1.481806
             ],
             "Scale": [
-                0.999998,
-                0.999999,
-                1.000002
+                1,
+                1.000000,
+                1
             ],
             "Rotation": [
-                -0.000001,
                 0.000000,
+                -0.000001,
                 1,
-                -0.000001
+                -0.000000
             ],
             "Components": [
                 {
@@ -506,7 +506,23 @@
                 },
                 {
                     "Type": "Collider",
-                    "ColliderType": "Box"
+                    "ColliderType": "Box",
+                    "Translation": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "Scale": [
+                        1.600000,
+                        1.200000,
+                        1.500000
+                    ],
+                    "Rotation": [
+                        0,
+                        0,
+                        0,
+                        1
+                    ]
                 }
             ]
         },
