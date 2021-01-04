@@ -175,10 +175,10 @@ static bool ImGui_ImplSDL2_Init(SDL_Window* window, void* sdl_gl_context)
 
     // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.
     io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;
-    io.KeyMap[ImGuiKey_LeftArrow] = SDL_SCANCODE_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow] = SDL_SCANCODE_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow] = SDL_SCANCODE_UP;
-    io.KeyMap[ImGuiKey_DownArrow] = SDL_SCANCODE_DOWN;
+    //io.KeyMap[ImGuiKey_LeftArrow] = SDL_SCANCODE_LEFT;  //WE COMMENT THIS CODE SO WHEN MOVING THE CAR it doesn't affect the UI
+    //io.KeyMap[ImGuiKey_RightArrow] = SDL_SCANCODE_RIGHT;
+    //io.KeyMap[ImGuiKey_UpArrow] = SDL_SCANCODE_UP;
+    //io.KeyMap[ImGuiKey_DownArrow] = SDL_SCANCODE_DOWN;
     io.KeyMap[ImGuiKey_PageUp] = SDL_SCANCODE_PAGEUP;
     io.KeyMap[ImGuiKey_PageDown] = SDL_SCANCODE_PAGEDOWN;
     io.KeyMap[ImGuiKey_Home] = SDL_SCANCODE_HOME;

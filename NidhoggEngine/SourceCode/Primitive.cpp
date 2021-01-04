@@ -209,7 +209,7 @@ void Cube::Update()
 
 void Cube::InnerRender() const
 {
-	glColor4ub(255, 0.0, 0.0, 0.0);
+	glColor4ub(255, 255, 255, 0.0);
 	if (App->UI->Wireframe_bool)
 	glPushMatrix();
 	/*glMultMatrixf(transform.M);*/ //This code made the cube go brrrrrrrrrrrrrrr form his initial position
