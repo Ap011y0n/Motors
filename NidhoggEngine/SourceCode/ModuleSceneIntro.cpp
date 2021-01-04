@@ -22,6 +22,7 @@
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	scene = CreateGameObject("scene");
+	
 	selectedObj = nullptr;
 
 }
@@ -37,7 +38,9 @@ bool ModuleSceneIntro::Start()
 
 	JointObj1 = nullptr;
 	JointObj2 = nullptr;
-
+	distance.Set(0, 0, 0);
+	axis1.Set(1, 0, 0);
+	axis2.Set(1, 0, 0);
 	//GameObject* obj1 = new GameObject();
 	//selectedObj = obj1;
 	//obj1->CreateComponent(ComponentType::TRANSFORM);
