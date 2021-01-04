@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "ModuleUI.h"
 class Collider;
+
 class Win_Inspector
 {
 

@@ -13,6 +13,8 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "MathGeoLib/include/MathGeoLib.h"
+
 #ifdef _DEBUG
 	#pragma comment (lib, "SourceCode/Bullet/libx86/BulletDynamics_debug.lib")
 	#pragma comment (lib, "SourceCode/Bullet/libx86/BulletCollision_debug.lib")
@@ -277,15 +279,19 @@ btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(const Primitive& body
 	return constraint;
 }
 
-btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(GameObject* bodyA, GameObject* bodyB, btVector3& pivotInA, btVector3& pivotInB) {
+btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(GameObject* bodyA, GameObject* bodyB, btVector3& dist) {
 	Collider* colliderA = (Collider*)bodyA->GetComponent(ComponentType::COLLIDER);
 	Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
 
+
 	if (colliderA && colliderB)
 	{
+		btVector3 pivotinA, pivotinB;
+		SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
+
 		btRigidBody* body1 = colliderA->body.GetBody();
 		btRigidBody* body2 = colliderB->body.GetBody();
-		btPoint2PointConstraint* constraint = new btPoint2PointConstraint(*body1, *body2, pivotInA, pivotInB);
+		btPoint2PointConstraint* constraint = new btPoint2PointConstraint(*body1, *body2, pivotinA, pivotinB);
 		world->addConstraint(constraint);
 		P2PConstraints.push_back(constraint);
 		return constraint;
@@ -301,14 +307,22 @@ btHingeConstraint* ModulePhysics3D::AddConstraintHinge(const Primitive& bodyA, c
 	return constraint;
 }
 
-btHingeConstraint* ModulePhysics3D::AddConstraintHinge(GameObject* bodyA, GameObject* bodyB, btVector3& pivotInA, btVector3& pivotInB, btVector3& axisInA, btVector3& axisInB) {
+btHingeConstraint* ModulePhysics3D::AddConstraintHinge(GameObject* bodyA, GameObject* bodyB, btVector3& dist, btVector3& axisInA, btVector3& axisInB) {
 	Collider* colliderA = (Collider*)bodyA->GetComponent(ComponentType::COLLIDER);
 	Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
 
-	btHingeConstraint* constraint = new btHingeConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), pivotInA, pivotInB, axisInA, axisInB);
-	world->addConstraint(constraint);
-	HingeConstraints.push_back(constraint);
-	return constraint;
+	if (colliderA && colliderB)
+	{
+		btVector3 pivotinA, pivotinB;
+		SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
+
+		btHingeConstraint* constraint = new btHingeConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), pivotinA, pivotinB, axisInA, axisInB);
+		world->addConstraint(constraint);
+		HingeConstraints.push_back(constraint);
+		return constraint;
+
+	}
+	return nullptr;
 }
 
 btSliderConstraint* ModulePhysics3D::AddConstraintSlider(const Primitive& bodyA, const Primitive& bodyB, btTransform& frameinA, btTransform& frameinB, bool linearreference) {
@@ -324,6 +338,68 @@ btSliderConstraint* ModulePhysics3D::AddConstraintSlider(const Primitive& bodyA,
 	return constraint;
 }
 
+btSliderConstraint* ModulePhysics3D::AddConstraintSlider(GameObject* bodyA, GameObject* bodyB, btVector3& dist, bool linearreference) {
+	
+	Collider* colliderA = (Collider*)bodyA->GetComponent(ComponentType::COLLIDER);
+	Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
+	if (colliderA && colliderB)
+	{
+		btVector3 pivotinA, pivotinB;
+		SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
+		btTransform localA;
+		btTransform localB;
+		localA.setIdentity();
+		localB.setIdentity();
+		localA.setOrigin(pivotinA);
+		localB.setOrigin(pivotinB);
+		btSliderConstraint* constraint = new btSliderConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), localA, localB, linearreference);
+		constraint->setLowerLinLimit(0.f);
+		constraint->setUpperLinLimit(0.4f);
+		constraint->setLowerAngLimit(-0.2f);
+		constraint->setUpperAngLimit(0.2f);
+
+		world->addConstraint(constraint);
+		SliderConstraints.push_back(constraint);
+
+		return constraint;
+	}
+	return nullptr;
+}
+
+void ModulePhysics3D::SetPivots(btVector3& dist, btVector3& pivotinA, btVector3& pivotinB, Collider* colliderA, Collider* colliderB)
+{
+	
+	pivotinA.setValue(0, 0, 0);
+	pivotinB.setValue(0, 0, 0);
+	vec3 pos1 = colliderA->body.GetPos();
+	vec3 pos2 = colliderB->body.GetPos();
+	float3 distance;
+	distance.Set(dist.getX(), dist.getY(), dist.getZ());
+	if (pos1.x > pos2.x && distance.x > 0)
+		pivotinA.setX(distance.x);
+	else if (pos1.x < pos2.x && distance.x < 0)
+		pivotinA.setX(distance.x);
+	else
+		pivotinB.setX(distance.x);
+
+	if (pos1.y > pos2.y && distance.y > 0)
+		pivotinA.setY(distance.y);
+	else if (pos1.y < pos2.y && distance.y < 0)
+		pivotinA.setY(distance.y);
+	else
+		pivotinB.setY(distance.y);
+
+	if (pos1.z > pos2.z && distance.z > 0)
+		pivotinA.setZ(distance.z);
+	else if (pos1.z < pos2.z && distance.z < 0)
+		pivotinA.setZ(distance.z);
+	else
+		pivotinB.setZ(distance.z);
+
+	LOG("%f, %f, %f", pivotinA.getX(), pivotinA.getY(), pivotinA.getZ());
+
+	LOG("%f, %f, %f", pivotinB.getX(), pivotinB.getY(), pivotinB.getZ());
+}
 // =============================================
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {

@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 #include <string>
 
@@ -72,4 +73,7 @@ public:
 	GameObject* JointObj1;
 	GameObject* JointObj2;
 	Primitive* cube1;
+	float3 distance;
+	float3 axis1;
+	float3 axis2;
 };

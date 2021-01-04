@@ -14,6 +14,7 @@
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f) 
 
 class GameObject;
+class Collider;
 class DebugDrawer;
 struct VehicleInfo;
 //class  PhysBody3D;
@@ -39,16 +40,20 @@ public:
 	//void AddConstraintP2P(const Primitive& bodyA, const Primitive& bodyB, ...);
 	
 	btPoint2PointConstraint* AddConstraintP2P(const Primitive& bodyA, const Primitive& bodyB, btVector3& pivotInA, btVector3& pivotInB);
-	btPoint2PointConstraint* AddConstraintP2P(GameObject* bodyA, GameObject* bodyB, btVector3& pivotInA, btVector3& pivotInB);
+	btPoint2PointConstraint* AddConstraintP2P(GameObject* bodyA, GameObject* bodyB, btVector3& distance);
 
 	//TODO 3: Implement the code to add a Hinge constraint ( btHingeConstraint )
 
 	btHingeConstraint* AddConstraintHinge(const Primitive & bodyA, const Primitive & bodyB, btVector3& pivotInA, btVector3& pivotInB, btVector3& axisInA, btVector3& axisInB);
-	btHingeConstraint* AddConstraintHinge(GameObject* bodyA, GameObject* bodyB, btVector3& pivotInA, btVector3& pivotInB, btVector3& axisInA, btVector3& axisInB);
+	btHingeConstraint* AddConstraintHinge(GameObject* bodyA, GameObject* bodyB, btVector3& distance, btVector3& axisInA, btVector3& axisInB);
 
 	btSliderConstraint* AddConstraintSlider(const Primitive& bodyA, const Primitive& bodyB, btTransform& frameinA, btTransform& frameinB, bool linearreference = true);
+	btSliderConstraint* AddConstraintSlider(GameObject* bodyA, GameObject* bodyB, btVector3& distance, bool linearreference = true);
+
 	PhysVehicle3D* AddVehicle(const VehicleInfo& info);
 	// Create map walls
+
+	void SetPivots(btVector3& dist, btVector3& pivotinA, btVector3& pivotinB, Collider* colliderA, Collider* colliderB);
 	
 	btDiscreteDynamicsWorld*			world;
 private:

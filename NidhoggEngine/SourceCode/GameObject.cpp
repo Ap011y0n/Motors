@@ -828,3 +828,18 @@ bool ComponentCamera::ContainsAABB(const AABB refBox) const
 			ret = false;
 	return ret;
 }
+
+Constraint::Constraint(Collider* A, Collider* B, ConstraintType T)
+{
+	colliderA = A;
+	colliderB = B;
+	type = T;
+	colliderA->constraints.push_back(this);
+	colliderB->constraints.push_back(this);
+
+}
+
+Constraint::~Constraint()
+{
+
+}

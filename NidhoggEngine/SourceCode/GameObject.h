@@ -26,8 +26,29 @@ enum class ColliderType
 	CAPSULE,
 };
 
+enum class ConstraintType
+{
+	NONE,
+	HINGE,
+	SLIDER,
+	DISTANCE,
+	CONE,
+};
 class GameObject;
 class Resource;
+class Collider;
+class btTypedConstraint;
+class Constraint
+{
+public:
+	Constraint(Collider* A, Collider* B, ConstraintType T);
+	~Constraint();
+public:
+	ConstraintType type;
+	Collider* colliderA;
+	Collider* colliderB;
+	btTypedConstraint* ConstraintPointer;
+};
 //Base component class, need to use childs to actually do something
 class Component
 {
@@ -55,6 +76,7 @@ public:
 public:
 	PhysBody3D body;
 	ColliderType collidertype = ColliderType::NONE; 	//Type of collider
+	vector<Constraint*> constraints;
 };
 //Mesh, child to component
 class ComponentMesh : public Component
