@@ -48,6 +48,7 @@ void Time::Stop()
 {
 	delta_time_fisics = 0;
 	Engine_Active = false;
+	Game_Paused = false;
 	Game_Timer.Stop();
 }
 
