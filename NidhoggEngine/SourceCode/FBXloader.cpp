@@ -594,7 +594,7 @@ void FBXloader::LoadNode(const aiScene* scene, aiNode* node, GameObject* father)
 
 	}
 	GameObject* object = App->scene_intro->CreateGameObject(name.c_str(), father);
-	JSON_Object* JsonObj = App->serializer->AddObjectToArray(App->serializer->leaves);
+	JSON_Object* JsonObj = App->serializer->AddObjectToArray(App->serializer->GameObjects);
 	App->serializer->AddFloat(JsonObj, "UID", object->UID);
 	App->serializer->AddFloat(JsonObj, "ParentUID", object->parent->UID);
 	App->serializer->AddString(JsonObj, "Name", name.c_str());

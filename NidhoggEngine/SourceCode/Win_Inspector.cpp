@@ -395,15 +395,15 @@ void Win_Inspector::AddComponent(GameObject* obj)
 	if (App->scene_intro->CreatingJoint)
 	{
 		//CODE FOR P2P CONSTRAINTS
-	/*	float x, y, z;
-		x = App->scene_intro->P2Pdistance.x;
-		y = App->scene_intro->P2Pdistance.y;
-		z = App->scene_intro->P2Pdistance.z;
+		float x, y, z;
+		x = App->scene_intro->distance.x;
+		y = App->scene_intro->distance.y;
+		z = App->scene_intro->distance.z;
 
 		ImGui::DragFloat("Distance in x", &x, 0.1f);
 		ImGui::DragFloat("Distance in y", &y, 0.1f);
 		ImGui::DragFloat("Distance in z", &z, 0.1f);
-		App->scene_intro->P2Pdistance.Set(x, y, z);
+		App->scene_intro->distance.Set(x, y, z);
 
 		App->scene_intro->JointObj1 = App->scene_intro->selectedObj;
 		ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
@@ -424,7 +424,7 @@ void Win_Inspector::AddComponent(GameObject* obj)
 		if (ImGui::Button("Cancel"))
 		{
 			App->scene_intro->CreatingJoint = false;
-		}*/
+		}
 
 		//CODE FOR HINGE CONSTRAINTS
 		/*float x, y, z;
@@ -478,7 +478,7 @@ void Win_Inspector::AddComponent(GameObject* obj)
 		}*/
 
 		//CODE FOR SLIDER CONSTRAINTS
-		float x, y, z;
+		/*float x, y, z;
 		x = App->scene_intro->distance.x;
 		y = App->scene_intro->distance.y;
 		z = App->scene_intro->distance.z;
@@ -488,24 +488,6 @@ void Win_Inspector::AddComponent(GameObject* obj)
 		ImGui::DragFloat("Distance in z", &z, 0.1f);
 		App->scene_intro->distance.Set(x, y, z);
 
-	/*	float axisx1, axisy1, axisz1;
-		float axisx2, axisy2, axisz2;
-		axisx1 = App->scene_intro->axis1.x;
-		axisy1 = App->scene_intro->axis1.y;
-		axisz1 = App->scene_intro->axis1.z;
-		axisx2 = App->scene_intro->axis2.x;
-		axisy2 = App->scene_intro->axis2.y;
-		axisz2 = App->scene_intro->axis2.z;
-
-		ImGui::DragFloat("Obj 1 Axis x", &axisx1, 0.1f, 0, 1);
-		ImGui::DragFloat("Obj 1 Axis y", &axisy1, 0.1f, 0, 1);
-		ImGui::DragFloat("Obj 1 Axis z", &axisz1, 0.1f, 0, 1);
-		App->scene_intro->axis1.Set(axisx1, axisy1, axisz1);
-
-		ImGui::DragFloat("Obj 2 Axis x", &axisx2, 0.1f, 0, 1);
-		ImGui::DragFloat("Obj 2 Axis y", &axisy2, 0.1f, 0, 1);
-		ImGui::DragFloat("Obj 2 Axis z", &axisz2, 0.1f, 0, 1);
-		App->scene_intro->axis2.Set(axisx2, axisy2, axisz2);*/
 
 		App->scene_intro->JointObj1 = App->scene_intro->selectedObj;
 		ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
@@ -525,7 +507,7 @@ void Win_Inspector::AddComponent(GameObject* obj)
 		if (ImGui::Button("Cancel"))
 		{
 			App->scene_intro->CreatingJoint = false;
-		}
+		}*/
 	}
 
 

@@ -6,6 +6,7 @@
 #include <string>
 
 class GameObject;
+class Constraint;
 class Primitive;
 class ComponentCamera;
 class ImportOptions;
@@ -32,6 +33,7 @@ public:
 	void DeleteSceneObjects(GameObject* parent);
 	bool DeleteGameObject(GameObject* parent);
 	void SaveScene(GameObject* parent);
+	void SaveScene();
 	void Camera_Editor_Window(ComponentCamera* camera);
 	void WantToImport(ImportOptions* options);
 	void ManageDropEvent(std::string file_path);
@@ -76,4 +78,5 @@ public:
 	float3 distance;
 	float3 axis1;
 	float3 axis2;
+	vector<Constraint*> constraints;
 };

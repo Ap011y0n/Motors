@@ -90,28 +90,28 @@ update_status ModulePhysics3D::PreUpdate(float dt)
 	
 	world->stepSimulation(Time::delta_time_fisics, 15);
 
-	for (int n = 0; n < world->getDispatcher()->getNumManifolds(); n++)
-	{
-		btPersistentManifold* manifold = world->getDispatcher()->getManifoldByIndexInternal(n);
-		if (manifold->getNumContacts() > 0)
-		{
-			PhysBody3D* body1 = (PhysBody3D*)manifold->getBody0()->getUserPointer();
-			PhysBody3D* body2 = (PhysBody3D*)manifold->getBody1()->getUserPointer();
+	//for (int n = 0; n < world->getDispatcher()->getNumManifolds(); n++)
+	//{
+	//	btPersistentManifold* manifold = world->getDispatcher()->getManifoldByIndexInternal(n);
+	//	if (manifold->getNumContacts() > 0)
+	//	{
+	//		PhysBody3D* body1 = (PhysBody3D*)manifold->getBody0()->getUserPointer();
+	//		PhysBody3D* body2 = (PhysBody3D*)manifold->getBody1()->getUserPointer();
 
-			/*if (body1 != nullptr && body2 != nullptr)
-			{
-				for (uint n = 0; n < body1->collision_listeners.Count(); n++)
-				{
-					body1->collision_listeners[n]->OnCollision(body1, body2);
-				}
+	//		/*if (body1 != nullptr && body2 != nullptr)
+	//		{
+	//			for (uint n = 0; n < body1->collision_listeners.Count(); n++)
+	//			{
+	//				body1->collision_listeners[n]->OnCollision(body1, body2);
+	//			}
 
-				for (uint n = 0; n < body2->collision_listeners.Count(); n++)
-				{
-					body2->collision_listeners[n]->OnCollision(body2, body1);
-				}
-			}*/
-		}
-	}
+	//			for (uint n = 0; n < body2->collision_listeners.Count(); n++)
+	//			{
+	//				body2->collision_listeners[n]->OnCollision(body2, body1);
+	//			}
+	//		}*/
+	//	}
+	//}
 
 	return UPDATE_CONTINUE;
 }
@@ -288,6 +288,8 @@ btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(GameObject* bodyA, Ga
 
 	if (colliderA && colliderB)
 	{
+		Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::DISTANCE);
+		App->scene_intro->constraints.push_back(newConstraint);
 		btVector3 pivotinA, pivotinB;
 		SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
 
@@ -315,6 +317,9 @@ btHingeConstraint* ModulePhysics3D::AddConstraintHinge(GameObject* bodyA, GameOb
 
 	if (colliderA && colliderB)
 	{
+		Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::HINGE);
+		App->scene_intro->constraints.push_back(newConstraint);
+
 		btVector3 pivotinA, pivotinB;
 		SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
 
@@ -346,6 +351,9 @@ btSliderConstraint* ModulePhysics3D::AddConstraintSlider(GameObject* bodyA, Game
 	Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
 	if (colliderA && colliderB)
 	{
+		Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::SLIDER);
+		App->scene_intro->constraints.push_back(newConstraint);
+
 		btVector3 pivotinA, pivotinB;
 		SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
 		btTransform localA;
@@ -362,6 +370,34 @@ btSliderConstraint* ModulePhysics3D::AddConstraintSlider(GameObject* bodyA, Game
 
 		world->addConstraint(constraint);
 		SliderConstraints.push_back(constraint);
+
+		return constraint;
+	}
+	return nullptr;
+}
+
+btConeTwistConstraint* ModulePhysics3D::AddConstraintCone(GameObject* bodyA, GameObject* bodyB, btVector3& distance)
+{
+	Collider* colliderA = (Collider*)bodyA->GetComponent(ComponentType::COLLIDER);
+	Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
+	if (colliderA && colliderB)
+	{
+		Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::CONE);
+		App->scene_intro->constraints.push_back(newConstraint);
+
+		btVector3 pivotinA, pivotinB;
+		SetPivots(distance, pivotinA, pivotinB, colliderA, colliderB);
+		btTransform localA;
+		btTransform localB;
+		localA.setIdentity();
+		localB.setIdentity();
+		localA.setOrigin(pivotinA);
+		localB.setOrigin(pivotinB);
+		btConeTwistConstraint* constraint = new btConeTwistConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), localA, localB);
+
+
+		world->addConstraint(constraint);
+		ConeConstraints.push_back(constraint);
 
 		return constraint;
 	}

@@ -1,8 +1,18 @@
 {
+    "Constraints": [
+        {
+            "Obj1": 981464514,
+            "Obj2": 1035708882
+        },
+        {
+            "Obj1": 831348161,
+            "Obj2": 1879452036
+        }
+    ],
     "Game Objects": [
         {
             "UID": 1100205486,
-            "ParentUID": 1077997627,
+            "ParentUID": 1465429333,
             "Name": "GameObject1",
             "Translation": [
                 0,
@@ -478,20 +488,20 @@
             "ParentUID": 1260751512,
             "Name": "City_building_014",
             "Translation": [
-                -2.831858,
-                32.061710,
-                6.735656
+                -19.439707,
+                32.061729,
+                0.000000
             ],
             "Scale": [
                 1,
-                1.000000,
-                1.000000
+                1,
+                1
             ],
             "Rotation": [
-                -0.000001,
-                0.000000,
+                0,
+                -0.000000,
                 1,
-                -0.000000
+                0
             ],
             "Components": [
                 {
@@ -506,7 +516,23 @@
                 },
                 {
                     "Type": "Collider",
-                    "ColliderType": "Box"
+                    "ColliderType": "Box",
+                    "Translation": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "Scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "Rotation": [
+                        0,
+                        0,
+                        0,
+                        1
+                    ]
                 }
             ]
         },
@@ -603,16 +629,16 @@
             "Translation": [
                 -20.831324,
                 -27.426489,
-                0
+                -0.000001
             ],
             "Scale": [
                 1,
-                1,
-                1
+                1.000000,
+                1.000000
             ],
             "Rotation": [
                 0,
-                0,
+                -0.000000,
                 1,
                 0
             ],
@@ -626,6 +652,26 @@
                     "Type": "Mesh",
                     "Path": "Assets\/library\/City_building_022.mesh",
                     "UID": 1048310283
+                },
+                {
+                    "Type": "Collider",
+                    "ColliderType": "Box",
+                    "Translation": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "Scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "Rotation": [
+                        0,
+                        0,
+                        0,
+                        1
+                    ]
                 }
             ]
         },
@@ -862,7 +908,7 @@
             "Translation": [
                 -29.478403,
                 21.014099,
-                0
+                -0.000000
             ],
             "Scale": [
                 1,
@@ -870,7 +916,7 @@
                 1
             ],
             "Rotation": [
-                0,
+                0.000000,
                 0,
                 0,
                 1
@@ -885,6 +931,26 @@
                     "Type": "Mesh",
                     "Path": "Assets\/library\/City_building_032.mesh",
                     "UID": 842766005
+                },
+                {
+                    "Type": "Collider",
+                    "ColliderType": "Box",
+                    "Translation": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "Scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "Rotation": [
+                        0,
+                        0,
+                        0,
+                        1
+                    ]
                 }
             ]
         },
@@ -1027,16 +1093,16 @@
             "Translation": [
                 -20.317694,
                 -16.163609,
-                0
+                0.000000
             ],
             "Scale": [
                 1,
-                1,
-                1
+                1.000000,
+                1.000000
             ],
             "Rotation": [
                 0,
-                0,
+                -0.000000,
                 1,
                 0
             ],
@@ -1050,6 +1116,26 @@
                     "Type": "Mesh",
                     "Path": "Assets\/library\/City_building_037.mesh",
                     "UID": 1002211572
+                },
+                {
+                    "Type": "Collider",
+                    "ColliderType": "Box",
+                    "Translation": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "Scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "Rotation": [
+                        0,
+                        0,
+                        0,
+                        1
+                    ]
                 }
             ]
         },

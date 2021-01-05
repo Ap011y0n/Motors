@@ -112,7 +112,10 @@ void Serializer::CreateNewScene()
 	 root_value = json_value_init_object();
 	 root_object = json_value_get_object(root_value);
 	 branch = json_value_init_array();
-	 leaves = json_value_get_array(branch);
+	 GameObjects = json_value_get_array(branch);
+	 branch2 = json_value_init_array();
+	 Constraints = json_value_get_array(branch2);
+	 json_object_set_value(root_object, "Constraints", branch2);
 
 	 json_object_set_value(root_object, "Game Objects", branch);
 

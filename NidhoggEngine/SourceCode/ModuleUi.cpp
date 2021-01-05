@@ -168,7 +168,7 @@ update_status ModuleUI::Update(float dt)
 		if (ImGui::MenuItem("Save Scene")) 
 		{
 			App->serializer->CreateNewScene();
-			App->scene_intro->SaveScene(App->scene_intro->scene);
+			App->scene_intro->SaveScene();
 			App->serializer->SaveScene("Scene.json");
 		}
 		if (ImGui::MenuItem("Load Scene"))

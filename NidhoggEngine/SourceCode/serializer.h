@@ -54,7 +54,9 @@ public:
 	JSON_Value* root_value;
 	JSON_Object* root_object;
 	JSON_Value* branch;
-	JSON_Array* leaves;
+	JSON_Value* branch2;
+	JSON_Array* GameObjects;
+	JSON_Array* Constraints;
 	std::vector<GameObject*> tempvector;
 };
 #endif

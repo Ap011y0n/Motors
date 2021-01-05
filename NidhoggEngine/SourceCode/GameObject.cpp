@@ -836,7 +836,6 @@ Constraint::Constraint(Collider* A, Collider* B, ConstraintType T)
 	type = T;
 	colliderA->constraints.push_back(this);
 	colliderB->constraints.push_back(this);
-
 }
 
 Constraint::~Constraint()

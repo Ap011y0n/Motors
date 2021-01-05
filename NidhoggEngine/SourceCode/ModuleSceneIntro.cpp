@@ -183,7 +183,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{
 		App->serializer->CreateNewScene();
-		SaveScene(scene);
+		SaveScene();
 		App->serializer->SaveScene("Scene.json");
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
@@ -210,11 +210,26 @@ void ModuleSceneIntro::WantToImport(ImportOptions* options)
 
 }
 
+void ModuleSceneIntro::SaveScene()
+{
+	for (int i = 0; i < constraints.size(); i++)
+	{
+		JSON_Object* JsonObj2 = App->serializer->AddObjectToArray(App->serializer->Constraints);
+		App->serializer->AddFloat(JsonObj2, "Obj1", constraints[i]->colliderA->owner->UID);
+		App->serializer->AddFloat(JsonObj2, "Obj2", constraints[i]->colliderB->owner->UID);
+
+	}
+	SaveScene(scene);
+}
+
 void ModuleSceneIntro::SaveScene(GameObject * parent)
 {
+	
+
+
 	if (parent != scene)
 	{
-		JSON_Object* JsonObj = App->serializer->AddObjectToArray(App->serializer->leaves);
+		JSON_Object* JsonObj = App->serializer->AddObjectToArray(App->serializer->GameObjects);
 		if (parent->UID == parent->parent->UID)
 		{
 			LCG();
