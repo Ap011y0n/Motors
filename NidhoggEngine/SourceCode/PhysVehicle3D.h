@@ -38,6 +38,32 @@ struct VehicleInfo
 	vec3 mudguard_R_offset2;
 	vec3 mudguard_R_size3;
 	vec3 mudguard_R_offset3;
+
+	vec3 Front_mudguard_size;
+	vec3 Front_mudguard_offset;
+	vec3 Front_mudguard_size2;
+	vec3 Front_mudguard_offset2;
+	vec3 Front_mudguard_size3;
+	vec3 Front_mudguard_offset3;
+	vec3 Front_mudguard_R_size;
+	vec3 Front_mudguard_R_offset;
+	vec3 Front_mudguard_R_size2;
+	vec3 Front_mudguard_R_offset2;
+	vec3 Front_mudguard_R_size3;
+	vec3 Front_mudguard_R_offset3;
+
+	vec3 bumper_size;
+	vec3 bumper_offset;
+	vec3 antenna_size;
+	vec3 antenna_offset;
+
+	vec3 rearview_size;
+	vec3 rearview_offset;
+
+	vec3 antenna_Ball_size;
+	vec3 antenna_Ball_offset;
+	
+
 	float mass;
 	float suspensionStiffness; // default to 5.88 / 10.0 offroad / 50.0 sports car / 200.0 F1 car
 	float suspensionCompression; // default to 0.83
