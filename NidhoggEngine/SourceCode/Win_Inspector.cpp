@@ -5,9 +5,11 @@
 
 #include "MathGeoLib/include/MathGeoLib.h"
 
+float Win_Inspector::mass = 0;
+
 Win_Inspector::Win_Inspector(Application* app, bool start_enabled)
 {
-
+	mass = 5;
 }
 
 Win_Inspector::~Win_Inspector()
@@ -341,7 +343,7 @@ void Win_Inspector::AddComponent(GameObject* obj)
 
 			    Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
 				collider->collidertype = ColliderType::BOX;
-				collider->body.SetBody(obj, 5, collider->collidertype);
+				collider->body.SetBody(obj, mass, collider->collidertype);
 			}
 		} 
 		ImGui::PopStyleColor();
@@ -359,7 +361,7 @@ void Win_Inspector::AddComponent(GameObject* obj)
 
 				Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
 				collider->collidertype = ColliderType::SPHERE;
-				collider->body.SetBody(obj, 5, collider->collidertype);
+				collider->body.SetBody(obj, mass, collider->collidertype);
 			}
 			
 		}
@@ -381,10 +383,17 @@ void Win_Inspector::AddComponent(GameObject* obj)
 
 				Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
 				collider->collidertype = ColliderType::CAPSULE;
-				collider->body.SetBody(obj, 5, collider->collidertype);
+				collider->body.SetBody(obj, mass, collider->collidertype);
 			}
 			
 		}ImGui::PopStyleColor();
+	}
+	float s1 = mass;
+	ImGui::SetNextItemWidth(200);
+	ImGui::DragFloat("Collider mass", &s1, 0.5f);
+	if (ImGui::IsItemActive())
+	{
+		mass = s1;
 	}
 
 	ImGui::Separator(); ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
@@ -698,7 +707,6 @@ void Win_Inspector::ColliderEditor(Collider* collider)
 
 		ImGui::Columns(1);
 		ImGui::TreePop();
-
 
 	}
 	ImGui::Separator();

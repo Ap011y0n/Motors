@@ -56,6 +56,7 @@ public:
 	void SetPivots(btVector3& dist, btVector3& pivotinA, btVector3& pivotinB, Collider* colliderA, Collider* colliderB);
 	
 	btDiscreteDynamicsWorld*			world;
+	float gravity;
 private:
 	btDefaultCollisionConfiguration*	collision_conf;
 	btCollisionDispatcher*				dispatcher;

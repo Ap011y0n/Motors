@@ -84,6 +84,8 @@ bool ModuleUI::Init()
 	Foldertree_open = true;
 	importWindow = false;
 	ResourceInfo_open = true;
+	Config_Camera_open = true;
+	FisicsConfig_open = true;
 	Inspector_open = true;
 	Console_open = true;
 	direction_camera = { 0,0,0 };
@@ -195,6 +197,7 @@ update_status ModuleUI::Update(float dt)
 			ImGui::MenuItem("Assets tree ", NULL, &Assetstree_open);
 			ImGui::MenuItem("Folder tree", NULL, &Foldertree_open);
 			ImGui::MenuItem("Resource Info", NULL, &ResourceInfo_open);
+			ImGui::MenuItem("Physics Config", NULL, &FisicsConfig_open);
 			ImGui::EndMenu();
 		}
 			
@@ -312,6 +315,7 @@ update_status ModuleUI::Update(float dt)
 	Win_CameraConfig::UpdateUi(App->camera->cameraComp);
 	Win_Inspector::InspectorWin();
 	Win_TimeManagement::Update_Ui();
+	ChangePhysicsWindow();
 	return UPDATE_CONTINUE;
 }
 
@@ -834,6 +838,27 @@ void ModuleUI::ControlsGuizmo()
 	{
 		guizmo_mode = ImGuizmo::MODE::WORLD;
 	} 
+}
+
+void ModuleUI::ChangePhysicsWindow()
+{
+	if (FisicsConfig_open == true)
+	{
+		ImGui::Begin("Physics Config", &FisicsConfig_open);
+
+		
+		float t = App->Physics->gravity;
+		ImGui::SetNextItemWidth(200);
+		ImGui::DragFloat("Gravity", &t,0.5f, -100,+100);
+		if (ImGui::IsItemActive())
+		{
+			App->Physics->gravity = t;
+			 btVector3 gravity = btVector3(0.0f, t, 0.0f);
+			App->Physics->world->setGravity(gravity);
+		}
+
+		ImGui::End();
+	}
 }
 
 void ModuleUI::RightClick_Assets_Menu(const char* path)

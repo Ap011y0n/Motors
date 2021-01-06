@@ -63,6 +63,7 @@ bool ModulePhysics3D::Start()
 	debug_draw->setDebugMode(1);
 	world->setDebugDrawer(debug_draw);
 	world->setGravity(GRAVITY);
+	gravity = -10.0f;
 	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
 
 	// Big rectangle as ground
