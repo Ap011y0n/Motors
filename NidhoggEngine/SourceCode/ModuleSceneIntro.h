@@ -37,6 +37,7 @@ public:
 	void Camera_Editor_Window(ComponentCamera* camera);
 	void WantToImport(ImportOptions* options);
 	void ManageDropEvent(std::string file_path);
+	GameObject* ReturnGameObject(uint UID, GameObject* parent);
 public:
 
 	uint my_indices = 0;

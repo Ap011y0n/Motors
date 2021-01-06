@@ -170,17 +170,20 @@ void Serializer::LoadScene(const char* path)
 {
 	JSON_Value* root_value;
 	JSON_Object* main_object;
-	JSON_Array* main_array;
+	JSON_Array* object_array;
+	JSON_Array* constraints_array;
 
 	root_value = json_parse_file(path);
 	if (root_value != NULL)
 	{
+	
+
 		main_object = json_value_get_object(root_value);
-		main_array = json_object_get_array(main_object, "Game Objects");
+		object_array = json_object_get_array(main_object, "Game Objects");
 
 
-		for (int i = 0; i < json_array_get_count(main_array); i++) {
-			JSON_Object* obj_in_array = json_array_get_object(main_array, i);
+		for (int i = 0; i < json_array_get_count(object_array); i++) {
+			JSON_Object* obj_in_array = json_array_get_object(object_array, i);
 			JSON_Array* component_array = json_object_get_array(obj_in_array, "Components");
 			JSON_Array* JsonTrans = json_object_get_array(obj_in_array, "Translation");
 			JSON_Array* JsonScale = json_object_get_array(obj_in_array, "Scale");
@@ -338,7 +341,38 @@ void Serializer::LoadScene(const char* path)
 		}
 		sortScene();
 
+		App->scene_intro->constraints.clear();
+		constraints_array = json_object_get_array(main_object, "Constraints");
+		for (int i = 0; i < json_array_get_count(constraints_array); i++) {
+			JSON_Object* obj_in_array = json_array_get_object(constraints_array, i);
+			JSON_Array* JsonTrans = json_object_get_array(obj_in_array, "Distance");
+			
+			uint UID1 = json_object_get_number(obj_in_array, "Obj1");
+			uint UID2 = json_object_get_number(obj_in_array, "Obj2");
+
+			float x = json_array_get_number(JsonTrans, 0);
+			float y = json_array_get_number(JsonTrans, 1);
+			float z = json_array_get_number(JsonTrans, 2);
+			GameObject* objA = nullptr;
+			GameObject* objB = nullptr;
+
+			for (int j = 0; j < tempvector.size(); j++)
+			{
+				if (tempvector[j]->UID == UID1)
+					objA = tempvector[j];
+				if (tempvector[j]->UID == UID2)
+					objB = tempvector[j];
+
+			}
+		//	objA = App->scene_intro->ReturnGameObject(UID1, App->scene_intro->scene);
+		//	objB = App->scene_intro->ReturnGameObject(UID2, App->scene_intro->scene);
+			btVector3 distance;
+			distance.setValue(x, y, z);
+			App->Physics->AddConstraintP2P(objA, objB, distance);
+
+		}
 		tempvector.clear();
+
 	}
 	
 

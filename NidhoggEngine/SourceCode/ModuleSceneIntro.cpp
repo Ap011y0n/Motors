@@ -217,6 +217,9 @@ void ModuleSceneIntro::SaveScene()
 		JSON_Object* JsonObj2 = App->serializer->AddObjectToArray(App->serializer->Constraints);
 		App->serializer->AddFloat(JsonObj2, "Obj1", constraints[i]->colliderA->owner->UID);
 		App->serializer->AddFloat(JsonObj2, "Obj2", constraints[i]->colliderB->owner->UID);
+		JSON_Array* JsonTrans = App->serializer->AddArray(JsonObj2, "Distance");
+
+		App->serializer->AddVec3(JsonTrans, constraints[i]->distance.x, constraints[i]->distance.y, constraints[i]->distance.z);
 
 	}
 	SaveScene(scene);
@@ -306,6 +309,26 @@ void ModuleSceneIntro::UpdateGameObject(GameObject* parent, float dt)
 
 }
 
+GameObject* ModuleSceneIntro::ReturnGameObject(uint UID, GameObject* parent)
+{
+	GameObject* ObjectToReturn = nullptr;
+	if (parent != nullptr && parent->UID != UID)
+	{
+		for (int i = 0; i < parent->childs.size(); i++)
+		{
+			ObjectToReturn = ReturnGameObject(UID, parent->childs[i]);
+			if (ObjectToReturn != nullptr)
+			{
+				return ObjectToReturn;
+			}
+		}
+	}
+	else
+	{
+		return parent;
+	}
+	return ObjectToReturn;
+}
 void ModuleSceneIntro::DeleteSceneObjects(GameObject* parent)
 {
 	if (parent->parent != nullptr && parent != scene)

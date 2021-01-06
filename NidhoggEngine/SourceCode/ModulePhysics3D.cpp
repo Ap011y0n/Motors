@@ -290,6 +290,7 @@ btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(GameObject* bodyA, Ga
 	{
 		Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::DISTANCE);
 		App->scene_intro->constraints.push_back(newConstraint);
+		newConstraint->distance.Set(dist.getX(), dist.getY(), dist.getZ());
 		btVector3 pivotinA, pivotinB;
 		SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
 
@@ -298,6 +299,7 @@ btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(GameObject* bodyA, Ga
 		btPoint2PointConstraint* constraint = new btPoint2PointConstraint(*body1, *body2, pivotinA, pivotinB);
 		world->addConstraint(constraint);
 		P2PConstraints.push_back(constraint);
+
 		return constraint;
 
 	}
@@ -319,6 +321,7 @@ btHingeConstraint* ModulePhysics3D::AddConstraintHinge(GameObject* bodyA, GameOb
 	{
 		Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::HINGE);
 		App->scene_intro->constraints.push_back(newConstraint);
+		newConstraint->distance.Set(dist.getX(), dist.getY(), dist.getZ());
 
 		btVector3 pivotinA, pivotinB;
 		SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
@@ -353,6 +356,7 @@ btSliderConstraint* ModulePhysics3D::AddConstraintSlider(GameObject* bodyA, Game
 	{
 		Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::SLIDER);
 		App->scene_intro->constraints.push_back(newConstraint);
+		newConstraint->distance.Set(dist.getX(), dist.getY(), dist.getZ());
 
 		btVector3 pivotinA, pivotinB;
 		SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);

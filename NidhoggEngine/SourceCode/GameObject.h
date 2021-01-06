@@ -48,7 +48,7 @@ public:
 	Collider* colliderA;
 	Collider* colliderB;
 	btTypedConstraint* ConstraintPointer;
-
+	float3 distance;
 };
 //Base component class, need to use childs to actually do something
 class Component
