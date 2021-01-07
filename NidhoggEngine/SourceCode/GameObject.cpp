@@ -61,7 +61,7 @@ GameObject::~GameObject()
 	{
 		if (Components[i] != nullptr)
 		{
-			Components[i]->type;
+			//Components[i]->type;
 			delete Components[i];
 
 		}
@@ -211,7 +211,16 @@ Collider::Collider(GameObject* ObjectOwner) : Component()
 
 Collider::~Collider()
 {
-
+	for (int i = 0; i < constraints.size(); i++)
+	{
+		if (constraints[i] != nullptr)
+		{
+			delete constraints[i];
+			i--;
+		}
+	
+	}
+	constraints.clear();
 }
 
 bool Collider::Update(float dt)
@@ -836,9 +845,29 @@ Constraint::Constraint(Collider* A, Collider* B, ConstraintType T)
 	type = T;
 	colliderA->constraints.push_back(this);
 	colliderB->constraints.push_back(this);
+	ConstraintPointer = nullptr;
 }
 
 Constraint::~Constraint()
 {
+	for (int i = 0; i < colliderA->constraints.size(); i++)
+	{
+		if (colliderA->constraints[i] = this)
+		{
+			colliderA->constraints.erase(colliderA->constraints.begin() + i);
+			i--;
+		}
+	}
+	for (int i = 0; i < colliderB->constraints.size(); i++)
+	{
+		if (colliderB->constraints[i] = this)
+		{
+			colliderB->constraints.erase(colliderB->constraints.begin() + i);
+			i--;
+		}
+	}
 
+	if (ConstraintPointer != nullptr)
+		App->Physics->world->removeConstraint(ConstraintPointer);
+	ConstraintPointer = nullptr;
 }

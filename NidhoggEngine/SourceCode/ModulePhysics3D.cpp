@@ -299,7 +299,7 @@ btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(GameObject* bodyA, Ga
 		btPoint2PointConstraint* constraint = new btPoint2PointConstraint(*body1, *body2, pivotinA, pivotinB);
 		world->addConstraint(constraint);
 		P2PConstraints.push_back(constraint);
-
+		newConstraint->ConstraintPointer = constraint;
 		return constraint;
 
 	}
@@ -329,6 +329,8 @@ btHingeConstraint* ModulePhysics3D::AddConstraintHinge(GameObject* bodyA, GameOb
 		btHingeConstraint* constraint = new btHingeConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), pivotinA, pivotinB, axisInA, axisInB);
 		world->addConstraint(constraint);
 		HingeConstraints.push_back(constraint);
+		newConstraint->ConstraintPointer = constraint;
+
 		return constraint;
 
 	}
@@ -374,6 +376,7 @@ btSliderConstraint* ModulePhysics3D::AddConstraintSlider(GameObject* bodyA, Game
 
 		world->addConstraint(constraint);
 		SliderConstraints.push_back(constraint);
+		newConstraint->ConstraintPointer = constraint;
 
 		return constraint;
 	}
@@ -402,6 +405,7 @@ btConeTwistConstraint* ModulePhysics3D::AddConstraintCone(GameObject* bodyA, Gam
 
 		world->addConstraint(constraint);
 		ConeConstraints.push_back(constraint);
+		newConstraint->ConstraintPointer = constraint;
 
 		return constraint;
 	}
