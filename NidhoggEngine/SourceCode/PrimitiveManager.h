@@ -40,8 +40,9 @@ public:
 	void ShowWireframe();
 	void HideWireframe();
 private:
-	vector<Primitive*> prim_list;
+	
 public:
+	vector<Primitive*> prim_list;
 	bool depth_bool;
 	bool cullface_bool;
 	bool texture2D_bool;

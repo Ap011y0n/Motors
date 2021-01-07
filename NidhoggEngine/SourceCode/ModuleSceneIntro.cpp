@@ -94,7 +94,15 @@ bool ModuleSceneIntro::Start()
 	vec3 size(2, 2, 2);
 	vec3 pos(0, 3, 0);
 	cube1 = App->PrimManager->CreateCube(size, pos);
-	
+
+	vec3 ballpos(4, 4, 4);
+
+	PrimSphere* sphere = new PrimSphere(0.999, 20, 20);
+	sphere->SetPos(pos.x, pos.y, pos.z);
+	sphere->body.SetBody(sphere, 10000);
+	App->PrimManager->prim_list.push_back((Primitive*)sphere);
+
+	spherecamera = sphere;
 	pos.Set(1, 6, 0);
 	Primitive* cube2 = App->PrimManager->CreateCube(size, pos);
 	App->Physics->AddConstraintP2P(*cube1, *cube2,

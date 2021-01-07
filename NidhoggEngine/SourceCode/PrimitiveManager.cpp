@@ -22,6 +22,7 @@ bool PrimitiveManager::Start()
 	bool ret = true;
 	depth_bool = false;
 	cullface_bool = false;	
+	texture2D_bool = true;
 	LIGHTING_bool = false;
 	Color_bool = false;
 	return ret;

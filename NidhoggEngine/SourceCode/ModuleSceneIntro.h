@@ -73,6 +73,7 @@ public:
 	GameObject* JointObj1;
 	GameObject* JointObj2;
 	Primitive* cube1;
+	Primitive* spherecamera;
 	float3 distance;
 	float3 axis1;
 	float3 axis2;
