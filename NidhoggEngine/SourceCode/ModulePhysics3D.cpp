@@ -283,26 +283,29 @@ btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(const Primitive& body
 }
 
 btPoint2PointConstraint* ModulePhysics3D::AddConstraintP2P(GameObject* bodyA, GameObject* bodyB, btVector3& dist) {
-	Collider* colliderA = (Collider*)bodyA->GetComponent(ComponentType::COLLIDER);
-	Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
-
-
-	if (colliderA && colliderB)
+	if (bodyA && bodyB)
 	{
-		Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::DISTANCE);
-		App->scene_intro->constraints.push_back(newConstraint);
-		newConstraint->distance.Set(dist.getX(), dist.getY(), dist.getZ());
-		btVector3 pivotinA, pivotinB;
-		SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
+		Collider* colliderA = (Collider*)bodyA->GetComponent(ComponentType::COLLIDER);
+		Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
 
-		btRigidBody* body1 = colliderA->body.GetBody();
-		btRigidBody* body2 = colliderB->body.GetBody();
-		btPoint2PointConstraint* constraint = new btPoint2PointConstraint(*body1, *body2, pivotinA, pivotinB);
-		world->addConstraint(constraint);
-		P2PConstraints.push_back(constraint);
-		newConstraint->ConstraintPointer = constraint;
-		return constraint;
 
+		if (colliderA && colliderB && colliderA != colliderB)
+		{
+			Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::DISTANCE);
+			App->scene_intro->constraints.push_back(newConstraint);
+			newConstraint->distance.Set(dist.getX(), dist.getY(), dist.getZ());
+			btVector3 pivotinA, pivotinB;
+			SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
+
+			btRigidBody* body1 = colliderA->body.GetBody();
+			btRigidBody* body2 = colliderB->body.GetBody();
+			btPoint2PointConstraint* constraint = new btPoint2PointConstraint(*body1, *body2, pivotinA, pivotinB);
+			world->addConstraint(constraint);
+			P2PConstraints.push_back(constraint);
+			newConstraint->ConstraintPointer = constraint;
+			return constraint;
+
+		}
 	}
 	return nullptr;
 }
@@ -315,37 +318,40 @@ btHingeConstraint* ModulePhysics3D::AddConstraintHinge(const Primitive& bodyA, c
 }
 
 btHingeConstraint* ModulePhysics3D::AddConstraintHinge(GameObject* bodyA, GameObject* bodyB, btVector3& dist, btVector3& axisInA, btVector3& axisInB) {
-	Collider* colliderA = (Collider*)bodyA->GetComponent(ComponentType::COLLIDER);
-	Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
-
-	if (colliderA && colliderB)
+	if (bodyA && bodyB)
 	{
-		Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::HINGE);
-		App->scene_intro->constraints.push_back(newConstraint);
-		newConstraint->distance.Set(dist.getX(), dist.getY(), dist.getZ());
-		newConstraint->axis1.Set(axisInA.getX(), axisInA.getY(), axisInA.getZ());
-		newConstraint->axis2.Set(axisInB.getX(), axisInB.getY(), axisInB.getZ());
+		Collider* colliderA = (Collider*)bodyA->GetComponent(ComponentType::COLLIDER);
+		Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
 
-		btVector3 pivotinA, pivotinB;
-		SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
+		if (colliderA && colliderB && colliderA != colliderB)
+		{
+			Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::HINGE);
+			App->scene_intro->constraints.push_back(newConstraint);
+			newConstraint->distance.Set(dist.getX(), dist.getY(), dist.getZ());
+			newConstraint->axis1.Set(axisInA.getX(), axisInA.getY(), axisInA.getZ());
+			newConstraint->axis2.Set(axisInB.getX(), axisInB.getY(), axisInB.getZ());
 
-		btHingeConstraint* constraint = new btHingeConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), pivotinA, pivotinB, axisInA, axisInB);
-		world->addConstraint(constraint);
-		HingeConstraints.push_back(constraint);
-		newConstraint->ConstraintPointer = constraint;
+			btVector3 pivotinA, pivotinB;
+			SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
 
-		return constraint;
+			btHingeConstraint* constraint = new btHingeConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), pivotinA, pivotinB, axisInA, axisInB);
+			world->addConstraint(constraint);
+			HingeConstraints.push_back(constraint);
+			newConstraint->ConstraintPointer = constraint;
 
+			return constraint;
+
+		}
 	}
 	return nullptr;
 }
 
 btSliderConstraint* ModulePhysics3D::AddConstraintSlider(const Primitive& bodyA, const Primitive& bodyB, btTransform& frameinA, btTransform& frameinB, bool linearreference) {
 	btSliderConstraint* constraint = new btSliderConstraint(*bodyA.body.GetBody(), *bodyB.body.GetBody(),frameinA, frameinB, linearreference);
-	constraint->setLowerLinLimit(0.f);
-	constraint->setUpperLinLimit(0.4f);
-	constraint->setLowerAngLimit(-0.2f);
-	constraint->setUpperAngLimit(0.2f);
+	//constraint->setLowerLinLimit(0.f);
+	//constraint->setUpperLinLimit(0.4f);
+	//constraint->setLowerAngLimit(-0.2f);
+	//constraint->setUpperAngLimit(0.2f);
 	
 	world->addConstraint(constraint);
 	SliderConstraints.push_back(constraint);
@@ -354,64 +360,69 @@ btSliderConstraint* ModulePhysics3D::AddConstraintSlider(const Primitive& bodyA,
 }
 
 btSliderConstraint* ModulePhysics3D::AddConstraintSlider(GameObject* bodyA, GameObject* bodyB, btVector3& dist, bool linearreference) {
-	
-	Collider* colliderA = (Collider*)bodyA->GetComponent(ComponentType::COLLIDER);
-	Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
-	if (colliderA && colliderB)
+	if (bodyA && bodyB)
 	{
-		Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::SLIDER);
-		App->scene_intro->constraints.push_back(newConstraint);
-		newConstraint->distance.Set(dist.getX(), dist.getY(), dist.getZ());
+		Collider* colliderA = (Collider*)bodyA->GetComponent(ComponentType::COLLIDER);
+		Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
+		if (colliderA && colliderB && colliderA != colliderB)
+		{
+			Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::SLIDER);
+			App->scene_intro->constraints.push_back(newConstraint);
+			newConstraint->distance.Set(dist.getX(), dist.getY(), dist.getZ());
 
-		btVector3 pivotinA, pivotinB;
-		SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
-		btTransform localA;
-		btTransform localB;
-		localA.setIdentity();
-		localB.setIdentity();
-		localA.setOrigin(pivotinA);
-		localB.setOrigin(pivotinB);
-		btSliderConstraint* constraint = new btSliderConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), localA, localB, linearreference);
-		constraint->setLowerLinLimit(0.f);
-		constraint->setUpperLinLimit(0.4f);
-		constraint->setLowerAngLimit(-0.2f);
-		constraint->setUpperAngLimit(0.2f);
+			btVector3 pivotinA, pivotinB;
+			SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
+			btTransform localA;
+			btTransform localB;
+			localA.setIdentity();
+			localB.setIdentity();
+			localA.setOrigin(pivotinA);
+			localB.setOrigin(pivotinB);
+			btSliderConstraint* constraint = new btSliderConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), localA, localB, linearreference);
+			/*	constraint->setLowerLinLimit(0.f);
+				constraint->setUpperLinLimit(0.4f);
+				constraint->setLowerAngLimit(-0.2f);
+				constraint->setUpperAngLimit(0.2f);*/
 
-		world->addConstraint(constraint);
-		SliderConstraints.push_back(constraint);
-		newConstraint->ConstraintPointer = constraint;
+			world->addConstraint(constraint);
+			SliderConstraints.push_back(constraint);
+			newConstraint->ConstraintPointer = constraint;
 
-		return constraint;
+			return constraint;
+		}
 	}
 	return nullptr;
 }
 
 btConeTwistConstraint* ModulePhysics3D::AddConstraintCone(GameObject* bodyA, GameObject* bodyB, btVector3& distance)
 {
-	Collider* colliderA = (Collider*)bodyA->GetComponent(ComponentType::COLLIDER);
-	Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
-	if (colliderA && colliderB)
+	if (bodyA && bodyB)
 	{
-		Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::CONE);
-		App->scene_intro->constraints.push_back(newConstraint);
-		newConstraint->distance.Set(distance.getX(), distance.getY(), distance.getZ());
+		Collider* colliderA = (Collider*)bodyA->GetComponent(ComponentType::COLLIDER);
+		Collider* colliderB = (Collider*)bodyB->GetComponent(ComponentType::COLLIDER);
+		if (colliderA && colliderB && colliderA != colliderB)
+		{
+			Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::CONE);
+			App->scene_intro->constraints.push_back(newConstraint);
+			newConstraint->distance.Set(distance.getX(), distance.getY(), distance.getZ());
 
-		btVector3 pivotinA, pivotinB;
-		SetPivots(distance, pivotinA, pivotinB, colliderA, colliderB);
-		btTransform localA;
-		btTransform localB;
-		localA.setIdentity();
-		localB.setIdentity();
-		localA.setOrigin(pivotinA);
-		localB.setOrigin(pivotinB);
-		btConeTwistConstraint* constraint = new btConeTwistConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), localA, localB);
+			btVector3 pivotinA, pivotinB;
+			SetPivots(distance, pivotinA, pivotinB, colliderA, colliderB);
+			btTransform localA;
+			btTransform localB;
+			localA.setIdentity();
+			localB.setIdentity();
+			localA.setOrigin(pivotinA);
+			localB.setOrigin(pivotinB);
+			btConeTwistConstraint* constraint = new btConeTwistConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), localA, localB);
 
 
-		world->addConstraint(constraint);
-		ConeConstraints.push_back(constraint);
-		newConstraint->ConstraintPointer = constraint;
+			world->addConstraint(constraint);
+			ConeConstraints.push_back(constraint);
+			newConstraint->ConstraintPointer = constraint;
 
-		return constraint;
+			return constraint;
+		}
 	}
 	return nullptr;
 }
