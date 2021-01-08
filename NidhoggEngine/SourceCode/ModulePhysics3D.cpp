@@ -347,10 +347,10 @@ btHingeConstraint* ModulePhysics3D::AddConstraintHinge(GameObject* bodyA, GameOb
 
 btSliderConstraint* ModulePhysics3D::AddConstraintSlider(const Primitive& bodyA, const Primitive& bodyB, btTransform& frameinA, btTransform& frameinB, bool linearreference) {
 	btSliderConstraint* constraint = new btSliderConstraint(*bodyA.body.GetBody(), *bodyB.body.GetBody(),frameinA, frameinB, linearreference);
-	//constraint->setLowerLinLimit(0.f);
-	//constraint->setUpperLinLimit(0.4f);
-	//constraint->setLowerAngLimit(-0.2f);
-	//constraint->setUpperAngLimit(0.2f);
+	constraint->setLowerLinLimit(0.f);
+	constraint->setUpperLinLimit(0.4f);
+	constraint->setLowerAngLimit(-0.2f);
+	constraint->setUpperAngLimit(0.2f);
 	
 	world->addConstraint(constraint);
 	SliderConstraints.push_back(constraint);
@@ -378,10 +378,10 @@ btSliderConstraint* ModulePhysics3D::AddConstraintSlider(GameObject* bodyA, Game
 			localA.setOrigin(pivotinA);
 			localB.setOrigin(pivotinB);
 			btSliderConstraint* constraint = new btSliderConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), localA, localB, linearreference);
-			/*	constraint->setLowerLinLimit(0.f);
+				constraint->setLowerLinLimit(0.f);
 				constraint->setUpperLinLimit(0.4f);
 				constraint->setLowerAngLimit(-0.2f);
-				constraint->setUpperAngLimit(0.2f);*/
+				constraint->setUpperAngLimit(0.2f);
 
 			world->addConstraint(constraint);
 			SliderConstraints.push_back(constraint);

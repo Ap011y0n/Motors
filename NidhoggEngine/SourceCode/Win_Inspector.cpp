@@ -40,6 +40,7 @@ void Win_Inspector::GameObjectInspector(GameObject* obj)
 	ComponentMaterial* material = nullptr;
 	ComponentMesh* mesh = nullptr;
 	ComponentCamera* camera = nullptr;
+	Collider* collider = nullptr;
 	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 
 	for (int i = 0; i < obj->Components.size(); i++)
@@ -59,6 +60,10 @@ void Win_Inspector::GameObjectInspector(GameObject* obj)
 		if (obj->Components[i]->type == ComponentType::CAMERA)
 		{
 			camera = (ComponentCamera*)obj->Components[i];
+		}
+		if (obj->Components[i]->type == ComponentType::COLLIDER)
+		{
+			collider = (Collider*)obj->Components[i];
 		}
 	}
 	if (transform != nullptr)
@@ -320,6 +325,262 @@ void Win_Inspector::GameObjectInspector(GameObject* obj)
 
 	}
 
+	if (collider != nullptr)
+	{
+		if (ImGui::TreeNodeEx("Collider", node_flags))
+		{
+			static bool hastodelete = false;
+			ImGui::Checkbox("Delete", &hastodelete);
+			if (hastodelete)
+			{
+				hastodelete = false;
+				for (int i = 0; i < obj->Components.size(); i++)
+				{
+					
+					if (obj->Components[i]->type == ComponentType::COLLIDER)
+					{
+						obj->Components.erase(obj->Components.begin()+i);
+					}
+				}
+				delete collider;
+			}
+			else
+			{
+				ColliderEditor(collider);
+
+				for (int i = 0; i < collider->constraints.size(); i++)
+				{
+					static bool removeconstraint = false;
+					ImGui::Checkbox("Remove", &removeconstraint);
+					if (removeconstraint)
+					{
+						removeconstraint = false;
+						Constraint* constraintpoint = collider->constraints[i];
+
+						collider->constraints.erase(collider->constraints.begin() + i);
+						--i;
+						for (int j = 0; j < App->scene_intro->constraints.size(); j++)
+						{
+							if (App->scene_intro->constraints[j] == constraintpoint)
+							{
+								App->scene_intro->constraints.erase(App->scene_intro->constraints.begin() + j);
+								j = App->scene_intro->constraints.size();
+							}
+						}
+						
+						delete constraintpoint;
+						
+					}
+					else
+					{
+						switch (collider->constraints[i]->type)
+						{
+						case ConstraintType::DISTANCE:
+						{
+							ImGui::Text("Point to point");
+						}
+						break;
+						case ConstraintType::CONE:
+						{
+							ImGui::Text("Cone");
+						}
+						break;
+						case ConstraintType::HINGE:
+						{
+							ImGui::Text("Hinge");
+						}
+						break;
+						case ConstraintType::SLIDER:
+						{
+							ImGui::Text("Slider");
+						}
+						break;
+
+						}
+						ImGui::Text("Obj1: %s", collider->constraints[i]->colliderA->owner->Name.c_str());
+						ImGui::Text("Obj2: %s", collider->constraints[i]->colliderB->owner->Name.c_str());
+
+					}
+					
+				}
+				ImGui::Separator(); ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
+				if (ImGui::Button("Add Constraint"))
+				{
+					App->scene_intro->CreatingJoint = true;
+				}ImGui::PopStyleColor();
+				if (App->scene_intro->CreatingJoint)
+				{
+					ImGui::SetNextItemWidth(130);
+					static int selectedMode = 0;
+					static const char* Mode[]{ "P2P","Hinge", "Slider", "Cone" };
+					ImGui::Combo("Constraint Type  ", &selectedMode, Mode, IM_ARRAYSIZE(Mode));
+
+					if (selectedMode == 0)
+					{
+						//CODE FOR P2P CONSTRAINTS
+						float x, y, z;
+						x = App->scene_intro->distance.x;
+						y = App->scene_intro->distance.y;
+						z = App->scene_intro->distance.z;
+
+						ImGui::DragFloat("Distance in x", &x, 0.1f);
+						ImGui::DragFloat("Distance in y", &y, 0.1f);
+						ImGui::DragFloat("Distance in z", &z, 0.1f);
+						App->scene_intro->distance.Set(x, y, z);
+
+						App->scene_intro->JointObj1 = App->scene_intro->selectedObj;
+						ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
+
+						if (App->scene_intro->JointObj2 != nullptr)
+							ImGui::Text("Object2: %s", App->scene_intro->JointObj2->Name.c_str());
+						else
+						{
+							ImGui::Text("Select another object to create a joint");
+						}
+						if (ImGui::Button("Confirm"))
+						{
+
+							App->scene_intro->CreatingJoint = false;
+							App->Physics->AddConstraintP2P(App->scene_intro->JointObj1, App->scene_intro->JointObj2,
+								btVector3{ x, y, z });
+
+
+						}
+						if (ImGui::Button("Cancel"))
+						{
+							App->scene_intro->CreatingJoint = false;
+						}
+					}
+					if (selectedMode == 1)
+					{
+						//CODE FOR HINGE CONSTRAINTS
+						float x, y, z;
+						x = App->scene_intro->distance.x;
+						y = App->scene_intro->distance.y;
+						z = App->scene_intro->distance.z;
+
+						ImGui::DragFloat("Distance in x", &x, 0.1f);
+						ImGui::DragFloat("Distance in y", &y, 0.1f);
+						ImGui::DragFloat("Distance in z", &z, 0.1f);
+						App->scene_intro->distance.Set(x, y, z);
+
+						float axisx1, axisy1, axisz1;
+						float axisx2, axisy2, axisz2;
+						axisx1 = App->scene_intro->axis1.x;
+						axisy1 = App->scene_intro->axis1.y;
+						axisz1 = App->scene_intro->axis1.z;
+						axisx2 = App->scene_intro->axis2.x;
+						axisy2 = App->scene_intro->axis2.y;
+						axisz2 = App->scene_intro->axis2.z;
+
+						ImGui::DragFloat("Obj 1 Axis x", &axisx1, 0.1f, 0, 1);
+						ImGui::DragFloat("Obj 1 Axis y", &axisy1, 0.1f, 0, 1);
+						ImGui::DragFloat("Obj 1 Axis z", &axisz1, 0.1f, 0, 1);
+						App->scene_intro->axis1.Set(axisx1, axisy1, axisz1);
+
+						ImGui::DragFloat("Obj 2 Axis x", &axisx2, 0.1f, 0, 1);
+						ImGui::DragFloat("Obj 2 Axis y", &axisy2, 0.1f, 0, 1);
+						ImGui::DragFloat("Obj 2 Axis z", &axisz2, 0.1f, 0, 1);
+						App->scene_intro->axis2.Set(axisx2, axisy2, axisz2);
+
+						App->scene_intro->JointObj1 = App->scene_intro->selectedObj;
+						ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
+
+						if (App->scene_intro->JointObj2 != nullptr)
+							ImGui::Text("Object2 %s:", App->scene_intro->JointObj2->Name.c_str());
+						else
+						{
+							ImGui::Text("Select another object to create a joint");
+						}
+						if (ImGui::Button("Confirm"))
+						{
+
+							App->scene_intro->CreatingJoint = false;
+							App->Physics->AddConstraintHinge(App->scene_intro->JointObj1, App->scene_intro->JointObj2,
+								btVector3{ x, y, z }, btVector3(axisx1, axisy1, axisz1), btVector3(axisx2, axisy2, axisz2));
+						}
+						if (ImGui::Button("Cancel"))
+						{
+							App->scene_intro->CreatingJoint = false;
+						}
+					}
+
+
+					if (selectedMode == 2)
+					{
+						//CODE FOR SLIDER CONSTRAINTS
+						float x, y, z;
+						x = App->scene_intro->distance.x;
+						y = App->scene_intro->distance.y;
+						z = App->scene_intro->distance.z;
+
+						ImGui::DragFloat("Distance in x", &x, 0.1f);
+						ImGui::DragFloat("Distance in y", &y, 0.1f);
+						ImGui::DragFloat("Distance in z", &z, 0.1f);
+						App->scene_intro->distance.Set(x, y, z);
+
+						App->scene_intro->JointObj1 = App->scene_intro->selectedObj;
+						ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
+
+						if (App->scene_intro->JointObj2 != nullptr)
+							ImGui::Text("Object2 %s:", App->scene_intro->JointObj2->Name.c_str());
+						else
+						{
+							ImGui::Text("Select another object to create a joint");
+						}
+						if (ImGui::Button("Confirm"))
+						{
+
+							App->scene_intro->CreatingJoint = false;
+							App->Physics->AddConstraintSlider(App->scene_intro->JointObj1, App->scene_intro->JointObj2, btVector3{ x, y, z });
+						}
+						if (ImGui::Button("Cancel"))
+						{
+							App->scene_intro->CreatingJoint = false;
+						}
+
+					}
+					if (selectedMode == 3)
+					{
+						//CODE FOR CONE CONSTRAINTS
+						float x, y, z;
+						x = App->scene_intro->distance.x;
+						y = App->scene_intro->distance.y;
+						z = App->scene_intro->distance.z;
+
+						ImGui::DragFloat("Distance in x", &x, 0.1f);
+						ImGui::DragFloat("Distance in y", &y, 0.1f);
+						ImGui::DragFloat("Distance in z", &z, 0.1f);
+						App->scene_intro->distance.Set(x, y, z);
+
+						App->scene_intro->JointObj1 = App->scene_intro->selectedObj;
+						ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
+
+						if (App->scene_intro->JointObj2 != nullptr)
+							ImGui::Text("Object2 %s:", App->scene_intro->JointObj2->Name.c_str());
+						else
+						{
+							ImGui::Text("Select another object to create a joint");
+						}
+						if (ImGui::Button("Confirm"))
+						{
+
+							App->scene_intro->CreatingJoint = false;
+							App->Physics->AddConstraintCone(App->scene_intro->JointObj1, App->scene_intro->JointObj2, btVector3{ x, y, z });
+						}
+						if (ImGui::Button("Cancel"))
+						{
+							App->scene_intro->CreatingJoint = false;
+						}
+					}
+				}
+			}
+			
+			
+
+			ImGui::TreePop();
+		}
+	}
 }
 
 void Win_Inspector::AddComponent(GameObject* obj)
@@ -327,6 +588,7 @@ void Win_Inspector::AddComponent(GameObject* obj)
 	Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
 	if (collider == nullptr)
 	{
+
 		ImGui::Separator();
 		ImGui::SetNextItemWidth(130);
 		static int selectedMode = 0;
@@ -444,181 +706,9 @@ void Win_Inspector::AddComponent(GameObject* obj)
 		}
 
 	}
-	else
-	{
-	ColliderEditor(collider);
 
-	ImGui::Separator(); ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
-	if (ImGui::Button("Add Constraint"))
-	{
-		App->scene_intro->CreatingJoint = true;
-	}ImGui::PopStyleColor();
-	if (App->scene_intro->CreatingJoint)
-	{
-		ImGui::SetNextItemWidth(130);
-		static int selectedMode = 0;
-		static const char* Mode[]{ "P2P","Hinge", "Slider", "Cone" };
-		ImGui::Combo("Constraint Type  ", &selectedMode, Mode, IM_ARRAYSIZE(Mode));
-
-		if (selectedMode == 0)
-		{
-			//CODE FOR P2P CONSTRAINTS
-			float x, y, z;
-			x = App->scene_intro->distance.x;
-			y = App->scene_intro->distance.y;
-			z = App->scene_intro->distance.z;
-
-			ImGui::DragFloat("Distance in x", &x, 0.1f);
-			ImGui::DragFloat("Distance in y", &y, 0.1f);
-			ImGui::DragFloat("Distance in z", &z, 0.1f);
-			App->scene_intro->distance.Set(x, y, z);
-
-			App->scene_intro->JointObj1 = App->scene_intro->selectedObj;
-			ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
-
-			if (App->scene_intro->JointObj2 != nullptr)
-				ImGui::Text("Object2: %s", App->scene_intro->JointObj2->Name.c_str());
-			else
-			{
-				ImGui::Text("Select another object to create a joint");
-			}
-			if (ImGui::Button("Confirm"))
-			{
-
-				App->scene_intro->CreatingJoint = false;
-				App->Physics->AddConstraintP2P(App->scene_intro->JointObj1, App->scene_intro->JointObj2,
-					btVector3{ x, y, z });
-
-			
-			}
-			if (ImGui::Button("Cancel"))
-			{
-				App->scene_intro->CreatingJoint = false;
-			}
-		}
-		if (selectedMode == 1)
-		{
-			//CODE FOR HINGE CONSTRAINTS
-			float x, y, z;
-			x = App->scene_intro->distance.x;
-			y = App->scene_intro->distance.y;
-			z = App->scene_intro->distance.z;
-
-			ImGui::DragFloat("Distance in x", &x, 0.1f);
-			ImGui::DragFloat("Distance in y", &y, 0.1f);
-			ImGui::DragFloat("Distance in z", &z, 0.1f);
-			App->scene_intro->distance.Set(x, y, z);
-
-			float axisx1, axisy1, axisz1;
-			float axisx2, axisy2, axisz2;
-			axisx1 = App->scene_intro->axis1.x;
-			axisy1 = App->scene_intro->axis1.y;
-			axisz1 = App->scene_intro->axis1.z;
-			axisx2 = App->scene_intro->axis2.x;
-			axisy2 = App->scene_intro->axis2.y;
-			axisz2 = App->scene_intro->axis2.z;
-
-			ImGui::DragFloat("Obj 1 Axis x", &axisx1, 0.1f, 0, 1);
-			ImGui::DragFloat("Obj 1 Axis y", &axisy1, 0.1f, 0, 1);
-			ImGui::DragFloat("Obj 1 Axis z", &axisz1, 0.1f, 0, 1);
-			App->scene_intro->axis1.Set(axisx1, axisy1, axisz1);
-
-			ImGui::DragFloat("Obj 2 Axis x", &axisx2, 0.1f, 0, 1);
-			ImGui::DragFloat("Obj 2 Axis y", &axisy2, 0.1f, 0, 1);
-			ImGui::DragFloat("Obj 2 Axis z", &axisz2, 0.1f, 0, 1);
-			App->scene_intro->axis2.Set(axisx2, axisy2, axisz2);
-
-			App->scene_intro->JointObj1 = App->scene_intro->selectedObj;
-			ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
-
-			if (App->scene_intro->JointObj2 != nullptr)
-				ImGui::Text("Object2 %s:", App->scene_intro->JointObj2->Name.c_str());
-			else
-			{
-				ImGui::Text("Select another object to create a joint");
-			}
-			if (ImGui::Button("Confirm"))
-			{
-
-				App->scene_intro->CreatingJoint = false;
-				App->Physics->AddConstraintHinge(App->scene_intro->JointObj1, App->scene_intro->JointObj2,
-					btVector3{ x, y, z }, btVector3(axisx1, axisy1, axisz1), btVector3(axisx2, axisy2, axisz2));
-			}
-			if (ImGui::Button("Cancel"))
-			{
-				App->scene_intro->CreatingJoint = false;
-			}
-		}
-
-
-		if (selectedMode == 2)
-		{
-			//CODE FOR SLIDER CONSTRAINTS
-			float x, y, z;
-			x = App->scene_intro->distance.x;
-			y = App->scene_intro->distance.y;
-			z = App->scene_intro->distance.z;
-
-			ImGui::DragFloat("Distance in x", &x, 0.1f);
-			ImGui::DragFloat("Distance in y", &y, 0.1f);
-			ImGui::DragFloat("Distance in z", &z, 0.1f);
-			App->scene_intro->distance.Set(x, y, z);
-
-			App->scene_intro->JointObj1 = App->scene_intro->selectedObj;
-			ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
-
-			if (App->scene_intro->JointObj2 != nullptr)
-				ImGui::Text("Object2 %s:", App->scene_intro->JointObj2->Name.c_str());
-			else
-			{
-				ImGui::Text("Select another object to create a joint");
-			}
-			if (ImGui::Button("Confirm"))
-			{
-
-				App->scene_intro->CreatingJoint = false;
-				App->Physics->AddConstraintSlider(App->scene_intro->JointObj1, App->scene_intro->JointObj2, btVector3{ x, y, z });
-			}
-			if (ImGui::Button("Cancel"))
-			{
-				App->scene_intro->CreatingJoint = false;
-			}
-
-		}
-		if (selectedMode == 3)
-		{
-			//CODE FOR CONE CONSTRAINTS
-			float x, y, z;
-			x = App->scene_intro->distance.x;
-			y = App->scene_intro->distance.y;
-			z = App->scene_intro->distance.z;
-
-			ImGui::DragFloat("Distance in x", &x, 0.1f);
-			ImGui::DragFloat("Distance in y", &y, 0.1f);
-			ImGui::DragFloat("Distance in z", &z, 0.1f);
-			App->scene_intro->distance.Set(x, y, z);
-
-			App->scene_intro->JointObj1 = App->scene_intro->selectedObj;
-			ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
-
-			if (App->scene_intro->JointObj2 != nullptr)
-				ImGui::Text("Object2 %s:", App->scene_intro->JointObj2->Name.c_str());
-			else
-			{
-				ImGui::Text("Select another object to create a joint");
-			}
-			if (ImGui::Button("Confirm"))
-			{
-
-				App->scene_intro->CreatingJoint = false;
-				App->Physics->AddConstraintCone(App->scene_intro->JointObj1, App->scene_intro->JointObj2, btVector3{ x, y, z });
-			}
-			if (ImGui::Button("Cancel"))
-			{
-				App->scene_intro->CreatingJoint = false;
-			}
-		}
-	}
+	
+	
 
 
 
@@ -626,7 +716,7 @@ void Win_Inspector::AddComponent(GameObject* obj)
 	
 
 	
-}
+
 
 
 void Win_Inspector::ColliderEditor(Collider* collider)
