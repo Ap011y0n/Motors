@@ -7,7 +7,7 @@ layout: default
     <img src="https://cdn.discordapp.com/attachments/555497331848380447/797195454222696448/generatedtextewe.png">
    
    <h2>
-      What is Elementorum?
+      What is Nidhogg Engine?
     </h2>
     <img src=" https://cdn.discordapp.com/attachments/555497331848380447/660951239395377176/unknown.png?width=556&height=434">
    
