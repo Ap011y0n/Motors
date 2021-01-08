@@ -4,7 +4,7 @@ layout: default
 
   
   <body>
-    <img src="https://cdn.discordapp.com/attachments/555497331848380447/660605929418522677/Title.png">
+    <img src="https://cdn.discordapp.com/attachments/555497331848380447/797195454222696448/generatedtextewe.png">
    
    <h2>
       What is Elementorum?
