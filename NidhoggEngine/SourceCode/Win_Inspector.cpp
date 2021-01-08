@@ -332,6 +332,23 @@ void Win_Inspector::AddComponent(GameObject* obj)
 
 	if (selectedMode == 0)
 	{
+		static bool satatic = false;
+		ImGui::Checkbox("Static Collider", &satatic);
+		if (satatic == true)
+		{
+			mass = 0;
+		}
+		if (satatic == false && mass == 0)
+		{
+			mass = 0.1;
+		}
+		float s1 = mass;
+		ImGui::SetNextItemWidth(200);
+		ImGui::DragFloat("Collider mass", &s1, 0.5f, 0.1f, 10000.0f);
+		if (ImGui::IsItemActive())
+		{
+			mass = s1;
+		}
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
 		if (ImGui::Button("AddComponent Box"))
 		{
@@ -350,6 +367,23 @@ void Win_Inspector::AddComponent(GameObject* obj)
 	}
 	if (selectedMode == 1)
 	{
+		static bool satatic = false;
+		ImGui::Checkbox("Static Collider", &satatic);
+		if (satatic == true)
+		{
+			mass = 0;
+		}
+		if (satatic == false && mass == 0)
+		{
+			mass = 0.1;
+		}
+		float s1 = mass;
+		ImGui::SetNextItemWidth(200);
+		ImGui::DragFloat("Collider mass", &s1, 0.5f, 0.1f, 10000.0f);
+		if (ImGui::IsItemActive())
+		{
+			mass = s1;
+		}
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
 		if (ImGui::Button("AddComponent Sphere"))
 		{
@@ -372,6 +406,23 @@ void Win_Inspector::AddComponent(GameObject* obj)
 
 	if (selectedMode == 2)
 	{
+		static bool satatic = false;
+		ImGui::Checkbox("Static Collider", &satatic);
+		if (satatic == true)
+		{
+			mass = 0;
+		}
+		if (satatic == false && mass == 0)
+		{
+			mass = 0.1;
+		}
+		float s1 = mass;
+		ImGui::SetNextItemWidth(200);
+		ImGui::DragFloat("Collider mass", &s1, 0.5f, 0.1f, 10000.0f);
+		if (ImGui::IsItemActive())
+		{
+			mass = s1;
+		}
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
 		if (ImGui::Button("AddComponent Capsule"))
 		{
@@ -388,13 +439,7 @@ void Win_Inspector::AddComponent(GameObject* obj)
 			
 		}ImGui::PopStyleColor();
 	}
-	float s1 = mass;
-	ImGui::SetNextItemWidth(200);
-	ImGui::DragFloat("Collider mass", &s1, 0.5f);
-	if (ImGui::IsItemActive())
-	{
-		mass = s1;
-	}
+	
 
 	ImGui::Separator(); ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
 	if (ImGui::Button("Add Constraint"))
