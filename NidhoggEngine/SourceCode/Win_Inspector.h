@@ -17,6 +17,7 @@ public:
 	static void AddComponent(GameObject* obj);
 	static void ColliderEditor(Collider*);
 public:
+	static float mass ;
 
 };
 #endif // !__WIN_INSPECTOR_H__

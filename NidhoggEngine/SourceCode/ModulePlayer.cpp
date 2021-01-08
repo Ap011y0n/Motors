@@ -35,6 +35,29 @@ bool ModulePlayer::Start()
 	car.mudguard_R_offset2.Set(-1.4, 1.3, -3);
 	car.mudguard_R_size3.Set(0.7f, 0.90f, 0.30f);
 	car.mudguard_R_offset3.Set(-1.4, 1.3, -1.2);
+
+	car.Front_mudguard_size.Set(0.7f, 0.30f, 1.8f);
+	car.Front_mudguard_offset.Set(1.4, 1.6, 2);
+	car.Front_mudguard_size2.Set(0.7f, 0.90f, 0.30f);
+	car.Front_mudguard_offset2.Set(1.4, 1.3, 3);
+	car.Front_mudguard_size3.Set(0.7f, 0.90f, 0.30f);
+	car.Front_mudguard_offset3.Set(1.4, 1.3, 1.2);
+	car.Front_mudguard_R_size.Set(0.7f, 0.30f, 1.8f);
+	car.Front_mudguard_R_offset.Set(-1.4, 1.6, 2);
+	car.Front_mudguard_R_size2.Set(0.7f, 0.90f, 0.30f);
+	car.Front_mudguard_R_offset2.Set(-1.4, 1.3, 3);
+	car.Front_mudguard_R_size3.Set(0.7f, 0.90f, 0.30f);
+	car.Front_mudguard_R_offset3.Set(-1.4, 1.3, 1.2);
+
+	car.bumper_size.Set(2.8, 1.6, 3);
+	car.bumper_offset.Set(0, 3, 0);
+	car.antenna_size.Set(0.1, 3, 0.1);
+	car.antenna_offset.Set(-1.3, 3, -2.8);
+	car.rearview_size.Set(4, 0.4, 0.4);
+	car.rearview_offset.Set(0,2.7,1);
+	car.antenna_Ball_size.Set(0.4, 0.6, 0.4);
+	car.antenna_Ball_offset.Set(-1.3, 4.3, -2.8);
+
 	car.mass = 500.0f;
 	car.suspensionStiffness = 15.88f;
 	car.suspensionCompression = 0.83f;

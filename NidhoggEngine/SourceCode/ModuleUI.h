@@ -126,6 +126,7 @@ public:
 	void FolderTree(); //hierarchy window
 	void ResourceInfo(); //hierarchy window
 	void ImportWindow(); //import window
+	void ChangePhysicsWindow();
 
 	void SortFilesinDir();
 	void Change_Window_size(Vec2 newSize);
@@ -166,6 +167,7 @@ public:
 	 bool Inspector_open;
 	 bool Config_Camera_open;
 	 bool Console_open;
+	 bool FisicsConfig_open;
 	 bool importWindow;
 	vector <float> fpsecond;
 	bool show_Configuration;

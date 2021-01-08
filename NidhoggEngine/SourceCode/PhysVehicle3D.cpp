@@ -97,6 +97,86 @@ void PhysVehicle3D::Render()
 	wing6.transform.M[13] += fw_offset6.getY();
 	wing6.transform.M[14] += fw_offset6.getZ();
 	
+	Cube wing7(info.bumper_size.x, info.bumper_size.y, info.bumper_size.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&wing7.transform);
+	btVector3 fw_offset7(info.bumper_offset.x, info.bumper_offset.y, info.bumper_offset.z);
+	fw_offset7 = fw_offset7.rotate(q.getAxis(), q.getAngle());
+	wing7.transform.M[12] += fw_offset7.getX();
+	wing7.transform.M[13] += fw_offset7.getY();
+	wing7.transform.M[14] += fw_offset7.getZ();
+
+	Cube wing8(info.Front_mudguard_size.x, info.Front_mudguard_size.y, info.Front_mudguard_size.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&wing8.transform);
+	btVector3 fw_offset8(info.Front_mudguard_offset.x, info.Front_mudguard_offset.y, info.Front_mudguard_offset.z);
+	fw_offset8 = fw_offset8.rotate(q.getAxis(), q.getAngle());
+	wing8.transform.M[12] += fw_offset8.getX();
+	wing8.transform.M[13] += fw_offset8.getY();
+	wing8.transform.M[14] += fw_offset8.getZ();
+
+	Cube wing9(info.Front_mudguard_size2.x, info.Front_mudguard_size2.y, info.Front_mudguard_size2.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&wing9.transform);
+	btVector3 fw_offset9(info.Front_mudguard_offset2.x, info.Front_mudguard_offset2.y, info.Front_mudguard_offset2.z);
+	fw_offset9 = fw_offset9.rotate(q.getAxis(), q.getAngle());
+	wing9.transform.M[12] += fw_offset9.getX();
+	wing9.transform.M[13] += fw_offset9.getY();
+	wing9.transform.M[14] += fw_offset9.getZ();
+
+	Cube wing10(info.Front_mudguard_size3.x, info.Front_mudguard_size3.y, info.Front_mudguard_size3.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&wing10.transform);
+	btVector3 fw_offset10(info.Front_mudguard_offset3.x, info.Front_mudguard_offset3.y, info.Front_mudguard_offset3.z);
+	fw_offset10 = fw_offset10.rotate(q.getAxis(), q.getAngle());
+	wing10.transform.M[12] += fw_offset10.getX();
+	wing10.transform.M[13] += fw_offset10.getY();
+	wing10.transform.M[14] += fw_offset10.getZ();
+
+	Cube wing11(info.Front_mudguard_R_size.x, info.Front_mudguard_R_size.y, info.Front_mudguard_R_size.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&wing11.transform);
+	btVector3 fw_offset11(info.Front_mudguard_R_offset.x, info.Front_mudguard_R_offset.y, info.Front_mudguard_R_offset.z);
+	fw_offset11 = fw_offset11.rotate(q.getAxis(), q.getAngle());
+	wing11.transform.M[12] += fw_offset11.getX();
+	wing11.transform.M[13] += fw_offset11.getY();
+	wing11.transform.M[14] += fw_offset11.getZ();
+
+	Cube wing12(info.Front_mudguard_R_size2.x, info.Front_mudguard_R_size2.y, info.Front_mudguard_R_size2.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&wing12.transform);
+	btVector3 fw_offset12(info.Front_mudguard_R_offset2.x, info.Front_mudguard_R_offset2.y, info.Front_mudguard_R_offset2.z);
+	fw_offset12 = fw_offset12.rotate(q.getAxis(), q.getAngle());
+	wing12.transform.M[12] += fw_offset12.getX();
+	wing12.transform.M[13] += fw_offset12.getY();
+	wing12.transform.M[14] += fw_offset12.getZ();
+
+	Cube wing13(info.Front_mudguard_R_size3.x, info.Front_mudguard_R_size3.y, info.Front_mudguard_R_size3.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&wing13.transform);
+	btVector3 fw_offset13(info.Front_mudguard_R_offset3.x, info.Front_mudguard_R_offset3.y, info.Front_mudguard_R_offset3.z);
+	fw_offset13 = fw_offset13.rotate(q.getAxis(), q.getAngle());
+	wing13.transform.M[12] += fw_offset13.getX();
+	wing13.transform.M[13] += fw_offset13.getY();
+	wing13.transform.M[14] += fw_offset13.getZ();
+
+	Cube wing14(info.antenna_size.x, info.antenna_size.y, info.antenna_size.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&wing14.transform);
+	btVector3 fw_offset14(info.antenna_offset.x, info.antenna_offset.y, info.antenna_offset.z);
+	fw_offset14 = fw_offset14.rotate(q.getAxis(), q.getAngle());
+	wing14.transform.M[12] += fw_offset14.getX();
+	wing14.transform.M[13] += fw_offset14.getY();
+	wing14.transform.M[14] += fw_offset14.getZ();
+
+	Cube wing15(info.rearview_size.x, info.rearview_size.y, info.rearview_size.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&wing15.transform);
+	btVector3 fw_offset15(info.rearview_offset.x, info.rearview_offset.y, info.rearview_offset.z);
+	fw_offset15 = fw_offset15.rotate(q.getAxis(), q.getAngle());
+	wing15.transform.M[12] += fw_offset15.getX();
+	wing15.transform.M[13] += fw_offset15.getY();
+	wing15.transform.M[14] += fw_offset15.getZ();
+
+	Cube wing16(info.antenna_Ball_size.x, info.antenna_Ball_size.y, info.antenna_Ball_size.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&wing16.transform);
+	btVector3 fw_offset16(info.antenna_Ball_offset.x, info.antenna_Ball_offset.y, info.antenna_Ball_offset.z);
+	fw_offset16 = fw_offset16.rotate(q.getAxis(), q.getAngle());
+	wing16.transform.M[12] += fw_offset16.getX();
+	wing16.transform.M[13] += fw_offset16.getY();
+	wing16.transform.M[14] += fw_offset16.getZ();
+
 	chassis.Render();
 	wing.Render();
 	wing2.Render();
@@ -104,6 +184,16 @@ void PhysVehicle3D::Render()
 	wing4.Render();
 	wing5.Render();
 	wing6.Render();
+	wing7.Render();
+	wing8.Render();
+	wing9.Render();
+	wing10.Render();
+	wing11.Render();
+	wing12.Render();
+	wing13.Render();
+	wing14.Render();
+	wing15.Render();
+	wing16.Render();
 }
 
 // ----------------------------------------------------------------------------
