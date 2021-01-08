@@ -191,7 +191,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{
 		App->serializer->CreateNewScene();
-		SaveScene(scene);
+		SaveScene();
 		App->serializer->SaveScene("Scene.json");
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
@@ -218,11 +218,50 @@ void ModuleSceneIntro::WantToImport(ImportOptions* options)
 
 }
 
+void ModuleSceneIntro::SaveScene()
+{
+	for (int i = 0; i < constraints.size(); i++)
+	{
+		JSON_Object* JsonObj2 = App->serializer->AddObjectToArray(App->serializer->Constraints);
+		App->serializer->AddFloat(JsonObj2, "Obj1", constraints[i]->colliderA->owner->UID);
+		App->serializer->AddFloat(JsonObj2, "Obj2", constraints[i]->colliderB->owner->UID);
+		switch (constraints[i]->type)
+		{
+		case ConstraintType::DISTANCE:
+			App->serializer->AddString(JsonObj2, "Type", "P2P");
+			break;
+		case ConstraintType::HINGE:
+		{
+			App->serializer->AddString(JsonObj2, "Type", "Hinge");
+			JSON_Array* JsonAxis1 = App->serializer->AddArray(JsonObj2, "Axis1");
+			App->serializer->AddVec3(JsonAxis1, constraints[i]->axis1.x, constraints[i]->axis1.y, constraints[i]->axis1.z);
+			JSON_Array* JsonAxis2 = App->serializer->AddArray(JsonObj2, "Axis2");
+			App->serializer->AddVec3(JsonAxis2, constraints[i]->axis2.x, constraints[i]->axis2.y, constraints[i]->axis2.z);
+			break;
+		}
+			
+		case ConstraintType::SLIDER:
+			App->serializer->AddString(JsonObj2, "Type", "Slider");
+			break;
+		case ConstraintType::CONE:
+			App->serializer->AddString(JsonObj2, "Type", "Cone");
+			break;
+		}
+		JSON_Array* JsonTrans = App->serializer->AddArray(JsonObj2, "Distance");
+		App->serializer->AddVec3(JsonTrans, constraints[i]->distance.x, constraints[i]->distance.y, constraints[i]->distance.z);
+
+	}
+	SaveScene(scene);
+}
+
 void ModuleSceneIntro::SaveScene(GameObject * parent)
 {
+	
+
+
 	if (parent != scene)
 	{
-		JSON_Object* JsonObj = App->serializer->AddObjectToArray(App->serializer->leaves);
+		JSON_Object* JsonObj = App->serializer->AddObjectToArray(App->serializer->GameObjects);
 		if (parent->UID == parent->parent->UID)
 		{
 			LCG();
@@ -299,6 +338,26 @@ void ModuleSceneIntro::UpdateGameObject(GameObject* parent, float dt)
 
 }
 
+GameObject* ModuleSceneIntro::ReturnGameObject(uint UID, GameObject* parent)
+{
+	GameObject* ObjectToReturn = nullptr;
+	if (parent != nullptr && parent->UID != UID)
+	{
+		for (int i = 0; i < parent->childs.size(); i++)
+		{
+			ObjectToReturn = ReturnGameObject(UID, parent->childs[i]);
+			if (ObjectToReturn != nullptr)
+			{
+				return ObjectToReturn;
+			}
+		}
+	}
+	else
+	{
+		return parent;
+	}
+	return ObjectToReturn;
+}
 void ModuleSceneIntro::DeleteSceneObjects(GameObject* parent)
 {
 	if (parent->parent != nullptr && parent != scene)

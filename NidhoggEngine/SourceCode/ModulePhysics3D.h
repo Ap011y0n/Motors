@@ -50,6 +50,8 @@ public:
 	btSliderConstraint* AddConstraintSlider(const Primitive& bodyA, const Primitive& bodyB, btTransform& frameinA, btTransform& frameinB, bool linearreference = true);
 	btSliderConstraint* AddConstraintSlider(GameObject* bodyA, GameObject* bodyB, btVector3& distance, bool linearreference = true);
 
+	btConeTwistConstraint* AddConstraintCone(GameObject* bodyA, GameObject* bodyB, btVector3& distance);
+
 	PhysVehicle3D* AddVehicle(const VehicleInfo& info);
 	// Create map walls
 
@@ -57,6 +59,7 @@ public:
 	
 	btDiscreteDynamicsWorld*			world;
 	float gravity;
+
 private:
 	btDefaultCollisionConfiguration*	collision_conf;
 	btCollisionDispatcher*				dispatcher;
@@ -66,6 +69,7 @@ private:
 	DebugDrawer*						debug_draw;
 	std::vector<btHingeConstraint*>			HingeConstraints;
 	std::vector<btSliderConstraint*>			SliderConstraints;
+	std::vector<btConeTwistConstraint*>			ConeConstraints;
 	std::vector<btCollisionShape*>		shapes;
 	std::vector<PhysVehicle3D*>		vehicles;
 	btDefaultVehicleRaycaster*			vehicle_raycaster;

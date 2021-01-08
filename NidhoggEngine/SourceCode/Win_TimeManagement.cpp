@@ -29,7 +29,7 @@ void Win_TimeManagement::Update_Ui()
 			{
 				Time::Start();
 				App->serializer->CreateNewScene();
-				App->scene_intro->SaveScene(App->scene_intro->scene);
+				App->scene_intro->SaveScene();
 				App->serializer->SaveScene("PlayScene.json");
 			} ImGui::SameLine();
 		}

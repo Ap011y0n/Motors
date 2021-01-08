@@ -324,122 +324,129 @@ void Win_Inspector::GameObjectInspector(GameObject* obj)
 
 void Win_Inspector::AddComponent(GameObject* obj)
 {
-	ImGui::Separator();
-	ImGui::SetNextItemWidth(130);
-	static int selectedMode = 0;
-	static const char* Mode[]{ "Box","Sphere", "Capsule" };
-	ImGui::Combo(" ", &selectedMode, Mode, IM_ARRAYSIZE(Mode)); ImGui::SameLine();
-
-	if (selectedMode == 0)
+	Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
+	if (collider == nullptr)
 	{
-		static bool satatic = false;
-		ImGui::Checkbox("Static Collider", &satatic);
-		if (satatic == true)
-		{
-			mass = 0;
-		}
-		if (satatic == false && mass == 0)
-		{
-			mass = 0.1;
-		}
-		float s1 = mass;
-		ImGui::SetNextItemWidth(200);
-		ImGui::DragFloat("Collider mass", &s1, 0.5f, 0.1f, 10000.0f);
-		if (ImGui::IsItemActive())
-		{
-			mass = s1;
-		}
-		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
-		if (ImGui::Button("AddComponent Box"))
-		{
-			ComponentType type = ComponentType::COLLIDER;
+		ImGui::Separator();
+		ImGui::SetNextItemWidth(130);
+		static int selectedMode = 0;
+		static const char* Mode[]{ "Box","Sphere", "Capsule" };
+		ImGui::Combo(" ", &selectedMode, Mode, IM_ARRAYSIZE(Mode)); ImGui::SameLine();
 
-			if (obj->GetComponent(type) == nullptr)
+		if (selectedMode == 0)
+		{
+			static bool satatic = false;
+			ImGui::Checkbox("Static Collider", &satatic);
+			if (satatic == true)
 			{
-				obj->CreateComponent(type);
-
-			    Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
-				collider->collidertype = ColliderType::BOX;
-				collider->body.SetBody(obj, mass, collider->collidertype);
+				mass = 0;
 			}
-		} 
-		ImGui::PopStyleColor();
+			if (satatic == false && mass == 0)
+			{
+				mass = 0.1;
+			}
+			float s1 = mass;
+			ImGui::SetNextItemWidth(200);
+			ImGui::DragFloat("Collider mass", &s1, 0.5f, 0.1f, 10000.0f);
+			if (ImGui::IsItemActive())
+			{
+				mass = s1;
+			}
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
+			if (ImGui::Button("AddComponent Box"))
+			{
+				ComponentType type = ComponentType::COLLIDER;
+
+				if (obj->GetComponent(type) == nullptr)
+				{
+					obj->CreateComponent(type);
+
+					Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
+					collider->collidertype = ColliderType::BOX;
+					collider->body.SetBody(obj, mass, collider->collidertype);
+				}
+			}
+			ImGui::PopStyleColor();
+		}
+		if (selectedMode == 1)
+		{
+			static bool satatic = false;
+			ImGui::Checkbox("Static Collider", &satatic);
+			if (satatic == true)
+			{
+				mass = 0;
+			}
+			if (satatic == false && mass == 0)
+			{
+				mass = 0.1;
+			}
+			float s1 = mass;
+			ImGui::SetNextItemWidth(200);
+			ImGui::DragFloat("Collider mass", &s1, 0.5f, 0.1f, 10000.0f);
+			if (ImGui::IsItemActive())
+			{
+				mass = s1;
+			}
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
+			if (ImGui::Button("AddComponent Sphere"))
+			{
+				ComponentType type = ComponentType::COLLIDER;
+
+				if (obj->GetComponent(type) == nullptr)
+				{
+					obj->CreateComponent(type);
+
+					Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
+					collider->collidertype = ColliderType::SPHERE;
+					collider->body.SetBody(obj, mass, collider->collidertype);
+				}
+
+			}
+			ImGui::PopStyleColor();
+		}
+
+
+
+		if (selectedMode == 2)
+		{
+			static bool satatic = false;
+			ImGui::Checkbox("Static Collider", &satatic);
+			if (satatic == true)
+			{
+				mass = 0;
+			}
+			if (satatic == false && mass == 0)
+			{
+				mass = 0.1;
+			}
+			float s1 = mass;
+			ImGui::SetNextItemWidth(200);
+			ImGui::DragFloat("Collider mass", &s1, 0.5f, 0.1f, 10000.0f);
+			if (ImGui::IsItemActive())
+			{
+				mass = s1;
+			}
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
+			if (ImGui::Button("AddComponent Capsule"))
+			{
+				ComponentType type = ComponentType::COLLIDER;
+
+				if (obj->GetComponent(type) == nullptr)
+				{
+					obj->CreateComponent(type);
+
+					Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
+					collider->collidertype = ColliderType::CAPSULE;
+					collider->body.SetBody(obj, mass, collider->collidertype);
+				}
+
+			}ImGui::PopStyleColor();
+		}
+
 	}
-	if (selectedMode == 1)
+	else
 	{
-		static bool satatic = false;
-		ImGui::Checkbox("Static Collider", &satatic);
-		if (satatic == true)
-		{
-			mass = 0;
-		}
-		if (satatic == false && mass == 0)
-		{
-			mass = 0.1;
-		}
-		float s1 = mass;
-		ImGui::SetNextItemWidth(200);
-		ImGui::DragFloat("Collider mass", &s1, 0.5f, 0.1f, 10000.0f);
-		if (ImGui::IsItemActive())
-		{
-			mass = s1;
-		}
-		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
-		if (ImGui::Button("AddComponent Sphere"))
-		{
-			ComponentType type = ComponentType::COLLIDER;
-
-			if (obj->GetComponent(type) == nullptr)
-			{
-				obj->CreateComponent(type);
-
-				Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
-				collider->collidertype = ColliderType::SPHERE;
-				collider->body.SetBody(obj, mass, collider->collidertype);
-			}
-			
-		}
-		ImGui::PopStyleColor();
-	}
-
-	
-
-	if (selectedMode == 2)
-	{
-		static bool satatic = false;
-		ImGui::Checkbox("Static Collider", &satatic);
-		if (satatic == true)
-		{
-			mass = 0;
-		}
-		if (satatic == false && mass == 0)
-		{
-			mass = 0.1;
-		}
-		float s1 = mass;
-		ImGui::SetNextItemWidth(200);
-		ImGui::DragFloat("Collider mass", &s1, 0.5f, 0.1f, 10000.0f);
-		if (ImGui::IsItemActive())
-		{
-			mass = s1;
-		}
-		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
-		if (ImGui::Button("AddComponent Capsule"))
-		{
-			ComponentType type = ComponentType::COLLIDER;
-
-			if (obj->GetComponent(type) == nullptr)
-			{
-				obj->CreateComponent(type);
-
-				Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
-				collider->collidertype = ColliderType::CAPSULE;
-				collider->body.SetBody(obj, mass, collider->collidertype);
-			}
-			
-		}ImGui::PopStyleColor();
-	}
-	
+	ColliderEditor(collider);
 
 	ImGui::Separator(); ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.6f));
 	if (ImGui::Button("Add Constraint"))
@@ -448,12 +455,11 @@ void Win_Inspector::AddComponent(GameObject* obj)
 	}ImGui::PopStyleColor();
 	if (App->scene_intro->CreatingJoint)
 	{
-		
 		ImGui::SetNextItemWidth(130);
 		static int selectedMode = 0;
-		static const char* Mode[]{ "P2P","Hinge", "Slider" };
+		static const char* Mode[]{ "P2P","Hinge", "Slider", "Cone" };
 		ImGui::Combo("Constraint Type  ", &selectedMode, Mode, IM_ARRAYSIZE(Mode));
-		
+
 		if (selectedMode == 0)
 		{
 			//CODE FOR P2P CONSTRAINTS
@@ -471,7 +477,7 @@ void Win_Inspector::AddComponent(GameObject* obj)
 			ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
 
 			if (App->scene_intro->JointObj2 != nullptr)
-				ImGui::Text("Object2 %s:", App->scene_intro->JointObj2->Name.c_str());
+				ImGui::Text("Object2: %s", App->scene_intro->JointObj2->Name.c_str());
 			else
 			{
 				ImGui::Text("Select another object to create a joint");
@@ -481,14 +487,15 @@ void Win_Inspector::AddComponent(GameObject* obj)
 
 				App->scene_intro->CreatingJoint = false;
 				App->Physics->AddConstraintP2P(App->scene_intro->JointObj1, App->scene_intro->JointObj2,
-					btVector3{ x, y, z});
+					btVector3{ x, y, z });
+
+			
 			}
 			if (ImGui::Button("Cancel"))
 			{
 				App->scene_intro->CreatingJoint = false;
 			}
 		}
-
 		if (selectedMode == 1)
 		{
 			//CODE FOR HINGE CONSTRAINTS
@@ -576,16 +583,51 @@ void Win_Inspector::AddComponent(GameObject* obj)
 			{
 				App->scene_intro->CreatingJoint = false;
 			}
+
+		}
+		if (selectedMode == 3)
+		{
+			//CODE FOR CONE CONSTRAINTS
+			float x, y, z;
+			x = App->scene_intro->distance.x;
+			y = App->scene_intro->distance.y;
+			z = App->scene_intro->distance.z;
+
+			ImGui::DragFloat("Distance in x", &x, 0.1f);
+			ImGui::DragFloat("Distance in y", &y, 0.1f);
+			ImGui::DragFloat("Distance in z", &z, 0.1f);
+			App->scene_intro->distance.Set(x, y, z);
+
+			App->scene_intro->JointObj1 = App->scene_intro->selectedObj;
+			ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
+
+			if (App->scene_intro->JointObj2 != nullptr)
+				ImGui::Text("Object2 %s:", App->scene_intro->JointObj2->Name.c_str());
+			else
+			{
+				ImGui::Text("Select another object to create a joint");
+			}
+			if (ImGui::Button("Confirm"))
+			{
+
+				App->scene_intro->CreatingJoint = false;
+				App->Physics->AddConstraintCone(App->scene_intro->JointObj1, App->scene_intro->JointObj2, btVector3{ x, y, z });
+			}
+			if (ImGui::Button("Cancel"))
+			{
+				App->scene_intro->CreatingJoint = false;
+			}
 		}
 	}
 
 
-	Collider* collider = (Collider*)obj->GetComponent(ComponentType::COLLIDER);
-	if (collider != nullptr)
-	{
-		ColliderEditor(collider);
-	}
+
+ }
+	
+
+	
 }
+
 
 void Win_Inspector::ColliderEditor(Collider* collider)
 {
