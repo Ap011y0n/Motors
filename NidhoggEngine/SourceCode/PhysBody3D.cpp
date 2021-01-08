@@ -15,6 +15,7 @@ PhysBody3D::PhysBody3D()
 	, parentPrimitive(nullptr)
 {
 	TransformMatrix = float4x4::identity;
+	BodyMass = 0;
 }
 
 // ---------------------------------------------------------
@@ -321,7 +322,7 @@ void PhysBody3D::SetBody(btCollisionShape* shape, GameObject* parent, float mass
 	btVector3 localInertia(0, 0, 0);
 	if (mass != 0.f)
 		colShape->calculateLocalInertia(mass, localInertia);
-
+	BodyMass = mass;
 	motionState = new btDefaultMotionState(startTransform);
 	
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, colShape, localInertia);

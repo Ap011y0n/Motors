@@ -297,7 +297,7 @@ void Serializer::LoadScene(const char* path)
 					Collider* collider = (Collider*)object->GetComponent(ComponentType::COLLIDER);
 
 					std::string Collidertype = json_object_get_string(obj_in_array_in_obj, "ColliderType");
-
+					float mass = json_object_get_number(obj_in_array_in_obj, "Mass");
 					if (Collidertype == "Box")
 						collider->collidertype = ColliderType::BOX;
 
@@ -309,7 +309,7 @@ void Serializer::LoadScene(const char* path)
 					else if (Collidertype == "None")
 						LOG("Collider type unknown");
 
-					collider->body.SetBody(object, 1, collider->collidertype);
+					collider->body.SetBody(object, mass, collider->collidertype);
 
 					JSON_Array* JsonTrans = json_object_get_array(obj_in_array_in_obj, "Translation");
 					JSON_Array* JsonScale = json_object_get_array(obj_in_array_in_obj, "Scale");
@@ -349,12 +349,15 @@ void Serializer::LoadScene(const char* path)
 			
 			uint UID1 = json_object_get_number(obj_in_array, "Obj1");
 			uint UID2 = json_object_get_number(obj_in_array, "Obj2");
+			std::string type = json_object_get_string(obj_in_array, "Type");
 
 			float x = json_array_get_number(JsonTrans, 0);
 			float y = json_array_get_number(JsonTrans, 1);
 			float z = json_array_get_number(JsonTrans, 2);
 			GameObject* objA = nullptr;
 			GameObject* objB = nullptr;
+			btVector3 distance;
+			distance.setValue(x, y, z);
 
 			for (int j = 0; j < tempvector.size(); j++)
 			{
@@ -364,11 +367,45 @@ void Serializer::LoadScene(const char* path)
 					objB = tempvector[j];
 
 			}
-		//	objA = App->scene_intro->ReturnGameObject(UID1, App->scene_intro->scene);
-		//	objB = App->scene_intro->ReturnGameObject(UID2, App->scene_intro->scene);
-			btVector3 distance;
-			distance.setValue(x, y, z);
-			App->Physics->AddConstraintP2P(objA, objB, distance);
+			if (type == "P2P")
+			{
+				App->Physics->AddConstraintP2P(objA, objB, distance);
+
+			}
+			else if (type == "Hinge")
+			{
+				btVector3 AxisinA;
+				JSON_Array* Axis = json_object_get_array(obj_in_array, "Axis1");
+
+				float x = json_array_get_number(Axis, 0);
+				float y = json_array_get_number(Axis, 1);
+				float z = json_array_get_number(Axis, 2);
+				AxisinA.setValue(x, y, z);
+				btVector3 AxisinB;
+				JSON_Array* Axis2 = json_object_get_array(obj_in_array, "Axis1");
+
+				x = json_array_get_number(Axis2, 0);
+				y = json_array_get_number(Axis2, 1);
+				z = json_array_get_number(Axis2, 2);
+
+				AxisinB.setValue(x, y, z);
+				App->Physics->AddConstraintHinge(objA, objB, distance,AxisinA, AxisinB );
+
+			}
+			else if (type == "Slider")
+			{
+				App->Physics->AddConstraintSlider(objA, objB, distance);
+
+			}
+			else if (type == "Cone")
+			{
+				App->Physics->AddConstraintCone(objA, objB, distance);
+
+			}
+			
+			
+		
+			
 
 		}
 		tempvector.clear();
@@ -682,6 +719,7 @@ void Serializer::AddComponent(JSON_Array* componentsArray, Component* component,
 				AddString(leaf_object, "ColliderType", "Capsule");
 				break;
 			}
+			AddFloat(leaf_object, "Mass", collider->body.BodyMass);
 			float4x4 collider_trans = collider->body.TransformMatrix;
 			
 			float3 trans, scale;
@@ -690,9 +728,9 @@ void Serializer::AddComponent(JSON_Array* componentsArray, Component* component,
 			JSON_Array* JsonTrans = App->serializer->AddArray(leaf_object, "Translation");
 			JSON_Array* JsonScale = App->serializer->AddArray(leaf_object, "Scale");
 			JSON_Array* JsonRot = App->serializer->AddArray(leaf_object, "Rotation");
-			App->serializer->AddVec3(JsonTrans, trans.x, trans.y, trans.z);
-			App->serializer->AddVec3(JsonScale, scale.x, scale.y, scale.z);
-			App->serializer->AddVec4(JsonRot, rot.x, rot.y, rot.z, rot.w);
+			AddVec3(JsonTrans, trans.x, trans.y, trans.z);
+			AddVec3(JsonScale, scale.x, scale.y, scale.z);
+			AddVec4(JsonRot, rot.x, rot.y, rot.z, rot.w);
 			break;
 		}
 

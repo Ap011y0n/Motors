@@ -80,6 +80,7 @@ public:
 	btRaycastVehicle* vehicle;
 	bool is_sensor = false;
 	ColliderType type;
+	double BodyMass;
 };
 
 #endif // __PhysBody3D_H__

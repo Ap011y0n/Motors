@@ -49,6 +49,9 @@ public:
 	Collider* colliderB;
 	btTypedConstraint* ConstraintPointer;
 	float3 distance;
+	//only for hinges
+	float3 axis1;
+	float3 axis2;
 };
 //Base component class, need to use childs to actually do something
 class Component

@@ -406,7 +406,7 @@ void Win_Inspector::AddComponent(GameObject* obj)
 
 		ImGui::SetNextItemWidth(130);
 		static int selectedMode = 0;
-		static const char* Mode[]{ "P2P","Hinge", "Slider" };
+		static const char* Mode[]{ "P2P","Hinge", "Slider", "Cone" };
 		ImGui::Combo("Constraint Type  ", &selectedMode, Mode, IM_ARRAYSIZE(Mode));
 
 		if (selectedMode == 0)
@@ -526,6 +526,39 @@ void Win_Inspector::AddComponent(GameObject* obj)
 
 				App->scene_intro->CreatingJoint = false;
 				App->Physics->AddConstraintSlider(App->scene_intro->JointObj1, App->scene_intro->JointObj2, btVector3{ x, y, z });
+			}
+			if (ImGui::Button("Cancel"))
+			{
+				App->scene_intro->CreatingJoint = false;
+			}
+		}
+		if (selectedMode == 3)
+		{
+			//CODE FOR CONE CONSTRAINTS
+			float x, y, z;
+			x = App->scene_intro->distance.x;
+			y = App->scene_intro->distance.y;
+			z = App->scene_intro->distance.z;
+
+			ImGui::DragFloat("Distance in x", &x, 0.1f);
+			ImGui::DragFloat("Distance in y", &y, 0.1f);
+			ImGui::DragFloat("Distance in z", &z, 0.1f);
+			App->scene_intro->distance.Set(x, y, z);
+
+			App->scene_intro->JointObj1 = App->scene_intro->selectedObj;
+			ImGui::Text("This Object: %s", App->scene_intro->JointObj1->Name.c_str());
+
+			if (App->scene_intro->JointObj2 != nullptr)
+				ImGui::Text("Object2 %s:", App->scene_intro->JointObj2->Name.c_str());
+			else
+			{
+				ImGui::Text("Select another object to create a joint");
+			}
+			if (ImGui::Button("Confirm"))
+			{
+
+				App->scene_intro->CreatingJoint = false;
+				App->Physics->AddConstraintCone(App->scene_intro->JointObj1, App->scene_intro->JointObj2, btVector3{ x, y, z });
 			}
 			if (ImGui::Button("Cancel"))
 			{

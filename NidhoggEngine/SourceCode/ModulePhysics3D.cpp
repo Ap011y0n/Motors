@@ -63,10 +63,11 @@ bool ModulePhysics3D::Start()
 	debug_draw->setDebugMode(1);
 	world->setDebugDrawer(debug_draw);
 	world->setGravity(GRAVITY);
+	gravity = -10.0f;
 	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
 
 	// Big rectangle as ground
-	{
+	/*{
 		btCollisionShape* colShape = new btBoxShape(btVector3(200.0f, 2.0f, 200.0f));
 
 		mat4x4 glMatrix = IdentityMatrix;
@@ -79,7 +80,7 @@ bool ModulePhysics3D::Start()
 
 		btRigidBody* body = new btRigidBody(rbInfo);
 		world->addRigidBody(body);
-	}
+	}*/
 
 	return true;
 }
@@ -90,28 +91,28 @@ update_status ModulePhysics3D::PreUpdate(float dt)
 	
 	world->stepSimulation(Time::delta_time_fisics, 15);
 
-	//for (int n = 0; n < world->getDispatcher()->getNumManifolds(); n++)
-	//{
-	//	btPersistentManifold* manifold = world->getDispatcher()->getManifoldByIndexInternal(n);
-	//	if (manifold->getNumContacts() > 0)
-	//	{
-	//		PhysBody3D* body1 = (PhysBody3D*)manifold->getBody0()->getUserPointer();
-	//		PhysBody3D* body2 = (PhysBody3D*)manifold->getBody1()->getUserPointer();
+	for (int n = 0; n < world->getDispatcher()->getNumManifolds(); n++)
+	{
+		btPersistentManifold* manifold = world->getDispatcher()->getManifoldByIndexInternal(n);
+		if (manifold->getNumContacts() > 0)
+		{
+			PhysBody3D* body1 = (PhysBody3D*)manifold->getBody0()->getUserPointer();
+			PhysBody3D* body2 = (PhysBody3D*)manifold->getBody1()->getUserPointer();
 
-	//		/*if (body1 != nullptr && body2 != nullptr)
-	//		{
-	//			for (uint n = 0; n < body1->collision_listeners.Count(); n++)
-	//			{
-	//				body1->collision_listeners[n]->OnCollision(body1, body2);
-	//			}
+			/*if (body1 != nullptr && body2 != nullptr)
+			{
+				for (uint n = 0; n < body1->collision_listeners.Count(); n++)
+				{
+					body1->collision_listeners[n]->OnCollision(body1, body2);
+				}
 
-	//			for (uint n = 0; n < body2->collision_listeners.Count(); n++)
-	//			{
-	//				body2->collision_listeners[n]->OnCollision(body2, body1);
-	//			}
-	//		}*/
-	//	}
-	//}
+				for (uint n = 0; n < body2->collision_listeners.Count(); n++)
+				{
+					body2->collision_listeners[n]->OnCollision(body2, body1);
+				}
+			}*/
+		}
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -322,6 +323,8 @@ btHingeConstraint* ModulePhysics3D::AddConstraintHinge(GameObject* bodyA, GameOb
 		Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::HINGE);
 		App->scene_intro->constraints.push_back(newConstraint);
 		newConstraint->distance.Set(dist.getX(), dist.getY(), dist.getZ());
+		newConstraint->axis1.Set(axisInA.getX(), axisInA.getY(), axisInA.getZ());
+		newConstraint->axis2.Set(axisInB.getX(), axisInB.getY(), axisInB.getZ());
 
 		btVector3 pivotinA, pivotinB;
 		SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
@@ -391,6 +394,7 @@ btConeTwistConstraint* ModulePhysics3D::AddConstraintCone(GameObject* bodyA, Gam
 	{
 		Constraint* newConstraint = new Constraint(colliderA, colliderB, ConstraintType::CONE);
 		App->scene_intro->constraints.push_back(newConstraint);
+		newConstraint->distance.Set(distance.getX(), distance.getY(), distance.getZ());
 
 		btVector3 pivotinA, pivotinB;
 		SetPivots(distance, pivotinA, pivotinB, colliderA, colliderB);

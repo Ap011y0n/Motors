@@ -217,8 +217,29 @@ void ModuleSceneIntro::SaveScene()
 		JSON_Object* JsonObj2 = App->serializer->AddObjectToArray(App->serializer->Constraints);
 		App->serializer->AddFloat(JsonObj2, "Obj1", constraints[i]->colliderA->owner->UID);
 		App->serializer->AddFloat(JsonObj2, "Obj2", constraints[i]->colliderB->owner->UID);
+		switch (constraints[i]->type)
+		{
+		case ConstraintType::DISTANCE:
+			App->serializer->AddString(JsonObj2, "Type", "P2P");
+			break;
+		case ConstraintType::HINGE:
+		{
+			App->serializer->AddString(JsonObj2, "Type", "Hinge");
+			JSON_Array* JsonAxis1 = App->serializer->AddArray(JsonObj2, "Axis1");
+			App->serializer->AddVec3(JsonAxis1, constraints[i]->axis1.x, constraints[i]->axis1.y, constraints[i]->axis1.z);
+			JSON_Array* JsonAxis2 = App->serializer->AddArray(JsonObj2, "Axis2");
+			App->serializer->AddVec3(JsonAxis2, constraints[i]->axis2.x, constraints[i]->axis2.y, constraints[i]->axis2.z);
+			break;
+		}
+			
+		case ConstraintType::SLIDER:
+			App->serializer->AddString(JsonObj2, "Type", "Slider");
+			break;
+		case ConstraintType::CONE:
+			App->serializer->AddString(JsonObj2, "Type", "Cone");
+			break;
+		}
 		JSON_Array* JsonTrans = App->serializer->AddArray(JsonObj2, "Distance");
-
 		App->serializer->AddVec3(JsonTrans, constraints[i]->distance.x, constraints[i]->distance.y, constraints[i]->distance.z);
 
 	}
