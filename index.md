@@ -9,7 +9,7 @@ layout: default
    <h2>
       What is Nidhogg Engine?
    </h2>
-    <img src=" https://cdn.discordapp.com/attachments/555497331848380447/660951239395377176/unknown.png?width=556&height=434">
+    <img src="https://cdn.discordapp.com/attachments/555497331848380447/797502304374226954/phosot.png">
    
    <p>Nidhogg Engine is a university project of the 3rd year of the career of GDD(video Game Design and Development) from the <a href="https://www.citm.upc.edu/ing/">CITM</a> made by two students in Terrassa(Spain), were we made a 3D Game Engine in C++.
   We've made this Engine for the UPC assignment Game Engines.</p>
