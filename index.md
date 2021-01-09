@@ -39,15 +39,15 @@ layout: default
     
    <h5>Albert Garcia Belerda </h5>
   
- - Game Controls (Play/Pause/Stop...)
+ - 3D models import.
   
- - Editor Camera
+ - Materials and texture systems.
   
- - ViewPort
+ - Resources management system.
  
- - Module Editor
+ - Joints.
  
- - Vehicle controller
+ - GameObjects structre and components.
  
    <h5>Albert Garcia: <a href="https://github.com/Ap011y0n">Github account</a>.
    <img src="https://cdn.discordapp.com/attachments/555497331848380447/797496930098741308/albert_garcia.png" width="200">
