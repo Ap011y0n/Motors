@@ -30,7 +30,23 @@ layout: default
 
     
    <h2>
-     
+     Main core subsystems
+   </h2>
+This Engine has 3 main core subsystems: 
+- GameObjects core: in charge of the management of all the objects in the game. This core controls the addition, elimination of all the gameojbects on tje world. All the management can be controlled throught the GameObjects module. Every GameObjects has his owns components. 
+- UI core: in charge of the management of all HUD of the Engine. This core, like the GameObjects core, can control the addition, elimination of his elements.
+-  
+
+   <h2>
+     Physics core:
+   </h2>
+   For the physics we have integrated the Bullet library into the Editor, now all GameObjects can create a collider component which will follow the physics from Bullet, there
+   are diferent types of colliders to chose (Capsuel,Sphere,Cube), you can also delete any collider component from a GameObject and create another, when creating a collider you
+   can decide it's mass or make it a collider sensor. 
+   
+   
+   The engine also let you modify the size, position and scale of the collider, and to choose betwen a static collider or a dynaimc one.
+   
    <h2>
      How to play (controls):
     </h2>
@@ -96,12 +112,4 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.//
 
   </body>
-  
-  <style>
-    
-   body{
-     <p style="color:#000000 ";>Black paragraph text</p>
-      text-align:left;
-   }
-    
-  </style>
+
