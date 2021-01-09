@@ -20,20 +20,19 @@ layout: default
    <h2>
      Who are we?
     </h2>
-    <p>We are two students from CITM Terrassa who had created the Nidhogg Engine. Here you can click on "github account" to go to our github accounts.</p>
+    <p>We are two students from CITM Terrassa who had created the Nidhogg Engine. Here you can click on our names to go to our github accounts.</p>
     
-   <h5>Pol de la Torre Solé </h5>
+   <h5><a href="https://github.com/polf780">Pol de la Torre Solé</a>: </h5>
  
  - Game Controls (Play/Pause/Stop...), Editor Camera, ViewPort, Module Editor, Vehicle controller. 
  
   Pol de la Torre: <a href="https://github.com/polf780">Github account</a>.
     <img src="https://raw.githubusercontent.com/marcpt98/Fight-club/gh-pages/Web%20images/foto_pol_dela_torre.png" width="400">
     
-   <h5>Albert Garcia Belerda </h5>
+   <h5><a href="https://github.com/Ap011y0n">Albert Garcia Belerda</a>: </h5>
   
  - 3D models import, Materials and texture systems, Resources management systemm, Joints, GameObjects structre and components, Scene Scerialitzation.
  
-   <h5>Albert Garcia: <a href="https://github.com/Ap011y0n">Github account</a>.
    <img src="https://cdn.discordapp.com/attachments/555497331848380447/797496930098741308/albert_garcia.png" width="200">
 
     
