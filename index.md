@@ -23,13 +23,13 @@ layout: default
     <p>We are two students from CITM Terrassa who had created the Nidhogg Engine. Here you can click on "github account" to go to our github accounts.</p>
     
    <h5>Pol de la Torre Solé </h5>
-  
- - Game Controls (Play/Pause/Stop...).
- - Editor Camera.
- - ViewPort.
- - Module Editor.
- - Vehicle controller.
-  
+  </h3>
+ - Game Controls (Play/Pause/Stop...).</br>
+ - Editor Camera.</br>
+ - ViewPort.</br>
+ - Module Editor.</br>
+ - Vehicle controller. </br>
+  </h3>
   Pol de la Torre: <a href="https://github.com/polf780">Github account</a>.
     <img src="https://raw.githubusercontent.com/marcpt98/Fight-club/gh-pages/Web%20images/foto_pol_dela_torre.png" width="400">
     
