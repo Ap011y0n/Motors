@@ -33,9 +33,11 @@ layout: default
      Main core subsystems
    </h2>
 This Engine has 3 main core subsystems: 
-- GameObjects core: in charge of the management of all the objects in the game. This core controls the addition, elimination of all the gameojbects on tje world. All the management can be controlled throught the GameObjects module. Every GameObjects has his owns components. 
+- GameObjects & Components core: in charge of the management of all the objects in the engine. This core controls the addition, elimination of all the gameojbects on the world. All the management can be controlled throught the GameObjects module. Every GameObjects has his owns components, there are component Mesh,Transforms,Collider i Material.
 - UI core: in charge of the management of all HUD of the Engine. This core, like the GameObjects core, can control the addition, elimination of his elements.
--  
+- Serialitzation: to save the scane(save laod)
+- Resource Manager:
+- Importer:
 
    <h2>
      Physics core:
@@ -43,7 +45,7 @@ This Engine has 3 main core subsystems:
    For the physics we have integrated the Bullet library into the Editor, now all GameObjects can create a collider component which will follow the physics from Bullet, there
    are diferent types of colliders to chose (Capsuel,Sphere,Cube), you can also delete any collider component from a GameObject and create another, when creating a collider you
    can decide it's mass or make it a collider sensor. 
-   
+   <img src="https://cdn.discordapp.com/attachments/555497331848380447/797512309983150090/ezgif.com-gif-maker_1.gif" width="600" height="338" />
    
    The engine also let you modify the size, position and scale of the collider, and to choose betwen a static collider or a dynaimc one.
    
