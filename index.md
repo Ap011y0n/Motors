@@ -24,22 +24,22 @@ layout: default
     
    <h5>Pol de la Torre Solé </h5>
   
- * Game Controls (Play/Pause/Stop...).
- * Editor Camera.
- *  ViewPort.
- *  Module Editor.
- *  Vehicle controller.
+ - Game Controls (Play/Pause/Stop...).
+ - Editor Camera.
+ - ViewPort.
+ - Module Editor.
+ - Vehicle controller.
   
   Pol de la Torre: <a href="https://github.com/polf780">Github account</a>.
     <img src="https://raw.githubusercontent.com/marcpt98/Fight-club/gh-pages/Web%20images/foto_pol_dela_torre.png" width="400">
     
    <h5>Albert Garcia Belerda </h5>
   
- *  3D models import.
- *  Materials and texture systems.
- *  Resources management system.
- *  Joints.
- *  GameObjects structre and components.
+ - 3D models import.
+ - Materials and texture systems.
+ - Resources management system.
+ - Joints.
+ - GameObjects structre and components.
  
    <h5>Albert Garcia: <a href="https://github.com/Ap011y0n">Github account</a>.
    <img src="https://cdn.discordapp.com/attachments/555497331848380447/797496930098741308/albert_garcia.png" width="200">
