@@ -40,6 +40,7 @@ layout: default
  - Resources management system.
  - Joints.
  - GameObjects structre and components.
+ - Scene Scerialitzation.
  
    <h5>Albert Garcia: <a href="https://github.com/Ap011y0n">Github account</a>.
    <img src="https://cdn.discordapp.com/attachments/555497331848380447/797496930098741308/albert_garcia.png" width="200">
@@ -104,16 +105,8 @@ This Engine has 5 main core subsystems:
 - Every 1000 points you gain an extra life (if you get 1000 points (an extra life) and die, </br>
 you have to get to 2000 points for another extra life)
 
-<h2>
-     Main core subsystems
-</h2>
-This game has 3 main core subsystems: </br>
-- Entity core: in charge of the management of all the objects in the game (player, enemies with pathfinding, coins and checkpoints). This core controls the addition, elimination, save and load of all entities. All the management can be controlled throught the EntityManager module. Every entity has his own movement, states and physics but they share variables that are located in the Entity module. </br>
-- UI core: in charge of the management of all HUD in the game (windows, menus, buttons, sliders, images and texts). This core, like the entity core, can control the addition, elimination of his elements. All the management can be controlled throught the Gui and SceneUI modules. Every UI also have some common variables and are located in the UI_element module. </br>
-- Scene core: in charge of the management of the maps and keybinds of the game. All the management can be controlled throught the Scene module. In this module you can control the load and unload of the maps and music. Also, in this module you have all the keybinds functionality. </br>
-
-    <h2>So…
-       </h2>
+   <h2>So…
+      </h2>
 
  <h4>Do you want to try out the game? Download it using this <a href="https://github.com/Ap011y0n/Nidhogg-Engine/releases/tag/v1.0">link</a>!</h4>
  <h4>For more information, check our <a href="https://github.com/Ap011y0n/Nidhogg-Engine">repository</a> in Github: </h4> </br>
