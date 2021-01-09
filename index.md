@@ -32,6 +32,7 @@ layout: default
   
  - 3D models import, Materials and texture systems, Resources management systemm, Joints, GameObjects structre and components, Scene Scerialitzation.
  
+ 
    <img src="https://cdn.discordapp.com/attachments/555497331848380447/797496930098741308/albert_garcia.png" width="200">
 
     
@@ -41,9 +42,9 @@ layout: default
 This Engine has 5 main core subsystems: 
 - GameObjects & Components core: in charge of the management of all the objects in the engine. This core controls the addition, elimination of all the gameojbects on the world. All the management can be controlled throught the GameObjects module. Every GameObjects has his owns components, there are component Mesh,Transforms,Collider and Material.
 - UI core: in charge of the management of all HUD of the Engine. This core, like the GameObjects core, can control the addition, elimination of his elements.
-- Serialitzation: to save the scane(save laod)
-- Resource Manager:
-- Importer:
+- Serialitzation core: to save the scane(save laod)
+- Resource Manager core:
+- Importer core: With the imoprter module we can import 
 
    <h2>
      Physics core:
@@ -58,42 +59,6 @@ This Engine has 5 main core subsystems:
    
     
     <img src="https://cdn.discordapp.com/attachments/796830125256736808/797532436862074910/ezgif.com-gif-maker_3.gif" width="800" height="450" />
-   
-   <h2>
-     How to play (controls):
-    </h2>
-       <h3>
-    Character controls:
-    </h3>
-    - A: Move left </br>
-    - D: Move right </br>
-    - F: Shoot </br>
-    - SPACE BAR: Jump </br>
-    <h3>
-    Special controls:
-    </h3>
-    - F1: Charge level 1 from the begining </br>
-    - F2: Charge level 2 from the begining </br>
-    - F3: Charge current level from the begining </br>
-    - F5: Save your current position </br>
-    - F6: Load your past position </br>
-    - F8: Show all UI debug </br>
-    - F9: Show all colliders and pathfinding </br>
-    - F10: God mode (player without collisions and can fly) </br>
-    - F11: Cap frames (siwtch fps cap between 30-60) </br>
-    - º: Open console </br>
-
-<h2>
-     Innovation:
-</h2>
-- Enemy states and patrol </br>
-- Game pause </br>
-- Jump particles</br>
-- Coldown on projectiles </br>
-- Particle effects </br>
-- Checkpoints </br>
-- Every 1000 points you gain an extra life (if you get 1000 points (an extra life) and die, </br>
-you have to get to 2000 points for another extra life)
 
    <h2>So…
       </h2>
