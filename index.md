@@ -56,6 +56,7 @@ This Engine has 5 main core subsystems:
    The engine also let you modify the size, position and scale of the collider, and to choose betwen a static collider or a dynaimc one.
    There are diferent types of constraints, a total of 4 diferents constraints (p2p , hinge, slider and Cone) all of the are adjustable from the editor, and each GameObject just    can have one collider. The camera now has a collider so it can collide with all colliders and interact with them.
    
+    
     <img src="https://cdn.discordapp.com/attachments/796830125256736808/797532436862074910/ezgif.com-gif-maker_3.gif" width="800" height="450" />
    
    <h2>
