@@ -408,6 +408,13 @@ void Serializer::LoadScene(const char* path)
 			
 
 		}
+	/*	for (int i = 0; i < tempvector.size(); i++)
+		{
+			LCG();
+			LCG rand;
+			tempvector[i]->UID = rand.Int();
+
+		}*/
 		tempvector.clear();
 
 	}
@@ -559,13 +566,13 @@ void Serializer::LoadModel(Resource* model)
 		}
 	}
 	sortScene();
-	/*for (int i = 0; i < tempvector.size(); i++)
+	for (int i = 0; i < tempvector.size(); i++)
 	{
 		LCG();
 		LCG rand;
 		tempvector[i]->UID = rand.Int();
 
-	}*/
+	}
 	tempvector.clear();
 }
 

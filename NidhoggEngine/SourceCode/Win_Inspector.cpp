@@ -619,7 +619,7 @@ void Win_Inspector::AddComponent(GameObject* obj)
 			{
 				ComponentType type = ComponentType::COLLIDER;
 
-				if (obj->GetComponent(type) == nullptr)
+				if (obj->GetComponent(type) == nullptr && obj->GetComponent(ComponentType::MESH) != nullptr)
 				{
 					obj->CreateComponent(type);
 
