@@ -59,12 +59,14 @@ This Engine has 5 main core subsystems:
      Physics core:
    </h2>
    For the physics we have integrated the Bullet library into the Editor, now all GameObjects can create a collider component which will follow the physics from Bullet, there
-   are diferent types of colliders to chose (Capsuel,Sphere,Cube), you can also delete any collider component from a GameObject and create another, when creating a collider you
-   can decide it's mass or make it a collider sensor.
+   are 3 diferent types of colliders to choose (capsuel,sphere,box), you can also delete any collider component from a GameObject and create another, when creating a collider      you can decide it's mass or make it a collider sensor.
    
    <img src="https://cdn.discordapp.com/attachments/796830125256736808/797521691932229662/ezgif.com-gif-maker_2.gif" width="800" height="450" />
    
    The engine also let you modify the size, position and scale of the collider, and to choose betwen a static collider or a dynaimc one.
+   There are diferent types of constraints, a total of 4 diferents constraints (p2p , hinge, slider and Cone) all of the are adjustable from the editor, each GameObject just can    have one collider.
+   
+    <img src="https://cdn.discordapp.com/attachments/796830125256736808/797532436862074910/ezgif.com-gif-maker_3.gif" width="800" height="450" />
    
    <h2>
      How to play (controls):
