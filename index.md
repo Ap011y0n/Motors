@@ -8,7 +8,7 @@ layout: default
    
    <h2>
       What is Nidhogg Engine?
-    </h2>
+   </h2>
     <img src=" https://cdn.discordapp.com/attachments/555497331848380447/660951239395377176/unknown.png?width=556&height=434">
    
    <p>Nidhogg Engine is a university project of the 3rd year of the career of GDD(video Game Design and Development) from the <a href="https://www.citm.upc.edu/ing/">CITM</a> made by two students in Terrassa(Spain), were we made a 3D Game Engine in C++.
@@ -78,8 +78,8 @@ This game has 3 main core subsystems: </br>
     <h2>So…
        </h2>
 
- <h4>Do you want to try out the game? Download it using this <a href="https://github.com/marcpt98/Plataformer-2D/releases/tag/1.0">link</a>!</h4>
- <h4>For more information, check our <a href="https://github.com/marcpt98/Plataformer-2D">repository</a> in Github: </h4> </br>
+ <h4>Do you want to try out the game? Download it using this <a href="https://github.com/Ap011y0n/Nidhogg-Engine/releases/tag/v1.0">link</a>!</h4>
+ <h4>For more information, check our <a href="https://github.com/Ap011y0n/Nidhogg-Engine">repository</a> in Github: </h4> </br>
      
 <h2>
     Licence
