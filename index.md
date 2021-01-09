@@ -11,8 +11,8 @@ layout: default
     </h2>
     <img src=" https://cdn.discordapp.com/attachments/555497331848380447/660951239395377176/unknown.png?width=556&height=434">
    
-   <p>Nidhogg Engine is is a university project of the 3rd year of the career of GDD(video Game Design and Development)from the  <a href="https://www.citm.upc.edu/ing/">CITM</a>.</h5></br> , made by two students in Terrassa(Spain), were we made a 3D Game Engine in C++.
-  We've made this game for the UPC assignment Development.</p>
+   <p>Nidhogg Engine is is a university project of the 3rd year of the career of GDD(video Game Design and Development)from the <a href="https://www.citm.upc.edu/ing/">CITM</a></h5> made by two students in Terrassa(Spain), were we made a 3D Game Engine in C++.
+  We've made this game for the UPC assignment Game Engines.</p>
     
    <h2>Gameplay video...enjoy!</h2>
 <iframe width="420" height="315" src="https://www.youtube.com/embed/bbJLTymIAWw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></br>
