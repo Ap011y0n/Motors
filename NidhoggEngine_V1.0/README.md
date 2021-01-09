@@ -155,6 +155,7 @@ Adding Constraints:
 - We can add 4 types of constraints(p2p, hinge, slider and cone).
 - After creating the first constraint you will need to pick another object to create the constraint, below in the inspector will appear the 2 names from the GameObjects that will have the constraint , both neeed a collider component first.
 - After picking both you will need to push the confirm button and then the constraint will be created, the cancel button will stop the creation of the constraint.
+- After adding a constraint on the bottom of the inspector will appear a button to remove the constraint, and also the type of constraint and the name of the objects with the constraint.
 
 ##Car controls 
 UP: Accelerate the car.
