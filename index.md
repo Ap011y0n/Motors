@@ -22,7 +22,22 @@ layout: default
     </h2>
     <p>We are two students from CITM Terrassa who had created the Nidhogg Engine. Here you can click on "github account" to go to our github accounts.</p>
     
-   <h5>Pol de la Torre Solé
+   <h5>Pol de la Torre Solé </h5>
+  
+ - Game Controls (Play/Pause/Stop...).
+  
+ - Editor Camera.
+  
+ - ViewPort.
+ 
+ - Module Editor.
+ 
+ - Vehicle controller.
+  
+  Pol de la Torre: <a href="https://github.com/polf780">Github account</a>.
+    <img src="https://raw.githubusercontent.com/marcpt98/Fight-club/gh-pages/Web%20images/foto_pol_dela_torre.png" width="400">
+    
+   <h5>Albert Garcia Belerda </h5>
   
  - Game Controls (Play/Pause/Stop...)
   
@@ -33,11 +48,8 @@ layout: default
  - Module Editor
  
  - Vehicle controller
-  
-  Pol de la Torre: <a href="https://github.com/polf780">Github account</a>.</h5>
-    <img src="https://raw.githubusercontent.com/marcpt98/Fight-club/gh-pages/Web%20images/foto_pol_dela_torre.png" width="400">
-    
-   <h5>Albert Garcia  (Loading things from XML, level 1,animations, keybinds, entities, pathfinding, UI): <a href="https://github.com/Ap011y0n">Github account</a>.</h5>
+ 
+   <h5>Albert Garcia: <a href="https://github.com/Ap011y0n">Github account</a>.
    <img src="https://cdn.discordapp.com/attachments/555497331848380447/797496930098741308/albert_garcia.png" width="200">
 
     
@@ -56,7 +68,8 @@ This Engine has 3 main core subsystems:
    </h2>
    For the physics we have integrated the Bullet library into the Editor, now all GameObjects can create a collider component which will follow the physics from Bullet, there
    are diferent types of colliders to chose (Capsuel,Sphere,Cube), you can also delete any collider component from a GameObject and create another, when creating a collider you
-   can decide it's mass or make it a collider sensor. 
+   can decide it's mass or make it a collider sensor.
+   
    <img src="https://cdn.discordapp.com/attachments/796830125256736808/797521691932229662/ezgif.com-gif-maker_2.gif" width="800" height="450" />
    
    The engine also let you modify the size, position and scale of the collider, and to choose betwen a static collider or a dynaimc one.
