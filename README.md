@@ -148,7 +148,7 @@ Inspector Update:
 Camera Update:
 Now the Editor camera has a collider that can push and interact with other colliders.
 
-New Windod added Phisycs:
+New Window added Phisycs:
 On this window we can change gravity with the slider.
 
 Adding Constraints:
