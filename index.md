@@ -24,9 +24,8 @@ layout: default
     
    <h5><a href="https://github.com/polf780">Pol de la Torre Solé</a>: </h5>
  
- - Game Controls (Play/Pause/Stop...), Editor Camera, ViewPort, Module Editor, Vehicle controller. 
+ - Game Controls (Play/Pause/Stop...), Editor Camera, ViewPort, Module Editor, Vehicle controller.
  
-  Pol de la Torre: <a href="https://github.com/polf780">Github account</a>.
     <img src="https://raw.githubusercontent.com/marcpt98/Fight-club/gh-pages/Web%20images/foto_pol_dela_torre.png" width="400">
     
    <h5><a href="https://github.com/Ap011y0n">Albert Garcia Belerda</a>: </h5>
