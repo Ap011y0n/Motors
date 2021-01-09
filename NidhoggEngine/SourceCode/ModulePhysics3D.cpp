@@ -329,7 +329,9 @@ btHingeConstraint* ModulePhysics3D::AddConstraintHinge(GameObject* bodyA, GameOb
 			newConstraint->distance.Set(dist.getX(), dist.getY(), dist.getZ());
 			newConstraint->axis1.Set(axisInA.getX(), axisInA.getY(), axisInA.getZ());
 			newConstraint->axis2.Set(axisInB.getX(), axisInB.getY(), axisInB.getZ());
-
+			newConstraint->motor = false;
+			newConstraint->velocity = 5.f;
+			newConstraint->maxspeed = 100.f;
 			btVector3 pivotinA, pivotinB;
 			SetPivots(dist, pivotinA, pivotinB, colliderA, colliderB);
 
@@ -378,10 +380,16 @@ btSliderConstraint* ModulePhysics3D::AddConstraintSlider(GameObject* bodyA, Game
 			localA.setOrigin(pivotinA);
 			localB.setOrigin(pivotinB);
 			btSliderConstraint* constraint = new btSliderConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), localA, localB, linearreference);
-				constraint->setLowerLinLimit(0.f);
-				constraint->setUpperLinLimit(0.4f);
-				constraint->setLowerAngLimit(-0.2f);
-				constraint->setUpperAngLimit(0.2f);
+			
+			newConstraint->LowerLinLimit = 0.f;
+			newConstraint->UpperLinLimit = 1.f;
+			newConstraint->LowerAngLimit = 0.f;
+			newConstraint->UpperAngLimit = 1.f;
+
+			constraint->setLowerLinLimit(0.f);
+			constraint->setUpperLinLimit(1.f);
+			constraint->setLowerAngLimit(0.f);
+			constraint->setUpperAngLimit(1.f);
 
 			world->addConstraint(constraint);
 			SliderConstraints.push_back(constraint);
@@ -413,8 +421,9 @@ btConeTwistConstraint* ModulePhysics3D::AddConstraintCone(GameObject* bodyA, Gam
 			localB.setIdentity();
 			localA.setOrigin(pivotinA);
 			localB.setOrigin(pivotinB);
-			btConeTwistConstraint* constraint = new btConeTwistConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), localA, localB);
 
+			btConeTwistConstraint* constraint = new btConeTwistConstraint(*colliderA->body.GetBody(), *colliderB->body.GetBody(), localA, localB);
+			
 
 			world->addConstraint(constraint);
 			ConeConstraints.push_back(constraint);
@@ -456,9 +465,6 @@ void ModulePhysics3D::SetPivots(btVector3& dist, btVector3& pivotinA, btVector3&
 	else
 		pivotinB.setZ(distance.z);
 
-	LOG("%f, %f, %f", pivotinA.getX(), pivotinA.getY(), pivotinA.getZ());
-
-	LOG("%f, %f, %f", pivotinB.getX(), pivotinB.getY(), pivotinB.getZ());
 }
 // =============================================
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)

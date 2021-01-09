@@ -383,16 +383,48 @@ void Win_Inspector::GameObjectInspector(GameObject* obj)
 						case ConstraintType::CONE:
 						{
 							ImGui::Text("Cone");
+
 						}
 						break;
 						case ConstraintType::HINGE:
 						{
 							ImGui::Text("Hinge");
+							float velocity = collider->constraints[i]->velocity;
+							float maxspeed = collider->constraints[i]->maxspeed;
+							ImGui::DragFloat("Velocity", &velocity, 0.1f);
+							ImGui::DragFloat("maxSpeed", &maxspeed, 0.1f);
+							collider->constraints[i]->velocity = velocity;
+							collider->constraints[i]->maxspeed = maxspeed;
+
+							static bool motor = collider->constraints[i]->motor;
+							ImGui::Checkbox("Motor", &motor);
+							collider->constraints[i]->motor = motor;
+							btHingeConstraint* hinge = (btHingeConstraint*)collider->constraints[i]->ConstraintPointer;
+							
+							if(motor)
+								hinge->enableAngularMotor(motor, velocity, maxspeed);
+							/*else
+								hinge->enableAngularMotor(true, 0.f, 100.f);*/
+
 						}
 						break;
 						case ConstraintType::SLIDER:
 						{
 							ImGui::Text("Slider");
+							float LLin = collider->constraints[i]->LowerLinLimit;
+							float ULin = collider->constraints[i]->UpperLinLimit;
+							float LAng = collider->constraints[i]->LowerAngLimit;
+							float UAng = collider->constraints[i]->UpperAngLimit;
+
+							ImGui::DragFloat("Lower Linear Limit", &LLin, 0.1f);
+							ImGui::DragFloat("Upper Linear Limit", &ULin, 0.1f);
+							collider->constraints[i]->LowerLinLimit = LLin;
+							collider->constraints[i]->UpperLinLimit = ULin;
+							ImGui::DragFloat("Lower Angle Limit", &LAng, 0.1f);
+							ImGui::DragFloat("Upper Angle Limit", &UAng, 0.1f);
+					
+							collider->constraints[i]->LowerAngLimit = LAng;
+							collider->constraints[i]->UpperAngLimit = UAng;
 						}
 						break;
 

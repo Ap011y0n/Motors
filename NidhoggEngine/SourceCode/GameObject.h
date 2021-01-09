@@ -52,6 +52,15 @@ public:
 	//only for hinges
 	float3 axis1;
 	float3 axis2;
+	bool motor;
+	float velocity;
+	float maxspeed;
+	//only for sliders
+	float LowerLinLimit;
+	float UpperLinLimit;
+	float LowerAngLimit;
+	float UpperAngLimit;
+
 };
 //Base component class, need to use childs to actually do something
 class Component
