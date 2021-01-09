@@ -50,7 +50,7 @@ This Engine has 5 main core subsystems:
      Physics core:
    </h2>
    For the physics we have integrated the Bullet library into the Editor, now all GameObjects can create a collider component which will follow the physics from Bullet, there
-   are 3 diferent types of colliders to choose (capsuel,sphere,box), you can also delete any collider component from a GameObject and create another, when creating a collider      you can decide it's mass or make it a collider sensor.
+   are 3 different types of colliders to choose (capsuel, sphere, box), you can also delete any collider component from a GameObject and create another, when creating a collider      you can decide it's mass or make it a collider sensor.
    
    <img src="https://cdn.discordapp.com/attachments/796830125256736808/797521691932229662/ezgif.com-gif-maker_2.gif" width="800" height="450" />
    
@@ -64,7 +64,7 @@ This Engine has 5 main core subsystems:
       </h2>
 
  <h4>Do you want to try out the game? Download it using this <a href="https://github.com/Ap011y0n/Nidhogg-Engine/releases/tag/v1.0">link</a>!</h4>
- <h4>For more information, check our <a href="https://github.com/Ap011y0n/Nidhogg-Engine">repository</a> in Github: </h4> </br>
+ <h4>For more information, check our <a href="https://github.com/Ap011y0n/Nidhogg-Engine">repository</a> in Github: </h4> 
      
 <h2>
     Licence
