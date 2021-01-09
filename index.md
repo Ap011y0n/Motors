@@ -25,13 +25,9 @@ layout: default
    <h5>Pol de la Torre Solé </h5>
   
  - Game Controls (Play/Pause/Stop...).
-  
  - Editor Camera.
-  
  - ViewPort.
- 
  - Module Editor.
- 
  - Vehicle controller.
   
   Pol de la Torre: <a href="https://github.com/polf780">Github account</a>.
@@ -40,13 +36,9 @@ layout: default
    <h5>Albert Garcia Belerda </h5>
   
  - 3D models import.
-  
  - Materials and texture systems.
-  
  - Resources management system.
- 
  - Joints.
- 
  - GameObjects structre and components.
  
    <h5>Albert Garcia: <a href="https://github.com/Ap011y0n">Github account</a>.
