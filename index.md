@@ -32,8 +32,7 @@ layout: default
   
  - 3D models import, Materials and texture systems, Resources management systemm, Joints, GameObjects structre and components, Scene Scerialitzation.
  
- 
-   <img src="https://cdn.discordapp.com/attachments/555497331848380447/797496930098741308/albert_garcia.png" width="200">
+   <img src="https://cdn.discordapp.com/attachments/498515828610957332/797540430774009936/yo.png" width="200">
 
     
    <h2>
@@ -42,8 +41,8 @@ layout: default
 This Engine has 5 main core subsystems: 
 - GameObjects & Components core: in charge of the management of all the objects in the engine. This core controls the addition, elimination of all the gameojbects on the world. All the management can be controlled throught the GameObjects module. Every GameObjects has his owns components, there are component Mesh,Transforms,Collider and Material.
 - UI core: in charge of the management of all HUD of the Engine. This core, like the GameObjects core, can control the addition, elimination of his elements.
-- Serialitzation core: to save the scane(save laod)
-- Resource Manager core:
+- Serialitzation core: With the serialitzation module we can save information, so this way we can save a component so later we can load it again on the enigne, we added suport to save the scene module so all component can save an load.
+- Resource Manager core: We have a main module to deal with the resources were we check the assets from the assets folder, 
 - Importer core: With the imoprter module we can import 
 
    <h2>
