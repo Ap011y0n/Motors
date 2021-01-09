@@ -20,13 +20,12 @@ layout: default
    <h2>
      Who are we?
     </h2>
-    <img src="https://cdn.discordapp.com/attachments/555497331848380447/660609368068456448/Foto_grup.png?width=486&height=767">
     <p>We are two students from CITM Terrassa who had created the Nidhogg Engine. Here you can click on "github account" to go to our github accounts.</p>
     
-   <h5>Pol de la Torre (Colliders, phisics, level 2, entities, pathfinding, UI): <a href="https://github.com/polf780">Github account</a>.</h5></br>
+   <h5>Pol de la Torre (Colliders, phisics, level 2, entities, pathfinding, UI): <a href="https://github.com/polf780">Github account</a>.</h5>
     <img src="https://raw.githubusercontent.com/marcpt98/Fight-club/gh-pages/Web%20images/foto_pol_dela_torre.png" width="400">
     
-   <h5>Albert Garcia  (Loading things from XML, level 1,animations, keybinds, entities, pathfinding, UI): <a href="https://github.com/Ap011y0n">Github account</a>.</h5></br>
+   <h5>Albert Garcia  (Loading things from XML, level 1,animations, keybinds, entities, pathfinding, UI): <a href="https://github.com/Ap011y0n">Github account</a>.</h5>
    <img src="https://cdn.discordapp.com/attachments/555497331848380447/797496930098741308/albert_garcia.png" width="200">
 
     
