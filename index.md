@@ -23,13 +23,13 @@ layout: default
     <p>We are two students from CITM Terrassa who had created the Nidhogg Engine. Here you can click on "github account" to go to our github accounts.</p>
     
    <h5>Pol de la Torre Solé </h5>
-  </h3>
- - Game Controls (Play/Pause/Stop...).</br>
- - Editor Camera.</br>
- - ViewPort.</br>
- - Module Editor.</br>
- - Vehicle controller. </br>
-  </h3>
+ 
+ - Game Controls (Play/Pause/Stop...).
+ - Editor Camera.
+ - ViewPort.
+ - Module Editor.
+ - Vehicle controller. 
+ 
   Pol de la Torre: <a href="https://github.com/polf780">Github account</a>.
     <img src="https://raw.githubusercontent.com/marcpt98/Fight-club/gh-pages/Web%20images/foto_pol_dela_torre.png" width="400">
     
@@ -48,8 +48,8 @@ layout: default
    <h2>
      Main core subsystems
    </h2>
-This Engine has 3 main core subsystems: 
-- GameObjects & Components core: in charge of the management of all the objects in the engine. This core controls the addition, elimination of all the gameojbects on the world. All the management can be controlled throught the GameObjects module. Every GameObjects has his owns components, there are component Mesh,Transforms,Collider i Material.
+This Engine has 5 main core subsystems: 
+- GameObjects & Components core: in charge of the management of all the objects in the engine. This core controls the addition, elimination of all the gameojbects on the world. All the management can be controlled throught the GameObjects module. Every GameObjects has his owns components, there are component Mesh,Transforms,Collider and Material.
 - UI core: in charge of the management of all HUD of the Engine. This core, like the GameObjects core, can control the addition, elimination of his elements.
 - Serialitzation: to save the scane(save laod)
 - Resource Manager:
