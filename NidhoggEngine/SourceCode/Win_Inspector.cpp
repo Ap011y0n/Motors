@@ -754,7 +754,9 @@ void Win_Inspector::AddComponent(GameObject* obj)
 void Win_Inspector::ColliderEditor(Collider* collider)
 {
 	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-
+	static bool sensor = collider->body.IsSensor();
+	ImGui::Checkbox("Sensor", &sensor);
+	collider->body.SetAsSensor(sensor);
 	ImGui::Separator();
 	if (ImGui::TreeNodeEx("Edit Collider", node_flags))
 	{

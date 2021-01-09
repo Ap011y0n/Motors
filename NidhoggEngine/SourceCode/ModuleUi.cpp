@@ -313,9 +313,10 @@ update_status ModuleUI::Update(float dt)
 	ImportWindow();
 	ResourceInfo();
 	Win_CameraConfig::UpdateUi(App->camera->cameraComp);
+	ChangePhysicsWindow();
+
 	Win_Inspector::InspectorWin();
 	Win_TimeManagement::Update_Ui();
-	ChangePhysicsWindow();
 	return UPDATE_CONTINUE;
 }
 

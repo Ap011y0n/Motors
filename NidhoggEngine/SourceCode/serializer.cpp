@@ -310,7 +310,9 @@ void Serializer::LoadScene(const char* path)
 						LOG("Collider type unknown");
 
 					collider->body.SetBody(object, mass, collider->collidertype);
-
+					bool sensor = json_object_get_number(obj_in_array_in_obj, "Sensor");
+					if(sensor)
+					collider->body.SetAsSensor(sensor);
 					JSON_Array* JsonTrans = json_object_get_array(obj_in_array_in_obj, "Translation");
 					JSON_Array* JsonScale = json_object_get_array(obj_in_array_in_obj, "Scale");
 					JSON_Array* JsonRot = json_object_get_array(obj_in_array_in_obj, "Rotation");
@@ -335,6 +337,8 @@ void Serializer::LoadScene(const char* path)
 					collider->body.GetBody()->getCollisionShape()->setLocalScaling(size);
 					collider->body.TransformMatrix = float4x4::FromTRS(pos, rot, scale);
 					collider->body.SetTransform(collider->body.globalTransform);
+
+					
 				}
 
 			}
@@ -710,7 +714,10 @@ void Serializer::AddComponent(JSON_Array* componentsArray, Component* component,
 		case ComponentType::COLLIDER:
 		{
 			AddString(leaf_object, "Type", "Collider");
+
 			Collider* collider = (Collider*)component;
+			App->serializer->AddFloat(leaf_object, "Sensor", collider->body.IsSensor());
+
 			switch (collider->body.type)
 			{
 			case ColliderType::NONE:

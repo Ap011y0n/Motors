@@ -54,7 +54,7 @@
     "Game Objects": [
         {
             "UID": 740074754,
-            "ParentUID": 222125120,
+            "ParentUID": 1019879101,
             "Name": "StreetEnvironment",
             "Translation": [
                 0,
@@ -234,7 +234,7 @@
             "Name": "City_building_004",
             "Translation": [
                 -41.475891,
-                21.014097,
+                21.014091,
                 0.000000
             ],
             "Scale": [
@@ -261,6 +261,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -315,6 +316,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -369,6 +371,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -396,12 +399,12 @@
             "Name": "City_building_008",
             "Translation": [
                 40.979996,
-                18.270824,
+                18.270828,
                 -0.000002
             ],
             "Scale": [
-                1.000002,
-                1.000002,
+                1.000005,
+                1.000005,
                 1
             ],
             "Rotation": [
@@ -423,6 +426,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -454,8 +458,8 @@
                 0.000000
             ],
             "Scale": [
-                1.000023,
-                1.000023,
+                1.000026,
+                1.000026,
                 1
             ],
             "Rotation": [
@@ -472,6 +476,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 0,
                     "Translation": [
@@ -531,8 +536,8 @@
                 0.000001
             ],
             "Scale": [
-                1.000002,
-                1.000002,
+                1.000005,
+                1.000005,
                 1
             ],
             "Rotation": [
@@ -564,6 +569,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -618,6 +624,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -645,12 +652,12 @@
             "Name": "City_building_013",
             "Translation": [
                 -42.288055,
-                33.201584,
+                33.201599,
                 0.000001
             ],
             "Scale": [
-                1.000002,
-                1.000002,
+                1.000005,
+                1.000005,
                 1
             ],
             "Rotation": [
@@ -672,6 +679,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -700,7 +708,7 @@
             "Translation": [
                 -19.439707,
                 32.061729,
-                0.000001
+                0.000004
             ],
             "Scale": [
                 1,
@@ -726,6 +734,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -753,8 +762,8 @@
             "Name": "City_building_016",
             "Translation": [
                 34.270424,
-                -41.972744,
-                0.000002
+                -41.972733,
+                0.000005
             ],
             "Scale": [
                 1,
@@ -790,6 +799,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -821,8 +831,8 @@
                 0.000001
             ],
             "Scale": [
-                1.000002,
-                1.000002,
+                1.000005,
+                1.000005,
                 1
             ],
             "Rotation": [
@@ -854,6 +864,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -881,7 +892,7 @@
             "Name": "City_building_022",
             "Translation": [
                 -20.831324,
-                -27.426489,
+                -27.426495,
                 -0.000001
             ],
             "Scale": [
@@ -908,6 +919,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -962,6 +974,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -989,7 +1002,7 @@
             "Name": "City_building_024",
             "Translation": [
                 -20.572771,
-                43.060825,
+                43.060814,
                 -0.069194
             ],
             "Scale": [
@@ -1016,6 +1029,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -1044,7 +1058,7 @@
             "Translation": [
                 31.511889,
                 -16.446016,
-                0.000001
+                0.000004
             ],
             "Scale": [
                 1,
@@ -1070,6 +1084,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -1124,6 +1139,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -1212,12 +1228,12 @@
             "Name": "City_building_031",
             "Translation": [
                 -34.679482,
-                -41.835560,
+                -41.835556,
                 -0.000001
             ],
             "Scale": [
-                1.000002,
-                1.000002,
+                1.000005,
+                1.000005,
                 1
             ],
             "Rotation": [
@@ -1239,6 +1255,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -1266,7 +1283,7 @@
             "Name": "City_building_032",
             "Translation": [
                 -29.478403,
-                21.014097,
+                21.014091,
                 0.000000
             ],
             "Scale": [
@@ -1293,6 +1310,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -1347,6 +1365,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -1374,12 +1393,12 @@
             "Name": "City_building_034",
             "Translation": [
                 16.049517,
-                -16.696884,
+                -16.696886,
                 0.000000
             ],
             "Scale": [
-                1.000002,
-                1.000002,
+                1.000005,
+                1.000005,
                 1
             ],
             "Rotation": [
@@ -1401,6 +1420,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -1429,7 +1449,7 @@
             "Translation": [
                 13.387990,
                 -40.802517,
-                -0.000000
+                0.000000
             ],
             "Scale": [
                 1,
@@ -1455,6 +1475,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -1482,12 +1503,12 @@
             "Name": "City_building_036",
             "Translation": [
                 -31.216331,
-                33.201584,
+                33.201599,
                 0.000001
             ],
             "Scale": [
-                1.000002,
-                1.000002,
+                1.000005,
+                1.000005,
                 1
             ],
             "Rotation": [
@@ -1509,6 +1530,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -1563,6 +1585,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -1594,8 +1617,8 @@
                 0.000000
             ],
             "Scale": [
-                1.000002,
-                1.000002,
+                1.000005,
+                1.000005,
                 1
             ],
             "Rotation": [
@@ -1617,6 +1640,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -1677,12 +1701,12 @@
             "Name": "City_building_040",
             "Translation": [
                 -34.679482,
-                -30.643883,
+                -30.643875,
                 -0.000001
             ],
             "Scale": [
-                1.000002,
-                1.000002,
+                1.000005,
+                1.000005,
                 1
             ],
             "Rotation": [
@@ -1704,6 +1728,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -1731,12 +1756,12 @@
             "Name": "City_building_041",
             "Translation": [
                 30.695278,
-                21.612644,
+                21.612638,
                 0.000000
             ],
             "Scale": [
-                1.000002,
-                1.000002,
+                1.000005,
+                1.000005,
                 1
             ],
             "Rotation": [
@@ -1758,6 +1783,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 100,
                     "Translation": [
@@ -1781,7 +1807,7 @@
         },
         {
             "UID": 1395095533,
-            "ParentUID": 222125120,
+            "ParentUID": 1019879101,
             "Name": "BakerHouse_p2p",
             "Translation": [
                 -12.512090,
@@ -1806,8 +1832,8 @@
             "ParentUID": 1395095533,
             "Name": "Chimney",
             "Translation": [
-                1.840260,
-                -2.664721,
+                1.840261,
+                -2.664718,
                 -1.503116
             ],
             "Scale": [
@@ -1834,6 +1860,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 85.599998,
                     "Translation": [
@@ -1888,6 +1915,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 0,
                     "Translation": [
@@ -1911,7 +1939,7 @@
         },
         {
             "UID": 179778850,
-            "ParentUID": 222125120,
+            "ParentUID": 1019879101,
             "Name": "BakerHouse_Hinge",
             "Translation": [
                 -5.846423,
@@ -1964,6 +1992,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 85.599998,
                     "Translation": [
@@ -2018,6 +2047,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 0,
                     "Translation": [
@@ -2041,7 +2071,7 @@
         },
         {
             "UID": 620922285,
-            "ParentUID": 222125120,
+            "ParentUID": 1019879101,
             "Name": "BakerHouse_Slider",
             "Translation": [
                 0.953186,
@@ -2067,7 +2097,7 @@
             "Name": "Chimney",
             "Translation": [
                 -1.902081,
-                6.418150,
+                6.418139,
                 -1.478538
             ],
             "Scale": [
@@ -2094,6 +2124,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 85.599998,
                     "Translation": [
@@ -2148,6 +2179,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 0,
                     "Translation": [
@@ -2171,7 +2203,7 @@
         },
         {
             "UID": 33197577,
-            "ParentUID": 222125120,
+            "ParentUID": 1019879101,
             "Name": "BakerHouse_Cone",
             "Translation": [
                 7.912078,
@@ -2196,9 +2228,9 @@
             "ParentUID": 33197577,
             "Name": "Chimney",
             "Translation": [
-                0.783544,
-                -4.805231,
-                -2.576408
+                0.783547,
+                -4.805232,
+                -2.576407
             ],
             "Scale": [
                 1.000000,
@@ -2224,6 +2256,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 85.599998,
                     "Translation": [
@@ -2278,6 +2311,7 @@
                 },
                 {
                     "Type": "Collider",
+                    "Sensor": 0,
                     "ColliderType": "Box",
                     "Mass": 0,
                     "Translation": [

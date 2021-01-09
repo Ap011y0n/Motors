@@ -16,6 +16,7 @@ PhysBody3D::PhysBody3D()
 {
 	TransformMatrix = float4x4::identity;
 	BodyMass = 0;
+	is_sensor = false;
 }
 
 // ---------------------------------------------------------
