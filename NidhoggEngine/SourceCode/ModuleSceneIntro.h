@@ -10,6 +10,7 @@ class Constraint;
 class Primitive;
 class ComponentCamera;
 class ImportOptions;
+class PhysBody3D;
 
 typedef unsigned char GLubyte;
 typedef unsigned int GLuint;
@@ -38,6 +39,8 @@ public:
 	void WantToImport(ImportOptions* options);
 	void ManageDropEvent(std::string file_path);
 	GameObject* ReturnGameObject(uint UID, GameObject* parent);
+	void OnCollision(PhysBody3D* body1, PhysBody3D* body2) override;
+
 public:
 
 	uint my_indices = 0;

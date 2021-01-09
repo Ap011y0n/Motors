@@ -93,8 +93,8 @@ bool ModuleSceneIntro::Start()
 	
 	vec3 size(2, 2, 2);
 	vec3 pos(0, 3, 0);
-	cube1 = App->PrimManager->CreateCube(size, pos);
-
+	/*cube1 = App->PrimManager->CreateCube(size, pos);
+	cube1->body.collision_listeners.push_back(this);*/
 	vec3 ballpos(4, 4, 4);
 
 	PrimSphere* sphere = new PrimSphere(0.999, 20, 20);
@@ -104,9 +104,9 @@ bool ModuleSceneIntro::Start()
 
 	spherecamera = sphere;
 	pos.Set(1, 6, 0);
-	Primitive* cube2 = App->PrimManager->CreateCube(size, pos);
+	/*Primitive* cube2 = App->PrimManager->CreateCube(size, pos);
 	App->Physics->AddConstraintP2P(*cube1, *cube2,
-		btVector3{ 4.f,-0.,-0 }, btVector3{ 0, 0,0 });
+		btVector3{ 4.f,-0.,-0 }, btVector3{ 0, 0,0 });*/
 
 	int i, j, c;
 
@@ -154,15 +154,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	{
 		wanttoload = false;
 		DeleteSceneObjects(scene);
-		std::string file_path = "Assets/Street environment_V01.FBX";
-
-		uint UID = App->ResManager->FindInAssets(file_path.c_str());
-		Resource* NewResource = App->ResManager->RequestResource(UID);
-		if (NewResource != nullptr)
-		{
-			LOG("Resource Found");
-			App->serializer->LoadModel(NewResource);
-		}
+		App->serializer->LoadScene("Assets/Scene.json");
 
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
@@ -528,3 +520,8 @@ void ModuleSceneIntro::Camera_Editor_Window(ComponentCamera* camera)
 }
 
 
+void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
+{
+	
+	LOG("Collision");
+}
