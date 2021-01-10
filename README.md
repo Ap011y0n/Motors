@@ -39,7 +39,7 @@ When a Game Object is selected in the Hierarchy you can see their multiple compo
 
 The engine supports drag and drop of files like fbx, png and dds textures.   
 
-### Controls
+### Controls:
 
 ### Camera Controls
 - Mouse right click: Rotate camera.
@@ -166,7 +166,7 @@ RIGHT: Turn wheels left direction..
 ### New Controls
 1: To shoot spheres in the direction of the camera.
 
-##Comments 
+### Comments 
 IMPORTANT:We recommend allways when creating constraints change the distance in x, y and z so it's not all 0 might be buggy if all distances are 0.
 
 ## License & Copyright 
