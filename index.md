@@ -62,7 +62,7 @@ This Engine has 5 main core subsystems:
    <h2>So…
       </h2>
 
- <h4>Do you want to try out the game? Download it using this <a href="https://github.com/Ap011y0n/Nidhogg-Engine/releases/tag/v1.0">link</a>!</h4>
+ <h4>Do you want to try out our project?? Download it using this <a href="https://github.com/Ap011y0n/Nidhogg-Engine/releases/tag/v1.0">link</a>!</h4>
  <h4>For more information, check our <a href="https://github.com/Ap011y0n/Nidhogg-Engine">repository</a> in Github: </h4> 
      
 <h2>
