@@ -54,7 +54,7 @@
     "Game Objects": [
         {
             "UID": 740074754,
-            "ParentUID": 1787031396,
+            "ParentUID": 247639,
             "Name": "StreetEnvironment",
             "Translation": [
                 0,
@@ -1195,17 +1195,17 @@
             "Name": "City_building_030",
             "Translation": [
                 -42.807240,
-                -41.835564,
+                -41.835560,
                 -0.000001
             ],
             "Scale": [
-                1,
-                1,
+                1.000001,
+                1.000001,
                 1
             ],
             "Rotation": [
                 0,
-                0,
+                -0.000000,
                 -0.707107,
                 0.707107
             ],
@@ -1219,6 +1219,28 @@
                     "Type": "Mesh",
                     "Path": "Assets\/library\/City_building_030.mesh",
                     "UID": 922162017
+                },
+                {
+                    "Type": "Collider",
+                    "Sensor": 0,
+                    "ColliderType": "Box",
+                    "Mass": 86.099998,
+                    "Translation": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "Scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "Rotation": [
+                        0,
+                        0,
+                        0,
+                        1
+                    ]
                 }
             ]
         },
@@ -1668,17 +1690,17 @@
             "Name": "City_building_039",
             "Translation": [
                 -42.807240,
-                -30.643888,
+                -30.643887,
                 -0.000001
             ],
             "Scale": [
-                1,
-                1,
+                1.000001,
+                1.000001,
                 1
             ],
             "Rotation": [
                 0,
-                0,
+                -0.000000,
                 -0.707107,
                 0.707107
             ],
@@ -1692,6 +1714,28 @@
                     "Type": "Mesh",
                     "Path": "Assets\/library\/City_building_039.mesh",
                     "UID": 1854461965
+                },
+                {
+                    "Type": "Collider",
+                    "Sensor": 0,
+                    "ColliderType": "Box",
+                    "Mass": 86.099998,
+                    "Translation": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "Scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "Rotation": [
+                        0,
+                        0,
+                        0,
+                        1
+                    ]
                 }
             ]
         },
@@ -1807,7 +1851,7 @@
         },
         {
             "UID": 1395095533,
-            "ParentUID": 1787031396,
+            "ParentUID": 247639,
             "Name": "BakerHouse_p2p",
             "Translation": [
                 -12.512090,
@@ -1939,7 +1983,7 @@
         },
         {
             "UID": 179778850,
-            "ParentUID": 1787031396,
+            "ParentUID": 247639,
             "Name": "BakerHouse_Hinge",
             "Translation": [
                 -5.846423,
@@ -2071,7 +2115,7 @@
         },
         {
             "UID": 620922285,
-            "ParentUID": 1787031396,
+            "ParentUID": 247639,
             "Name": "BakerHouse_Slider",
             "Translation": [
                 0.953186,
@@ -2203,7 +2247,7 @@
         },
         {
             "UID": 33197577,
-            "ParentUID": 1787031396,
+            "ParentUID": 247639,
             "Name": "BakerHouse_Cone",
             "Translation": [
                 7.912078,
@@ -2229,8 +2273,8 @@
             "Name": "Chimney",
             "Translation": [
                 0.783549,
-                -4.805233,
-                -2.576406
+                -4.805232,
+                -2.576407
             ],
             "Scale": [
                 1.000000,

@@ -133,27 +133,27 @@ Important!! When opening for the first time the engine import will appear many t
 ### Assigment 3
 
 The scene:
-All the buildings have the new component Colliders.
+All buildings in city environment have the new component Collider.
 There are 4 Baker house with each one of the 4 types of constraints as an example linked with another.
 There is a functional car on the scene.
 
 Inspector Update:
 - Now the inspector has a new Component type Collider.
-- The first two options inside component collider are Delete and Sensor, The delete button will delete the actual collider component and the Snesor button will turn the collider into a sensor that has no collisions.
+- The first two options inside component collider are Delete and Sensor, The delete button will delete the collider component and it's constraints, and the sensor button will turn the collider into a sensor which detects collisions but is unaffected by physics.
 - Then we have a grid in which we can change the position the scale and the rotation of the collider itself.
-- New button add constraint(this will just work with 2 objects with colliders components)
-- We can create 3 types of colliders(sphere, box and capsule) and choose if we want it to be static or dynamic (if static is not checked then the collider will be dynamic).
-- There is also an slider to change the mass from the collider itself.
+- New button "add constraint"(this will only work when selecting objects with colliders)
+- We can create 3 types of colliders(sphere, box and capsule) and choose if we want it to be static or dynamic (if static is not checked then the collider will be dynamic). An static object has collisions but is unaffected by external forces.
+- There is also an slider to change the mass from the body.
 
 Camera Update:
-Now the Editor camera has a collider that can push and interact with other colliders.
+Now the Editor camera has a collider that can push and interact with other colliders and can shoot spheres that interact with colliders.
 
 New Window added Phisycs:
 On this window we can change gravity with the slider.
 
 Adding Constraints:
 - We can add 4 types of constraints(p2p, hinge, slider and cone).
-- After creating the first constraint you will need to pick another object to create the constraint, below in the inspector will appear the 2 names from the GameObjects that will have the constraint , both neeed a collider component first.
+- After creating the first constraint you will need to pick another object to create the constraint, below in the inspector will appear the 2 names from the GameObjects that will have the constraint, both neeed a collider component first.
 - After picking both you will need to push the confirm button and then the constraint will be created, the cancel button will stop the creation of the constraint.
 - After adding a constraint on the bottom of the inspector will appear a button to remove the constraint, and also the type of constraint and the name of the objects with the constraint.
 
@@ -167,7 +167,8 @@ RIGHT: Turn wheels left direction..
 1: To shoot spheres in the direction of the camera.
 
 ##Comments 
-IMPORTANT:We recommend allways when creating constraints change the distance in x, y and z so it's not all 0 might be buggy if all distances are 0.
+IMPORTANT:We recommend allways when creating constraints change the distance in x, y and z so it's not set to 0, it might be buggy if all distances are 0.
+If you overwrite the save scene and want to load the same initial set up again there is a backup file called "Scene-backup" in assets folder which is a copy of the initial savegame file.
 
 ## License & Copyright 
 
