@@ -14,7 +14,7 @@ layout: default
    <p>Nidhogg Engine is a university project of the 3rd year of the career of GDD(video Game Design and Development) from the <a href="https://www.citm.upc.edu/ing/">CITM</a> made by two students in Terrassa(Spain), were we made a 3D Game Engine in C++.
   We've made this Engine for the UPC assignment Game Engines. Our main goal was to create a basic but functional tool to create 3d games with openGL and SDL. The engine consists in an editor were you can add and eddit gameobjects with meshes and textures, a resource manager which is really useful to manage all the assets used in the project and a system to serialize and save all the information stored in a scene and load it afterwards. We also added the first of many subsystems an engine can have, which is a physics engine, more information about it is detailed below.</p>
     
-   <h2>Gameplay video...enjoy!</h2>
+   <h2>Showcase</h2>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/XHlPIRvOjkY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
    
    <h2>
