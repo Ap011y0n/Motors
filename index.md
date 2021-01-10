@@ -24,13 +24,13 @@ layout: default
     
    <h5><a href="https://github.com/polf780">Pol de la Torre Solé</a>: </h5>
  
- - Game Controls and time management (Play/Pause/Stop...), Editor Camera, ViewPort, Module Editor, Vehicle controller, collider types, graphic designer, user experience.
+<p> - Game Controls and time management (Play/Pause/Stop...), Editor Camera, ViewPort, Module Editor, Vehicle controller, collider types, graphic designer, user experience.</p>
  
     <img src="https://raw.githubusercontent.com/marcpt98/Fight-club/gh-pages/Web%20images/foto_pol_dela_torre.png" width="400">
     
    <h5><a href="https://github.com/Ap011y0n">Albert Garcia Belerda</a>: </h5>
   
- - 3D models import, Materials and texture systems, Resource management system, Constraints and basic collision system, GameObjects structure and components, Scene Scerialitzation,  hot reload, culling and mouse picking.
+<p> - 3D models import, Materials and texture systems, Resource management system, Constraints and basic collision system, GameObjects structure and components, Scene Scerialitzation,  hot reload, culling and mouse picking.</p>
  
    <img src="https://cdn.discordapp.com/attachments/498515828610957332/797540430774009936/yo.png" width="200">
 
