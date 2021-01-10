@@ -1,9 +1,9 @@
-#Nidhogg Engine 
+# Nidhogg Engine 
 This is a university project of the 3rd year of the career of GDD(video Game Design and Development)from the CITM (https://www.citm.upc.edu/), made by two students in Terrassa(Spain), were we made a 3D Game Engine in C++. This version of the engine works as a Geometry Viewer that suports drag and drop texture.
 
 Link to the github page of the project: https://github.com/Ap011y0n/Nidhogg-Engine
 
-##Team Members
+### Team Members
 
 * Albert Garcia Belerda
 * Github: Ap011y0n (https://github.com/Ap011y0n)
@@ -12,9 +12,9 @@ Link to the github page of the project: https://github.com/Ap011y0n/Nidhogg-Engi
 * Github: polf780(https://github.com/polf780)
 
 
-### Assigment 1
+## Assigment 1
 
-##How to use the Engine
+### How to use the Engine
 On the left side there's the Hierarchy window where you can see the Game Objects with their correspondent childs, when clicking one the Inspector on the right side will show you the selected Game Object components.
   
 On the Inspector when a Game Object is selected you can delete it using the first button on top of the inspector, you can also change the name of the selected Game Object on the Inspector.
@@ -39,9 +39,9 @@ When a Game Object is selected in the Hierarchy you can see their multiple compo
 
 The engine supports drag and drop of files like fbx, png and dds textures.   
 
-#Controls
+### Controls:
 
-##Camera Controls
+### Camera Controls
 - Mouse right click: Rotate camera.
 - Mouse wheel: to move forward and backwards the camera.
 - Shift + left click: Focus the camera on the selected Game Object and rotate on it's orbit.
@@ -49,20 +49,20 @@ The engine supports drag and drop of files like fbx, png and dds textures.
 - Shift + (WASD): move camera postion faster. 
 - F: Focus the camera on the slected Game Object.
 
-##Additional funcionality
+### Additional funcionality
 - If you move a Game Object the father will move all the children, but when selecting a children and moving    him it will move/rotate/Scale independently of the father.
 - On the inspector we can change the name of any Game Object independently. 
 - There is an option in the Menu Bar inside Edit to change the Engine Theme.
 - We have added on top of the inspector a Delete button that will delte the Game Object, when deleting a     Game Object it will also delete all his children. 
 
-##Comments
+### Comments
 - We have added the png of Lenna for testing purposes.
 - We have added an dds for testing purposes.
 - The changing name function loses the Focus so it's this function is still a work in progress.
 
 
 
-### Assigment 2
+## Assigment 2
 
 Main Menu Bar updated:
 - We added on the main menu bar inside File two new options, one to save the scene and another one to Load the previous scene saved.
@@ -114,7 +114,7 @@ New Importer Window:
 3. Invert textures.
 4. Ignore cameras.
 
-##New controls and Shortcuts
+### New controls and Shortcuts
 F1: Load Bakerhouse.fbx
 F3: Save scene.
 F4: Load scene.
@@ -122,7 +122,7 @@ E: Guizmo translate mode.
 R: Guizmo rotate mode.
 T: Guizmo scale mode.
 
-##Comments
+### Comments
 If you want to add something to the scene you will need to use the Window Folder, right click to add on scene, if it's not imported it will be imported when adding, if it's already imported it will apear on the scene.
 To change a mesh you will need to use the Resource window, and then the Resource Info will appear a button to import to the current scene.
 If it's a model it will be imported to the scene, but if it's a texture and it detects that it's a new one it will create a new component, but if there is already one component it will get swaped.
@@ -130,7 +130,7 @@ This can also be made with meshes, when selecting one mesh in the scene, then wi
 Important!! When opening for the first time the engine import will appear many times, remember to push repeatedly the button until all is imported.
 
 
-### Assigment 3
+## Assigment 3
 
 The scene:
 All buildings in city environment have the new component Collider.
@@ -139,7 +139,7 @@ There is a functional car on the scene.
 
 Inspector Update:
 - Now the inspector has a new Component type Collider.
-- The first two options inside component collider are Delete and Sensor, The delete button will delete the collider component and it's constraints, and the sensor button will turn the collider into a sensor which detects collisions but is unaffected by physics.
+- The first two options inside component collider are Delete and Sensor. The delete button will delete the collider component and it's constraints, and the sensor button will turn the collider into a sensor which detects collisions but is unaffected by physics.
 - Then we have a grid in which we can change the position the scale and the rotation of the collider itself.
 - New button "add constraint"(this will only work when selecting objects with colliders)
 - We can create 3 types of colliders(sphere, box and capsule) and choose if we want it to be static or dynamic (if static is not checked then the collider will be dynamic). An static object has collisions but is unaffected by external forces.
@@ -157,16 +157,16 @@ Adding Constraints:
 - After picking both you will need to push the confirm button and then the constraint will be created, the cancel button will stop the creation of the constraint.
 - After adding a constraint on the bottom of the inspector will appear a button to remove the constraint, and also the type of constraint and the name of the objects with the constraint.
 
-##Car controls 
+### Car controls 
 UP: Accelerate the car.
 DOWN: brake/reverse acceleration.
 LEFT: Turn wheels right direction.
 RIGHT: Turn wheels left direction..
 
-##New Controls
+### New Controls
 1: To shoot spheres in the direction of the camera.
 
-##Comments 
+## Comments 
 IMPORTANT:We recommend allways when creating constraints change the distance in x, y and z so it's not set to 0, it might be buggy if all distances are 0.
 If you overwrite the save scene and want to load the same initial set up again there is a backup file called "Scene-backup" in assets folder which is a copy of the initial savegame file.
 
