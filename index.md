@@ -15,7 +15,7 @@ layout: default
   We've made this Engine for the UPC assignment Game Engines. Our main goal was to create a basic but functional tool to create 3d games with openGL and SDL. The engine consists in an editor were you can add and eddit gameobjects with meshes and textures, a resource manager which is really useful to manage all the assets used in the project and a system to serialize and save all the information stored in a scene and load it afterwards. We also added the first of many subsystems an engine can have, which is a physics engine, more information about it is detailed below.</p>
     
    <h2>Showcase</h2>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2r9jfxkxdhg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="800" height="450" src="https://www.youtube.com/embed/2r9jfxkxdhg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
    
    <h2>
      Who are we?
